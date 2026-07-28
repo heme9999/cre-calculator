@@ -287,14 +287,29 @@ export function LoanPaymentCalculator({ locale }: Props) {
                 </div>
               )}
 
-              <div className="flex justify-between text-slate-700">
-                <span>{isZh ? `前 ${balloonYears} 年累计利息支出:` : `Total Interest (${balloonYears} yrs):`}</span>
-                <span className="font-semibold text-red-600">{formatCurrency(Math.round(termInterest))}</span>
-              </div>
-              <div className="flex justify-between text-slate-700">
-                <span>{isZh ? `前 ${balloonYears} 年偿还本金:` : `Total Principal Paid (${balloonYears} yrs):`}</span>
-                <span className="font-semibold text-slate-900">{formatCurrency(Math.round(termPrincipal))}</span>
-              </div>
+              {(() => {
+                const isBalloonActive = hasBalloon && balloonYears < amortizationYears;
+                const displayYears = isBalloonActive ? balloonYears : amortizationYears;
+                const interestLabel = isZh
+                  ? (isBalloonActive ? `前 ${displayYears} 年累计利息支出:` : `全周期累计利息支出 (${displayYears} 年):`)
+                  : `Total Interest (${displayYears} yrs):`;
+                const principalLabel = isZh
+                  ? (isBalloonActive ? `前 ${displayYears} 年偿还本金:` : `全周期偿还本金 (${displayYears} 年):`)
+                  : `Total Principal Paid (${displayYears} yrs):`;
+
+                return (
+                  <>
+                    <div className="flex justify-between text-slate-700">
+                      <span>{interestLabel}</span>
+                      <span className="font-semibold text-red-600">{formatCurrency(Math.round(termInterest))}</span>
+                    </div>
+                    <div className="flex justify-between text-slate-700">
+                      <span>{principalLabel}</span>
+                      <span className="font-semibold text-slate-900">{formatCurrency(Math.round(termPrincipal))}</span>
+                    </div>
+                  </>
+                );
+              })()}
               <div className="flex justify-between text-slate-700 font-semibold border-t border-slate-200 pt-2">
                 <span>{isZh ? '累计支付总额:' : 'Total Cumulative Payments:'}</span>
                 <span className="text-slate-900">{formatCurrency(Math.round(totalPaidInTerm))}</span>
