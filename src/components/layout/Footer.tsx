@@ -10,6 +10,7 @@ interface FooterProps {
 export function Footer({ locale }: FooterProps) {
   const isZh = locale === 'zh';
   const content = getContent(locale);
+  const nav = content.nav;
   const year = new Date().getFullYear();
 
   return (
@@ -22,7 +23,7 @@ export function Footer({ locale }: FooterProps) {
               <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
                 <Building2 className="w-4 h-4 text-white" />
               </div>
-              <span>{content.nav.brandName}</span>
+              <span>{nav.brandName}</span>
             </div>
             <p className="text-xs leading-relaxed text-slate-400 max-w-sm">
               {isZh
@@ -39,27 +40,22 @@ export function Footer({ locale }: FooterProps) {
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href={`/${locale}/calculators/cap-rate/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? 'Cap Rate (资本化率) 计算器' : 'Cap Rate Calculator'}
+                  {nav.capRate}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/calculators/noi/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? 'NOI (净营业收入) 计算器' : 'NOI Calculator'}
+                  {nav.noi}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/calculators/cash-on-cash/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? 'Cash-on-Cash Return 计算器' : 'Cash-on-Cash Return Calculator'}
-                </Link>
-              </li>
-              <li>
-                <Link href={`/${locale}/calculators/dscr/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? 'DSCR (偿债覆盖率) 计算器' : 'DSCR Calculator'}
+                  {nav.cashOnCash}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/calculators/loan-payment/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? '商业地产贷款月供计算器' : 'Commercial Loan Payment Calculator'}
+                  {nav.loanPayment}
                 </Link>
               </li>
             </ul>
@@ -97,7 +93,7 @@ export function Footer({ locale }: FooterProps) {
 
         {/* Copyright */}
         <div className="border-t border-slate-800 pt-6 text-center text-xs text-slate-500">
-          © {year} {content.nav.brandName}. All rights reserved.
+          © {year} {nav.brandName}. All rights reserved.
         </div>
       </div>
     </footer>

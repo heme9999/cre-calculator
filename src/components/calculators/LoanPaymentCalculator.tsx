@@ -60,7 +60,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
     currentBalance = endingBalance;
   }
 
-  // Calculate 10-year / term cumulative interest
+  // Calculate term cumulative interest
   let termInterest = 0;
   let termPrincipal = 0;
   let balanceTracker = loanAmount;
@@ -83,10 +83,10 @@ export function LoanPaymentCalculator({ locale }: Props) {
             {isZh ? '商业贷款还款计算' : 'Commercial Debt Calculation'}
           </div>
           <h2 className="text-xl md:text-2xl font-bold">
-            {isZh ? '商业地产贷款月供与摊销计算器' : 'Commercial Real Estate Loan Payment Calculator'}
+            {isZh ? '商业地产贷款月供与气球尾款计算器' : 'Commercial Real Estate Loan Payment & Balloon Payoff Calculator'}
           </h2>
           <p className="text-slate-400 text-sm mt-1">
-            {isZh ? '计算每月本息还款、总利息支出、气球贷款到期尾款及前12个月还款摊销表' : 'Calculate monthly payments, interest costs, balloon payoff, and amortization'}
+            {isZh ? '精准区分摊销年限与到期年限，计算每月本息还款、利息成本、气球尾款及还款摊销表' : 'Calculate monthly payments, total interest, balloon payoff amounts, and amortization schedules'}
           </p>
         </div>
       </div>
@@ -123,7 +123,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
             </div>
           </div>
 
-          {/* Interest Rate & Amortization */}
+          {/* Interest Rate & Amortization Term */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -144,7 +144,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
 
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '摊销年限 (Amortization Years)' : 'Amortization Period (Years)'}
+                {isZh ? '摊销年限 (Amortization Term)' : 'Amortization Term (Years)'}
               </label>
               <select
                 value={amortizationYears}
@@ -153,18 +153,18 @@ export function LoanPaymentCalculator({ locale }: Props) {
               >
                 <option value={15}>15 {isZh ? '年摊销' : 'Years'}</option>
                 <option value={20}>20 {isZh ? '年摊销' : 'Years'}</option>
-                <option value={25}>25 {isZh ? '年摊销 (商业主流)' : 'Years (Standard)'}</option>
+                <option value={25}>25 {isZh ? '年摊销 (商业主流标准)' : 'Years (Standard)'}</option>
                 <option value={30}>30 {isZh ? '年摊销' : 'Years'}</option>
               </select>
             </div>
           </div>
 
-          {/* Balloon Option */}
+          {/* Maturity Term & Balloon Payoff Option */}
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-sm font-bold text-slate-800 flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-emerald-600" />
-                {isZh ? '包含气球贷款到期条款 (Balloon Payment)' : 'Include Balloon Maturity Term'}
+                {isZh ? '设定到期年限与气球尾款 (Maturity Term & Balloon Payoff)' : 'Set Loan Maturity Term (Balloon Payoff)'}
               </label>
               <input
                 type="checkbox"
@@ -177,7 +177,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
             {hasBalloon && (
               <div>
                 <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  {isZh ? '到期还款年限 (Maturity Term)' : 'Loan Maturity Term (Years)'}
+                  {isZh ? '贷款到期年限 (Maturity Term)' : 'Loan Maturity Term (Years)'}
                 </label>
                 <select
                   value={balloonYears}
@@ -223,7 +223,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
                     <span className="text-emerald-700 font-extrabold">{formatCurrency(balloonBalance)}</span>
                   </div>
                   <p className="text-[11px] text-emerald-800">
-                    {isZh ? '需在到期日前办理再融资 (Refinance) 或出售结清' : 'Must be refinanced or paid off at loan maturity'}
+                    {isZh ? '需在到期日前办理再融资 (Refinance) 或出售物业结清' : 'Must be refinanced or paid off at loan maturity'}
                   </p>
                 </div>
               )}

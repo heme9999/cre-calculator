@@ -49,6 +49,10 @@ export interface HomePageContent {
 export interface NavContent {
   brandName: string;
   calculators: string;
+  capRate: string;
+  noi: string;
+  cashOnCash: string;
+  loanPayment: string;
   guides: string;
   about: string;
   switchLangLabel: string;
@@ -62,6 +66,6 @@ export interface LocaleContent {
   capRate: CalculatorPageContent;
   noi: CalculatorPageContent;
   cashOnCash: CalculatorPageContent;
-  dscr: CalculatorPageContent;
   loanPayment: CalculatorPageContent;
+  dscr: CalculatorPageContent;
 }

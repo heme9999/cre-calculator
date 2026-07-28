@@ -9,7 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'calculators/cap-rate',
     'calculators/noi',
     'calculators/cash-on-cash',
-    'calculators/dscr',
     'calculators/loan-payment',
   ];
   const locales = ['en', 'zh'];

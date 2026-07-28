@@ -3,7 +3,11 @@ import { LocaleContent } from './types';
 export const enContent: LocaleContent = {
   nav: {
     brandName: 'CRE Calculators',
-    calculators: 'Calculators',
+    calculators: 'All Calculators',
+    capRate: 'Cap Rate',
+    noi: 'NOI',
+    cashOnCash: 'Cash-on-Cash',
+    loanPayment: 'Loan Payment',
     guides: 'Guides & Benchmarks',
     about: 'About',
     switchLangLabel: '中文',
@@ -12,7 +16,7 @@ export const enContent: LocaleContent = {
   },
   home: {
     metaTitle: 'Commercial Real Estate Investment Calculators | CRE Tools',
-    metaDescription: 'Free, professional commercial real estate investment calculators for cap rate, NOI, cash-on-cash return, DSCR, and deal analysis. Made for investors and brokers.',
+    metaDescription: 'Free, professional commercial real estate investment calculators for cap rate, NOI, cash-on-cash return, loan payment, and deal analysis. Made for investors and brokers.',
     heroH1: 'Commercial Real Estate Investment Decision Tools',
     heroSubtitle: 'Instant, precise financial calculators backed by clear formulas, real-world examples, and industry benchmarks.',
     featuredTitle: 'Essential CRE Calculators',
@@ -37,15 +41,9 @@ export const enContent: LocaleContent = {
         badge: 'Leverage',
       },
       {
-        slug: 'dscr',
-        title: 'DSCR (Debt Service Coverage Ratio) Calculator',
-        description: 'Determine whether a property generates enough NOI to cover mortgage payments against lender guidelines.',
-        badge: 'Bank Underwriting',
-      },
-      {
         slug: 'loan-payment',
         title: 'Commercial Loan Payment Calculator',
-        description: 'Calculate monthly principal & interest payments, total interest, balloon payoff balances, and amortization.',
+        description: 'Calculate monthly principal & interest payments, total interest, balloon payoff balances, and amortization schedules.',
         badge: 'Financing',
       },
     ],
@@ -103,7 +101,7 @@ export const enContent: LocaleContent = {
     relatedCalculators: [
       { title: 'NOI Calculator', slug: 'noi' },
       { title: 'Cash-on-Cash Return Calculator', slug: 'cash-on-cash' },
-      { title: 'DSCR Calculator', slug: 'dscr' },
+      { title: 'Commercial Loan Payment Calculator', slug: 'loan-payment' },
     ],
   },
   noi: {
@@ -112,7 +110,7 @@ export const enContent: LocaleContent = {
     h1: 'NOI Calculator (Net Operating Income)',
     subtitle: "Find your property's net operating income — the number every other CRE metric is built on.",
     whatIsTitle: 'What Is NOI and Why It Matters',
-    whatIsContent: 'NOI is the foundation metric in commercial real estate. Almost every other calculation — cap rate, DSCR, cash-on-cash return — starts with NOI. It represents how much income a property actually generates from operations, before you factor in your mortgage payment or income taxes. Lenders, appraisers, and buyers all look at NOI first because it isolates the property\'s performance from how any particular owner chose to finance it.',
+    whatIsContent: 'NOI is the foundation metric in commercial real estate. Almost every other calculation — cap rate, cash-on-cash return, loan payment — starts with NOI. It represents how much income a property actually generates from operations, before you factor in your mortgage payment or income taxes. Lenders, appraisers, and buyers all look at NOI first because it isolates the property\'s performance from how any particular owner chose to finance it.',
     formulaTitle: 'The Formula',
     formulaCode: 'NOI = Effective Gross Income (EGI) − Operating Expenses\nEGI = Gross Income − Vacancy & Credit Loss',
     formulaVariables: [
@@ -133,7 +131,7 @@ export const enContent: LocaleContent = {
       },
       {
         question: 'Why do lenders care so much about NOI?',
-        answer: 'Lenders use NOI to calculate DSCR (debt service coverage ratio) — essentially, whether the property generates enough income to comfortably cover the loan payment. Low or shrinking NOI is a red flag in underwriting.',
+        answer: 'Lenders use NOI to calculate debt service coverage ratio (DSCR) — essentially, whether the property generates enough income to comfortably cover the loan payment. Low or shrinking NOI is a red flag in underwriting.',
       },
       {
         question: 'How is NOI different from cash flow?',
@@ -143,7 +141,7 @@ export const enContent: LocaleContent = {
     relatedTitle: 'Related Calculators',
     relatedCalculators: [
       { title: 'Cap Rate Calculator', slug: 'cap-rate' },
-      { title: 'DSCR Calculator', slug: 'dscr' },
+      { title: 'Commercial Loan Payment Calculator', slug: 'loan-payment' },
       { title: 'Cash-on-Cash Return Calculator', slug: 'cash-on-cash' },
     ],
   },
@@ -174,55 +172,14 @@ export const enContent: LocaleContent = {
       },
       {
         question: 'Is a higher cash-on-cash return always better?',
-        answer: 'Not necessarily — a very high cash-on-cash return can also signal high leverage and higher risk (a bigger loan relative to a smaller down payment). Look at it alongside DSCR to understand your risk cushion.',
+        answer: 'Not necessarily — a very high cash-on-cash return can also signal high leverage and higher risk (a bigger loan relative to a smaller down payment). Look at it alongside your mortgage payment to understand your risk cushion.',
       },
     ],
     relatedTitle: 'Related Calculators',
     relatedCalculators: [
       { title: 'Cap Rate Calculator', slug: 'cap-rate' },
       { title: 'NOI Calculator', slug: 'noi' },
-      { title: 'DSCR Calculator', slug: 'dscr' },
-    ],
-  },
-  dscr: {
-    metaTitle: 'DSCR Calculator — Debt Service Coverage Ratio for Commercial Loans',
-    metaDescription: 'Calculate your debt service coverage ratio (DSCR) for commercial real estate financing. Enter annual NOI and debt service to test bank approval benchmarks.',
-    h1: 'DSCR Calculator (Debt Service Coverage Ratio)',
-    subtitle: 'Determine whether your commercial property generates enough income to cover loan payments — and check against lender underwriting requirements.',
-    whatIsTitle: 'What Is DSCR and Why It Matters',
-    whatIsContent: 'DSCR (Debt Service Coverage Ratio) measures a commercial property\'s ability to cover its annual mortgage payments with its net operating income (NOI). Unlike residential lending, which focuses on a borrower\'s personal debt-to-income ratio, commercial lenders underwrite the property itself. DSCR is the single most critical ratio lenders use to determine maximum loan size, interest rates, and approval eligibility. A ratio of 1.0x means net income exactly covers loan payments, while lenders typically require 1.20x to 1.35x as a safety cushion for market fluctuations.',
-    formulaTitle: 'The Formula',
-    formulaCode: 'DSCR = Net Operating Income (NOI) / Annual Debt Service',
-    formulaVariables: [
-      { label: 'NOI', desc: 'Annual Net Operating Income before debt service and income taxes' },
-      { label: 'Annual Debt Service', desc: 'Total annual principal and interest loan payments' },
-    ],
-    exampleTitle: 'A Real Example',
-    exampleContent: 'Suppose an office building generates an annual NOI of $250,000. Your proposed commercial mortgage requires monthly payments of $15,625 ($187,500 per year).\n\nDSCR = $250,000 / $187,500 = 1.33x\n\nBecause 1.33x exceeds the bank\'s standard 1.25x requirement, the deal has a healthy safety cushion ($62,500/year above debt service), making it an attractive candidate for commercial loan approval.',
-    faqTitle: 'Frequently Asked Questions',
-    faqs: [
-      {
-        question: 'What is a good DSCR ratio for commercial real estate?',
-        answer: 'Most commercial banks and lenders look for a minimum DSCR of 1.20x to 1.25x. Highly stable assets (like long-term net lease properties) may qualify at 1.15x - 1.20x, while riskier assets (such as hotels or unanchored retail) often require 1.35x to 1.50x.',
-      },
-      {
-        question: 'What happens if DSCR falls below 1.0x?',
-        answer: 'A DSCR below 1.0x indicates negative cash flow — meaning the property does not generate enough income from operations to pay its mortgage. Unless the owner injects personal capital, the deal risks loan default.',
-      },
-      {
-        question: 'How can I improve a deal\'s DSCR?',
-        answer: 'You can improve DSCR by increasing NOI (raising rents, adding ancillary revenue, or cutting operating expenses) or by lowering annual debt service (increasing your down payment, negotiating a lower interest rate, or extending the amortization term).',
-      },
-      {
-        question: 'Is DSCR based on gross income or NOI?',
-        answer: 'DSCR is always calculated using Net Operating Income (NOI), after deducting all property operating expenses and vacancy loss. Gross income is never used for DSCR calculation.',
-      },
-    ],
-    relatedTitle: 'Related Calculators',
-    relatedCalculators: [
-      { title: 'NOI Calculator', slug: 'noi' },
       { title: 'Commercial Loan Payment Calculator', slug: 'loan-payment' },
-      { title: 'Cash-on-Cash Return Calculator', slug: 'cash-on-cash' },
     ],
   },
   loanPayment: {
@@ -231,11 +188,11 @@ export const enContent: LocaleContent = {
     h1: 'Commercial Real Estate Loan Payment Calculator',
     subtitle: 'Calculate monthly principal and interest payments, total interest costs, and balloon payoff amounts for commercial property loans.',
     whatIsTitle: 'What Is Commercial Loan Amortization and Why It Matters',
-    whatIsContent: 'Commercial real estate mortgages differ significantly from residential loans. While residential loans often feature 30-year fixed terms, commercial loans typically feature shorter loan maturity terms (such as 5, 7, or 10 years) paired with a longer amortization schedule (such as 25 or 30 years). At maturity, the remaining principal balance must be paid off or refinanced via a "balloon payment." Calculating your monthly debt service and balloon payoff is essential for projecting cash flow and refinancing risk.',
+    whatIsContent: 'Commercial real estate mortgages differ significantly from residential loans. While residential loans often feature 30-year fixed terms, commercial loans typically feature shorter loan maturity terms (such as 5, 7, or 10 years) paired with a longer amortization schedule (such as 25 or 30 years). At maturity, the remaining principal balance must be paid off or refinanced via a balloon payment. Calculating your monthly debt service and balloon payoff is essential for projecting cash flow and refinancing risk.',
     formulaTitle: 'The Formula',
     formulaCode: 'M = P × [ r(1 + r)^n ] / [ (1 + r)^n − 1 ]',
     formulaVariables: [
-      { label: 'M', desc: 'Monthly Principal & Interest Payment' },
+      { label: 'M', desc: 'Monthly Principal & Interest Payment ($)' },
       { label: 'P', desc: 'Principal Loan Amount ($)' },
       { label: 'r', desc: 'Monthly Interest Rate (Annual Rate / 12)' },
       { label: 'n', desc: 'Total Amortization Payments (Amortization Years × 12)' },
@@ -246,26 +203,43 @@ export const enContent: LocaleContent = {
     faqs: [
       {
         question: 'What is a balloon payment in commercial real estate?',
-        answer: 'A balloon payment is a lump-sum principal balance due at the end of a loan term when the loan\'s maturity period (e.g. 10 years) is shorter than its amortization schedule (e.g. 25 years). Investors typically refinance or sell the property before the balloon date.',
+        answer: 'A balloon payment is a lump-sum principal balance due at the end of a loan\'s maturity term (e.g., 10 years) when it is shorter than the amortization schedule (e.g., 25 years). Investors typically refinance or sell the property before the balloon payoff date.',
       },
       {
-        question: 'What amortization period is standard for commercial mortgages?',
-        answer: 'Most commercial real estate loans use a 25-year amortization schedule. Primary, institutional assets may qualify for 30-year amortization, while older or special-purpose properties may be restricted to 20 years.',
+        question: 'What are standard amortization and maturity terms for commercial mortgages?',
+        answer: 'Most commercial mortgages use a 25-year amortization term to calculate monthly payments, paired with a shorter 5, 7, or 10-year loan maturity term. Institutional core properties may qualify for 30-year amortization.',
       },
       {
-        question: 'How does interest rate impact commercial debt service?',
-        answer: 'Because commercial loan amounts are large, even a 0.5% interest rate change significantly shifts annual debt service, directly impacting your DSCR and Cash-on-Cash returns.',
+        question: 'How does interest rate impact commercial debt payments?',
+        answer: 'Because commercial mortgage balances are large, even a 0.5% shift in interest rate substantially changes your monthly payment and annual debt service, directly affecting your cash flow and returns.',
       },
       {
         question: 'Are commercial loan interest rates fixed or variable?',
-        answer: 'Commercial loans can feature fixed rates for 5 to 10 years, or variable/floating rates tied to SOFR or Prime. Hybrid loans often fix the rate for the initial 5 or 7 years before resetting.',
+        answer: 'Commercial loans can feature fixed interest rates for 5 to 10 years, or variable rates tied to SOFR or Prime. Many hybrid loans fix the rate for an initial period before resetting.',
       },
     ],
     relatedTitle: 'Related Calculators',
     relatedCalculators: [
-      { title: 'DSCR Calculator', slug: 'dscr' },
       { title: 'Cash-on-Cash Return Calculator', slug: 'cash-on-cash' },
       { title: 'Cap Rate Calculator', slug: 'cap-rate' },
+      { title: 'NOI Calculator', slug: 'noi' },
     ],
+  },
+  dscr: {
+    metaTitle: 'DSCR Calculator — Debt Service Coverage Ratio for Commercial Loans',
+    metaDescription: 'Calculate Debt Service Coverage Ratio (DSCR) for commercial real estate loans.',
+    h1: 'DSCR (Debt Service Coverage Ratio) Calculator',
+    subtitle: 'Evaluate net operating income against annual loan payments.',
+    whatIsTitle: 'What Is DSCR',
+    whatIsContent: 'Debt Service Coverage Ratio measures property cash flow relative to debt payments.',
+    formulaTitle: 'Formula',
+    formulaCode: 'DSCR = NOI / Annual Debt Service',
+    formulaVariables: [],
+    exampleTitle: 'Example',
+    exampleContent: 'NOI $250,000 / Debt $187,500 = 1.33x',
+    faqTitle: 'FAQs',
+    faqs: [],
+    relatedTitle: 'Related Calculators',
+    relatedCalculators: [],
   },
 };
