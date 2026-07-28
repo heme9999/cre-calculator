@@ -36,6 +36,7 @@ export function Header({ locale }: HeaderProps) {
     { href: `/${locale}/calculators/noi/`, label: nav.noi, key: 'noi' },
     { href: `/${locale}/calculators/cash-on-cash/`, label: nav.cashOnCash, key: 'cash-on-cash' },
     { href: `/${locale}/calculators/loan-payment/`, label: nav.loanPayment, key: 'loan-payment' },
+    { href: `/${locale}/calculators/dscr/`, label: nav.dscr, key: 'dscr' },
   ];
 
   return (

@@ -53,6 +53,7 @@ export interface NavContent {
   noi: string;
   cashOnCash: string;
   loanPayment: string;
+  dscr: string;
   guides: string;
   about: string;
   switchLangLabel: string;

@@ -58,6 +58,11 @@ export function Footer({ locale }: FooterProps) {
                   {nav.loanPayment}
                 </Link>
               </li>
+              <li>
+                <Link href={`/${locale}/calculators/dscr/`} className="hover:text-emerald-400 transition-colors">
+                  {nav.dscr}
+                </Link>
+              </li>
             </ul>
           </div>
 

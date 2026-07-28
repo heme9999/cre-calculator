@@ -23,27 +23,28 @@ export function DscrCalculator({ locale }: Props) {
   const cashCushion = noi - effectiveDebtService;
   const maxDebtForTarget = noi / 1.25;
 
-  // Status Tier
+  // Status Tier based on user specification
   let statusColor = 'text-emerald-600';
-  let badgeBg = 'bg-emerald-50 text-emerald-800 border-emerald-200';
-  let statusText = isZh ? '优秀覆盖倍数 (极佳信贷风险剖面)' : 'Strong Coverage (Excellent Underwriting Profile)';
+  let badgeBg = 'bg-emerald-50 text-emerald-800 border-emerald-300';
+  let statusText = isZh
+    ? '较为健康的安全边际 (符合绝大多数商业地产贷款机构标准)'
+    : 'Healthy Safety Margin (Meets or exceeds commercial lender standards)';
   let StatusIcon = CheckCircle2;
 
   if (dscr < 1.0) {
-    statusColor = 'text-red-600';
-    badgeBg = 'bg-red-50 text-red-800 border-red-200';
-    statusText = isZh ? '严重负现金流 (违约与拒贷高风险)' : 'Negative Cash Flow (High Default / Decline Risk)';
+    statusColor = 'text-rose-600';
+    badgeBg = 'bg-rose-50 text-rose-900 border-rose-300 font-bold';
+    statusText = isZh
+      ? '警示：净营业收入不足以覆盖贷款还款 (现金流倒挂)'
+      : 'Warning: Net Operating Income Insufficient to Cover Debt Service';
     StatusIcon = ShieldAlert;
-  } else if (dscr < 1.20) {
+  } else if (dscr < 1.25) {
     statusColor = 'text-amber-600';
-    badgeBg = 'bg-amber-50 text-amber-800 border-amber-200';
-    statusText = isZh ? '低于传统银行最低标准 1.20x (需要增加首付或提升收入)' : 'Below Bank Minimum 1.20x (Higher Equity/Lower Debt Needed)';
+    badgeBg = 'bg-amber-50 text-amber-900 border-amber-300 font-semibold';
+    statusText = isZh
+      ? '处于多数贷款机构最低门槛附近 (1.20 - 1.25x)，需谨慎评估'
+      : 'Near Lender Minimum Threshold (1.20 - 1.25x), Requires Cautious Evaluation';
     StatusIcon = AlertTriangle;
-  } else if (dscr <= 1.35) {
-    statusColor = 'text-emerald-600';
-    badgeBg = 'bg-emerald-50 text-emerald-800 border-emerald-200';
-    statusText = isZh ? '符合商业银行标准审批区间 (1.20x - 1.35x)' : 'Standard Commercial Bank Approval Range (1.20x - 1.35x)';
-    StatusIcon = ShieldCheck;
   }
 
   return (
