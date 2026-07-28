@@ -1,0 +1,172 @@
+import { LocaleContent } from './types';
+
+export const enContent: LocaleContent = {
+  nav: {
+    brandName: 'CRE Calculators',
+    calculators: 'Calculators',
+    guides: 'Guides & Benchmarks',
+    about: 'About',
+    switchLangLabel: '中文',
+    switchLangTarget: 'zh',
+    switchLangCode: 'zh',
+  },
+  home: {
+    metaTitle: 'Commercial Real Estate Investment Calculators | CRE Tools',
+    metaDescription: 'Free, professional commercial real estate investment calculators for cap rate, NOI, cash-on-cash return, DSCR, and deal analysis. Made for investors and brokers.',
+    heroH1: 'Commercial Real Estate Investment Decision Tools',
+    heroSubtitle: 'Instant, precise financial calculators backed by clear formulas, real-world examples, and industry benchmarks.',
+    featuredTitle: 'Essential CRE Calculators',
+    featuredDesc: 'Evaluate property yield, cash flow, and debt coverage with our instant client-side tools.',
+    calculators: [
+      {
+        slug: 'cap-rate',
+        title: 'Cap Rate Calculator',
+        description: 'Find the capitalization rate for any property or work backward to calculate your max purchase price.',
+        badge: 'High Priority',
+      },
+      {
+        slug: 'noi',
+        title: 'NOI (Net Operating Income) Calculator',
+        description: 'Calculate net operating income after vacancy and operating expenses—the foundation of all CRE metrics.',
+        badge: 'Essential',
+      },
+      {
+        slug: 'cash-on-cash',
+        title: 'Cash-on-Cash Return Calculator',
+        description: 'Measure your real annual return on cash invested after loan payments and upfront closing costs.',
+        badge: 'Leverage',
+      },
+    ],
+    whyUsTitle: 'Built for Serious CRE Investors & Brokers',
+    whyUsItems: [
+      {
+        title: 'Instant & Client-Side',
+        desc: 'All calculations run in real time right in your browser. No registration or server delays.',
+      },
+      {
+        title: 'Transparent Formulas & Examples',
+        desc: 'Every tool includes step-by-step formula breakdowns and real scenarios so you understand the numbers.',
+      },
+      {
+        title: 'Dual US & Global Perspective',
+        desc: 'Tailored for US commercial property standards, underwriting practices, and investor requirements.',
+      },
+    ],
+  },
+  capRate: {
+    metaTitle: 'Cap Rate Calculator — Commercial Real Estate Cap Rate Tool',
+    metaDescription: 'Calculate capitalization rate for any commercial property in seconds. Enter purchase price and NOI to find your cap rate, or work backward from a target cap rate to find max purchase price.',
+    h1: 'Cap Rate Calculator',
+    subtitle: 'Find the capitalization rate for any commercial property — or work backward to find your maximum purchase price.',
+    whatIsTitle: 'What Is Cap Rate and Why It Matters',
+    whatIsContent: "Cap rate (capitalization rate) is the most common shorthand investors use to compare commercial properties at a glance. It tells you the annual return a property would generate if you bought it in all cash, based purely on its net operating income relative to the purchase price. It's not a complete picture of your actual return — it ignores financing, taxes, and future appreciation — but it's the fastest way to compare two properties or sanity-check a listing price against the market.",
+    formulaTitle: 'The Formula',
+    formulaCode: 'Cap Rate = Net Operating Income (NOI) / Purchase Price × 100%',
+    formulaVariables: [
+      { label: 'NOI', desc: 'Annual income after operating expenses, before debt service and taxes' },
+      { label: 'Purchase Price', desc: "The property's acquisition price (or current market value, if you're evaluating a property you already own)" },
+    ],
+    exampleTitle: 'A Real Example',
+    exampleContent: 'Say you\'re looking at a small retail strip center listed at $2,400,000, with an NOI of $168,000/year.\n\nCap Rate = $168,000 / $2,400,000 = 7.0%\n\nIf you know your target cap rate is 7.5% and the NOI is fixed at $168,000, you can work backward: Max Purchase Price = $168,000 / 0.075 = $2,240,000 — meaning the listing is priced above what a 7.5% target would justify.',
+    faqTitle: 'Frequently Asked Questions',
+    faqs: [
+      {
+        question: "What's a good cap rate for commercial real estate?",
+        answer: 'It depends heavily on asset class and location. Multifamily in a strong metro might trade at 4-5%, while a single-tenant net-lease property in a secondary market might trade at 7-9%. Lower cap rates generally signal lower perceived risk (and lower yield); higher cap rates signal higher risk or yield.',
+      },
+      {
+        question: "What's the difference between cap rate and cash-on-cash return?",
+        answer: 'Cap rate assumes an all-cash purchase and ignores your financing. Cash-on-cash return accounts for your actual cash invested (after a loan), so it reflects your real leveraged return.',
+      },
+      {
+        question: 'Does cap rate account for financing?',
+        answer: "No. Cap rate is calculated independent of how the deal is financed, which is exactly why it's useful for comparing properties apples-to-apples — regardless of each buyer's loan terms.",
+      },
+      {
+        question: 'Can I use cap rate to value a property I already own?',
+        answer: "Yes — plug in your property's current NOI and an estimated market value (or ask a broker for comparable sales) to see roughly where your cap rate sits relative to the market.",
+      },
+    ],
+    relatedTitle: 'Related Calculators',
+    relatedCalculators: [
+      { title: 'NOI Calculator', slug: 'noi' },
+      { title: 'Cash-on-Cash Return Calculator', slug: 'cash-on-cash' },
+    ],
+  },
+  noi: {
+    metaTitle: 'NOI Calculator — Net Operating Income for Commercial Property',
+    metaDescription: 'Calculate net operating income (NOI) for any commercial property. Enter gross income, vacancy loss, and operating expenses to get your annual and monthly NOI.',
+    h1: 'NOI Calculator (Net Operating Income)',
+    subtitle: "Find your property's net operating income — the number every other CRE metric is built on.",
+    whatIsTitle: 'What Is NOI and Why It Matters',
+    whatIsContent: 'NOI is the foundation metric in commercial real estate. Almost every other calculation — cap rate, DSCR, cash-on-cash return — starts with NOI. It represents how much income a property actually generates from operations, before you factor in your mortgage payment or income taxes. Lenders, appraisers, and buyers all look at NOI first because it isolates the property\'s performance from how any particular owner chose to finance it.',
+    formulaTitle: 'The Formula',
+    formulaCode: 'NOI = Effective Gross Income (EGI) − Operating Expenses\nEGI = Gross Income − Vacancy & Credit Loss',
+    formulaVariables: [
+      { label: 'Effective Gross Income (EGI)', desc: 'Gross potential rental income minus expected vacancy and unpaid rent' },
+      { label: 'Operating Expenses', desc: 'Property taxes, insurance, repairs/maintenance, management fees, landlord utilities. Excludes debt service, capital improvements, and income taxes.' },
+    ],
+    exampleTitle: 'A Real Example',
+    exampleContent: 'A 12-unit apartment building generates $312,000/year in gross rental income. You estimate 5% vacancy loss ($15,600), and operating expenses run $94,000/year (taxes, insurance, maintenance, management fee).\n\nEGI = $312,000 − $15,600 = $296,400\nNOI = $296,400 − $94,000 = $202,400/year (about $16,867/month)',
+    faqTitle: 'Frequently Asked Questions',
+    faqs: [
+      {
+        question: 'Does NOI include mortgage payments?',
+        answer: 'No. NOI is calculated before debt service. Your loan payment is subtracted later, when you calculate cash flow — not NOI.',
+      },
+      {
+        question: 'What counts as an operating expense?',
+        answer: 'Property taxes, insurance, repairs and maintenance, property management fees, utilities the landlord pays, and reserves for replacement. Capital improvements (like a new roof) and mortgage payments are excluded.',
+      },
+      {
+        question: 'Why do lenders care so much about NOI?',
+        answer: 'Lenders use NOI to calculate DSCR (debt service coverage ratio) — essentially, whether the property generates enough income to comfortably cover the loan payment. Low or shrinking NOI is a red flag in underwriting.',
+      },
+      {
+        question: 'How is NOI different from cash flow?',
+        answer: 'NOI is before debt service; cash flow is after. Cash flow = NOI − annual debt service (and sometimes − capital reserves).',
+      },
+    ],
+    relatedTitle: 'Related Calculators',
+    relatedCalculators: [
+      { title: 'Cap Rate Calculator', slug: 'cap-rate' },
+      { title: 'Cash-on-Cash Return Calculator', slug: 'cash-on-cash' },
+    ],
+  },
+  cashOnCash: {
+    metaTitle: 'Cash-on-Cash Return Calculator — Real Estate Investment Tool',
+    metaDescription: 'Calculate your cash-on-cash return on a leveraged commercial real estate deal. Enter annual cash flow and total cash invested to find your real return on invested capital.',
+    h1: 'Cash-on-Cash Return Calculator',
+    subtitle: 'Find your real return on the actual cash you put into a deal — after financing.',
+    whatIsTitle: 'What Is Cash-on-Cash Return and Why It Matters',
+    whatIsContent: 'Cash-on-cash return measures the annual pre-tax cash flow you actually receive, relative to the actual cash you put into the deal — your down payment, closing costs, and any upfront capital improvements. Unlike cap rate, it accounts for leverage, which means it\'s the number that tells you how hard your invested dollars are working, not how the property performs in the abstract.',
+    formulaTitle: 'The Formula',
+    formulaCode: 'Cash-on-Cash Return = Annual Pre-Tax Cash Flow / Total Cash Invested × 100%',
+    formulaVariables: [
+      { label: 'Annual Cash Flow', desc: 'NOI minus annual debt service (loan payments)' },
+      { label: 'Total Cash Invested', desc: 'Down payment + closing costs + any immediate capital expenditures — not the full purchase price' },
+    ],
+    exampleTitle: 'A Real Example',
+    exampleContent: 'You buy a $1,200,000 property with a 25% down payment ($300,000) plus $30,000 in closing costs and immediate repairs — total cash invested is $330,000. Annual NOI is $84,000, and your annual loan payment (debt service) is $54,000.\n\nAnnual Cash Flow = $84,000 − $54,000 = $30,000\nCash-on-Cash Return = $30,000 / $330,000 = 9.1%\n\nCompare that to the property\'s cap rate ($84,000 / $1,200,000 = 7.0%) — the leverage here is boosting your cash return above the unleveraged cap rate, because the cost of debt is lower than the property\'s yield.',
+    faqTitle: 'Frequently Asked Questions',
+    faqs: [
+      {
+        question: 'Why is cash-on-cash return usually different from cap rate?',
+        answer: 'Cap rate assumes no financing. Cash-on-cash return reflects leverage. If your loan\'s interest rate is lower than the property\'s cap rate, leverage typically boosts your cash-on-cash return above the cap rate (positive leverage). If the interest rate is higher, it works against you (negative leverage).',
+      },
+      {
+        question: 'What counts as "cash invested"?',
+        answer: 'Down payment, closing costs, loan origination fees, and any immediate repairs or upgrades needed before the property is rent-ready. It does not include the financed portion of the purchase price.',
+      },
+      {
+        question: 'Is a higher cash-on-cash return always better?',
+        answer: 'Not necessarily — a very high cash-on-cash return can also signal high leverage and higher risk (a bigger loan relative to a smaller down payment). Look at it alongside DSCR to understand your risk cushion.',
+      },
+    ],
+    relatedTitle: 'Related Calculators',
+    relatedCalculators: [
+      { title: 'Cap Rate Calculator', slug: 'cap-rate' },
+      { title: 'NOI Calculator', slug: 'noi' },
+    ],
+  },
+};
