@@ -198,7 +198,7 @@ export const enContent: LocaleContent = {
       { label: 'm', desc: 'Payment Month Number (1 through n)' },
     ],
     exampleTitle: 'Real Scenario Comparison ($1.3M Loan, 6.5% Rate, 25-Yr Amort, 10-Yr Maturity)',
-    exampleContent: 'Suppose you obtain a $1,300,000 commercial loan at 6.5% interest on a 25-year amortization schedule with a 10-year balloon maturity:\n\n1. Under Equal Installment (Fixed Payment):\n- Monthly Payment: $8,772 / month (fixed)\n- 10-Year Total Interest Paid: $748,925\n- Year 10 Balloon Payoff Balance: $996,245 (approx. 76.6% of original principal)\n\n2. Under Equal Principal (Declining Payment):\n- Initial Payment: $11,375 / month (decreases by ~$23.47/mo down to $8,582 at Month 120)\n- 10-Year Total Interest Paid: $677,354 (saves $71,571 in interest)\n- Year 10 Balloon Payoff Balance: $780,000 (exactly 60.0% of original principal)',
+    exampleContent: '',
     faqTitle: 'Frequently Asked Questions',
     faqs: [
       {

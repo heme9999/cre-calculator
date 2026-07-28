@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { calculateLoanDetails } from '@/lib/loanCalculations';
-import { Check, Sparkles, Scale } from 'lucide-react';
+import { Sparkles, Scale } from 'lucide-react';
 
 interface Props {
   locale: string;
@@ -25,18 +25,20 @@ export function LoanScenarioComparison({ locale }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-          <Scale className="w-4 h-4 text-emerald-600" />
-          {isZh
-            ? `真实场景对比 ($130万贷款, 6.5%利率, 25年摊销, 10年到期)`
-            : `Real Scenario Comparison ($1.3M Loan, 6.5% Rate, 25-Yr Amort, 10-Yr Balloon)`}
-        </h3>
-        <span className="text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-          {isZh ? '公式算法实时同步' : 'Live Formula Output'}
-        </span>
+      {/* Dynamic Intro Paragraph */}
+      <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed">
+        {isZh ? (
+          <p>
+            假设申请一笔 <strong>{formatCurrency(benchmarkInput.loanAmount)}</strong> 的商业地产贷款，利率 <strong>{benchmarkInput.interestRate}%</strong>，按 <strong>{benchmarkInput.amortizationYears} 年摊销</strong>，到期年限为 <strong>{benchmarkInput.balloonYears} 年</strong>（到期偿还气球尾款）：
+          </p>
+        ) : (
+          <p>
+            Suppose you obtain a <strong>{formatCurrency(benchmarkInput.loanAmount)}</strong> commercial loan at <strong>{benchmarkInput.interestRate}%</strong> interest on a <strong>{benchmarkInput.amortizationYears}-year amortization</strong> schedule with a <strong>{benchmarkInput.balloonYears}-year balloon maturity</strong>:
+          </p>
+        )}
       </div>
 
+      {/* Dynamic Comparison Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Equal Installment Card */}
         <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3 relative overflow-hidden">
@@ -46,7 +48,7 @@ export function LoanScenarioComparison({ locale }: Props) {
                 1. {isZh ? '等额本息 (Equal Installment)' : 'Equal Installment (Fixed)'}
               </span>
               <span className="text-[11px] text-slate-500">
-                {isZh ? '月供总额固定不变' : 'Fixed Monthly Payment'}
+                {isZh ? '每月月供固定不变' : 'Fixed Monthly Payment'}
               </span>
             </div>
             <span className="text-xs font-bold text-slate-700 bg-white px-2.5 py-1 rounded-md border border-slate-200">
