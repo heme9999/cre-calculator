@@ -2,13 +2,12 @@
 
 import React, { useState } from 'react';
 import { formatCurrency } from '@/lib/utils';
+import { calculateLoanDetails, PaymentType } from '@/lib/loanCalculations';
 import { Calculator, Calendar, DollarSign, Table as TableIcon, Layers, Info } from 'lucide-react';
 
 interface Props {
   locale: string;
 }
-
-export type PaymentType = 'installment' | 'principal';
 
 export function LoanPaymentCalculator({ locale }: Props) {
   const isZh = locale === 'zh';
@@ -21,61 +20,33 @@ export function LoanPaymentCalculator({ locale }: Props) {
   const [balloonYears, setBalloonYears] = useState<number>(10);
   const [hasBalloon, setHasBalloon] = useState<boolean>(true);
 
-  // Derived Variables
-  const r = interestRate / 100 / 12; // Monthly rate
-  const n = amortizationYears * 12; // Total amortization months
-  const k = (hasBalloon ? balloonYears : amortizationYears) * 12; // Effective loan term months
-  const effectiveTermMonths = Math.min(k, n);
+  // Use unified loan calculation function
+  const calcResult = calculateLoanDetails({
+    loanAmount,
+    interestRate,
+    amortizationYears,
+    balloonYears,
+    hasBalloon,
+    paymentType,
+  });
 
-  // Equal Installment (等额本息) Monthly Payment M
-  const equalInstallmentMonthly = (r > 0 && n > 0)
-    ? (loanAmount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1)
-    : 0;
-
-  // Equal Principal (等额本金) Monthly Fixed Principal P_fixed
-  const equalPrincipalFixed = n > 0 ? loanAmount / n : 0;
-  const equalPrincipalMonth1Payment = equalPrincipalFixed + loanAmount * r;
-  const equalPrincipalMonthEndPayment = equalPrincipalFixed + Math.max(0, loanAmount - (effectiveTermMonths - 1) * equalPrincipalFixed) * r;
-
-  // Calculate Cumulative Interest & Principal over effective loan term (k months)
-  let termInterest = 0;
-  let termPrincipal = 0;
-  let currentBal = loanAmount;
-
-  if (paymentType === 'installment') {
-    for (let m = 1; m <= effectiveTermMonths; m++) {
-      const iMonth = currentBal * r;
-      const pMonth = equalInstallmentMonthly - iMonth;
-      termInterest += iMonth;
-      termPrincipal += pMonth;
-      currentBal = Math.max(0, currentBal - pMonth);
-    }
-  } else {
-    for (let m = 1; m <= effectiveTermMonths; m++) {
-      const iMonth = currentBal * r;
-      const pMonth = equalPrincipalFixed;
-      termInterest += iMonth;
-      termPrincipal += pMonth;
-      currentBal = Math.max(0, currentBal - pMonth);
-    }
-  }
-
-  // Calculate Balloon Payoff Balance after k months
-  let balloonBalance = 0;
-  if (hasBalloon && balloonYears < amortizationYears) {
-    if (paymentType === 'installment') {
-      balloonBalance = (r > 0 && n > 0 && k < n)
-        ? loanAmount * (Math.pow(1 + r, n) - Math.pow(1 + r, k)) / (Math.pow(1 + r, n) - 1)
-        : 0;
-    } else {
-      balloonBalance = Math.max(0, loanAmount - k * equalPrincipalFixed);
-    }
-  }
-
-  // Total Cumulative Payments
-  const totalPaidInTerm = termInterest + termPrincipal;
+  const {
+    monthlyPayment,
+    equalInstallmentMonthly,
+    equalPrincipalMonth1Payment,
+    equalPrincipalMonthEndPayment,
+    termInterest,
+    termPrincipal,
+    balloonBalance,
+    balloonPercentage,
+    totalPaidInTerm,
+  } = calcResult;
 
   // Compute 12-Month Schedule Table
+  const r = interestRate / 100 / 12;
+  const n = amortizationYears * 12;
+  const equalPrincipalFixed = n > 0 ? loanAmount / n : 0;
+
   const schedule = [];
   let scheduleBal = loanAmount;
 
@@ -282,22 +253,20 @@ export function LoanPaymentCalculator({ locale }: Props) {
               </span>
 
               <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1">
-                {paymentType === 'installment'
-                  ? formatCurrency(equalInstallmentMonthly)
-                  : formatCurrency(equalPrincipalMonth1Payment)}
+                {formatCurrency(Math.round(monthlyPayment))}
               </div>
 
               {paymentType === 'installment' ? (
                 <p className="text-xs text-slate-500 mt-1">
                   {isZh
-                    ? `每月固定供款: ${formatCurrency(equalInstallmentMonthly)} (每年 ${formatCurrency(equalInstallmentMonthly * 12)})`
-                    : `Fixed Monthly Debt Service: ${formatCurrency(equalInstallmentMonthly)}/mo`}
+                    ? `每月固定供款: ${formatCurrency(Math.round(equalInstallmentMonthly))} (每年 ${formatCurrency(Math.round(equalInstallmentMonthly * 12))})`
+                    : `Fixed Monthly Debt Service: ${formatCurrency(Math.round(equalInstallmentMonthly))}/mo`}
                 </p>
               ) : (
                 <p className="text-xs text-slate-500 mt-1">
                   {isZh
-                    ? `月供按月递减：首月 ${formatCurrency(equalPrincipalMonth1Payment)}，末月 ${formatCurrency(equalPrincipalMonthEndPayment)}`
-                    : `Declining payment: Initial ${formatCurrency(equalPrincipalMonth1Payment)}, final ${formatCurrency(equalPrincipalMonthEndPayment)}`}
+                    ? `月供按月递减：首月 ${formatCurrency(Math.round(equalPrincipalMonth1Payment))}，末月 ${formatCurrency(Math.round(equalPrincipalMonthEndPayment))}`
+                    : `Declining payment: Initial ${formatCurrency(Math.round(equalPrincipalMonth1Payment))}, final ${formatCurrency(Math.round(equalPrincipalMonthEndPayment))}`}
                 </p>
               )}
             </div>
@@ -308,27 +277,27 @@ export function LoanPaymentCalculator({ locale }: Props) {
                 <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs space-y-1">
                   <div className="flex justify-between font-bold text-emerald-950">
                     <span>{isZh ? `第 ${balloonYears} 年到期气球尾款:` : `Year ${balloonYears} Balloon Payoff:`}</span>
-                    <span className="text-emerald-700 font-extrabold">{formatCurrency(balloonBalance)}</span>
+                    <span className="text-emerald-700 font-extrabold">{formatCurrency(Math.round(balloonBalance))}</span>
                   </div>
                   <p className="text-[11px] text-emerald-800">
                     {paymentType === 'principal'
-                      ? (isZh ? `等额本金加快本金偿还，尾款降至原本金的 ${( (balloonBalance / loanAmount) * 100 ).toFixed(1)}%` : `Principal balance drops faster to ${((balloonBalance / loanAmount) * 100).toFixed(1)}% of original`)
+                      ? (isZh ? `等额本金加快本金偿还，尾款降至原本金的 ${balloonPercentage.toFixed(1)}%` : `Principal balance drops faster to ${balloonPercentage.toFixed(1)}% of original`)
                       : (isZh ? '需在到期日前办理再融资 (Refinance) 或出售物业结清' : 'Must be refinanced or paid off at loan maturity')}
                   </p>
                 </div>
               )}
 
               <div className="flex justify-between text-slate-700">
-                <span>{isZh ? `前 ${effectiveTermMonths / 12} 年累计利息支出:` : `Total Interest (${effectiveTermMonths / 12} yrs):`}</span>
-                <span className="font-semibold text-red-600">{formatCurrency(termInterest)}</span>
+                <span>{isZh ? `前 ${balloonYears} 年累计利息支出:` : `Total Interest (${balloonYears} yrs):`}</span>
+                <span className="font-semibold text-red-600">{formatCurrency(Math.round(termInterest))}</span>
               </div>
               <div className="flex justify-between text-slate-700">
-                <span>{isZh ? `前 ${effectiveTermMonths / 12} 年偿还本金:` : `Total Principal Paid (${effectiveTermMonths / 12} yrs):`}</span>
-                <span className="font-semibold text-slate-900">{formatCurrency(termPrincipal)}</span>
+                <span>{isZh ? `前 ${balloonYears} 年偿还本金:` : `Total Principal Paid (${balloonYears} yrs):`}</span>
+                <span className="font-semibold text-slate-900">{formatCurrency(Math.round(termPrincipal))}</span>
               </div>
               <div className="flex justify-between text-slate-700 font-semibold border-t border-slate-200 pt-2">
                 <span>{isZh ? '累计支付总额:' : 'Total Cumulative Payments:'}</span>
-                <span className="text-slate-900">{formatCurrency(totalPaidInTerm)}</span>
+                <span className="text-slate-900">{formatCurrency(Math.round(totalPaidInTerm))}</span>
               </div>
             </div>
           </div>
