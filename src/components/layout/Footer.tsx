@@ -68,6 +68,11 @@ export function Footer({ locale }: FooterProps) {
                   {nav.exchange1031}
                 </Link>
               </li>
+              <li>
+                <Link href={`/${locale}/calculators/lease-vs-buy/`} className="hover:text-emerald-400 transition-colors">
+                  {nav.leaseVsBuy}
+                </Link>
+              </li>
             </ul>
           </div>
 
