@@ -52,6 +52,16 @@ export function Footer({ locale }: FooterProps) {
                   {isZh ? 'Cash-on-Cash Return 计算器' : 'Cash-on-Cash Return Calculator'}
                 </Link>
               </li>
+              <li>
+                <Link href={`/${locale}/calculators/dscr/`} className="hover:text-emerald-400 transition-colors">
+                  {isZh ? 'DSCR (偿债覆盖率) 计算器' : 'DSCR Calculator'}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/calculators/loan-payment/`} className="hover:text-emerald-400 transition-colors">
+                  {isZh ? '商业地产贷款月供计算器' : 'Commercial Loan Payment Calculator'}
+                </Link>
+              </li>
             </ul>
           </div>
 

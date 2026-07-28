@@ -75,6 +75,22 @@ export function Header({ locale }: HeaderProps) {
           >
             Cash-on-Cash
           </Link>
+          <Link
+            href={`/${locale}/calculators/dscr/`}
+            className={`hover:text-white transition-colors ${
+              pathname?.includes('/dscr/') ? 'text-emerald-400 font-semibold' : ''
+            }`}
+          >
+            DSCR
+          </Link>
+          <Link
+            href={`/${locale}/calculators/loan-payment/`}
+            className={`hover:text-white transition-colors ${
+              pathname?.includes('/loan-payment/') ? 'text-emerald-400 font-semibold' : ''
+            }`}
+          >
+            Loan Payment
+          </Link>
         </nav>
 
         {/* Right Section: Language Switcher */}

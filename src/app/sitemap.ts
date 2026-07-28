@@ -4,7 +4,14 @@ import { SITE_URL } from '@/lib/constants';
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ['', 'calculators/cap-rate', 'calculators/noi', 'calculators/cash-on-cash'];
+  const routes = [
+    '',
+    'calculators/cap-rate',
+    'calculators/noi',
+    'calculators/cash-on-cash',
+    'calculators/dscr',
+    'calculators/loan-payment',
+  ];
   const locales = ['en', 'zh'];
 
   const items: MetadataRoute.Sitemap = [];

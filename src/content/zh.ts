@@ -12,7 +12,7 @@ export const zhContent: LocaleContent = {
   },
   home: {
     metaTitle: '商业地产投资计算器 | 美国商业地产决策工具站',
-    metaDescription: '专为在美华人投资者与经纪人打造的商业地产投资决策计算工具，支持 Cap Rate、NOI、Cash-on-Cash Return 实时计算与公式解读。',
+    metaDescription: '专为在美华人投资者与经纪人打造的商业地产投资决策计算工具，支持 Cap Rate、NOI、Cash-on-Cash Return、DSCR 实时计算与公式解读。',
     heroH1: '商业地产投资决策数字工具',
     heroSubtitle: '提供实时、精准的商业地产财务计算器，辅以公式讲解、真实场景示例与行业基准数据，助您快速评估项目价值。',
     featuredTitle: '核心商业地产计算器',
@@ -35,6 +35,18 @@ export const zhContent: LocaleContent = {
         title: 'Cash-on-Cash Return 计算器',
         description: '算出你实际投入的现金——在加了贷款杠杆之后——真正的税前年化现金回报率。',
         badge: '杠杆分析',
+      },
+      {
+        slug: 'dscr',
+        title: 'DSCR（偿债覆盖率）计算器',
+        description: '计算净营业收入对贷款还款的覆盖倍数，即刻对照商业银行贷款审核要求。',
+        badge: '银行审核',
+      },
+      {
+        slug: 'loan-payment',
+        title: '商业地产贷款月供计算器',
+        description: '计算每月本息还款额、总利息支出、气球贷款到期尾款及还款摊销表。',
+        badge: '融资还款',
       },
     ],
     whyUsTitle: '专为商业地产投资者与经纪人设计',
@@ -91,6 +103,7 @@ export const zhContent: LocaleContent = {
     relatedCalculators: [
       { title: 'NOI 计算器', slug: 'noi' },
       { title: 'Cash-on-Cash Return 计算器', slug: 'cash-on-cash' },
+      { title: 'DSCR 计算器', slug: 'dscr' },
     ],
   },
   noi: {
@@ -130,6 +143,7 @@ export const zhContent: LocaleContent = {
     relatedTitle: '相关计算器',
     relatedCalculators: [
       { title: 'Cap Rate 计算器', slug: 'cap-rate' },
+      { title: 'DSCR 计算器', slug: 'dscr' },
       { title: 'Cash-on-Cash Return 计算器', slug: 'cash-on-cash' },
     ],
   },
@@ -167,6 +181,91 @@ export const zhContent: LocaleContent = {
     relatedCalculators: [
       { title: 'Cap Rate 计算器', slug: 'cap-rate' },
       { title: 'NOI 计算器', slug: 'noi' },
+      { title: 'DSCR 计算器', slug: 'dscr' },
+    ],
+  },
+  dscr: {
+    metaTitle: 'DSCR 计算器 — 商业地产偿债覆盖率在线计算工具',
+    metaDescription: '输入年净营业收入（NOI）和年度还贷总额，计算商业地产的偿债覆盖率（DSCR），即刻对照商业银行贷款审批常见标准。',
+    h1: 'DSCR（偿债覆盖率）计算器',
+    subtitle: '判断你的商业物业产生的净收入，能否舒服地覆盖贷款还款——并对照商业银行常见的审核线。',
+    whatIsTitle: 'DSCR 是什么，为什么重要',
+    whatIsContent: 'DSCR（Debt Service Coverage Ratio，偿债覆盖率）衡量的是商业地产通过自身的净营业收入（NOI）覆盖每年房贷还款本息的能力。与住宅贷款看重借款人个人收入不同，商业地产贷款主要看物业本身的盈利能力。DSCR是商业银行和贷款机构在审核贷款额度、利率及审批通过率时最核心的指标。比率为1.0x意味着净收入刚好够还贷，而银行通常要求1.20x至1.35x的比率作为应对市场波动的安全缓冲。',
+    formulaTitle: '计算公式',
+    formulaCode: 'DSCR = 净营业收入(NOI) / 年度还贷总额(Annual Debt Service)',
+    formulaVariables: [
+      { label: 'NOI', desc: '扣除运营支出后、但在还贷和缴税之前的年净收入' },
+      { label: '年度还贷总额', desc: '一年内应偿还的贷款本金与利息总和' },
+    ],
+    exampleTitle: '一个真实场景示例',
+    exampleContent: '假设一栋办公楼年NOI为25万美元。你的商业贷款申请要求每月还款15,625美元（每年还款18.75万美元）。\n\nDSCR = $250,000 / $187,500 = 1.33x\n\n因为1.33x高于银行常见的1.25x最低要求，这意味着该项目拥有每年6.25万美元的安全缓冲资金，属于银行非常青睐的稳健贷款标的。',
+    faqTitle: '常见问题',
+    faqs: [
+      {
+        question: '商业地产的 DSCR 多少算合理？',
+        answer: '绝大多数商业银行要求最低 DSCR 在 1.20x 到 1.25x 之间。如果是现金流极其稳定的优质资产（如长租单租户 NNN 物业），最低要求可能放宽至 1.15x - 1.20x；如果是风险偏高的资产（如酒店或无主力店的零售 Center），银行通常要求 1.35x 到 1.50x 以上。',
+      },
+      {
+        question: '如果 DSCR 低于 1.0x 会发生什么？',
+        answer: 'DSCR 低于 1.0x 意味着负现金流——物业运营产生的收入不足以支付房贷。除非业主持续自筹资金补足缺口，否则项目将面临贷款违约风险。',
+      },
+      {
+        question: '如何提高一个项目的 DSCR？',
+        answer: '提高 DSCR 主要有两种途径：一是提高 NOI（通过提升租金、增加其他杂项收入或降低运营成本）；二是降低年度还款额（通过增加首付比例、争取更低利率或延长摊销年限）。',
+      },
+      {
+        question: '计算 DSCR 是用总收入还是 NOI？',
+        answer: 'DSCR 必须使用扣除所有运营支出和空置损失后的净营业收入（NOI）来计算，绝不能使用毛收入（Gross Income）。',
+      },
+    ],
+    relatedTitle: '相关计算器',
+    relatedCalculators: [
+      { title: 'NOI 计算器', slug: 'noi' },
+      { title: '商业地产贷款月供计算器', slug: 'loan-payment' },
+      { title: 'Cash-on-Cash Return 计算器', slug: 'cash-on-cash' },
+    ],
+  },
+  loanPayment: {
+    metaTitle: '商业地产贷款月供计算器 — 还款摊销与气球贷款计算',
+    metaDescription: '计算商业地产贷款的每月本息还款额、总利息支出、气球贷款（Balloon Payment）到期尾款金额，并查看前12个月还款摊销表。',
+    h1: '商业地产贷款月供计算器',
+    subtitle: '计算商业地产贷款的每月本息还款额、利息成本以及气球贷款到期应付尾款。',
+    whatIsTitle: '商业地产贷款摊销与气球贷款是什么',
+    whatIsContent: '商业地产贷款与住宅贷款有很大不同。住宅贷款常见30年固定利率，而商业地产贷款通常采用较短的贷款到期年限（如5年、7年或10年），搭配较长的摊销年限（如25年或30年）。在到期日，未还清的剩余本金余额必须通过一次性“气球贷款（Balloon Payment）”偿还或重新办理再融资（Refinance）。精准计算月供和到期尾款是预测现金流和防范再融资风险的关键。',
+    formulaTitle: '计算公式',
+    formulaCode: 'M = P × [ r(1 + r)^n ] / [ (1 + r)^n − 1 ]',
+    formulaVariables: [
+      { label: 'M', desc: '每月本息还款额 (Monthly Payment)' },
+      { label: 'P', desc: '贷款本金总额 ($)' },
+      { label: 'r', desc: '月利率 (年利率 / 12)' },
+      { label: 'n', desc: '总摊销期数 (摊销年限 × 12)' },
+    ],
+    exampleTitle: '一个真实场景示例',
+    exampleContent: '你申请了一笔200万美元的商业地产贷款，利率为6.5%，按25年摊销计算月供，贷款期限为10年（到期气球还款）。\n\n你的月供为$13,496（每年$161,952）。在前10年内，你累计还款$1,619,520（其中利息$1,152,192，本金$467,328）。在第10年到期时，你需要一次性偿还剩余的气球贷款尾款$1,532,672。',
+    faqTitle: '常见问题',
+    faqs: [
+      {
+        question: '什么是商业地产里的气球贷款 (Balloon Payment)？',
+        answer: '气球贷款是指贷款的实际到期期限（例如10年）短于其月供计算的摊销期限（例如25年），在贷款到期时需要一次性偿还的剩余本金大额尾款。投资者通常会在气球贷款到期前选择重新贷款（Refinance）或出售物业。',
+      },
+      {
+        question: '商业地产贷款常见的摊销年限是多少？',
+        answer: '绝大多数商业地产贷款采用25年摊销期。优质核心城市的标杆资产可能争取到30年摊销，而较老旧或特殊用途的物业可能被限制在20年。',
+      },
+      {
+        question: '利率波动对商业地产债务影响有多大？',
+        answer: '由于商业地产贷款金额巨大，哪怕0.5%的利率变化也会显著改变年度还款额，从而直接影响项目的 DSCR 和 Cash-on-Cash Return 现金回报率。',
+      },
+      {
+        question: '商业地产贷款是固定利率还是浮动利率？',
+        answer: '商业贷款可以是5-10年的固定利率，也可以是锚定 SOFR 或 Prime 的浮动利率。常见模式是前5年或7年固定，之后按市场利率重新调整。',
+      },
+    ],
+    relatedTitle: '相关计算器',
+    relatedCalculators: [
+      { title: 'DSCR 计算器', slug: 'dscr' },
+      { title: 'Cash-on-Cash Return 计算器', slug: 'cash-on-cash' },
+      { title: 'Cap Rate 计算器', slug: 'cap-rate' },
     ],
   },
 };

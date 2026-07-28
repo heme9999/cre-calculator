@@ -62,4 +62,6 @@ export interface LocaleContent {
   capRate: CalculatorPageContent;
   noi: CalculatorPageContent;
   cashOnCash: CalculatorPageContent;
+  dscr: CalculatorPageContent;
+  loanPayment: CalculatorPageContent;
 }
