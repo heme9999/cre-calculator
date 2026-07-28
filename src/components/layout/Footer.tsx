@@ -73,6 +73,11 @@ export function Footer({ locale }: FooterProps) {
                   {nav.leaseVsBuy}
                 </Link>
               </li>
+              <li>
+                <Link href={`/${locale}/calculators/break-even-ratio/`} className="hover:text-emerald-400 transition-colors">
+                  {nav.breakEvenRatio}
+                </Link>
+              </li>
             </ul>
           </div>
 

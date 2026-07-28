@@ -68,6 +68,12 @@ export const zhContent: LocaleContent = {
         description: '对比商业地产租赁与购买方案在 5-15 年持有期内的总现金支出与退出净资产积累。',
         badge: '租买决策',
       },
+      {
+        slug: 'break-even-ratio',
+        title: '收支平衡比率 (Break-Even Ratio) 计算器',
+        description: '计算商业地产物业满足运营支出与还贷债务所需的最低出租率门槛与抗空置安全垫。',
+        badge: '风控安全',
+      },
     ],
     whyUsTitle: '专为商业地产投资者与经纪人设计',
     whyUsItems: [
@@ -123,7 +129,8 @@ export const zhContent: LocaleContent = {
     relatedCalculators: [
       { title: '净营业收入 (NOI) 计算器', slug: 'noi' },
       { title: '现金回报率 (Cash-on-Cash) 计算器', slug: 'cash-on-cash' },
-      { title: '贷款月供 (Loan Payment) 计算器', slug: 'loan-payment' },
+      { title: '1031 Exchange 递延税计算器', slug: '1031-exchange' },
+      { title: '收支平衡比率 (Break-Even Ratio) 计算器', slug: 'break-even-ratio' },
     ],
   },
   noi: {
@@ -164,8 +171,8 @@ export const zhContent: LocaleContent = {
     relatedCalculators: [
       { title: '资本化率 (Cap Rate) 计算器', slug: 'cap-rate' },
       { title: '偿债覆盖率 (DSCR) 计算器', slug: 'dscr' },
-      { title: '贷款月供 (Loan Payment) 计算器', slug: 'loan-payment' },
-      { title: '现金回报率 (Cash-on-Cash) 计算器', slug: 'cash-on-cash' },
+      { title: '收支平衡比率 (Break-Even Ratio) 计算器', slug: 'break-even-ratio' },
+      { title: '1031 Exchange 递延税计算器', slug: '1031-exchange' },
     ],
   },
   cashOnCash: {
@@ -201,9 +208,9 @@ export const zhContent: LocaleContent = {
     relatedTitle: '相关计算器',
     relatedCalculators: [
       { title: '资本化率 (Cap Rate) 计算器', slug: 'cap-rate' },
+      { title: '收支平衡比率 (Break-Even Ratio) 计算器', slug: 'break-even-ratio' },
+      { title: '1031 Exchange 递延税计算器', slug: '1031-exchange' },
       { title: '偿债覆盖率 (DSCR) 计算器', slug: 'dscr' },
-      { title: '净营业收入 (NOI) 计算器', slug: 'noi' },
-      { title: '贷款月供 (Loan Payment) 计算器', slug: 'loan-payment' },
     ],
   },
   loanPayment: {
@@ -374,20 +381,41 @@ export const zhContent: LocaleContent = {
     ],
   },
   breakEvenRatio: {
-    metaTitle: 'Break-Even Ratio 收支平衡比率计算器 — 商业地产空置风险评估',
-    metaDescription: '计算商业地产收支平衡比率 (Break-Even Ratio)。',
+    metaTitle: '收支平衡比率 (Break-Even Ratio) 计算器 — 商业地产空置与抗风险能力评估',
+    metaDescription: '输入年度运营支出、年度还贷总额与有效毛收入（EGI），在线计算商业地产收支平衡比率 (Break-Even Ratio)，评估保本出租率与商业银行风控放贷标准。',
     h1: '收支平衡比率 (Break-Even Ratio) 计算器',
-    subtitle: '计算商业地产满足运营支出与还贷所需的最低出租率门槛。',
-    whatIsTitle: 'Break-Even Ratio 是什么',
-    whatIsContent: '衡量物业避免负现金流所需的门槛。',
+    subtitle: '计算商业地产物业满足运营支出与还贷债务所需的最低出租率门槛与抗空置安全垫。',
+    whatIsTitle: 'Break-Even Ratio 是什么，为什么重要',
+    whatIsContent: '收支平衡比率（Break-Even Ratio，简称 BER）是商业地产贷款机构（Lenders）与投资者评估物业“抗空置能力”与“防止现金流倒挂（Negative Cash Flow）”的关键风控指标。\n\n该指标表明：物业的实际出租率必须达到多少，产生的毛收入才刚好够支付全部运营支出（Operating Expenses）和贷款本息（Debt Service）。BER 越低，说明物业的抗风险能力越强，能够承受越高的空置率或租金下滑风险；反之，BER 越高，说明财务安全垫越薄，极易陷入亏损。商业银行通常要求 BER 控制在 80% 至 85% 以下。',
     formulaTitle: '计算公式',
-    formulaCode: 'Break-Even Ratio = (Operating Expenses + Annual Debt Service) / EGI',
-    formulaVariables: [],
-    exampleTitle: '场景示例',
-    exampleContent: 'Break-Even Ratio = 65%',
+    formulaCode: '收支平衡比率 (%) = ( 年度运营支出 + 年度还贷总额 ) / 年有效毛收入 (EGI) × 100%\n最高可承受空置率 (%) = 100% − 收支平衡比率',
+    formulaVariables: [
+      { label: '年度运营支出 (Operating Expenses)', desc: '物业维持日常运营所需的全部固定与变动开支（房产税、保险、管理费、维修等）' },
+      { label: '年度还贷总额 (Annual Debt Service)', desc: '物业按揭贷款全年的本金与利息还款总额 (12 × 月供)' },
+      { label: '年有效毛收入 (Effective Gross Income)', desc: '潜在租金总收入扣除预期空置与欠租损失后的实际毛收入 (EGI)' },
+    ],
+    exampleTitle: '一个真实商业办公楼收支平衡比率示例 ($22万 EGI)',
+    exampleContent: '假设你持有一栋年有效毛收入 (EGI) 为 $220,000 的商业办公楼，年度运营支出为 $70,000，按揭贷款年度还贷总额 (Annual Debt Service) 为 $121,536：\n\n刚性固定支出总额 = $70,000 + $121,536 = $191,536\n收支平衡比率 (BER) = ($191,536 / $220,000) × 100% = 87.06%\n最高可承受空置率 = 100% − 87.06% = 12.94%\n\n【结果解读】：由于 BER 达到了 87.06%（超过了商业银行普遍设定的 80%-85% 警戒线），说明该物业抗空置能力偏弱。一旦空置率超过 12.94%，物业产生的收入将无法覆盖账面开支，业主需自筹资金补贴打款。建议通过增加首付降贷或提升租金来降低 BER。',
     faqTitle: '常见问题',
-    faqs: [],
+    faqs: [
+      {
+        question: '商业银行普遍接受的最高 Break-Even Ratio 是多少？',
+        answer: '多数商业地产放贷机构要求 Break-Even Ratio 不得超过 80% 至 85%。BER 低于 80% 被视为具有良好的财务安全缓冲，更容易获得贷款审批与优惠利率。',
+      },
+      {
+        question: 'Break-Even Ratio 和 DSCR 有什么区别与联系？',
+        answer: '两个指标均衡量偿债能力，但视角不同：DSCR = NOI / Debt Service，关注净收入覆盖还贷的倍数；而 Break-Even Ratio = (Operating Expenses + Debt Service) / EGI，将运营开支与还贷加总后除以毛收入，直观反映了“保本所需的最少出租率”。两者相辅相成。',
+      },
+      {
+        question: '如何有效降低物业的收支平衡比率？',
+        answer: '主要途径有三：1. 降低贷款债务（增加首付比例、争取更低利率或延长摊销年限）；2. 优化运营成本（重新竞标物业保险、申请房产税减免）；3. 提升毛收入（增设停车场/广告牌等额外收入来源）。',
+      },
+    ],
     relatedTitle: '相关计算器',
-    relatedCalculators: [],
+    relatedCalculators: [
+      { title: '偿债覆盖率 (DSCR) 计算器', slug: 'dscr' },
+      { title: '净营业收入 (NOI) 计算器', slug: 'noi' },
+      { title: '资本化率 (Cap Rate) 计算器', slug: 'cap-rate' },
+    ],
   },
 };

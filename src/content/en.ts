@@ -68,6 +68,12 @@ export const enContent: LocaleContent = {
         description: 'Compare full lifecycle cost and net equity accumulation between leasing and buying commercial space.',
         badge: 'Occupier Strategy',
       },
+      {
+        slug: 'break-even-ratio',
+        title: 'Break-Even Ratio Calculator',
+        description: 'Determine the minimum occupancy rate required to cover operating expenses and mortgage debt service.',
+        badge: 'Risk Analysis',
+      },
     ],
     whyUsTitle: 'Built for Serious CRE Investors & Brokers',
     whyUsItems: [
@@ -123,7 +129,8 @@ export const enContent: LocaleContent = {
     relatedCalculators: [
       { title: 'NOI Calculator', slug: 'noi' },
       { title: 'Cash-on-Cash Return Calculator', slug: 'cash-on-cash' },
-      { title: 'Commercial Loan Payment Calculator', slug: 'loan-payment' },
+      { title: '1031 Exchange Calculator', slug: '1031-exchange' },
+      { title: 'Break-Even Ratio Calculator', slug: 'break-even-ratio' },
     ],
   },
   noi: {
@@ -164,8 +171,8 @@ export const enContent: LocaleContent = {
     relatedCalculators: [
       { title: 'Cap Rate Calculator', slug: 'cap-rate' },
       { title: 'DSCR Calculator', slug: 'dscr' },
-      { title: 'Commercial Loan Payment Calculator', slug: 'loan-payment' },
-      { title: 'Cash-on-Cash Return Calculator', slug: 'cash-on-cash' },
+      { title: 'Break-Even Ratio Calculator', slug: 'break-even-ratio' },
+      { title: '1031 Exchange Calculator', slug: '1031-exchange' },
     ],
   },
   cashOnCash: {
@@ -201,9 +208,9 @@ export const enContent: LocaleContent = {
     relatedTitle: 'Related Calculators',
     relatedCalculators: [
       { title: 'Cap Rate Calculator', slug: 'cap-rate' },
+      { title: 'Break-Even Ratio Calculator', slug: 'break-even-ratio' },
+      { title: '1031 Exchange Calculator', slug: '1031-exchange' },
       { title: 'DSCR Calculator', slug: 'dscr' },
-      { title: 'NOI Calculator', slug: 'noi' },
-      { title: 'Commercial Loan Payment Calculator', slug: 'loan-payment' },
     ],
   },
   loanPayment: {
@@ -375,19 +382,40 @@ export const enContent: LocaleContent = {
   },
   breakEvenRatio: {
     metaTitle: 'Break-Even Ratio Calculator — Commercial Real Estate Risk Metric',
-    metaDescription: 'Calculate Break-Even Ratio for commercial real estate properties.',
+    metaDescription: 'Calculate Break-Even Ratio (BER) for commercial real estate properties. Enter operating expenses, annual debt service, and Effective Gross Income to assess occupancy safety margins.',
     h1: 'Break-Even Ratio Calculator',
-    subtitle: 'Find minimum occupancy needed to cover operating expenses and mortgage payments.',
-    whatIsTitle: 'What Is Break-Even Ratio',
-    whatIsContent: 'Measures occupancy safety margin to avoid negative cash flow.',
-    formulaTitle: 'Formula',
-    formulaCode: 'Break-Even Ratio = (Operating Expenses + Annual Debt Service) / EGI',
-    formulaVariables: [],
-    exampleTitle: 'Example',
-    exampleContent: 'Break-Even Ratio = 65%',
-    faqTitle: 'FAQs',
-    faqs: [],
+    subtitle: 'Determine the minimum occupancy rate required to cover operating expenses and mortgage debt service.',
+    whatIsTitle: 'What Is the Break-Even Ratio and Why It Matters',
+    whatIsContent: 'The Break-Even Ratio (BER) is a fundamental risk evaluation metric used by commercial real estate lenders and underwriting teams to gauge a property\'s vulnerability to vacancy and negative cash flow.\n\nBER shows the exact percentage of occupancy (or gross revenue) required to pay all operating expenses and annual mortgage debt service combined. A lower BER indicates a larger safety margin, meaning the property can weather economic downturns, tenant defaults, or rising expenses. Commercial lenders typically require a BER below 80% to 85%.',
+    formulaTitle: 'The Formulas',
+    formulaCode: 'Break-Even Ratio (%) = ( Operating Expenses + Annual Debt Service ) / Effective Gross Income (EGI) × 100%\nMax Allowable Vacancy (%) = 100% − Break-Even Ratio',
+    formulaVariables: [
+      { label: 'Operating Expenses', desc: 'Total annual costs to operate the property (property taxes, insurance, management, repairs, utilities)' },
+      { label: 'Annual Debt Service', desc: 'Total annual mortgage principal and interest payments (12 × Monthly Payment)' },
+      { label: 'Effective Gross Income (EGI)', desc: 'Gross potential rent minus estimated vacancy and credit losses plus secondary income' },
+    ],
+    exampleTitle: 'A Real Office Property Break-Even Example ($220k EGI)',
+    exampleContent: 'Suppose you own a commercial office building generating $220,000 in Effective Gross Income (EGI), with $70,000 in annual operating expenses and $121,536 in annual debt service:\n\nTotal Fixed Outlay = $70,000 + $121,536 = $191,536\nBreak-Even Ratio (BER) = ($191,536 / $220,000) × 100% = 87.06%\nMax Allowable Vacancy = 100% − 87.06% = 12.94%\n\n【Interpretation】: Because BER is 87.06% (exceeding lender target benchmarks of 80-85%), the financial cushion against vacancy is thin. If vacancy exceeds 12.94%, the property will experience a cash flow deficit.',
+    faqTitle: 'Frequently Asked Questions',
+    faqs: [
+      {
+        question: 'What is a good Break-Even Ratio for commercial lenders?',
+        answer: 'Most commercial lenders prefer a Break-Even Ratio under 80%. A BER below 80% signifies a robust financial cushion, making loan approval easier and interest terms more favorable.',
+      },
+      {
+        question: 'How does Break-Even Ratio differ from DSCR?',
+        answer: 'While DSCR measures net operating income against debt service (NOI / Debt Service), BER measures total fixed obligations (Expenses + Debt Service) against gross income (EGI). BER explicitly reveals the minimum required occupancy percentage to break even.',
+      },
+      {
+        question: 'How can an investor lower a property\'s Break-Even Ratio?',
+        answer: 'Investors can lower BER by reducing debt service (larger down payment or lower interest rate), auditing and curbing operating expenses, or increasing gross revenues through rent adjustments or amenity fees.',
+      },
+    ],
     relatedTitle: 'Related Calculators',
-    relatedCalculators: [],
+    relatedCalculators: [
+      { title: 'DSCR Calculator', slug: 'dscr' },
+      { title: 'NOI Calculator', slug: 'noi' },
+      { title: 'Cap Rate Calculator', slug: 'cap-rate' },
+    ],
   },
 };

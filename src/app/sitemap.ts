@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'calculators/dscr',
     'calculators/1031-exchange',
     'calculators/lease-vs-buy',
+    'calculators/break-even-ratio',
   ];
   const locales = ['en', 'zh'];
 
