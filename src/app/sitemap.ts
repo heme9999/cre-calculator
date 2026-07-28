@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'calculators/cash-on-cash',
     'calculators/loan-payment',
     'calculators/dscr',
+    'calculators/1031-exchange',
   ];
   const locales = ['en', 'zh'];
 

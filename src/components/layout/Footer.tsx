@@ -63,6 +63,11 @@ export function Footer({ locale }: FooterProps) {
                   {nav.dscr}
                 </Link>
               </li>
+              <li>
+                <Link href={`/${locale}/calculators/1031-exchange/`} className="hover:text-emerald-400 transition-colors">
+                  {nav.exchange1031}
+                </Link>
+              </li>
             </ul>
           </div>
 

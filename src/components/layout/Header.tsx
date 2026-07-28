@@ -37,6 +37,7 @@ export function Header({ locale }: HeaderProps) {
     { href: `/${locale}/calculators/cash-on-cash/`, label: nav.cashOnCash, key: 'cash-on-cash' },
     { href: `/${locale}/calculators/loan-payment/`, label: nav.loanPayment, key: 'loan-payment' },
     { href: `/${locale}/calculators/dscr/`, label: nav.dscr, key: 'dscr' },
+    { href: `/${locale}/calculators/1031-exchange/`, label: nav.exchange1031, key: '1031-exchange' },
   ];
 
   return (

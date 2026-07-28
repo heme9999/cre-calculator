@@ -54,6 +54,9 @@ export interface NavContent {
   cashOnCash: string;
   loanPayment: string;
   dscr: string;
+  exchange1031: string;
+  leaseVsBuy: string;
+  breakEvenRatio: string;
   guides: string;
   about: string;
   switchLangLabel: string;
@@ -69,4 +72,7 @@ export interface LocaleContent {
   cashOnCash: CalculatorPageContent;
   loanPayment: CalculatorPageContent;
   dscr: CalculatorPageContent;
+  exchange1031: CalculatorPageContent;
+  leaseVsBuy: CalculatorPageContent;
+  breakEvenRatio: CalculatorPageContent;
 }
