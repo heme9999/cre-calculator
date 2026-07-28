@@ -1,76 +1,109 @@
 'use client';
 
 import React, { useState } from 'react';
-import { formatCurrency, formatPercent } from '@/lib/utils';
-import { Calculator, Calendar, DollarSign, PieChart, Table as TableIcon, Info } from 'lucide-react';
+import { formatCurrency } from '@/lib/utils';
+import { Calculator, Calendar, DollarSign, Table as TableIcon, Layers, Info } from 'lucide-react';
 
 interface Props {
   locale: string;
 }
 
+export type PaymentType = 'installment' | 'principal';
+
 export function LoanPaymentCalculator({ locale }: Props) {
   const isZh = locale === 'zh';
 
-  // Inputs
-  const [loanAmount, setLoanAmount] = useState<number>(2000000);
+  // Inputs - Default set to 1.3M loan, 6.5% interest, 25yr amort, 10yr balloon
+  const [paymentType, setPaymentType] = useState<PaymentType>('installment');
+  const [loanAmount, setLoanAmount] = useState<number>(1300000);
   const [interestRate, setInterestRate] = useState<number>(6.5);
   const [amortizationYears, setAmortizationYears] = useState<number>(25);
   const [balloonYears, setBalloonYears] = useState<number>(10);
   const [hasBalloon, setHasBalloon] = useState<boolean>(true);
 
-  // Calculations
+  // Derived Variables
   const r = interestRate / 100 / 12; // Monthly rate
-  const n = amortizationYears * 12; // Total months
+  const n = amortizationYears * 12; // Total amortization months
+  const k = (hasBalloon ? balloonYears : amortizationYears) * 12; // Effective loan term months
+  const effectiveTermMonths = Math.min(k, n);
 
-  // Monthly Payment M
-  const monthlyPayment = (r > 0 && n > 0)
+  // Equal Installment (等额本息) Monthly Payment M
+  const equalInstallmentMonthly = (r > 0 && n > 0)
     ? (loanAmount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1)
     : 0;
 
-  const annualDebtService = monthlyPayment * 12;
+  // Equal Principal (等额本金) Monthly Fixed Principal P_fixed
+  const equalPrincipalFixed = n > 0 ? loanAmount / n : 0;
+  const equalPrincipalMonth1Payment = equalPrincipalFixed + loanAmount * r;
+  const equalPrincipalMonthEndPayment = equalPrincipalFixed + Math.max(0, loanAmount - (effectiveTermMonths - 1) * equalPrincipalFixed) * r;
 
-  // Balloon Balance after balloonYears
-  const k = (hasBalloon ? balloonYears : amortizationYears) * 12;
-  const balloonBalance = (r > 0 && n > 0 && k < n)
-    ? loanAmount * (Math.pow(1 + r, n) - Math.pow(1 + r, k)) / (Math.pow(1 + r, n) - 1)
-    : 0;
+  // Calculate Cumulative Interest & Principal over effective loan term (k months)
+  let termInterest = 0;
+  let termPrincipal = 0;
+  let currentBal = loanAmount;
 
-  // Cumulative Payments up to Balloon / Maturity
-  const effectiveTermMonths = Math.min(k, n);
-  const totalPaidInTerm = monthlyPayment * effectiveTermMonths;
+  if (paymentType === 'installment') {
+    for (let m = 1; m <= effectiveTermMonths; m++) {
+      const iMonth = currentBal * r;
+      const pMonth = equalInstallmentMonthly - iMonth;
+      termInterest += iMonth;
+      termPrincipal += pMonth;
+      currentBal = Math.max(0, currentBal - pMonth);
+    }
+  } else {
+    for (let m = 1; m <= effectiveTermMonths; m++) {
+      const iMonth = currentBal * r;
+      const pMonth = equalPrincipalFixed;
+      termInterest += iMonth;
+      termPrincipal += pMonth;
+      currentBal = Math.max(0, currentBal - pMonth);
+    }
+  }
 
-  // Compute 12-Month Schedule
+  // Calculate Balloon Payoff Balance after k months
+  let balloonBalance = 0;
+  if (hasBalloon && balloonYears < amortizationYears) {
+    if (paymentType === 'installment') {
+      balloonBalance = (r > 0 && n > 0 && k < n)
+        ? loanAmount * (Math.pow(1 + r, n) - Math.pow(1 + r, k)) / (Math.pow(1 + r, n) - 1)
+        : 0;
+    } else {
+      balloonBalance = Math.max(0, loanAmount - k * equalPrincipalFixed);
+    }
+  }
+
+  // Total Cumulative Payments
+  const totalPaidInTerm = termInterest + termPrincipal;
+
+  // Compute 12-Month Schedule Table
   const schedule = [];
-  let currentBalance = loanAmount;
+  let scheduleBal = loanAmount;
 
   for (let month = 1; month <= 12; month++) {
-    const interestMonth = currentBalance * r;
-    const principalMonth = monthlyPayment - interestMonth;
-    const endingBalance = Math.max(0, currentBalance - principalMonth);
+    let pMonth = 0;
+    let iMonth = scheduleBal * r;
+    let payMonth = 0;
+
+    if (paymentType === 'installment') {
+      payMonth = equalInstallmentMonthly;
+      pMonth = payMonth - iMonth;
+    } else {
+      pMonth = equalPrincipalFixed;
+      payMonth = pMonth + iMonth;
+    }
+
+    const endBal = Math.max(0, scheduleBal - pMonth);
 
     schedule.push({
       month,
-      startBalance: currentBalance,
-      payment: monthlyPayment,
-      principal: principalMonth,
-      interest: interestMonth,
-      endBalance: endingBalance,
+      startBalance: scheduleBal,
+      payment: payMonth,
+      principal: pMonth,
+      interest: iMonth,
+      endBalance: endBal,
     });
 
-    currentBalance = endingBalance;
-  }
-
-  // Calculate term cumulative interest
-  let termInterest = 0;
-  let termPrincipal = 0;
-  let balanceTracker = loanAmount;
-
-  for (let m = 1; m <= effectiveTermMonths; m++) {
-    const iMonth = balanceTracker * r;
-    const pMonth = monthlyPayment - iMonth;
-    termInterest += iMonth;
-    termPrincipal += pMonth;
-    balanceTracker -= pMonth;
+    scheduleBal = endBal;
   }
 
   return (
@@ -86,7 +119,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
             {isZh ? '商业地产贷款月供与气球尾款计算器' : 'Commercial Real Estate Loan Payment & Balloon Payoff Calculator'}
           </h2>
           <p className="text-slate-400 text-sm mt-1">
-            {isZh ? '精准区分摊销年限与到期年限，计算每月本息还款、利息成本、气球尾款及还款摊销表' : 'Calculate monthly payments, total interest, balloon payoff amounts, and amortization schedules'}
+            {isZh ? '支持【等额本息】与【等额本金】两种还款模式对比，精确推算月供、利息开支及到期气球尾款' : 'Compare Equal Installment (fixed) vs Equal Principal (declining) loan repayment methods'}
           </p>
         </div>
       </div>
@@ -95,6 +128,45 @@ export function LoanPaymentCalculator({ locale }: Props) {
       <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Input Forms */}
         <div className="lg:col-span-7 space-y-6">
+          {/* Repayment Method Switcher */}
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+              <Layers className="w-4 h-4 text-emerald-600" />
+              {isZh ? '还款方式选择 (Repayment Method)' : 'Repayment Method'}
+            </label>
+            <div className="grid grid-cols-2 gap-3 p-1.5 bg-slate-100 rounded-xl border border-slate-200">
+              <button
+                type="button"
+                onClick={() => setPaymentType('installment')}
+                className={`py-3 px-4 rounded-lg text-xs font-bold transition-all text-center flex flex-col items-center justify-center gap-1 ${
+                  paymentType === 'installment'
+                    ? 'bg-slate-900 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                }`}
+              >
+                <span>{isZh ? '等额本息 (Equal Installment)' : 'Equal Installment (Fixed)'}</span>
+                <span className={`text-[10px] font-normal ${paymentType === 'installment' ? 'text-emerald-400' : 'text-slate-500'}`}>
+                  {isZh ? '每月月供固定不变 (标准模式)' : 'Fixed monthly P&I payment (Standard)'}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setPaymentType('principal')}
+                className={`py-3 px-4 rounded-lg text-xs font-bold transition-all text-center flex flex-col items-center justify-center gap-1 ${
+                  paymentType === 'principal'
+                    ? 'bg-slate-900 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                }`}
+              >
+                <span>{isZh ? '等额本金 (Equal Principal)' : 'Equal Principal (Declining)'}</span>
+                <span className={`text-[10px] font-normal ${paymentType === 'principal' ? 'text-emerald-400' : 'text-slate-500'}`}>
+                  {isZh ? '每月还款本金固定，月供逐月递减' : 'Fixed principal, declining total payment'}
+                </span>
+              </button>
+            </div>
+          </div>
+
           {/* Loan Principal */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -107,11 +179,11 @@ export function LoanPaymentCalculator({ locale }: Props) {
                 value={loanAmount || ''}
                 onChange={(e) => setLoanAmount(parseFloat(e.target.value) || 0)}
                 className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
-                placeholder="2,000,000"
+                placeholder="1,300,000"
               />
             </div>
             <div className="flex gap-2 mt-2">
-              {[1000000, 2000000, 5000000, 10000000].map((val) => (
+              {[1000000, 1300000, 2000000, 5000000].map((val) => (
                 <button
                   key={val}
                   onClick={() => setLoanAmount(val)}
@@ -204,14 +276,30 @@ export function LoanPaymentCalculator({ locale }: Props) {
             {/* Major Card */}
             <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                {isZh ? '每月本息还款额 (Monthly P&I)' : 'Monthly Payment (P&I)'}
+                {paymentType === 'installment'
+                  ? (isZh ? '每月本息还款额 (Monthly P&I)' : 'Monthly Payment (Fixed P&I)')
+                  : (isZh ? '首月还款额 (Initial Monthly Payment)' : 'Initial Monthly Payment')}
               </span>
+
               <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1">
-                {formatCurrency(monthlyPayment)}
+                {paymentType === 'installment'
+                  ? formatCurrency(equalInstallmentMonthly)
+                  : formatCurrency(equalPrincipalMonth1Payment)}
               </div>
-              <p className="text-xs text-slate-500 mt-1">
-                {isZh ? `年度还贷总额: ${formatCurrency(annualDebtService)} / 年` : `Annual Debt Service: ${formatCurrency(annualDebtService)} / yr`}
-              </p>
+
+              {paymentType === 'installment' ? (
+                <p className="text-xs text-slate-500 mt-1">
+                  {isZh
+                    ? `每月固定供款: ${formatCurrency(equalInstallmentMonthly)} (每年 ${formatCurrency(equalInstallmentMonthly * 12)})`
+                    : `Fixed Monthly Debt Service: ${formatCurrency(equalInstallmentMonthly)}/mo`}
+                </p>
+              ) : (
+                <p className="text-xs text-slate-500 mt-1">
+                  {isZh
+                    ? `月供按月递减：首月 ${formatCurrency(equalPrincipalMonth1Payment)}，末月 ${formatCurrency(equalPrincipalMonthEndPayment)}`
+                    : `Declining payment: Initial ${formatCurrency(equalPrincipalMonth1Payment)}, final ${formatCurrency(equalPrincipalMonthEndPayment)}`}
+                </p>
+              )}
             </div>
 
             {/* Financial Breakdown */}
@@ -223,7 +311,9 @@ export function LoanPaymentCalculator({ locale }: Props) {
                     <span className="text-emerald-700 font-extrabold">{formatCurrency(balloonBalance)}</span>
                   </div>
                   <p className="text-[11px] text-emerald-800">
-                    {isZh ? '需在到期日前办理再融资 (Refinance) 或出售物业结清' : 'Must be refinanced or paid off at loan maturity'}
+                    {paymentType === 'principal'
+                      ? (isZh ? `等额本金加快本金偿还，尾款降至原本金的 ${( (balloonBalance / loanAmount) * 100 ).toFixed(1)}%` : `Principal balance drops faster to ${((balloonBalance / loanAmount) * 100).toFixed(1)}% of original`)
+                      : (isZh ? '需在到期日前办理再融资 (Refinance) 或出售物业结清' : 'Must be refinanced or paid off at loan maturity')}
                   </p>
                 </div>
               )}
@@ -247,10 +337,17 @@ export function LoanPaymentCalculator({ locale }: Props) {
 
       {/* Amortization Schedule Table Section */}
       <div className="border-t border-slate-200 p-6 md:p-8 bg-slate-50/50">
-        <h3 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
-          <TableIcon className="w-4 h-4 text-emerald-600" />
-          {isZh ? '首年还款明细表 (前 12 个月摊销)' : 'First Year Amortization Schedule (First 12 Months)'}
-        </h3>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+            <TableIcon className="w-4 h-4 text-emerald-600" />
+            {isZh
+              ? `首年还款明细表 (前 12 个月${paymentType === 'installment' ? '等额本息' : '等额本金'}摊销)`
+              : `First Year Amortization Schedule (${paymentType === 'installment' ? 'Equal Installment' : 'Equal Principal'})`}
+          </h3>
+          <span className="text-xs text-slate-500 font-medium">
+            {paymentType === 'principal' && (isZh ? '注：等额本金模式下每月固定偿还本金' : 'Note: Fixed principal paid each month')}
+          </span>
+        </div>
 
         <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
           <table className="w-full text-xs text-left text-slate-700">
