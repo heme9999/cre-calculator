@@ -27,6 +27,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="google-site-verification" content="wMz2VDeMwD8R6yiCgJIqFD_wM2wSzrSEauzvCtzKHyw" />
         <link rel="alternate" hrefLang="en-US" href={enUrl} />
         <link rel="alternate" hrefLang="zh-Hans-US" href={zhUrl} />
         <link rel="alternate" hrefLang="x-default" href={enUrl} />
