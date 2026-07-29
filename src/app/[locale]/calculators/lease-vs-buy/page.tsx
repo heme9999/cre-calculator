@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
 import { LeaseVsBuyCalculator } from '@/components/calculators/LeaseVsBuyCalculator';
+import { LeaseVsBuyScenarioComparison } from '@/components/calculators/LeaseVsBuyScenarioComparison';
 import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen } from 'lucide-react';
 
@@ -96,9 +97,7 @@ export default async function LeaseVsBuyPage({ params }: PageProps) {
         {/* Real Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
           <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
-          <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
-            {content.exampleContent}
-          </div>
+          <LeaseVsBuyScenarioComparison locale={locale} />
         </section>
 
         {/* FAQs */}
