@@ -26,12 +26,18 @@ export function Header({ locale }: HeaderProps) {
     targetPath = pathname ? pathname.replace(/^\/zh/, '/en') : '/en/';
   }
 
+  // Handle single-language guide: redirect to DSCR calculator if switching from Chinese-only DSCR guide
+  if (pathname && pathname.includes('dscr-loan-guide-chinese-investors')) {
+    targetPath = '/en/calculators/dscr/';
+  }
+
   // Ensure trailing slash for static export compatibility
   if (!targetPath.endsWith('/')) {
     targetPath += '/';
   }
 
   const navLinks = [
+    { href: `/${locale}/guides/`, label: locale === 'zh' ? '指南' : 'Guides', key: 'guides' },
     { href: `/${locale}/calculators/cap-rate/`, label: nav.capRate, key: 'cap-rate' },
     { href: `/${locale}/calculators/noi/`, label: nav.noi, key: 'noi' },
     { href: `/${locale}/calculators/cash-on-cash/`, label: nav.cashOnCash, key: 'cash-on-cash' },

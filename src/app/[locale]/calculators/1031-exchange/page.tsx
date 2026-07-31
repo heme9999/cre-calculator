@@ -117,6 +117,28 @@ export default async function Exchange1031Page({ params }: PageProps) {
           </div>
         </section>
 
+        {/* 1031 Guide Banner */}
+        <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
+          <div className="space-y-1">
+            <h3 className="text-base font-bold text-emerald-950 flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-emerald-600" />
+              {locale === 'zh' ? '1031 Exchange 完整操作流程指南' : 'The Complete 1031 Exchange Process Guide'}
+            </h3>
+            <p className="text-xs text-emerald-800 leading-relaxed">
+              {locale === 'zh'
+                ? '一步步讲解如何寻找合格中介(QI)，以及45天确认期和180天交割期的硬性规定。'
+                : 'Step-by-step walkthrough on QI selection, 45-day identification, and 180-day closing rules.'}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/guides/1031-exchange-process/`}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
+          >
+            <span>{locale === 'zh' ? '阅读流程指南' : 'Read Guide'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </section>
+
         {/* Related Calculators */}
         <section className="bg-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4">
           <h2 className="text-lg font-bold text-white">{content.relatedTitle}</h2>

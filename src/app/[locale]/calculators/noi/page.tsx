@@ -117,6 +117,28 @@ export default async function NoiPage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* NOI Guide Banner */}
+        <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
+          <div className="space-y-1">
+            <h3 className="text-base font-bold text-emerald-950 flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-emerald-600" />
+              {locale === 'zh' ? '怎么估算 NOI 指南（没有历史财务数据时）' : 'How to Estimate NOI Guide (Even Without Financials)'}
+            </h3>
+            <p className="text-xs text-emerald-800 leading-relaxed">
+              {locale === 'zh'
+                ? '当卖家的数字不完整、被美化过、或者干脆没有历史账本时，如何重新测算真实 NOI。'
+                : 'A practical framework for reconstructing NOI when seller numbers are incomplete or nonexistent.'}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/guides/how-to-estimate-noi/`}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
+          >
+            <span>{locale === 'zh' ? '阅读估算指南' : 'Read Guide'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </section>
+
         {/* Related Calculators */}
         <section className="bg-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4">
           <h2 className="text-lg font-bold text-white">{content.relatedTitle}</h2>

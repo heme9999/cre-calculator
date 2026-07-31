@@ -513,4 +513,187 @@ export const enContent: LocaleContent = {
       { title: 'Cash-on-Cash Return Calculator', slug: 'cash-on-cash' },
     ],
   },
+  howToEstimateNoiGuide: {
+    metaTitle: 'How to Estimate NOI Without Historical Financials — CRE Guide',
+    metaDescription: "Learn how to estimate a commercial property's Net Operating Income when the seller won't share financials, or when you're underwriting new construction or an off-market deal.",
+    h1: 'How to Estimate NOI (Even Without Historical Financials)',
+    subtitle: "A practical framework for reconstructing NOI when a seller's numbers are incomplete, inflated, or nonexistent.",
+    sections: [
+      {
+        title: "Why You Often Can't Just Trust the Seller's NOI",
+        content: "Sellers have every incentive to present the highest defensible NOI — and sometimes an indefensible one. Common inflation tactics include add-backs that wouldn't survive new ownership (owner-managed properties with no real management fee line item), deferred maintenance that hasn't yet hit the expense line, or a trailing-12 that happens to cover an unusually strong stretch. On top of that, many deals — off-market properties, new construction, distressed assets sold \"as-is\" — come with little or no verifiable financial history at all. In both cases, you need to be able to build your own NOI estimate from the ground up, not just accept what's handed to you.",
+      },
+      {
+        title: "Method 1: Reconstruct From Market Data (No Financials Available)",
+        content: "When you have no seller-provided numbers to work from — common with off-market deals, new construction, or a seller who simply won't share books — build a market-based pro forma:\n\n1. Estimate gross potential income: Pull comparable rents from recent leases in similar nearby properties (a local broker's rent comps, or public listing data for the unit mix). Multiply by unit count / square footage.\n2. Apply a market vacancy and credit loss assumption: Use the submarket's reported vacancy rate (available from local market reports) rather than assuming 0% or an unrealistically low number.\n3. Apply a market-standard expense ratio: Operating expenses as a percentage of effective gross income vary by property type — multifamily typically runs 35–45% of EGI, while net-lease industrial or retail can be much lower (10–20%) since the tenant covers most operating costs. Use a ratio appropriate to your specific property type and lease structure, not a generic rule of thumb across all asset classes.\n4. Subtract to get NOI: EGI minus estimated operating expenses.\n\nThis method won't be perfectly precise, but it gives you a defensible range to underwrite against — and more importantly, it's *your* number, not a number the seller has an incentive to inflate.",
+      },
+      {
+        title: "Method 2: Reconstruct From a Trailing-12 (T-12) or Rent Roll",
+        content: "When you do get some financial documentation, don't take the bottom-line NOI at face value — reconstruct it line by line:\n\n- Verify the rent roll against the T-12 collected income: Does actual collected rent match what the rent roll claims is in place? A gap often signals concessions, delinquency, or units that have been vacant longer than disclosed.\n- Normalize the management fee: If the seller self-manages, add in a market-rate management fee (typically 3–8% of collected revenue depending on property type) rather than accepting a $0 or below-market line item — you'll likely need to pay for management once you own it.\n- Scrutinize add-backs: One-time items (a single large repair, a one-off legal settlement) are legitimate to normalize out. Recurring costs dressed up as \"one-time\" are a red flag.\n- Check for underinvestment in maintenance: A suspiciously low repairs-and-maintenance line relative to the property's age and condition often means deferred maintenance that will hit your budget shortly after closing, even if it hasn't shown up in the seller's historical NOI.",
+      },
+      {
+        title: "A Real Example",
+        content: "You're evaluating a 20-unit apartment building. The seller provides a T-12 showing NOI of $185,000. On closer inspection:\n\n- The seller self-manages with no management fee line item — you add in a market-rate 5% management fee on $340,000 of collected income: −$17,000\n- Two units have been vacant for 4+ months (not reflected as ongoing vacancy loss in the T-12, since it only shows *actual* collected income): you apply a normalized 5% vacancy assumption going forward instead of the artificially low trailing vacancy: −$8,000\n- A one-time roof repair of $12,000 appears in the expense line as a legitimate one-off: add back +$12,000\n\nAdjusted NOI ≈ $185,000 − $17,000 − $8,000 + $12,000 = $172,000 — about 7% lower than the seller's stated figure. Run your Cap Rate, DSCR, and Cash-on-Cash calculations off this adjusted number, not the seller's headline NOI.",
+      },
+    ],
+    faqTitle: "Frequently Asked Questions",
+    faqs: [
+      {
+        question: "What expense ratio should I use if I don't have any comps?",
+        answer: "As a rough starting point (not a substitute for real local data): multifamily 35–45% of EGI, retail 15–35% depending on lease structure (net vs. gross), office 30–45%, industrial 10–25% for net-leased single-tenant assets. These ranges are wide because lease structure (who pays what) matters more than property type alone — always adjust for your specific lease terms.",
+      },
+      {
+        question: "How do I estimate vacancy if the seller claims 0% vacancy?",
+        answer: "Be skeptical of any trailing-12 showing 0% vacancy over an extended period — it's either a very tight submarket or (more often) a seller who's timed the sale right after re-leasing a unit that was actually vacant for months prior. Pull the submarket's reported vacancy rate from a local market report and use that as your underwriting assumption, even if the trailing actuals look better.",
+      },
+      {
+        question: "Should I use in-place rents or market rents to estimate income?",
+        answer: "Use in-place (currently signed) rents for your base-case underwriting — that's the income you're actually acquiring. Market rents (what a unit could lease for today) are relevant for upside scenarios or value-add projections, but don't underwrite your going-in numbers on rent growth you haven't captured yet.",
+      },
+    ],
+    relatedTitle: "Related CRE Calculators & Tools",
+    relatedCalculators: [
+      { title: "Net Operating Income (NOI) Calculator", slug: "noi" },
+      { title: "Cap Rate Calculator", slug: "cap-rate" },
+      { title: "DSCR Calculator", slug: "dscr" },
+    ],
+  },
+  exchange1031ProcessGuide: {
+    metaTitle: "1031 Exchange Process: Step-by-Step Guide to the 45/180-Day Rules",
+    metaDescription: "A step-by-step walkthrough of the 1031 exchange process — how to structure the sale, hire a qualified intermediary, and hit the 45-day identification and 180-day closing deadlines.",
+    h1: "The Complete 1031 Exchange Process, Step by Step",
+    subtitle: "How to structure a 1031 exchange correctly — from hiring a qualified intermediary through the 45-day and 180-day deadlines.",
+    sections: [
+      {
+        title: "The 6-Step Process",
+        content: "1. Hire a Qualified Intermediary (QI) — before you close on the sale. This is the single most time-sensitive step: your exchange must be structured *before* the sale of your relinquished property closes. If you close first and try to set up the exchange afterward, it's too late — the exchange is void.\n2. Sell your relinquished property. The QI receives the sale proceeds directly at closing. You must never have actual or constructive receipt of the funds — if the money touches your bank account, even briefly, the exchange fails.\n3. Identify replacement property in writing within 45 calendar days. The clock starts on the closing date of your relinquished property (not the day you decide to do an exchange). This identification must be delivered in writing, signed, to your QI — a verbal mention to your broker doesn't count.\n4. Close on the replacement property within 180 calendar days. This is a single combined clock with step 3 — you don't get 45 days plus a separate 180 days; the 180-day period runs concurrently from the same start date. If your tax return for the year is due before day 180 (and you haven't filed an extension), that earlier date applies instead.\n5. The QI transfers the funds to close on the replacement property. The same taxpayer/entity that sold the relinquished property must be the one acquiring the replacement — this is called the \"same taxpayer\" rule.\n6. Report the exchange on your tax return (IRS Form 8824). Your CPA will need the closing statements from both transactions.",
+      },
+      {
+        title: "The Identification Rules (45-Day Window)",
+        content: "You don't have to pick just one replacement property. The IRS allows one of these identification approaches:\n\n- The 3-Property Rule: Identify up to three potential replacement properties, regardless of their combined value.\n- The 200% Rule: Identify more than three properties, as long as their combined fair market value doesn't exceed 200% of the value of the property you sold.\n- The 95% Rule: Identify any number of properties of any value, as long as you actually acquire at least 95% of the total value identified.\n\nMost investors use the 3-Property Rule with a primary target and one or two backups in case the deal falls through in due diligence.",
+      },
+      {
+        title: "Choosing a Qualified Intermediary",
+        content: "The QI holds your sale proceeds for the entire exchange period, so this isn't a decision to make on price alone. A few things worth checking:\n\n- Who is legally disqualified from serving as your QI: Your attorney, CPA, real estate agent, or broker from the past two years, your close family members, or any entity you or your family control more than 10% of — none of these can serve as your QI.\n- How your funds are held: Ask specifically whether proceeds sit in a segregated, qualified escrow account (safer) versus commingled with the QI's general operating funds (riskier if the QI runs into financial trouble).\n- Fidelity bond and errors & omissions insurance: A reputable QI firm carries both — ask for proof, don't just take their word for it.",
+      },
+      {
+        title: "Common Mistakes That Blow Up an Exchange",
+        content: "- Setting up the QI after closing — the most common and most fatal mistake; there's no fixing this after the fact.\n- Touching the sale proceeds, even briefly — this immediately disqualifies the exchange (known as \"constructive receipt\").\n- Assuming the 45-day or 180-day deadlines can be extended — they generally cannot, except in federally-declared disaster areas.\n- Waiting until after closing to start looking for a replacement property — 45 days moves fast, especially in a competitive market; start your search in parallel with marketing your relinquished property, not after it sells.\n- Identifying only one property with no backup — if that deal falls apart in due diligence, you may run out of time to identify a replacement within the 45-day window.",
+      },
+    ],
+    faqTitle: "Frequently Asked Questions",
+    faqs: [
+      {
+        question: "Can I do a 1031 exchange on a property outside the US?",
+        answer: "No. Real property inside the United States is only considered like-kind to other real property inside the United States — a US property cannot be exchanged into a foreign property under Section 1031, even if the foreign property is also held for investment purposes.",
+      },
+      {
+        question: "What happens if I can't find a replacement property in time?",
+        answer: "If you don't identify a qualifying replacement within 45 days, or don't close within 180 days, the exchange fails and the transaction is treated as a normal taxable sale — the QI returns your proceeds (typically after the exchange period ends) and you owe capital gains tax as if no exchange occurred.",
+      },
+      {
+        question: "Can I buy a smaller, less expensive replacement property?",
+        answer: "You can, but to defer 100% of your capital gains tax, the replacement property generally needs to be equal or greater in value, and you need to reinvest all of your net proceeds and replace the same amount of debt (or add cash to make up the difference). Buying \"down\" in value typically triggers partial taxable gain (known as \"boot\").",
+      },
+    ],
+    relatedTitle: "Related CRE Calculators & Tools",
+    relatedCalculators: [
+      { title: "1031 Exchange Tax Deferred Calculator", slug: "1031-exchange" },
+      { title: "Cap Rate Calculator", slug: "cap-rate" },
+      { title: "Cash-on-Cash Return Calculator", slug: "cash-on-cash" },
+    ],
+  },
+  howToUnderwriteDealGuide: {
+    metaTitle: "How to Underwrite a Commercial Real Estate Deal — Step-by-Step Guide",
+    metaDescription: "A practical, step-by-step framework for underwriting a commercial property from initial screening through the go/no-go decision, using the key CRE ratios investors actually check.",
+    h1: "How to Underwrite a Commercial Real Estate Deal, Step by Step",
+    subtitle: "A practical framework for going from \"here's a listing\" to \"here's my offer\" — or \"here's why I'm passing.\"",
+    sections: [
+      {
+        title: "Step 1: Initial Screening (5 Minutes, Before You Waste Anyone's Time)",
+        content: "Before you request financials or schedule a tour, do a quick sanity check with whatever's in the listing:\n\n- Price per unit / per square foot: How does it compare to recent comparable sales in the same submarket? Wildly above comps needs a strong justification (value-add upside, irreplaceable location); wildly below comps is often a red flag (deferred maintenance, legal issues, distressed seller).\n- Implied cap rate at asking price: If the listing states an NOI, does the resulting cap rate look plausible for this property type and market tier? (See our Cap Rate Benchmarks Guide for typical ranges.)\n\nIf it clears this quick screen, move forward. If not, don't waste time requesting a full financial package on a deal that's obviously mispriced.",
+      },
+      {
+        title: "Step 2: Request and Reconstruct the Financials",
+        content: "Ask the seller/broker for a trailing-12 (T-12) income statement, current rent roll, and (ideally) 2-3 years of historical operating statements. Then don't just accept the bottom-line NOI — reconstruct it using the method in our How to Estimate NOI guide, normalizing for owner add-backs, below-market management fees, and any gaps between the rent roll and actual collections.",
+      },
+      {
+        title: "Step 3: Run the Core Underwriting Ratios",
+        content: "With a defensible NOI in hand, run the numbers that actually drive your decision:\n\n- Cap Rate: Does the going-in yield make sense for this asset class and market tier?\n- Cash-on-Cash Return: What's your actual return on the cash you're putting in, factoring in your realistic financing terms?\n- DSCR: Will a lender's minimum threshold (typically 1.20–1.25) actually be met at your target loan amount — or does this deal only work with an unrealistically small loan?\n- Break-Even Ratio: How much cushion do you have before vacancy or rising expenses put you underwater?\n\nIf any of these come back thin, that's not automatically a dealbreaker — but it tells you exactly where your risk is concentrated and what needs to improve (price, financing terms, or operational upside) for the deal to work.",
+      },
+      {
+        title: "Step 4: Stress-Test the Numbers",
+        content: "Run your key ratios again under a less favorable scenario — vacancy up 3-5 points from your base case, a modest increase in operating expenses, and (if you're not locking a fixed rate) an interest rate 50-100 bps higher than today's quote. If the deal still pencils reasonably under a stress case, that's a much stronger signal than a deal that only works if everything goes exactly as planned.",
+      },
+      {
+        title: "Step 5: Physical and Legal Due Diligence",
+        content: "Numbers alone don't close a deal safely — verify the physical and legal condition of the asset:\n\n- Property condition assessment: A professional inspection covering roof, HVAC, structural, and major systems — budget for anything flagged as near end-of-life.\n- Title review: Confirm there are no liens, easements, or title defects that could complicate closing or future resale.\n- Environmental review (Phase I ESA): Particularly important for industrial and older commercial properties with any history of fuel storage, dry cleaning, or manufacturing use.\n- Zoning and permit compliance: Confirm the current use is legally permitted and that any planned renovations or expansions are actually allowed under current zoning.\n- Lease abstract review: For multi-tenant properties, actually read (or have your attorney read) the underlying leases — don't rely on a summary rent roll alone, which can miss early termination rights, below-market renewal options, or tenant-favorable co-tenancy clauses.",
+      },
+      {
+        title: "Step 6: Lock Down Financing",
+        content: "Get an actual term sheet from a lender (not just a rough rate quote) before you're too far into the process — the specific DSCR, loan-to-value, and amortization terms you actually qualify for can meaningfully change your Cash-on-Cash and Break-Even numbers from Step 3.",
+      },
+      {
+        title: "Step 7: Make the Go/No-Go Decision",
+        content: "Bring it all together: does the risk-adjusted return justify the price, given what you found in due diligence and the realistic financing you can actually secure? A deal that looked good on the initial screen but reveals meaningful issues in diligence should be repriced (renegotiate) or walked away from — not forced through because you've already invested time in it.",
+      },
+    ],
+    faqTitle: "Frequently Asked Questions",
+    faqs: [
+      {
+        question: "How long should underwriting a deal typically take?",
+        answer: "For a straightforward stabilized property, a solid initial underwriting pass (Steps 1-3) can often be done in a few hours once you have the financials. Full due diligence (Steps 5-6) typically takes 30-45 days, which is why most purchase contracts include a due diligence period of similar length.",
+      },
+      {
+        question: "What if the seller won't share full financials before I make an offer?",
+        answer: "This is common, especially in competitive markets. Many investors make an offer contingent on financial verification during a due diligence period, using Method 1 from our NOI guide (market-based reconstruction) to underwrite their initial offer price, then confirming or renegotiating once real numbers are available.",
+      },
+      {
+        question: "Should I underwrite based on in-place NOI or a value-add pro forma?",
+        answer: "Underwrite your base-case offer price on in-place, verified NOI — not projected upside. If there's genuine value-add potential (below-market rents, operational inefficiencies you can fix), treat that as bonus upside in your return projections, not as income you're paying for on day one.",
+      },
+    ],
+    relatedTitle: "Related CRE Calculators & Tools",
+    relatedCalculators: [
+      { title: "Cap Rate Calculator", slug: "cap-rate" },
+      { title: "DSCR Calculator", slug: "dscr" },
+      { title: "Break-Even Ratio Calculator", slug: "break-even-ratio" },
+    ],
+  },
+  guidesHub: {
+    metaTitle: "Commercial Real Estate Investment Guides & Frameworks | CRE Tools",
+    metaDescription: "Practical, step-by-step guides on commercial real estate underwriting, NOI estimation, 1031 exchanges, and market cap rate benchmarks.",
+    h1: "Commercial Real Estate Guides & Analysis Frameworks",
+    subtitle: "In-depth, practical guides for CRE investors, brokers, and underwriters.",
+    guides: [
+      {
+        slug: "cap-rate-benchmarks-by-city",
+        title: "US Cap Rate Benchmarks by Metro Market & Property Type",
+        description: "Aggregated capitalization rate ranges across primary asset classes and metropolitan market tiers based on 2026 industry surveys.",
+        badge: "Market Data",
+        readTime: "8 min read",
+      },
+      {
+        slug: "how-to-estimate-noi",
+        title: "How to Estimate NOI (Even Without Historical Financials)",
+        description: "A practical framework for reconstructing NOI when a seller's numbers are incomplete, inflated, or nonexistent.",
+        badge: "Underwriting",
+        readTime: "6 min read",
+      },
+      {
+        slug: "1031-exchange-process",
+        title: "The Complete 1031 Exchange Process, Step by Step",
+        description: "How to structure a 1031 exchange correctly — from hiring a qualified intermediary through the 45-day and 180-day deadlines.",
+        badge: "Tax Strategy",
+        readTime: "7 min read",
+      },
+      {
+        slug: "how-to-underwrite-a-deal",
+        title: "How to Underwrite a Commercial Real Estate Deal, Step by Step",
+        description: "A practical framework for going from 'here's a listing' to 'here's my offer' — or 'here's why I'm passing.'",
+        badge: "Due Diligence",
+        readTime: "10 min read",
+      },
+    ],
+  },
 };

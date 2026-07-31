@@ -18,7 +18,7 @@ export function Footer({ locale }: FooterProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
           {/* Brand Info */}
-          <div className="md:col-span-5 space-y-4">
+          <div className="md:col-span-4 space-y-4">
             <div className="flex items-center gap-2 font-bold text-lg text-white">
               <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
                 <Building2 className="w-4 h-4 text-white" />
@@ -33,7 +33,7 @@ export function Footer({ locale }: FooterProps) {
           </div>
 
           {/* Calculators Nav */}
-          <div className="md:col-span-4 space-y-3">
+          <div className="md:col-span-3 space-y-3">
             <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
               {isZh ? '计算器导航' : 'Calculators'}
             </h4>
@@ -81,8 +81,44 @@ export function Footer({ locale }: FooterProps) {
             </ul>
           </div>
 
-          {/* Languages */}
+          {/* Guides Nav */}
           <div className="md:col-span-3 space-y-3">
+            <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
+              {isZh ? '实操指南' : 'Guides'}
+            </h4>
+            <ul className="space-y-2 text-xs">
+              <li>
+                <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/`} className="hover:text-emerald-400 transition-colors">
+                  {isZh ? 'Cap Rate全美基准' : 'Cap Rate Benchmarks'}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/guides/how-to-estimate-noi/`} className="hover:text-emerald-400 transition-colors">
+                  {isZh ? '怎么估算NOI' : 'How to Estimate NOI'}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/guides/1031-exchange-process/`} className="hover:text-emerald-400 transition-colors">
+                  {isZh ? '1031 Exchange流程' : '1031 Exchange Process'}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/guides/how-to-underwrite-a-deal/`} className="hover:text-emerald-400 transition-colors">
+                  {isZh ? '商业地产交易尽调' : 'How to Underwrite a Deal'}
+                </Link>
+              </li>
+              {isZh && (
+                <li>
+                  <Link href="/zh/guides/dscr-loan-guide-chinese-investors/" className="hover:text-emerald-400 transition-colors">
+                    DSCR华人贷款指南
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </div>
+
+          {/* Languages */}
+          <div className="md:col-span-2 space-y-3">
             <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
               {isZh ? '语言版本' : 'Language'}
             </h4>

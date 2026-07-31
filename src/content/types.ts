@@ -107,6 +107,42 @@ export interface GuidePageContent {
   relatedCalculators: RelatedCalculatorRef[];
 }
 
+export interface ArticleSection {
+  title: string;
+  content: string;
+}
+
+export interface ArticleGuideContent {
+  metaTitle: string;
+  metaDescription: string;
+  h1: string;
+  subtitle: string;
+  disclaimer?: string;
+  sections: ArticleSection[];
+  faqTitle: string;
+  faqs: FAQItem[];
+  dataSourcesTitle?: string;
+  dataSources?: string[];
+  relatedTitle: string;
+  relatedCalculators: RelatedCalculatorRef[];
+}
+
+export interface GuideHubItem {
+  slug: string;
+  title: string;
+  description: string;
+  badge: string;
+  readTime: string;
+}
+
+export interface GuidesHubPageContent {
+  metaTitle: string;
+  metaDescription: string;
+  h1: string;
+  subtitle: string;
+  guides: GuideHubItem[];
+}
+
 export interface LocaleContent {
   nav: NavContent;
   home: HomePageContent;
@@ -119,4 +155,9 @@ export interface LocaleContent {
   leaseVsBuy: CalculatorPageContent;
   breakEvenRatio: CalculatorPageContent;
   capRateBenchmarksGuide: GuidePageContent;
+  howToEstimateNoiGuide: ArticleGuideContent;
+  exchange1031ProcessGuide: ArticleGuideContent;
+  howToUnderwriteDealGuide: ArticleGuideContent;
+  dscrLoanGuideChineseInvestorsGuide?: ArticleGuideContent;
+  guidesHub: GuidesHubPageContent;
 }

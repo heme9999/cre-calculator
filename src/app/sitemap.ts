@@ -14,7 +14,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'calculators/1031-exchange',
     'calculators/lease-vs-buy',
     'calculators/break-even-ratio',
+    'guides',
     'guides/cap-rate-benchmarks-by-city',
+    'guides/how-to-estimate-noi',
+    'guides/1031-exchange-process',
+    'guides/how-to-underwrite-a-deal',
   ];
   const locales = ['en', 'zh'];
 
@@ -31,6 +35,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       });
     }
   }
+
+  // Add Chinese-only DSCR loan guide route
+  items.push({
+    url: `${SITE_URL}/zh/guides/dscr-loan-guide-chinese-investors/`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.9,
+  });
 
   return items;
 }
