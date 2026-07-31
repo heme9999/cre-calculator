@@ -2,7 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { getContent } from '@/content';
-import { LOCALES } from '@/lib/constants';
+import { LOCALES, SITE_URL } from '@/lib/constants';
+import { JsonLd, getWebSiteJsonLd } from '@/components/seo/JsonLd';
 import { Calculator, ArrowRight, TrendingUp, ShieldCheck, Zap } from 'lucide-react';
 
 export function generateStaticParams() {
@@ -31,8 +32,16 @@ export default async function HomePage({ params }: PageProps) {
   const content = getContent(locale);
   const home = content.home;
 
+  const jsonLdData = getWebSiteJsonLd(
+    content.nav.brandName,
+    home.metaDescription,
+    `${SITE_URL}/${locale}/`,
+    locale
+  );
+
   return (
     <div className="space-y-16 py-4">
+      <JsonLd data={jsonLdData} />
       {/* Hero Section */}
       <section className="text-center max-w-4xl mx-auto space-y-6 pt-4">
         <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-xs">

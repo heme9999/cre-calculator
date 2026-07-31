@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArticleGuideContent } from '@/content/types';
-import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
+import { JsonLd, getArticleJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen, AlertTriangle, Database } from 'lucide-react';
 import { SITE_URL } from '@/lib/constants';
 
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export function ArticleGuideView({ content, locale, guideSlug }: Props) {
-  const jsonLdData = getCalculatorJsonLd(
+  const jsonLdData = getArticleJsonLd(
     content.h1,
     content.metaDescription,
     `${SITE_URL}/${locale}/guides/${guideSlug}/`,

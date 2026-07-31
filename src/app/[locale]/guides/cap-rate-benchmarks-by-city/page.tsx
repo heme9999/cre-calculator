@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
-import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
+import { JsonLd, getArticleJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen, AlertTriangle, Database, Building2 } from 'lucide-react';
 
 export function generateStaticParams() {
@@ -33,7 +33,7 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).capRateBenchmarksGuide;
 
-  const jsonLdData = getCalculatorJsonLd(
+  const jsonLdData = getArticleJsonLd(
     content.h1,
     content.metaDescription,
     `${SITE_URL}/${locale}/guides/cap-rate-benchmarks-by-city/`,
