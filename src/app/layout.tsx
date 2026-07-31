@@ -7,7 +7,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cfToken = process.env.NEXT_PUBLIC_CF_BEACON_TOKEN;
+  const cfToken = process.env.NEXT_PUBLIC_CF_BEACON_TOKEN || "cfd6b69de8df450b98360ab8893cc6c8";
 
   return (
     <html lang="en">
@@ -18,14 +18,12 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        {cfToken && (
-          <Script
-            defer
-            src="https://static.cloudflareinsights.com/beacon.min.js"
-            data-cf-beacon={JSON.stringify({ token: cfToken })}
-            strategy="afterInteractive"
-          />
-        )}
+        <Script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: cfToken })}
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
