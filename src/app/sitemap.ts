@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'calculators/1031-exchange',
     'calculators/lease-vs-buy',
     'calculators/break-even-ratio',
+    'guides/cap-rate-benchmarks-by-city',
   ];
   const locales = ['en', 'zh'];
 

@@ -64,6 +64,49 @@ export interface NavContent {
   switchLangCode: 'en' | 'zh';
 }
 
+export interface CapRateBenchmarkRow {
+  propertyType: string;
+  range: string;
+  notes: string;
+}
+
+export interface MarketTierRow {
+  tier: string;
+  metros: string;
+  pricing: string;
+}
+
+export interface GuidePageContent {
+  metaTitle: string;
+  metaDescription: string;
+  h1: string;
+  subtitle: string;
+  disclaimer: string;
+  propertyTypeTitle: string;
+  propertyTypeTableHeader: {
+    type: string;
+    range: string;
+    notes: string;
+  };
+  propertyTypes: CapRateBenchmarkRow[];
+  marketTierTitle: string;
+  marketTierIntro: string;
+  marketTierTableHeader: {
+    tier: string;
+    metros: string;
+    pricing: string;
+  };
+  marketTiers: MarketTierRow[];
+  chineseInvestorTitle?: string;
+  chineseInvestorContent?: string;
+  faqTitle: string;
+  faqs: FAQItem[];
+  dataSourcesTitle: string;
+  dataSources: string[];
+  relatedTitle: string;
+  relatedCalculators: RelatedCalculatorRef[];
+}
+
 export interface LocaleContent {
   nav: NavContent;
   home: HomePageContent;
@@ -75,4 +118,5 @@ export interface LocaleContent {
   exchange1031: CalculatorPageContent;
   leaseVsBuy: CalculatorPageContent;
   breakEvenRatio: CalculatorPageContent;
+  capRateBenchmarksGuide: GuidePageContent;
 }

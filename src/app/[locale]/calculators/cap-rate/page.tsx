@@ -117,6 +117,28 @@ export default async function CapRatePage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* Cap Rate Benchmark Guide Banner */}
+        <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
+          <div className="space-y-1">
+            <h3 className="text-base font-bold text-emerald-950 flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-emerald-600" />
+              {locale === 'zh' ? '全美 Cap Rate 基准数据指南' : 'US Cap Rate Benchmarks Guide (2026)'}
+            </h3>
+            <p className="text-xs text-emerald-800 leading-relaxed">
+              {locale === 'zh'
+                ? '查看全美主要都市圈（一二三四级城市）与各大商业物业类型的典型 Cap Rate 收益率参考区间。'
+                : 'Explore national capitalization rate ranges across property types and metropolitan market tiers.'}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/guides/cap-rate-benchmarks-by-city/`}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
+          >
+            <span>{locale === 'zh' ? '查看基准数据指南' : 'View Benchmark Guide'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </section>
+
         {/* Related Calculators */}
         <section className="bg-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4">
           <h2 className="text-lg font-bold text-white">{content.relatedTitle}</h2>
