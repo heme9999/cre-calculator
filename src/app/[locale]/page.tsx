@@ -97,7 +97,7 @@ export default async function HomePage({ params }: PageProps) {
       </section>
 
       {/* Why Us / Value Proposition */}
-      <section className="bg-slate-900 text-white rounded-3xl p-8 md:p-12 space-y-8 shadow-md">
+      <section className="bg-slate-900 text-white rounded-3xl p-8 md:p-12 space-y-8 shadow-md cv-auto">
         <div className="text-center max-w-2xl mx-auto space-y-2">
           <h2 className="text-2xl md:text-3xl font-bold">{home.whyUsTitle}</h2>
           <p className="text-xs text-slate-400">

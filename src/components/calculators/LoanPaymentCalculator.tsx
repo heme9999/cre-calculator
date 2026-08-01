@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { calculateLoanDetails, PaymentType } from '@/lib/loanCalculations';
-import { Calculator, Calendar, DollarSign, Table as TableIcon, Layers, Info } from 'lucide-react';
+import { Calculator, Calendar, Table as TableIcon, Layers } from 'lucide-react';
 
 interface Props {
   locale: string;
@@ -99,17 +99,19 @@ export function LoanPaymentCalculator({ locale }: Props) {
       <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Input Forms */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Repayment Method Switcher */}
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-emerald-600" />
+          {/* Repayment Method Switcher (Fieldset + Radio Roles for Accessibility) */}
+          <fieldset className="border-0 p-0 m-0">
+            <legend className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+              <Layers className="w-4 h-4 text-emerald-600" aria-hidden="true" />
               {isZh ? '还款方式选择 (Repayment Method)' : 'Repayment Method'}
-            </label>
-            <div className="grid grid-cols-2 gap-3 p-1.5 bg-slate-100 rounded-xl border border-slate-200">
+            </legend>
+            <div role="radiogroup" aria-label={isZh ? '还款方式选择' : 'Repayment Method'} className="grid grid-cols-2 gap-3 p-1.5 bg-slate-100 rounded-xl border border-slate-200">
               <button
                 type="button"
+                role="radio"
+                aria-checked={paymentType === 'installment'}
                 onClick={() => setPaymentType('installment')}
-                className={`py-3 px-4 rounded-lg text-xs font-bold transition-all text-center flex flex-col items-center justify-center gap-1 ${
+                className={`py-3 px-4 rounded-lg text-xs font-bold transition-all text-center flex flex-col items-center justify-center gap-1 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
                   paymentType === 'installment'
                     ? 'bg-slate-900 text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
@@ -123,8 +125,10 @@ export function LoanPaymentCalculator({ locale }: Props) {
 
               <button
                 type="button"
+                role="radio"
+                aria-checked={paymentType === 'principal'}
                 onClick={() => setPaymentType('principal')}
-                className={`py-3 px-4 rounded-lg text-xs font-bold transition-all text-center flex flex-col items-center justify-center gap-1 ${
+                className={`py-3 px-4 rounded-lg text-xs font-bold transition-all text-center flex flex-col items-center justify-center gap-1 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
                   paymentType === 'principal'
                     ? 'bg-slate-900 text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
@@ -136,29 +140,33 @@ export function LoanPaymentCalculator({ locale }: Props) {
                 </span>
               </button>
             </div>
-          </div>
+          </fieldset>
 
           {/* Loan Principal */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
+            <label htmlFor="loan-amount-input" className="block text-sm font-semibold text-slate-700 mb-2">
               {isZh ? '贷款本金总额 (Loan Amount)' : 'Principal Loan Amount ($)'}
             </label>
             <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold" aria-hidden="true">$</span>
               <input
+                id="loan-amount-input"
                 type="number"
                 value={loanAmount || ''}
                 onChange={(e) => setLoanAmount(parseFloat(e.target.value) || 0)}
                 className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
                 placeholder="1,300,000"
+                aria-label={isZh ? '贷款本金总额' : 'Principal Loan Amount'}
               />
             </div>
             <div className="flex gap-2 mt-2">
               {[1000000, 1300000, 2000000, 5000000].map((val) => (
                 <button
                   key={val}
+                  type="button"
                   onClick={() => setLoanAmount(val)}
-                  className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium px-2.5 py-1 rounded-md transition"
+                  aria-label={isZh ? `设置贷款金额为 ${formatCurrency(val)}` : `Set loan amount to ${formatCurrency(val)}`}
+                  className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium px-2.5 py-1 rounded-md transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   {formatCurrency(val)}
                 </button>
@@ -169,29 +177,33 @@ export function LoanPaymentCalculator({ locale }: Props) {
           {/* Interest Rate & Amortization Term */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="interest-rate-input" className="block text-sm font-semibold text-slate-700 mb-2">
                 {isZh ? '年利率 (%)' : 'Annual Interest Rate (%)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <input
+                  id="interest-rate-input"
                   type="number"
                   step="0.125"
                   value={interestRate || ''}
                   onChange={(e) => setInterestRate(parseFloat(e.target.value) || 0)}
                   className="w-full pl-4 pr-8 py-3 text-slate-900 font-semibold focus:outline-none"
                   placeholder="6.5"
+                  aria-label={isZh ? '年利率' : 'Annual Interest Rate'}
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">%</span>
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold" aria-hidden="true">%</span>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="amortization-years-select" className="block text-sm font-semibold text-slate-700 mb-2">
                 {isZh ? '摊销年限 (Amortization Term)' : 'Amortization Term (Years)'}
               </label>
               <select
+                id="amortization-years-select"
                 value={amortizationYears}
                 onChange={(e) => setAmortizationYears(parseInt(e.target.value) || 25)}
+                aria-label={isZh ? '摊销年限' : 'Amortization Term'}
                 className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-ring text-slate-900 font-semibold bg-white focus:outline-none"
               >
                 <option value={15}>15 {isZh ? '年摊销' : 'Years'}</option>
@@ -205,26 +217,30 @@ export function LoanPaymentCalculator({ locale }: Props) {
           {/* Maturity Term & Balloon Payoff Option */}
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-emerald-600" />
+              <label htmlFor="has-balloon-checkbox" className="text-sm font-bold text-slate-800 flex items-center gap-2 cursor-pointer">
+                <Calendar className="w-4 h-4 text-emerald-600" aria-hidden="true" />
                 {isZh ? '设定到期年限与气球尾款 (Maturity Term & Balloon Payoff)' : 'Set Loan Maturity Term (Balloon Payoff)'}
               </label>
               <input
+                id="has-balloon-checkbox"
                 type="checkbox"
                 checked={hasBalloon}
                 onChange={(e) => setHasBalloon(e.target.checked)}
-                className="w-4 h-4 text-emerald-600 rounded-sm focus:ring-emerald-500"
+                aria-label={isZh ? '启用到期年限与气球尾款' : 'Enable loan maturity term and balloon payoff'}
+                className="w-4 h-4 text-emerald-600 rounded-sm focus:ring-emerald-500 cursor-pointer"
               />
             </div>
 
             {hasBalloon && (
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
+                <label htmlFor="balloon-years-select" className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '贷款到期年限 (Maturity Term)' : 'Loan Maturity Term (Years)'}
                 </label>
                 <select
+                  id="balloon-years-select"
                   value={balloonYears}
                   onChange={(e) => setBalloonYears(parseInt(e.target.value) || 10)}
+                  aria-label={isZh ? '贷款到期年限' : 'Loan Maturity Term'}
                   className="w-full px-3 py-2 rounded-lg border border-slate-300 focus-ring text-slate-900 text-sm font-medium bg-white"
                 >
                   <option value={3}>3 {isZh ? '年到期' : 'Years'}</option>
@@ -323,7 +339,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
       <div className="border-t border-slate-200 p-6 md:p-8 bg-slate-50/50">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <TableIcon className="w-4 h-4 text-emerald-600" />
+            <TableIcon className="w-4 h-4 text-emerald-600" aria-hidden="true" />
             {isZh
               ? `首年还款明细表 (前 12 个月${paymentType === 'installment' ? '等额本息' : '等额本金'}摊销)`
               : `First Year Amortization Schedule (${paymentType === 'installment' ? 'Equal Installment' : 'Equal Principal'})`}
@@ -334,15 +350,18 @@ export function LoanPaymentCalculator({ locale }: Props) {
         </div>
 
         <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-          <table className="w-full text-xs text-left text-slate-700">
+          <table
+            aria-label={isZh ? '首年还款明细表' : 'First Year Amortization Schedule'}
+            className="w-full text-xs text-left text-slate-700"
+          >
             <thead className="bg-slate-900 text-white font-semibold uppercase tracking-wider text-[11px]">
               <tr>
-                <th className="px-4 py-3">{isZh ? '期数 (月)' : 'Month'}</th>
-                <th className="px-4 py-3">{isZh ? '月初余额' : 'Start Balance'}</th>
-                <th className="px-4 py-3">{isZh ? '月供总额' : 'Payment'}</th>
-                <th className="px-4 py-3 text-emerald-600">{isZh ? '偿还本金' : 'Principal'}</th>
-                <th className="px-4 py-3 text-red-500">{isZh ? '支付利息' : 'Interest'}</th>
-                <th className="px-4 py-3">{isZh ? '月末余额' : 'End Balance'}</th>
+                <th scope="col" className="px-4 py-3">{isZh ? '期数 (月)' : 'Month'}</th>
+                <th scope="col" className="px-4 py-3">{isZh ? '月初余额' : 'Start Balance'}</th>
+                <th scope="col" className="px-4 py-3">{isZh ? '月供总额' : 'Payment'}</th>
+                <th scope="col" className="px-4 py-3 text-emerald-400">{isZh ? '偿还本金' : 'Principal'}</th>
+                <th scope="col" className="px-4 py-3 text-red-400">{isZh ? '支付利息' : 'Interest'}</th>
+                <th scope="col" className="px-4 py-3">{isZh ? '月末余额' : 'End Balance'}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -351,8 +370,8 @@ export function LoanPaymentCalculator({ locale }: Props) {
                   <td className="px-4 py-2.5 font-bold text-slate-900">{row.month}</td>
                   <td className="px-4 py-2.5">{formatCurrency(row.startBalance)}</td>
                   <td className="px-4 py-2.5 font-medium">{formatCurrency(row.payment)}</td>
-                  <td className="px-4 py-2.5 font-medium text-emerald-700">{formatCurrency(row.principal)}</td>
-                  <td className="px-4 py-2.5 font-medium text-red-600">{formatCurrency(row.interest)}</td>
+                  <td className="px-4 py-2.5 font-medium text-emerald-800">{formatCurrency(row.principal)}</td>
+                  <td className="px-4 py-2.5 font-medium text-red-700">{formatCurrency(row.interest)}</td>
                   <td className="px-4 py-2.5 font-semibold text-slate-900">{formatCurrency(row.endBalance)}</td>
                 </tr>
               ))}
@@ -363,3 +382,4 @@ export function LoanPaymentCalculator({ locale }: Props) {
     </div>
   );
 }
+
