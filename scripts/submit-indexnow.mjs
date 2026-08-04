@@ -1,5 +1,5 @@
 const HOST = 'cre-calculator.pages.dev';
-const KEY = '4f82a9c1e3b567890d2e4f6a8b1c3d5e';
+const KEY = 'b8687ac0745e47fa98319b0ee0b5cda6';
 const KEY_LOCATION = `https://${HOST}/${KEY}.txt`;
 
 const routes = [
