@@ -4,6 +4,7 @@ export const zhContent: LocaleContent = {
   nav: {
     brandName: '商业地产投资计算器',
     calculators: '计算器总览',
+    dealAnalyzer: 'Deal Analyzer 综合尽调',
     capRate: '资本化率 (Cap Rate)',
     noi: '净营业收入 (NOI)',
     cashOnCash: '现金回报率 (Cash-on-Cash)',
@@ -89,6 +90,47 @@ export const zhContent: LocaleContent = {
         title: '深耕美国商业地产市场',
         desc: '全面适配美国商业地产市场习惯（USD / sq ft），提供专业术语对照。',
       },
+    ],
+  },
+  dealAnalyzer: {
+    metaTitle: 'Deal Analyzer 综合尽调工具 — 一次输入，算出全部核心指标',
+    metaDescription: '一次输入，同时算出Cap Rate、Cash-on-Cash Return、DSCR、Break-Even Ratio，还能一键做压力测试、导出一页纸PDF摘要。',
+    h1: 'Deal Analyzer：一次输入，完整尽调',
+    subtitle: '不用把同一组数字反复输入五次。一次算出全部核心指标，做压力测试，导出摘要。',
+    whatIsTitle: '这个工具能帮你做什么',
+    whatIsContent: '真正尽调一笔交易，需要把Cap Rate、Cash-on-Cash Return、DSCR、Break-Even Ratio放在一起看，而不是一个一个单独算。Deal Analyzer只需要你输入一组数据（购买价、收入、支出、融资条件），就能同时算出这四个核心指标，标注这笔交易有没有达到贷款机构的典型门槛，还能让你在做决定之前，先看看在更艰难的空置率和利率环境下，这笔交易还能不能撑住。算完之后，可以导出一页纸的PDF摘要，发给合伙人或者贷款经纪人。',
+    formulaTitle: '核心尽调指标与计算公式',
+    formulaCode: '• NOI = 有效毛收入 (EGI) - 运营支出 (OpEx)\n• Cap Rate = NOI / 购买价格 × 100%\n• Cash-on-Cash Return = (NOI - 年还贷本息) / (首付款 + 过户成本) × 100%\n• DSCR = NOI / 年还贷本息\n• Break-Even Ratio = (运营支出 + 年还贷本息) / 有效毛收入 (EGI) × 100%',
+    formulaVariables: [
+      { label: 'NOI', desc: '物业每年产生的净营业收入。' },
+      { label: 'Cap Rate', desc: '无杠杆全款购买下的静态年化回报率。' },
+      { label: 'Cash-on-Cash Return', desc: '扣除房贷与初始投入现金后的真实杠杆现金流回报率。' },
+      { label: 'DSCR 偿债覆盖率', desc: '净营业收入对每年房贷还款本息的覆盖倍数。' },
+      { label: 'Break-Even Ratio', desc: '涵盖运营支出与房贷本息所需维持的最低出租入住率。' },
+    ],
+    exampleTitle: '一个真实场景示例',
+    exampleContent: '一处购买价280万美元的物业，总潜在年收入33.6万美元，空置率5%，年运营支出9.2万美元：\n\n• NOI：$227,200 → Cap Rate：8.11%\n• 融资方案：首付25%（$700,000）加过户成本2%，贷款$2,100,000，利率6.5%，25年摊销\n• Cash-on-Cash Return：7.55% · DSCR：1.34x · Break-Even Ratio：82.13%\n• Deal Health：健康 —— DSCR和Break-Even Ratio都舒适地处于贷款机构典型门槛以内\n\n现在做个压力测试（空置率升到10%，利率升到7.5%）：\n\n• DSCR降到1.13x —— 已经压到大多数贷款机构最低门槛的边缘\n• Break-Even Ratio升到92.01% —— 进入警示区间\n\n这正是压力测试的意义：一笔在基础情景下看起来相当健康的交易，在一个只是"适度更艰难"（并不是极端情景）的假设下，安全垫可能会大幅缩水。',
+    faqTitle: '常见问题',
+    faqs: [
+      {
+        question: '这个算出来的数字，会 me 和我单独用各个计算器算的不一样吗？',
+        answer: '不应该——Deal Analyzer用的是和我们独立的Cap Rate、NOI、Cash-on-Cash、DSCR、Break-Even Ratio计算器完全相同的计算逻辑。这里的优势是你只需要输入一次数据，而不是分别在五个页面各输入一次，这也避免了在不同工具之间不小心用了略有差异的输入数字这种风险。',
+      },
+      {
+        question: '压力测试用的是什么假设？我能自己调整吗？',
+        answer: '默认的压力测试假设是空置率+5个百分点、利率+100个基点——这是一个适度的（不是最坏情况的）压力情景，和我们如何完整尽调一笔交易指南里描述的压力测试方法是一致的。自定义压力测试情景可能会在未来的更新里加入。',
+      },
+      {
+        question: '导出的PDF能直接用于正式贷款申请吗？',
+        answer: '不能——请把它当作你自己分析用的工作摘要，或者和合伙人/贷款经纪人做非正式讨论时用的材料，不能替代贷款机构要求的正式核保材料包（经核实的财务报表、评估报告等）。',
+      },
+    ],
+    relatedTitle: '相关工具与指南',
+    relatedCalculators: [
+      { title: 'Cap Rate 计算器', slug: 'cap-rate' },
+      { title: 'DSCR 计算器', slug: 'dscr' },
+      { title: '收支平衡比率计算器', slug: 'break-even-ratio' },
+      { title: '如何完整尽调一笔交易 指南', slug: '../../guides/how-to-underwrite-a-deal' },
     ],
   },
   capRate: {

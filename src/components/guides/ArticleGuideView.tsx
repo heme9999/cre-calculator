@@ -40,6 +40,32 @@ export function ArticleGuideView({ content, locale, guideSlug }: Props) {
         </p>
       </header>
 
+      {/* Deal Analyzer Action Banner for Underwriting Guide */}
+      {guideSlug === 'how-to-underwrite-a-deal' && (
+        <section className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4 border border-slate-700 shadow-md">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                {locale === 'zh' ? '尽调流程落地工具' : 'Underwriting Tool Implementation'}
+              </span>
+              <h3 className="text-xl font-bold text-white">
+                {locale === 'zh' ? '用 Deal Analyzer 走一遍完整尽调流程' : 'Run This Full Underwriting Process in Deal Analyzer'}
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                {locale === 'zh' ? '不用在5个单独计算器间来算去。一次输入购买价、收入开支与融资条件，同时算出 Cap Rate、CoC、DSCR、BER 并做压力测试。' : 'No need to switch across 5 separate pages. Input terms once to run Cap Rate, CoC, DSCR, and BER with stress testing.'}
+              </p>
+            </div>
+            <Link
+              href={`/${locale}/tools/deal-analyzer/`}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
+            >
+              <span>{locale === 'zh' ? '打开 Deal Analyzer' : 'Launch Deal Analyzer'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </section>
+      )}
+
       {/* Disclaimer Banner if present */}
       {content.disclaimer && (
         <section className="bg-amber-50/90 border-l-4 border-amber-500 p-5 rounded-r-2xl shadow-xs">

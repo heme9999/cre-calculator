@@ -139,6 +139,30 @@ export default async function CapRatePage({ params }: PageProps) {
           </Link>
         </section>
 
+        {/* Deal Analyzer Banner */}
+        <section className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4 border border-slate-700 shadow-md">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                {locale === 'zh' ? '综合分析工具' : 'Full Underwriting Tool'}
+              </span>
+              <h3 className="text-xl font-bold text-white">
+                {locale === 'zh' ? '想同时计算 Cap Rate、NOI、DSCR 和 Cash-on-Cash？' : 'Need Cap Rate, NOI, DSCR, and Cash-on-Cash all together?'}
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                {locale === 'zh' ? '使用 Deal Analyzer 综合尽调工具，一次输入算出全部核心指标，支持压力测试与 PDF 导出。' : 'Use the Deal Analyzer tool to run all core CRE metrics from a single set of inputs with stress testing.'}
+              </p>
+            </div>
+            <Link
+              href={`/${locale}/tools/deal-analyzer/`}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
+            >
+              <span>{locale === 'zh' ? '打开 Deal Analyzer' : 'Launch Deal Analyzer'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </section>
+
         {/* Related Calculators */}
         <section className="bg-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4">
           <h2 className="text-lg font-bold text-white">{content.relatedTitle}</h2>

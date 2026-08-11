@@ -37,6 +37,7 @@ export function Header({ locale }: HeaderProps) {
   }
 
   const navLinks = [
+    { href: `/${locale}/tools/deal-analyzer/`, label: nav.dealAnalyzer, key: 'deal-analyzer', isPrimary: true },
     { href: `/${locale}/guides/`, label: locale === 'zh' ? '指南' : 'Guides', key: 'guides' },
     { href: `/${locale}/calculators/cap-rate/`, label: nav.capRate, key: 'cap-rate' },
     { href: `/${locale}/calculators/noi/`, label: nav.noi, key: 'noi' },
@@ -60,7 +61,7 @@ export function Header({ locale }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-300">
+        <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-slate-300">
           <Link
             href={`/${locale}/`}
             className={`hover:text-white transition-colors ${
@@ -74,11 +75,20 @@ export function Header({ locale }: HeaderProps) {
             <Link
               key={item.key}
               href={item.href}
-              className={`hover:text-white transition-colors ${
-                pathname?.includes(`/${item.key}/`) ? 'text-emerald-400 font-semibold' : ''
+              className={`hover:text-white transition-colors flex items-center gap-1.5 ${
+                item.isPrimary
+                  ? 'bg-emerald-500/20 text-emerald-300 hover:text-emerald-200 px-3 py-1 rounded-full border border-emerald-500/40 font-bold text-xs'
+                  : pathname?.includes(`/${item.key}/`)
+                  ? 'text-emerald-400 font-semibold'
+                  : ''
               }`}
             >
-              {item.label}
+              <span>{item.label}</span>
+              {item.isPrimary && (
+                <span className="text-[10px] bg-emerald-500 text-slate-950 px-1.5 py-0.2 rounded font-black uppercase">
+                  {locale === 'zh' ? '综合' : 'Suite'}
+                </span>
+              )}
             </Link>
           ))}
         </nav>

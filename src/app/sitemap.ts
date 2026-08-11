@@ -19,6 +19,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'guides/how-to-estimate-noi',
     'guides/1031-exchange-process',
     'guides/how-to-underwrite-a-deal',
+    'tools',
+    'tools/deal-analyzer',
   ];
   const locales = ['en', 'zh'];
 

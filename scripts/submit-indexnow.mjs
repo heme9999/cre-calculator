@@ -17,6 +17,8 @@ const routes = [
   'guides/how-to-estimate-noi',
   'guides/1031-exchange-process',
   'guides/how-to-underwrite-a-deal',
+  'tools',
+  'tools/deal-analyzer',
 ];
 
 const locales = ['en', 'zh'];
@@ -63,7 +65,19 @@ async function submitIndexNow() {
         console.log(`✅ Successfully submitted all ${urlList.length} URLs to ${endpoint}!`);
       } else {
         const text = await response.text();
-        console.error(`❌ ${endpoint} returned non-success response:`, text);
+        console.error(`❌ ${endpoint} POST returned non-success response:`, text);
+
+        // Fallback to GET for each URL
+        console.log(`Attempting GET submission fallback to ${endpoint}...`);
+        let successCount = 0;
+        for (const url of urlList) {
+          const getUrl = `${endpoint}?url=${encodeURIComponent(url)}&key=${KEY}`;
+          const getRes = await fetch(getUrl);
+          if (getRes.status === 200 || getRes.status === 202) {
+            successCount++;
+          }
+        }
+        console.log(`✅ Fallback GET submission complete: ${successCount}/${urlList.length} URLs returned HTTP 200/202 from ${endpoint}`);
       }
     } catch (err) {
       console.error(`❌ Error submitting to ${endpoint}:`, err);

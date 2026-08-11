@@ -49,6 +49,7 @@ export interface HomePageContent {
 export interface NavContent {
   brandName: string;
   calculators: string;
+  dealAnalyzer: string;
   capRate: string;
   noi: string;
   cashOnCash: string;
@@ -68,6 +69,12 @@ export interface CapRateBenchmarkRow {
   propertyType: string;
   range: string;
   notes: string;
+}
+
+export interface CapRateBenchmarkTier {
+  tierName: string;
+  tierDescription: string;
+  rows: CapRateBenchmarkRow[];
 }
 
 export interface MarketTierRow {
@@ -146,6 +153,7 @@ export interface GuidesHubPageContent {
 export interface LocaleContent {
   nav: NavContent;
   home: HomePageContent;
+  dealAnalyzer: CalculatorPageContent;
   capRate: CalculatorPageContent;
   noi: CalculatorPageContent;
   cashOnCash: CalculatorPageContent;

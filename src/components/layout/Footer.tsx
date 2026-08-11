@@ -39,6 +39,11 @@ export function Footer({ locale }: FooterProps) {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
+                <Link href={`/${locale}/tools/deal-analyzer/`} className="hover:text-emerald-400 transition-colors font-bold text-emerald-400">
+                  Deal Analyzer ({isZh ? '综合尽调' : 'Full Underwriting'})
+                </Link>
+              </li>
+              <li>
                 <Link href={`/${locale}/calculators/cap-rate/`} className="hover:text-emerald-400 transition-colors">
                   {nav.capRate}
                 </Link>

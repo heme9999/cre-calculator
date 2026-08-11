@@ -139,6 +139,30 @@ export default async function DscrPage({ params }: PageProps) {
           </section>
         )}
 
+        {/* Deal Analyzer Banner */}
+        <section className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4 border border-slate-700 shadow-md">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                {locale === 'zh' ? '综合分析工具' : 'Full Underwriting Tool'}
+              </span>
+              <h3 className="text-xl font-bold text-white">
+                {locale === 'zh' ? '用 Deal Analyzer 完成包含 DSCR 的完整尽调测算' : 'Run Complete Underwriting Including DSCR in Deal Analyzer'}
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                {locale === 'zh' ? '一次输入同步算出 Cap Rate、Cash-on-Cash、DSCR、Break-Even Ratio，支持压力测试与 PDF 导出。' : 'Calculate Cap Rate, Cash-on-Cash, DSCR, and BER simultaneously with stress testing.'}
+              </p>
+            </div>
+            <Link
+              href={`/${locale}/tools/deal-analyzer/`}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
+            >
+              <span>{locale === 'zh' ? '打开 Deal Analyzer' : 'Launch Deal Analyzer'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </section>
+
         {/* Related Calculators */}
         <section className="bg-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4">
           <h2 className="text-lg font-bold text-white">{content.relatedTitle}</h2>
