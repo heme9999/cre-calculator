@@ -1,4 +1,4 @@
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://cre-calculator.pages.dev';
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://crecalculators.com';
 
 export const LOCALES = ['en', 'zh'] as const;
 export type Locale = (typeof LOCALES)[number];

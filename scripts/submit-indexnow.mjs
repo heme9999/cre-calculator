@@ -1,4 +1,4 @@
-const HOST = 'cre-calculator.pages.dev';
+const HOST = 'crecalculators.com';
 const KEY = 'b8687ac0745e47fa98319b0ee0b5cda6';
 const KEY_LOCATION = `https://${HOST}/${KEY}.txt`;
 
