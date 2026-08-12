@@ -1,10 +1,8 @@
 export function formatCurrency(val: number): string {
   if (isNaN(val) || !isFinite(val)) return '$0';
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(val);
+  const rounded = Math.round(val);
+  const formatted = Math.abs(rounded).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return rounded < 0 ? `-$${formatted}` : `$${formatted}`;
 }
 
 export function formatPercent(val: number, decimals: number = 2): string {

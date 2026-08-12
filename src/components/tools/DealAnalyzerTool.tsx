@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { PaymentType } from '@/lib/loanCalculations';
 import {
@@ -46,6 +46,8 @@ export function DealAnalyzerTool({ locale }: Props) {
   const [showStressTest, setShowStressTest] = useState<boolean>(false);
   const [isExportingPdf, setIsExportingPdf] = useState<boolean>(false);
 
+  const pdfTemplateRef = useRef<HTMLDivElement>(null);
+
   const input: DealAnalyzerInput = {
     purchasePrice,
     closingCostsPercent,
@@ -62,185 +64,46 @@ export function DealAnalyzerTool({ locale }: Props) {
 
   const { base, stress } = calculateDealAnalysis(input, locale);
 
-  // Native Vector PDF Export Handler using jsPDF + jspdf-autotable
+  // DOM Screenshot PDF Export Handler using html2canvas-pro + jsPDF
   const handleExportPdf = async () => {
+    if (!pdfTemplateRef.current) return;
     try {
       setIsExportingPdf(true);
+      const html2canvas = (await import('html2canvas-pro')).default;
       const { jsPDF } = await import('jspdf');
-      const autoTable = (await import('jspdf-autotable')).default;
 
-      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const margin = 14;
-      const contentWidth = pageWidth - margin * 2;
+      const element = pdfTemplateRef.current;
+      const canvas = await html2canvas(element, {
+        scale: 2, // High resolution DPI
+        useCORS: true,
+        backgroundColor: '#ffffff',
+      });
 
-      let currentY = 16;
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
 
-      // 1. Header & Brand
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.setTextColor(5, 150, 105); // emerald-600
-      doc.text('CRE Calculators', margin, currentY);
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.setTextColor(100, 116, 139); // slate-500
-      const today = new Date().toISOString().split('T')[0];
-      doc.text(`Date: ${today}  |  https://cre-calculator.pages.dev`, pageWidth - margin, currentY, { align: 'right' });
+      let heightLeft = imgHeight;
+      let position = 0;
 
-      currentY += 8;
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
 
-      // Title & Subtitle
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(15);
-      doc.setTextColor(15, 23, 42); // slate-900
-      doc.text(
-        isZh ? 'CRE Underwriting Summary (商业地产尽调摘要)' : 'Commercial Real Estate Underwriting Summary',
-        margin,
-        currentY
-      );
-
-      currentY += 5;
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.setTextColor(71, 85, 105); // slate-600
-      doc.text(
-        isZh ? 'Deal Analyzer 综合尽调评估报告' : 'Comprehensive Deal Analysis Report — Base Case & Stress Scenario',
-        margin,
-        currentY
-      );
-
-      currentY += 5;
-
-      // Divider Line
-      doc.setDrawColor(226, 232, 240); // slate-200
-      doc.setLineWidth(0.5);
-      doc.line(margin, currentY, pageWidth - margin, currentY);
-
-      currentY += 6;
-
-      // 2. Health Status Banner
-      const healthStatus = base.healthStatus;
-      let bgColor: [number, number, number] = [236, 253, 245]; // emerald-50
-      let borderColor: [number, number, number] = [5, 150, 105]; // emerald-600
-      let textColor: [number, number, number] = [6, 95, 70]; // emerald-800
-      let badgeText = 'HEALTHY DEAL';
-
-      if (healthStatus === 'yellow') {
-        bgColor = [255, 251, 235]; // amber-50
-        borderColor = [217, 119, 6]; // amber-600
-        textColor = [146, 64, 14]; // amber-800
-        badgeText = 'CAUTION / NEAR THRESHOLDS';
-      } else if (healthStatus === 'red') {
-        bgColor = [254, 242, 242]; // rose-50
-        borderColor = [225, 29, 72]; // rose-600
-        textColor = [159, 18, 57]; // rose-800
-        badgeText = 'WARNING / ELEVATED RISK';
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
       }
 
-      const bannerHeight = 18;
-      doc.setFillColor(...bgColor);
-      doc.setDrawColor(...borderColor);
-      doc.setLineWidth(0.6);
-      doc.roundedRect(margin, currentY, contentWidth, bannerHeight, 3, 3, 'FD');
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.setTextColor(...textColor);
-      doc.text(`EVALUATION: ${badgeText} — ${base.healthTitle}`, margin + 4, currentY + 6);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8);
-      const splitDesc = doc.splitTextToSize(base.healthDesc, contentWidth - 8);
-      doc.text(splitDesc, margin + 4, currentY + 11);
-
-      currentY += bannerHeight + 7;
-
-      // 3. Property & Financing Inputs (Table 1)
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.setTextColor(15, 23, 42);
-      doc.text(isZh ? '1. Underwriting Inputs (输入参数)' : '1. Underwriting Input Parameters', margin, currentY);
-
-      currentY += 2;
-
-      autoTable(doc, {
-        startY: currentY,
-        margin: { left: margin, right: margin },
-        theme: 'grid',
-        styles: { fontSize: 8, cellPadding: 2, font: 'helvetica' },
-        headStyles: { fillColor: [15, 23, 42], textColor: [255, 255, 255], fontStyle: 'bold' },
-        bodyStyles: { textColor: [30, 41, 59] },
-        columnStyles: {
-          0: { fontStyle: 'bold', cellWidth: 45 },
-          1: { cellWidth: 46 },
-          2: { fontStyle: 'bold', cellWidth: 45 },
-          3: { cellWidth: 46 },
-        },
-        head: [['Parameter (参数)', 'Value (数值)', 'Parameter (参数)', 'Value (数值)']],
-        body: [
-          ['Purchase Price (购买价)', formatCurrency(purchasePrice), 'Down Payment (首付比例)', `${downPaymentPercent}% (${formatCurrency(base.downPayment)})`],
-          ['Closing Costs (过户成本)', `${closingCostsPercent}% (${formatCurrency(base.closingCosts)})`, 'Loan Amount (贷款金额)', formatCurrency(base.loanAmount)],
-          ['Gross Income (GPI)', formatCurrency(grossPotentialIncome), 'Interest Rate (年利率)', `${interestRate}%`],
-          ['Vacancy Loss (空置率)', `${vacancyRate}% (${formatCurrency(base.vacancyLoss)})`, 'Amortization Term (摊销)', `${amortizationYears} Years (${isZh ? '年' : 'Yrs'})`],
-          ['Effective Income (EGI)', formatCurrency(base.egi), 'Monthly Pmt (月供本息)', formatCurrency(Math.round(base.monthlyPayment))],
-          ['Operating Expenses (OpEx)', formatCurrency(operatingExpenses), 'Annual Debt Service (年还贷)', formatCurrency(base.annualDebtService)],
-        ],
-      });
-
-      currentY = (doc as any).lastAutoTable.finalY + 7;
-
-      // 4. Core CRE Metrics & Stress Test Comparison (Table 2)
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.setTextColor(15, 23, 42);
-      doc.text(isZh ? '2. Calculated Metrics & Stress Test (核心指标与压力测试对比)' : '2. Core Underwriting Metrics & Stress Test Comparison', margin, currentY);
-
-      currentY += 2;
-
-      autoTable(doc, {
-        startY: currentY,
-        margin: { left: margin, right: margin },
-        theme: 'striped',
-        styles: { fontSize: 8.5, cellPadding: 2.5, font: 'helvetica' },
-        headStyles: { fillColor: [5, 150, 105], textColor: [255, 255, 255], fontStyle: 'bold' },
-        bodyStyles: { textColor: [30, 41, 59] },
-        columnStyles: {
-          0: { fontStyle: 'bold', cellWidth: 55 },
-          1: { fontStyle: 'bold', cellWidth: 40 },
-          2: { fontStyle: 'bold', cellWidth: 45 },
-          3: { cellWidth: 42 },
-        },
-        head: [['Core Metric (核心指标)', 'Base Case (基础情景)', 'Stressed (+5% Vac, +1% Rate)', 'Underwriting Benchmark']],
-        body: [
-          ['Net Operating Income (NOI)', formatCurrency(base.noi), formatCurrency(stress.noi), 'Unleveraged Property Cash Flow'],
-          ['Cap Rate (资本化率)', formatPercent(base.capRate), formatPercent(stress.capRate), 'Unleveraged Acquisition Yield'],
-          ['Cash-on-Cash Return (CoC)', formatPercent(base.cashOnCashReturn), formatPercent(stress.cashOnCashReturn), 'Leveraged Annual Cash Return'],
-          ['DSCR (偿债覆盖率)', `${base.dscr.toFixed(2)}x`, `${stress.dscr.toFixed(2)}x`, 'Lender Standard: >= 1.25x'],
-          ['Break-Even Ratio (BER)', formatPercent(base.breakEvenRatio), formatPercent(stress.breakEvenRatio), 'Lender Standard: <= 85.0%'],
-          ['Annual Debt Service (年还贷)', formatCurrency(base.annualDebtService), formatCurrency(stress.annualDebtService), 'Principal & Interest Total'],
-        ],
-      });
-
-      currentY = (doc as any).lastAutoTable.finalY + 10;
-
-      // 5. Footer Branding
-      doc.setDrawColor(226, 232, 240);
-      doc.setLineWidth(0.4);
-      doc.line(margin, currentY, pageWidth - margin, currentY);
-
-      currentY += 5;
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8);
-      doc.setTextColor(148, 163, 184); // slate-400
-      doc.text(
-        'Generated by CRE Calculators (https://cre-calculator.pages.dev) — Commercial Real Estate Investment Tools.',
-        pageWidth / 2,
-        currentY,
-        { align: 'center' }
-      );
-
-      doc.save('deal-analyzer-underwriting-summary.pdf');
+      pdf.save(isZh ? 'deal-analyzer-underwriting-summary-zh.pdf' : 'deal-analyzer-underwriting-summary-en.pdf');
     } catch (err) {
       console.error('PDF export failed:', err);
     } finally {
@@ -716,6 +579,112 @@ export function DealAnalyzerTool({ locale }: Props) {
           </div>
         </div>
       )}
+
+      {/* Hidden Printable DOM Card for html2canvas-pro Screenshot Export */}
+      <div className="absolute left-[-9999px] top-[-9999px]">
+        <div
+          ref={pdfTemplateRef}
+          className="w-[800px] p-8 bg-white text-slate-900 font-sans space-y-6 border border-slate-200 shadow-none"
+        >
+          {/* Header */}
+          <div className="border-b border-slate-300 pb-4 flex justify-between items-center">
+            <div>
+              <div className="flex items-center gap-2 text-emerald-700 font-bold text-xl">
+                <Building2 className="w-6 h-6" />
+                <span>{isZh ? '商业地产投资计算器' : 'CRE Calculators'}</span>
+              </div>
+              <h1 className="text-2xl font-black text-slate-900 mt-1">
+                {isZh ? '商业地产尽调与投资分析摘要' : 'Commercial Real Estate Underwriting Summary'}
+              </h1>
+            </div>
+            <div className="text-right text-xs text-slate-500">
+              <div>Date: {new Date().toISOString().split('T')[0]}</div>
+              <div className="font-mono text-[11px] text-emerald-700 font-bold mt-1">https://cre-calculator.pages.dev</div>
+            </div>
+          </div>
+
+          {/* Deal Health Banner */}
+          <div className={`p-4 rounded-xl border ${baseBadge.bg} flex items-center justify-between`}>
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">{isZh ? '交易健康度诊断' : 'Deal Health Evaluation'}</span>
+              <span className="text-lg font-black">{base.healthTitle}</span>
+              <p className="text-xs text-slate-700 mt-0.5">{base.healthDesc}</p>
+            </div>
+            <div className={`px-4 py-2 rounded-xl text-sm font-black ${baseBadge.badge}`}>
+              {baseBadge.label}
+            </div>
+          </div>
+
+          {/* Key Inputs Grid */}
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">{isZh ? '关键测算输入参数' : 'Underwriting Input Parameters'}</h3>
+            <div className="grid grid-cols-3 gap-3 text-xs text-slate-700">
+              <div><strong>{isZh ? '购买价格:' : 'Purchase Price:'}</strong> {formatCurrency(purchasePrice)}</div>
+              <div><strong>{isZh ? '过户成本:' : 'Closing Costs:'}</strong> {closingCostsPercent}% ({formatCurrency(base.closingCosts)})</div>
+              <div><strong>{isZh ? '总潜在收入 (GPI):' : 'Gross Income (GPI):'}</strong> {formatCurrency(grossPotentialIncome)}</div>
+              <div><strong>{isZh ? '空置率:' : 'Vacancy Rate:'}</strong> {vacancyRate}% ({formatCurrency(base.vacancyLoss)})</div>
+              <div><strong>{isZh ? '有效毛收入 (EGI):' : 'Effective Income (EGI):'}</strong> {formatCurrency(base.egi)}</div>
+              <div><strong>{isZh ? '运营支出 (OpEx):' : 'Operating Expenses:'}</strong> {formatCurrency(operatingExpenses)}</div>
+              <div><strong>{isZh ? '首付比例:' : 'Down Payment:'}</strong> {downPaymentPercent}% ({formatCurrency(base.downPayment)})</div>
+              <div><strong>{isZh ? '贷款金额:' : 'Loan Amount:'}</strong> {formatCurrency(base.loanAmount)}</div>
+              <div><strong>{isZh ? '年利率 / 摊销:' : 'Rate / Amortization:'}</strong> {interestRate}% / {amortizationYears} {isZh ? '年' : 'Years'}</div>
+            </div>
+          </div>
+
+          {/* Core Metrics & Stress Test Comparison Table */}
+          <div className="space-y-2">
+            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">{isZh ? '核心指标评估与压力测试对比' : 'Calculated Core CRE Metrics & Stress Test'}</h3>
+            <table className="w-full text-xs text-left border-collapse border border-slate-300">
+              <thead className="bg-slate-900 text-white font-bold">
+                <tr>
+                  <th className="p-2.5 border border-slate-700">{isZh ? '评估指标' : 'Core Metric'}</th>
+                  <th className="p-2.5 border border-slate-700">{isZh ? '基础情景' : 'Base Case'}</th>
+                  <th className="p-2.5 border border-slate-700">{isZh ? '压力情景 (空置率+5%, 利率+1%)' : 'Stressed Case (+5% Vac, +1% Rate)'}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                <tr>
+                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '净营业收入 (NOI)' : 'Net Operating Income (NOI)'}</td>
+                  <td className="p-2.5 font-bold text-slate-900 border border-slate-200">{formatCurrency(base.noi)}</td>
+                  <td className="p-2.5 text-slate-700 border border-slate-200">{formatCurrency(stress.noi)}</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '资本化率 (Cap Rate)' : 'Cap Rate'}</td>
+                  <td className="p-2.5 font-bold text-emerald-700 border border-slate-200">{formatPercent(base.capRate)}</td>
+                  <td className="p-2.5 text-slate-700 border border-slate-200">{formatPercent(stress.capRate)}</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '现金回报率 (Cash-on-Cash Return)' : 'Cash-on-Cash Return (CoC)'}</td>
+                  <td className="p-2.5 font-bold text-emerald-700 border border-slate-200">{formatPercent(base.cashOnCashReturn)}</td>
+                  <td className="p-2.5 text-slate-700 border border-slate-200">{formatPercent(stress.cashOnCashReturn)}</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '偿债覆盖率 (DSCR)' : 'Debt Service Coverage Ratio (DSCR)'}</td>
+                  <td className="p-2.5 font-bold text-slate-900 border border-slate-200">{base.dscr.toFixed(2)}x</td>
+                  <td className="p-2.5 text-slate-700 border border-slate-200">{stress.dscr.toFixed(2)}x</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '收支平衡点 (Break-Even Ratio)' : 'Break-Even Ratio'}</td>
+                  <td className="p-2.5 font-bold text-slate-900 border border-slate-200">{formatPercent(base.breakEvenRatio)}</td>
+                  <td className="p-2.5 text-slate-700 border border-slate-200">{formatPercent(stress.breakEvenRatio)}</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '年还贷总额 (Annual Debt Service)' : 'Annual Debt Service'}</td>
+                  <td className="p-2.5 text-slate-900 border border-slate-200">{formatCurrency(base.annualDebtService)}</td>
+                  <td className="p-2.5 text-slate-700 border border-slate-200">{formatCurrency(stress.annualDebtService)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Footer Branding */}
+          <div className="pt-4 border-t border-slate-300 text-center text-[10px] text-slate-500">
+            {isZh
+              ? '本文档由 CRE Calculators (https://cre-calculator.pages.dev) 自动生成，仅供商业地产尽调与投资分析使用。'
+              : 'Generated by CRE Calculators (https://cre-calculator.pages.dev). For underwriting and deal analysis purposes only.'}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
