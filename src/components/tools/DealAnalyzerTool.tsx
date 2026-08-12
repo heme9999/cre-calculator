@@ -7,6 +7,7 @@ import {
   calculateDealAnalysis,
   DealAnalyzerInput,
 } from '@/lib/dealAnalyzerCalculations';
+import { getContent } from '@/content';
 import {
   Building2,
   DollarSign,
@@ -20,6 +21,8 @@ import {
   Zap,
   FileDown,
   Sparkles,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 interface Props {
@@ -28,6 +31,8 @@ interface Props {
 
 export function DealAnalyzerTool({ locale }: Props) {
   const isZh = locale === 'zh';
+  const whatIsContent = getContent(locale).dealAnalyzer.whatIsContent;
+  const [isInfoExpanded, setIsInfoExpanded] = useState<boolean>(false);
 
   // Default Inputs set to real example: $2.8M purchase price, 2% closing, 336k GPI, 5% vacancy, 92k OpEx, 25% down, 6.5% interest, 25yr amort
   const [purchasePrice, setPurchasePrice] = useState<number>(2800000);
@@ -197,6 +202,31 @@ export function DealAnalyzerTool({ locale }: Props) {
         <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Inputs Section */}
           <div className="lg:col-span-7 space-y-6">
+            {/* Collapsible Tool Explanation Banner */}
+            <div className="bg-emerald-50/80 border border-emerald-200/80 rounded-xl overflow-hidden transition-all shadow-xs">
+              <button
+                type="button"
+                onClick={() => setIsInfoExpanded(!isInfoExpanded)}
+                className="w-full px-4 py-3 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-emerald-950 hover:bg-emerald-100/50 transition-colors gap-2 cursor-pointer"
+              >
+                <span>
+                  {isZh
+                    ? '💡 一次输入，同时算出Cap Rate、DSCR等5项核心指标 —— 点击查看详细说明'
+                    : '💡 One input set calculates Cap Rate, DSCR, and 3 more core metrics at once — click for details'}
+                </span>
+                {isInfoExpanded ? (
+                  <ChevronUp className="w-4 h-4 text-emerald-700 shrink-0" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-emerald-700 shrink-0" />
+                )}
+              </button>
+              {isInfoExpanded && (
+                <div className="px-4 pb-4 pt-2 border-t border-emerald-200/60 text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+                  {whatIsContent}
+                </div>
+              )}
+            </div>
+
             {/* Section 1: Property & Purchase */}
             <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
