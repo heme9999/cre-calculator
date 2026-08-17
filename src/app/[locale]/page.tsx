@@ -4,7 +4,10 @@ import { Metadata } from 'next';
 import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
 import { JsonLd, getWebSiteJsonLd } from '@/components/seo/JsonLd';
-import { Calculator, ArrowRight, TrendingUp, ShieldCheck, Zap, Sparkles } from 'lucide-react';
+import { Calculator, ArrowRight, TrendingUp, ShieldCheck, Zap } from 'lucide-react';
+import { DealAnalyzerPreview } from '@/components/home/DealAnalyzerPreview';
+
+import { buildSeoMetadata } from '@/lib/seo';
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
@@ -19,10 +22,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale);
 
-  return {
+  return buildSeoMetadata({
+    path: '',
+    locale,
     title: content.home.metaTitle,
     description: content.home.metaDescription,
-  };
+  });
 }
 
 export default async function HomePage({ params }: PageProps) {
@@ -43,43 +48,44 @@ export default async function HomePage({ params }: PageProps) {
     <div className="space-y-16 py-4">
       <JsonLd data={jsonLdData} />
       {/* Hero Section */}
-      <section className="text-center max-w-4xl mx-auto space-y-6 pt-4">
-        <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-xs">
-          <TrendingUp className="w-4 h-4 text-emerald-600" />
-          <span>{isZh ? '美国商业地产 (CRE) 投资决策工具包' : 'US Commercial Real Estate Analysis Suite'}</span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-          {home.heroH1}
-        </h1>
-        <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          {home.heroSubtitle}
-        </p>
+      <section className="pt-2">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Left Column: Headline, Value Proposition, Primary CTA */}
+          <div className="lg:col-span-6 space-y-6 text-left">
+            <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-xs">
+              <TrendingUp className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>{isZh ? '美国商业地产 (CRE) 专业投资决策工具' : 'US Commercial Real Estate Underwriting Suite'}</span>
+            </div>
 
-        {/* Featured Deal Analyzer Banner */}
-        <div className="pt-2">
-          <Link
-            href={`/${locale}/tools/deal-analyzer/`}
-            className="group bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-6 md:p-8 hover:shadow-xl transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 border border-slate-700 text-left"
-          >
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/30">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                <span>{isZh ? '全新推出：全流程综合尽调工具' : 'New: Full Underwriting Suite'}</span>
-              </div>
-              <h2 className="text-xl md:text-2xl font-black group-hover:text-emerald-400 transition-colors">
-                Deal Analyzer — {isZh ? '一次输入，完整尽调' : 'Full Underwriting, One Input Set'}
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                {isZh
-                  ? '不用在5个独立页面重复输入。一次算出 Cap Rate、NOI、Cash-on-Cash、DSCR、Break-Even Ratio，支持压力测试与 PDF 一页纸导出。'
-                  : 'Stop re-entering numbers 5 times. Calculate Cap Rate, NOI, Cash-on-Cash, DSCR, and BER simultaneously, run stress testing, and export a clean PDF.'}
-              </p>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+              {home.heroH1}
+            </h1>
+
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl">
+              {home.heroSubtitle}
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <Link
+                href={`/${locale}/tools/deal-analyzer/`}
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all shadow-md hover:shadow-lg"
+              >
+                <span>{isZh ? '免费体验 Deal Analyzer' : 'Try Deal Analyzer Suite'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href={`/${locale}/calculators/cap-rate/`}
+                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm transition-colors border border-slate-300"
+              >
+                <span>{isZh ? 'Cap Rate 计算器' : 'Cap Rate Calculator'}</span>
+              </Link>
             </div>
-            <div className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 group-hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-colors shadow-xs">
-              <span>{isZh ? '立即体验综合尽调' : 'Try Deal Analyzer'}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </Link>
+          </div>
+
+          {/* Right Column: Original Deal Analyzer Interactive Preview */}
+          <div className="lg:col-span-6">
+            <DealAnalyzerPreview locale={locale} />
+          </div>
         </div>
       </section>
 

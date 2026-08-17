@@ -4,6 +4,7 @@ import { ArticleGuideContent } from '@/content/types';
 import { JsonLd, getArticleJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen, AlertTriangle, Database } from 'lucide-react';
 import { SITE_URL } from '@/lib/constants';
+import { UnderwritingWorkflowDiagram } from './visuals/UnderwritingWorkflowDiagram';
 
 interface Props {
   content: ArticleGuideContent;
@@ -39,6 +40,11 @@ export function ArticleGuideView({ content, locale, guideSlug }: Props) {
           {content.subtitle}
         </p>
       </header>
+
+      {/* Structured Underwriting Workflow Infographic */}
+      {guideSlug === 'how-to-underwrite-a-deal' && (
+        <UnderwritingWorkflowDiagram locale={locale} />
+      )}
 
       {/* Deal Analyzer Action Banner for Underwriting Guide */}
       {guideSlug === 'how-to-underwrite-a-deal' && (

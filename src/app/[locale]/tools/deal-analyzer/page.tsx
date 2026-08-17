@@ -7,6 +7,8 @@ import { DealAnalyzerTool } from '@/components/tools/DealAnalyzerTool';
 import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen, Calculator, Sparkles } from 'lucide-react';
 
+import { buildSeoMetadata } from '@/lib/seo';
+
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
@@ -20,13 +22,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).dealAnalyzer;
 
-  return {
+  return buildSeoMetadata({
+    path: 'tools/deal-analyzer',
+    locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    alternates: {
-      canonical: `${SITE_URL}/${locale}/tools/deal-analyzer/`,
-    },
-  };
+  });
 }
 
 export default async function DealAnalyzerPage({ params }: PageProps) {

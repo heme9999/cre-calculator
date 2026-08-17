@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { formatCurrency } from '@/lib/utils';
-import { Calculator, ShieldAlert, ArrowUpRight, DollarSign, Info, CheckCircle2 } from 'lucide-react';
+import { Calculator, ShieldAlert, CheckCircle2 } from 'lucide-react';
+import { Exchange1031Timeline } from './visuals/Exchange1031Timeline';
 
 interface Props {
   locale: string;
@@ -60,131 +61,145 @@ export function Exchange1031Calculator({ locale }: Props) {
       </div>
 
       {/* Body */}
-      <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Inputs */}
-        <div className="lg:col-span-7 space-y-6">
-          {/* Sale Price */}
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
-              {isZh ? '拟出售物业售价 (Sale Price)' : 'Property Sale Price ($)'}
-            </label>
-            <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
-              <input
-                type="number"
-                value={salePrice || ''}
-                onChange={(e) => setSalePrice(parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
-                placeholder="2,500,000"
-              />
-            </div>
-          </div>
-
-          {/* Cost Basis & Selling Expenses */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="p-6 md:p-8 space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Inputs */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* Sale Price */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '原始成本基准 (Cost Basis)' : 'Original Cost Basis ($)'}
+              <label htmlFor="sale-price-input" className="block text-sm font-semibold text-slate-700 mb-2">
+                {isZh ? '拟出售物业售价 (Sale Price)' : 'Property Sale Price ($)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                 <input
+                  id="sale-price-input"
                   type="number"
-                  value={originalCostBasis || ''}
-                  onChange={(e) => setOriginalCostBasis(parseFloat(e.target.value) || 0)}
+                  min="0"
+                  value={salePrice || ''}
+                  onChange={(e) => setSalePrice(parseFloat(e.target.value) || 0)}
                   className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
-                  placeholder="1,200,000"
+                  placeholder="2,500,000"
                 />
               </div>
             </div>
 
+            {/* Cost Basis & Selling Expenses */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="cost-basis-input" className="block text-sm font-semibold text-slate-700 mb-2">
+                  {isZh ? '原始成本基准 (Cost Basis)' : 'Original Cost Basis ($)'}
+                </label>
+                <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
+                  <input
+                    id="cost-basis-input"
+                    type="number"
+                    min="0"
+                    value={originalCostBasis || ''}
+                    onChange={(e) => setOriginalCostBasis(parseFloat(e.target.value) || 0)}
+                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                    placeholder="1,200,000"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="selling-expenses-input" className="block text-sm font-semibold text-slate-700 mb-2">
+                  {isZh ? '交易经纪与过户费用' : 'Selling Expenses ($)'}
+                </label>
+                <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
+                  <input
+                    id="selling-expenses-input"
+                    type="number"
+                    min="0"
+                    value={sellingExpenses || ''}
+                    onChange={(e) => setSellingExpenses(parseFloat(e.target.value) || 0)}
+                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                    placeholder="150,000"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Combined Tax Rate */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '出售费用/过户费 (Expenses)' : 'Selling Expenses ($)'}
+              <label htmlFor="tax-rate-input" className="block text-sm font-semibold text-slate-700 mb-2">
+                {isZh ? '预计综合税率 (%)' : 'Estimated Combined Tax Rate (%)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                 <input
+                  id="tax-rate-input"
                   type="number"
-                  value={sellingExpenses || ''}
-                  onChange={(e) => setSellingExpenses(parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
-                  placeholder="150,000"
+                  min="0"
+                  max="100"
+                  step="0.5"
+                  value={taxRate || ''}
+                  onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)}
+                  className="w-full pl-4 pr-8 py-3 text-slate-900 font-semibold focus:outline-none"
+                  placeholder="25"
                 />
-              </div>
-            </div>
-          </div>
-
-          {/* Tax Rate Slider/Input */}
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
-              {isZh ? '预计综合税率 (%)' : 'Estimated Combined Tax Rate (%)'}
-            </label>
-            <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
-              <input
-                type="number"
-                step="0.5"
-                value={taxRate || ''}
-                onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)}
-                className="w-full pl-4 pr-8 py-3 text-slate-900 font-semibold focus:outline-none"
-                placeholder="25"
-              />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">%</span>
-            </div>
-            <p className="text-xs text-slate-500 mt-1">
-              {isZh
-                ? '包含联邦资本利得税 (15%-20%)、州税 (0%-13.3%)、折旧追回税 (25%) 及 NIIT (3.8%) 的综合预估税率'
-                : 'Combined estimate of Federal Capital Gains, State Tax, Depreciation Recapture, and NIIT'}
-            </p>
-          </div>
-        </div>
-
-        {/* Results Panel */}
-        <div className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
-          <div>
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-              {isZh ? '延税估算总览' : 'Tax Deferral Summary'}
-            </h3>
-
-            {/* Major Output */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                {isZh ? '预计可延迟缴纳资本利得税' : 'Estimated Deferred Tax'}
-              </span>
-              <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1">
-                {formatCurrency(Math.round(deferredTax))}
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">%</span>
               </div>
               <p className="text-xs text-slate-500 mt-1">
                 {isZh
-                  ? `基于约 ${formatCurrency(Math.round(realizedGain))} 的资本利得收益及 ${taxRate}% 综合税率`
-                  : `Based on ${formatCurrency(Math.round(realizedGain))} realized gain at ${taxRate}% combined tax rate`}
+                  ? '包含联邦资本利得税 (15%-20%)、州税 (0%-13.3%)、折旧追回税 (25%) 及 NIIT (3.8%) 的综合预估税率'
+                  : 'Combined estimate of Federal Capital Gains, State Tax, Depreciation Recapture, and NIIT'}
               </p>
             </div>
+          </div>
 
-            {/* Breakdown */}
-            <div className="space-y-3 text-sm border-t border-slate-200 pt-4">
-              <div className="flex justify-between text-slate-700">
-                <span>{isZh ? '出售扣除费用后净所得 (Net Proceeds):' : 'Net Sale Proceeds:'}</span>
-                <span className="font-semibold text-slate-900">{formatCurrency(Math.round(netSaleProceeds))}</span>
-              </div>
-              <div className="flex justify-between text-slate-700">
-                <span>{isZh ? '变现资本利得 (Realized Gain):' : 'Realized Capital Gain:'}</span>
-                <span className="font-semibold text-slate-900">{formatCurrency(Math.round(realizedGain))}</span>
-              </div>
-              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs space-y-1 mt-3">
-                <div className="flex items-center gap-1.5 font-bold text-emerald-950">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>{isZh ? '100% 全额延税再投资目标:' : '100% Tax Deferral Reinvestment Rule:'}</span>
+          {/* Results Panel */}
+          <div aria-live="polite" className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
+                {isZh ? '延税估算总览' : 'Tax Deferral Summary'}
+              </h3>
+
+              {/* Major Output */}
+              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  {isZh ? '预计可延迟缴纳资本利得税' : 'Estimated Deferred Tax'}
+                </span>
+                <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1">
+                  {formatCurrency(Math.round(deferredTax))}
                 </div>
-                <p className="text-[11px] text-emerald-800 leading-relaxed">
+                <p className="text-xs text-slate-500 mt-1">
                   {isZh
-                    ? `新购买的目标物业售价需 ≥ ${formatCurrency(Math.round(netSaleProceeds))}，且出售净现金需全部重新投入新项目中。`
-                    : `Replacement property purchase price must be ≥ ${formatCurrency(Math.round(netSaleProceeds))} with all net cash equity reinvested.`}
+                    ? `基于约 ${formatCurrency(Math.round(realizedGain))} 的资本利得收益及 ${taxRate}% 综合税率`
+                    : `Based on ${formatCurrency(Math.round(realizedGain))} realized gain at ${taxRate}% combined tax rate`}
                 </p>
+              </div>
+
+              {/* Breakdown */}
+              <div className="space-y-3 text-sm border-t border-slate-200 pt-4">
+                <div className="flex justify-between text-slate-700">
+                  <span>{isZh ? '出售扣除费用后净所得 (Net Proceeds):' : 'Net Sale Proceeds:'}</span>
+                  <span className="font-semibold text-slate-900">{formatCurrency(Math.round(netSaleProceeds))}</span>
+                </div>
+                <div className="flex justify-between text-slate-700">
+                  <span>{isZh ? '变现资本利得 (Realized Gain):' : 'Realized Capital Gain:'}</span>
+                  <span className="font-semibold text-slate-900">{formatCurrency(Math.round(realizedGain))}</span>
+                </div>
+                <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs space-y-1 mt-3">
+                  <div className="flex items-center gap-1.5 font-bold text-emerald-950">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>{isZh ? '100% 全额延税再投资目标:' : '100% Tax Deferral Reinvestment Rule:'}</span>
+                  </div>
+                  <p className="text-[11px] text-emerald-800 leading-relaxed">
+                    {isZh
+                      ? `新购买的目标物业售价需 ≥ ${formatCurrency(Math.round(netSaleProceeds))}，且出售净现金需全部重新投入新项目中。`
+                      : `Replacement property purchase price must be ≥ ${formatCurrency(Math.round(netSaleProceeds))} with all net cash equity reinvested.`}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
+        {/* 1031 Exchange Statutory Timeline Visual Component */}
+        <Exchange1031Timeline locale={locale} />
       </div>
     </div>
   );

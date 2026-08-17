@@ -8,6 +8,8 @@ import { LeaseVsBuyScenarioComparison } from '@/components/calculators/LeaseVsBu
 import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen } from 'lucide-react';
 
+import { buildSeoMetadata } from '@/lib/seo';
+
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
@@ -21,13 +23,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).leaseVsBuy;
 
-  return {
+  return buildSeoMetadata({
+    path: 'calculators/lease-vs-buy',
+    locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    alternates: {
-      canonical: `${SITE_URL}/${locale}/calculators/lease-vs-buy/`,
-    },
-  };
+  });
 }
 
 export default async function LeaseVsBuyPage({ params }: PageProps) {

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { Calculator, ShieldCheck, AlertTriangle, ShieldAlert, CheckCircle2, Info } from 'lucide-react';
+import { DscrCoverageTierVisualizer } from './visuals/DscrCoverageTierVisualizer';
 
 interface Props {
   locale: string;
@@ -171,18 +172,26 @@ export function DscrCalculator({ locale }: Props) {
             </h3>
 
             {/* Major Card */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 {isZh ? 'DSCR 偿债覆盖率' : 'Debt Service Coverage Ratio (DSCR)'}
               </span>
-              <div className={`text-4xl md:text-5xl font-black mt-1 ${statusColor}`}>
+              <div aria-live="polite" className={`text-4xl md:text-5xl font-black mt-1 ${statusColor}`}>
                 {dscr.toFixed(2)}x
               </div>
               <div className={`mt-3 inline-flex items-center gap-1.5 p-2 rounded-lg border text-xs font-medium ${badgeBg}`}>
-                <StatusIcon className="w-4 h-4 shrink-0" />
+                <StatusIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
                 <span>{statusText}</span>
               </div>
             </div>
+
+            {/* Visual Coverage Tier Scale */}
+            <DscrCoverageTierVisualizer
+              dscr={dscr}
+              noi={noi}
+              debtService={effectiveDebtService}
+              locale={locale}
+            />
 
             {/* Financial Cushion Breakdown */}
             <div className="space-y-3 text-sm border-t border-slate-200 pt-4">

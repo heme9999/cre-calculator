@@ -122,20 +122,35 @@ export function Footer({ locale }: FooterProps) {
             </ul>
           </div>
 
-          {/* Languages */}
+          {/* Trust & Legal Nav */}
           <div className="md:col-span-2 space-y-3">
             <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
-              {isZh ? '语言版本' : 'Language'}
+              {isZh ? '关于与条款' : 'Company & Legal'}
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/en/" className={`hover:text-emerald-400 transition-colors ${locale === 'en' ? 'text-emerald-400 font-semibold' : ''}`}>
-                  English (US)
+                <Link href={`/${locale}/about/`} className="hover:text-emerald-400 transition-colors">
+                  {isZh ? '关于我们' : 'About Us'}
                 </Link>
               </li>
               <li>
-                <Link href="/zh/" className={`hover:text-emerald-400 transition-colors ${locale === 'zh' ? 'text-emerald-400 font-semibold' : ''}`}>
-                  简体中文 (US Chinese)
+                <Link href={`/${locale}/editorial/`} className="hover:text-emerald-400 transition-colors">
+                  {isZh ? '公式与方法论' : 'Methodology'}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/contact/`} className="hover:text-emerald-400 transition-colors">
+                  {isZh ? '联系我们' : 'Contact Us'}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/privacy/`} className="hover:text-emerald-400 transition-colors">
+                  {isZh ? '隐私政策' : 'Privacy Policy'}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/terms/`} className="hover:text-emerald-400 transition-colors">
+                  {isZh ? '服务条款' : 'Terms of Use'}
                 </Link>
               </li>
             </ul>

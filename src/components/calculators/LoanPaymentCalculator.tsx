@@ -52,7 +52,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
 
   for (let month = 1; month <= 12; month++) {
     let pMonth = 0;
-    let iMonth = scheduleBal * r;
+    const iMonth = scheduleBal * r;
     let payMonth = 0;
 
     if (paymentType === 'installment') {

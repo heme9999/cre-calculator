@@ -7,6 +7,8 @@ import { Exchange1031Calculator } from '@/components/calculators/Exchange1031Cal
 import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen } from 'lucide-react';
 
+import { buildSeoMetadata } from '@/lib/seo';
+
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
@@ -20,13 +22,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).exchange1031;
 
-  return {
+  return buildSeoMetadata({
+    path: 'calculators/1031-exchange',
+    locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    alternates: {
-      canonical: `${SITE_URL}/${locale}/calculators/1031-exchange/`,
-    },
-  };
+  });
 }
 
 export default async function Exchange1031Page({ params }: PageProps) {

@@ -7,6 +7,8 @@ import { CapRateCalculator } from '@/components/calculators/CapRateCalculator';
 import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen, Calculator } from 'lucide-react';
 
+import { buildSeoMetadata } from '@/lib/seo';
+
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
@@ -20,13 +22,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).capRate;
 
-  return {
+  return buildSeoMetadata({
+    path: 'calculators/cap-rate',
+    locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    alternates: {
-      canonical: `${SITE_URL}/${locale}/calculators/cap-rate/`,
-    },
-  };
+  });
 }
 
 export default async function CapRatePage({ params }: PageProps) {

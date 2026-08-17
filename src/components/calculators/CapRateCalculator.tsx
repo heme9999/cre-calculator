@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { Calculator, ArrowRightLeft, TrendingUp, AlertCircle, Info } from 'lucide-react';
+import { CapRateVisualGauge } from './visuals/CapRateVisualGauge';
 
 interface Props {
   locale: string;
@@ -198,7 +199,7 @@ export function CapRateCalculator({ locale }: Props) {
 
             {mode === 'forward' ? (
               <div className="space-y-6">
-                <div>
+                <div aria-live="polite">
                   <span className="text-sm font-medium text-slate-600">
                     {isZh ? '资本化率 (Cap Rate)' : 'Capitalization Rate'}
                   </span>
@@ -222,6 +223,14 @@ export function CapRateCalculator({ locale }: Props) {
                   </div>
                 </div>
 
+                {/* Cap Rate Visual Range Gauge */}
+                <CapRateVisualGauge
+                  capRate={calculatedCapRate}
+                  purchasePrice={purchasePrice}
+                  noi={noi}
+                  locale={locale}
+                />
+
                 {/* Benchmark Insight */}
                 <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs text-emerald-900 flex items-start gap-2.5">
                   <TrendingUp className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
@@ -237,7 +246,7 @@ export function CapRateCalculator({ locale }: Props) {
               </div>
             ) : (
               <div className="space-y-6">
-                <div>
+                <div aria-live="polite">
                   <span className="text-sm font-medium text-slate-600">
                     {isZh ? '最高可接受购买价格' : 'Max Acceptable Purchase Price'}
                   </span>

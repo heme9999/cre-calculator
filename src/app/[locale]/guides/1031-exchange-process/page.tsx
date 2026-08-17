@@ -4,6 +4,8 @@ import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
 import { ArticleGuideView } from '@/components/guides/ArticleGuideView';
 
+import { buildSeoMetadata } from '@/lib/seo';
+
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
@@ -17,13 +19,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).exchange1031ProcessGuide;
 
-  return {
+  return buildSeoMetadata({
+    path: 'guides/1031-exchange-process',
+    locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    alternates: {
-      canonical: `${SITE_URL}/${locale}/guides/1031-exchange-process/`,
-    },
-  };
+  });
 }
 
 export default async function Exchange1031ProcessPage({ params }: PageProps) {

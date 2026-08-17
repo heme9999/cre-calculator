@@ -50,6 +50,22 @@ export function DealAnalyzerTool({ locale }: Props) {
   // UI state
   const [showStressTest, setShowStressTest] = useState<boolean>(false);
   const [isExportingPdf, setIsExportingPdf] = useState<boolean>(false);
+  const [copiedLink, setCopiedLink] = useState<boolean>(false);
+  const [showSavedModal, setShowSavedModal] = useState<boolean>(false);
+  const [savedDeals, setSavedDeals] = useState<Array<{ name: string; date: string; input: DealAnalyzerInput }>>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('cre_saved_deals');
+        return stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  });
+  const [showSubscribeModal, setShowSubscribeModal] = useState<boolean>(false);
+  const [emailInput, setEmailInput] = useState<string>('');
+  const [subscribedSuccess, setSubscribedSuccess] = useState<boolean>(false);
 
   const pdfTemplateRef = useRef<HTMLDivElement>(null);
 
@@ -68,6 +84,67 @@ export function DealAnalyzerTool({ locale }: Props) {
   };
 
   const { base, stress } = calculateDealAnalysis(input, locale);
+
+  // Action handlers
+  const handleCopyLink = () => {
+    if (typeof window !== 'undefined') {
+      navigator.clipboard.writeText(window.location.href);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2500);
+    }
+  };
+
+  const handleExportCsv = () => {
+    const csvRows = [
+      ['Metric', 'Base Case Value', 'Stress Test Value'],
+      ['Purchase Price', `$${purchasePrice.toLocaleString()}`, `$${purchasePrice.toLocaleString()}`],
+      ['Annual NOI', `$${base.noi.toLocaleString()}`, `$${stress.noi.toLocaleString()}`],
+      ['Cap Rate', `${base.capRate.toFixed(2)}%`, `${stress.capRate.toFixed(2)}%`],
+      ['DSCR', `${base.dscr.toFixed(2)}x`, `${stress.dscr.toFixed(2)}x`],
+      ['Cash-on-Cash Return', `${base.cashOnCashReturn.toFixed(2)}%`, `${stress.cashOnCashReturn.toFixed(2)}%`],
+      ['Break-Even Occupancy', `${base.breakEvenRatio.toFixed(1)}%`, `${stress.breakEvenRatio.toFixed(1)}%`],
+      ['Net Annual Cash Flow', `$${(base.noi - base.annualDebtService).toLocaleString()}`, `$${(stress.noi - stress.annualDebtService).toLocaleString()}`],
+    ];
+
+    const csvContent = csvRows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `deal-analysis-${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleSaveDeal = () => {
+    const dealName = prompt(isZh ? '请输入交易备忘名称（如：Dallas 24-Unit Apartment）：' : 'Enter a name for this deal (e.g. Dallas 24-Unit):') || `Deal #${savedDeals.length + 1}`;
+    const newDeal = {
+      name: dealName,
+      date: new Date().toLocaleDateString(),
+      input: { ...input },
+    };
+    const updated = [newDeal, ...savedDeals];
+    setSavedDeals(updated);
+    try {
+      localStorage.setItem('cre_saved_deals', JSON.stringify(updated));
+    } catch (e) {}
+  };
+
+  const handleLoadDeal = (loadedInput: DealAnalyzerInput) => {
+    setPurchasePrice(loadedInput.purchasePrice);
+    setClosingCostsPercent(loadedInput.closingCostsPercent);
+    setGrossPotentialIncome(loadedInput.grossPotentialIncome);
+    setVacancyRate(loadedInput.vacancyRate);
+    setOperatingExpenses(loadedInput.operatingExpenses);
+    setDownPaymentPercent(loadedInput.downPaymentPercent);
+    setInterestRate(loadedInput.interestRate);
+    setAmortizationYears(loadedInput.amortizationYears);
+    setPaymentType(loadedInput.paymentType);
+    setHasBalloon(loadedInput.hasBalloon || false);
+    setBalloonYears(loadedInput.balloonYears || 10);
+    setShowSavedModal(false);
+  };
 
   // DOM Screenshot PDF Export Handler using html2canvas-pro + jsPDF
   const handleExportPdf = async () => {
@@ -172,28 +249,64 @@ export function DealAnalyzerTool({ locale }: Props) {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              onClick={handleSaveDeal}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
+              title={isZh ? '保存当前测算配置到浏览器本地' : 'Save current inputs to local storage'}
+            >
+              <span>{isZh ? '💾 保存交易' : '💾 Save Deal'}</span>
+            </button>
+
+            {savedDeals.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setShowSavedModal(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-xs transition-all"
+              >
+                <span>{isZh ? `已存交易 (${savedDeals.length})` : `Saved (${savedDeals.length})`}</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={handleExportCsv}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
+              title={isZh ? '导出 CSV 数据文件' : 'Export CSV data'}
+            >
+              <span>{isZh ? '📊 CSV 导出' : '📊 CSV Export'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleCopyLink}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
+            >
+              <span>{copiedLink ? (isZh ? '✅ 链接已复制' : '✅ Link Copied') : (isZh ? '🔗 分享链接' : '🔗 Share Link')}</span>
+            </button>
+
             <button
               type="button"
               onClick={() => setShowStressTest(!showStressTest)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl font-bold text-xs transition-all shadow-xs ${
                 showStressTest
                   ? 'bg-amber-500 hover:bg-amber-600 text-white'
                   : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
               }`}
             >
               <Zap className="w-4 h-4 text-amber-300" />
-              <span>{showStressTest ? (isZh ? '隐藏压力测试' : 'Hide Stress Test') : (isZh ? '压力测试 (Stress Test)' : 'Stress Test Deal')}</span>
+              <span>{showStressTest ? (isZh ? '隐藏压力测试' : 'Hide Stress Test') : (isZh ? '压力测试' : 'Stress Test')}</span>
             </button>
 
             <button
               type="button"
               onClick={handleExportPdf}
               disabled={isExportingPdf}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-xs disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-xs disabled:opacity-50"
             >
               <FileDown className="w-4 h-4" />
-              <span>{isExportingPdf ? (isZh ? '导出中...' : 'Generating...') : (isZh ? '导出 PDF 摘要' : 'Export as PDF')}</span>
+              <span>{isExportingPdf ? (isZh ? '导出中...' : 'Generating...') : (isZh ? '导出 PDF' : 'Export PDF')}</span>
             </button>
           </div>
         </div>
@@ -243,6 +356,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                     <input
                       id="purchase-price-input"
                       type="number"
+                      min="0"
                       value={purchasePrice || ''}
                       onChange={(e) => setPurchasePrice(parseFloat(e.target.value) || 0)}
                       className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
@@ -260,6 +374,8 @@ export function DealAnalyzerTool({ locale }: Props) {
                       id="closing-costs-input"
                       type="number"
                       step="0.25"
+                      min="0"
+                      max="100"
                       value={closingCostsPercent || ''}
                       onChange={(e) => setClosingCostsPercent(parseFloat(e.target.value) || 0)}
                       className="w-full pl-3 pr-7 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
@@ -290,6 +406,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                     <input
                       id="gpi-input"
                       type="number"
+                      min="0"
                       value={grossPotentialIncome || ''}
                       onChange={(e) => setGrossPotentialIncome(parseFloat(e.target.value) || 0)}
                       className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
@@ -307,6 +424,8 @@ export function DealAnalyzerTool({ locale }: Props) {
                       id="vacancy-input"
                       type="number"
                       step="0.5"
+                      min="0"
+                      max="100"
                       value={vacancyRate || ''}
                       onChange={(e) => setVacancyRate(parseFloat(e.target.value) || 0)}
                       className="w-full pl-3 pr-7 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
@@ -325,6 +444,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                     <input
                       id="opex-input"
                       type="number"
+                      min="0"
                       value={operatingExpenses || ''}
                       onChange={(e) => setOperatingExpenses(parseFloat(e.target.value) || 0)}
                       className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
@@ -356,6 +476,8 @@ export function DealAnalyzerTool({ locale }: Props) {
                       id="downpayment-input"
                       type="number"
                       step="1"
+                      min="0"
+                      max="100"
                       value={downPaymentPercent || ''}
                       onChange={(e) => setDownPaymentPercent(parseFloat(e.target.value) || 0)}
                       className="w-full pl-3 pr-7 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
@@ -374,6 +496,8 @@ export function DealAnalyzerTool({ locale }: Props) {
                       id="rate-input"
                       type="number"
                       step="0.125"
+                      min="0"
+                      max="30"
                       value={interestRate || ''}
                       onChange={(e) => setInterestRate(parseFloat(e.target.value) || 0)}
                       className="w-full pl-3 pr-7 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
@@ -433,7 +557,7 @@ export function DealAnalyzerTool({ locale }: Props) {
           </div>
 
           {/* Core Results Panel */}
-          <div className="lg:col-span-5 space-y-6">
+          <div aria-live="polite" className="lg:col-span-5 space-y-6">
             {/* Deal Health Banner */}
             <div className={`p-5 rounded-2xl border ${baseBadge.bg} space-y-2 transition-all`}>
               <div className="flex items-center justify-between">
@@ -632,9 +756,9 @@ export function DealAnalyzerTool({ locale }: Props) {
                 <Building2 className="w-6 h-6" />
                 <span>{isZh ? '商业地产投资计算器' : 'CRE Calculators'}</span>
               </div>
-              <h1 className="text-2xl font-black text-slate-900 mt-1">
+              <div className="text-2xl font-black text-slate-900 mt-1">
                 {isZh ? '商业地产尽调与投资分析摘要' : 'Commercial Real Estate Underwriting Summary'}
-              </h1>
+              </div>
             </div>
             <div className="text-right text-xs text-slate-500">
               <div>Date: {new Date().toISOString().split('T')[0]}</div>
@@ -734,6 +858,43 @@ export function DealAnalyzerTool({ locale }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Modal: Saved Deals Manager */}
+      {showSavedModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl border border-slate-200">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <h3 className="text-base font-bold text-slate-900">
+                {isZh ? '已保存的交易测算备忘' : 'Saved Deal Underwritings'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowSavedModal(false)}
+                className="text-slate-400 hover:text-slate-600 font-bold text-sm"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="max-h-80 overflow-y-auto space-y-2">
+              {savedDeals.map((deal, idx) => (
+                <div key={idx} className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between hover:border-emerald-500 transition-colors">
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900">{deal.name}</h4>
+                    <p className="text-xs text-slate-500">{deal.date} • ${deal.input.purchasePrice.toLocaleString()}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleLoadDeal(deal.input)}
+                    className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs"
+                  >
+                    {isZh ? '载入测算' : 'Load Deal'}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -5,6 +5,8 @@ import { LOCALES, SITE_URL } from '@/lib/constants';
 import { getContent } from '@/content';
 import { Building2, ArrowRight, Sparkles } from 'lucide-react';
 
+import { buildSeoMetadata } from '@/lib/seo';
+
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
@@ -18,15 +20,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const isZh = locale === 'zh';
 
-  return {
+  return buildSeoMetadata({
+    path: 'tools',
+    locale,
     title: isZh ? '商业地产分析工具包 | CRE Tools' : 'Commercial Real Estate Analysis Tools | CRE Tools',
     description: isZh
       ? '综合型商业地产尽调与测算分析工具，支持单次输入计算全部指标、压力测试与一页纸PDF摘要导出。'
       : 'Comprehensive commercial real estate deal analysis tools featuring single-input underwriting, stress testing, and one-page PDF export.',
-    alternates: {
-      canonical: `${SITE_URL}/${locale}/tools/`,
-    },
-  };
+  });
 }
 
 export default async function ToolsPage({ params }: PageProps) {

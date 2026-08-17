@@ -6,6 +6,8 @@ import { LOCALES, SITE_URL } from '@/lib/constants';
 import { JsonLd, getArticleJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, BookOpen, Clock } from 'lucide-react';
 
+import { buildSeoMetadata } from '@/lib/seo';
+
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
@@ -19,13 +21,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).guidesHub;
 
-  return {
+  return buildSeoMetadata({
+    path: 'guides',
+    locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    alternates: {
-      canonical: `${SITE_URL}/${locale}/guides/`,
-    },
-  };
+  });
 }
 
 export default async function GuidesHubPage({ params }: PageProps) {

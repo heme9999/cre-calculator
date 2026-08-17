@@ -21,6 +21,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'guides/how-to-underwrite-a-deal',
     'tools',
     'tools/deal-analyzer',
+    'about',
+    'contact',
+    'privacy',
+    'terms',
+    'editorial',
   ];
   const locales = ['en', 'zh'];
 
@@ -31,7 +36,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       const path = route ? `${loc}/${route}/` : `${loc}/`;
       items.push({
         url: `${SITE_URL}/${path}`,
-        lastModified: new Date(),
         changeFrequency: 'weekly',
         priority: route === '' ? 1.0 : 0.9,
       });
@@ -41,7 +45,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Add Chinese-only DSCR loan guide route
   items.push({
     url: `${SITE_URL}/zh/guides/dscr-loan-guide-chinese-investors/`,
-    lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.9,
   });

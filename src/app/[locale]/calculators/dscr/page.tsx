@@ -7,6 +7,8 @@ import { DscrCalculator } from '@/components/calculators/DscrCalculator';
 import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen } from 'lucide-react';
 
+import { buildSeoMetadata } from '@/lib/seo';
+
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
@@ -20,13 +22,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).dscr;
 
-  return {
+  return buildSeoMetadata({
+    path: 'calculators/dscr',
+    locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    alternates: {
-      canonical: `${SITE_URL}/${locale}/calculators/dscr/`,
-    },
-  };
+  });
 }
 
 export default async function DscrPage({ params }: PageProps) {

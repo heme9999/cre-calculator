@@ -5,6 +5,7 @@ import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
 import { JsonLd, getArticleJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen, AlertTriangle, Database, Building2 } from 'lucide-react';
+import { buildSeoMetadata } from '@/lib/seo';
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
@@ -19,13 +20,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).capRateBenchmarksGuide;
 
-  return {
+  return buildSeoMetadata({
+    path: 'guides/cap-rate-benchmarks-by-city',
+    locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    alternates: {
-      canonical: `${SITE_URL}/${locale}/guides/cap-rate-benchmarks-by-city/`,
-    },
-  };
+  });
 }
 
 export default async function CapRateBenchmarksGuidePage({ params }: PageProps) {
