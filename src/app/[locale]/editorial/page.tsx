@@ -1,7 +1,8 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { LOCALES } from '@/lib/constants';
+import { LOCALES, SITE_URL } from '@/lib/constants';
 import { buildSeoMetadata } from '@/lib/seo';
+import { JsonLd, getEditorialWebPageJsonLd } from '@/components/seo/JsonLd';
 import { Calculator, CheckCircle2, Database, ArrowRight, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
@@ -32,9 +33,12 @@ export default async function EditorialPage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const isZh = locale === 'zh';
+  const canonicalUrl = `${SITE_URL}/${locale}/editorial/`;
+  const jsonLdData = getEditorialWebPageJsonLd(canonicalUrl, locale);
 
   return (
     <article className="max-w-4xl mx-auto space-y-10 py-4">
+      <JsonLd data={jsonLdData} />
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full">
           <Calculator className="w-4 h-4 text-emerald-600" />

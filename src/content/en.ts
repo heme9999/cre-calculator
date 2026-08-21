@@ -20,8 +20,8 @@ export const enContent: LocaleContent = {
     switchLangCode: 'zh',
   },
   home: {
-    metaTitle: 'Commercial Real Estate Investment Calculators | CRE Tools',
-    metaDescription: 'Free, professional commercial real estate investment calculators for cap rate, NOI, cash-on-cash return, loan payment, DSCR, and deal analysis. Made for investors and brokers.',
+    metaTitle: 'Commercial Real Estate Calculators | CRE Tools',
+    metaDescription: 'Free commercial real estate calculators for cap rate, NOI, cash-on-cash return, loan payments, DSCR and complete deal underwriting.',
     heroH1: 'Commercial Real Estate Investment Decision Tools',
     heroSubtitle: 'Instant, precise financial calculators backed by clear formulas, real-world examples, and industry benchmarks.',
     featuredTitle: 'Essential CRE Calculators',
@@ -93,8 +93,8 @@ export const enContent: LocaleContent = {
     ],
   },
   dealAnalyzer: {
-    metaTitle: 'Deal Analyzer — Full Commercial Real Estate Underwriting Tool',
-    metaDescription: 'Run Cap Rate, Cash-on-Cash Return, DSCR, and Break-Even Ratio all at once from a single set of inputs. Stress-test the deal and export a one-page PDF summary.',
+    metaTitle: 'Commercial Real Estate Deal Analyzer',
+    metaDescription: 'Calculate NOI, cap rate, cash-on-cash return, DSCR and break-even ratio from one input set, with stress testing and report export.',
     h1: 'Deal Analyzer: Full Underwriting, One Input Set',
     subtitle: 'Stop re-entering the same numbers five times. Run every core metric together, stress-test the deal, and export a clean summary.',
     whatIsTitle: 'What This Tool Does',
@@ -134,8 +134,8 @@ export const enContent: LocaleContent = {
     ],
   },
   capRate: {
-    metaTitle: 'Cap Rate Calculator — Commercial Real Estate Cap Rate Tool',
-    metaDescription: 'Calculate capitalization rate for any commercial property in seconds. Enter purchase price and NOI to find your cap rate, or work backward from a target cap rate to find max purchase price.',
+    metaTitle: 'Commercial Real Estate Cap Rate Calculator',
+    metaDescription: 'Calculate commercial property cap rate from purchase price and NOI, or reverse-calculate the maximum price for a target cap rate.',
     h1: 'Cap Rate Calculator',
     subtitle: 'Find the capitalization rate for any commercial property — or work backward to find your maximum purchase price.',
     whatIsTitle: 'What Is Cap Rate and Why It Matters',
@@ -300,8 +300,8 @@ export const enContent: LocaleContent = {
     ],
   },
   dscr: {
-    metaTitle: 'DSCR Calculator — Debt Service Coverage Ratio for Commercial Loans',
-    metaDescription: 'Calculate the Debt Service Coverage Ratio (DSCR) for commercial real estate mortgages. Evaluate property cash flow against annual debt service to meet lender underwriting standards.',
+    metaTitle: 'Commercial Real Estate DSCR Calculator',
+    metaDescription: 'Calculate commercial property DSCR from NOI and annual debt service, then compare the result with common lender coverage thresholds.',
     h1: 'DSCR (Debt Service Coverage Ratio) Calculator',
     subtitle: "Evaluate whether your property's net operating income (NOI) comfortably covers your annual mortgage debt service.",
     whatIsTitle: 'What Is DSCR and Why It Matters',
@@ -342,8 +342,8 @@ export const enContent: LocaleContent = {
     ],
   },
   exchange1031: {
-    metaTitle: '1031 Exchange Calculator — Tax Deferred Real Estate Investment Tool',
-    metaDescription: 'Calculate deferred capital gains taxes for 1031 like-kind exchanges. Enter sale price, original cost basis, selling expenses, and tax rate to evaluate tax savings and replacement property rules.',
+    metaTitle: '1031 Exchange Tax Deferral Calculator',
+    metaDescription: 'Estimate capital gains tax deferral for a 1031 exchange and review replacement-property value, equity and debt requirements.',
     h1: '1031 Exchange Tax Deferral Calculator',
     subtitle: 'Estimate deferred capital gains tax and replacement property purchasing rules when exchanging commercial real estate.',
     whatIsTitle: 'What Is a 1031 Exchange and Why It Matters',
@@ -646,9 +646,9 @@ export const enContent: LocaleContent = {
     ],
   },
   howToUnderwriteDealGuide: {
-    metaTitle: "How to Underwrite a Commercial Real Estate Deal — Step-by-Step Guide",
-    metaDescription: "A practical, step-by-step framework for underwriting a commercial property from initial screening through the go/no-go decision, using the key CRE ratios investors actually check.",
-    h1: "How to Underwrite a Commercial Real Estate Deal, Step by Step",
+    metaTitle: 'How to Underwrite a Commercial Real Estate Deal',
+    metaDescription: 'Follow a practical commercial real estate underwriting process covering financial review, core ratios, financing, stress tests and due diligence.',
+    h1: 'How to Underwrite a Commercial Real Estate Deal, Step by Step',
     subtitle: "A practical framework for going from \"here's a listing\" to \"here's my offer\" — or \"here's why I'm passing.\"",
     sections: [
       {

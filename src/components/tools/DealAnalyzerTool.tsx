@@ -12,15 +12,11 @@ import {
   Building2,
   DollarSign,
   TrendingUp,
-  Percent,
-  Calendar,
-  Layers,
   CheckCircle2,
   AlertTriangle,
   ShieldAlert,
   Zap,
   FileDown,
-  Sparkles,
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
@@ -57,15 +53,12 @@ export function DealAnalyzerTool({ locale }: Props) {
       try {
         const stored = localStorage.getItem('cre_saved_deals');
         return stored ? JSON.parse(stored) : [];
-      } catch (e) {
+      } catch {
         return [];
       }
     }
     return [];
   });
-  const [showSubscribeModal, setShowSubscribeModal] = useState<boolean>(false);
-  const [emailInput, setEmailInput] = useState<string>('');
-  const [subscribedSuccess, setSubscribedSuccess] = useState<boolean>(false);
 
   const pdfTemplateRef = useRef<HTMLDivElement>(null);
 
@@ -128,7 +121,9 @@ export function DealAnalyzerTool({ locale }: Props) {
     setSavedDeals(updated);
     try {
       localStorage.setItem('cre_saved_deals', JSON.stringify(updated));
-    } catch (e) {}
+    } catch {
+      // ignore
+    }
   };
 
   const handleLoadDeal = (loadedInput: DealAnalyzerInput) => {
@@ -226,7 +221,6 @@ export function DealAnalyzerTool({ locale }: Props) {
   const BaseIcon = baseBadge.Icon;
 
   const stressBadge = getHealthBadge(stress.healthStatus);
-  const StressIcon = stressBadge.Icon;
 
   return (
     <div className="space-y-8 mb-12">

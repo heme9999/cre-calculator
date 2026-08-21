@@ -1,7 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { getContent } from '@/content';
-import { LOCALES, SITE_URL } from '@/lib/constants';
+import { LOCALES } from '@/lib/constants';
 import { ArticleGuideView } from '@/components/guides/ArticleGuideView';
 
 import { buildSeoMetadata } from '@/lib/seo';

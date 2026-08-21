@@ -5,7 +5,7 @@ import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
 import { CapRateCalculator } from '@/components/calculators/CapRateCalculator';
 import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
-import { ArrowRight, HelpCircle, BookOpen, Calculator } from 'lucide-react';
+import { ArrowRight, HelpCircle, BookOpen } from 'lucide-react';
 
 import { buildSeoMetadata } from '@/lib/seo';
 

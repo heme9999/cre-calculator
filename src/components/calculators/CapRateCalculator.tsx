@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { formatCurrency, formatPercent } from '@/lib/utils';
-import { Calculator, ArrowRightLeft, TrendingUp, AlertCircle, Info } from 'lucide-react';
+import { Calculator, TrendingUp, AlertCircle, Info } from 'lucide-react';
 import { CapRateVisualGauge } from './visuals/CapRateVisualGauge';
 
 interface Props {

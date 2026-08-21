@@ -1,9 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { LOCALES, SITE_URL } from '@/lib/constants';
-import { getContent } from '@/content';
-import { Building2, ArrowRight, Sparkles } from 'lucide-react';
+import { LOCALES } from '@/lib/constants';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 import { buildSeoMetadata } from '@/lib/seo';
 

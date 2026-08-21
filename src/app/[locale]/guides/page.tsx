@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
-import { JsonLd, getArticleJsonLd } from '@/components/seo/JsonLd';
-import { ArrowRight, BookOpen, Clock } from 'lucide-react';
+import { JsonLd, getGuidesHubJsonLd } from '@/components/seo/JsonLd';
+import { ArrowRight, Clock } from 'lucide-react';
 
 import { buildSeoMetadata } from '@/lib/seo';
 
@@ -33,13 +33,7 @@ export default async function GuidesHubPage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).guidesHub;
-
-  const jsonLdData = getArticleJsonLd(
-    content.h1,
-    content.metaDescription,
-    `${SITE_URL}/${locale}/guides/`,
-    locale
-  );
+  const jsonLdData = getGuidesHubJsonLd(`${SITE_URL}/${locale}/guides/`, locale);
 
   return (
     <div className="space-y-10 py-4 max-w-5xl mx-auto">

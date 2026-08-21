@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { formatCurrency, formatPercent } from '@/lib/utils';
-import { Calculator, AlertTriangle, CheckCircle2, DollarSign, ShieldCheck, Info } from 'lucide-react';
+import { Calculator, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 interface Props {
   locale: string;
@@ -23,7 +23,6 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
 
   // Status Tiers
   let tierStyle = 'bg-emerald-50 text-emerald-900 border-emerald-200';
-  let badgeStyle = 'bg-emerald-100 text-emerald-800 border-emerald-300';
   let statusTitle = isZh ? '健康收支平衡边际' : 'Healthy Break-Even Cushion';
   let statusDesc = isZh
     ? `收支平衡点为 ${formatPercent(breakEvenRatio)}，物业即使遭遇高达 ${formatPercent(maxAllowableVacancy)} 的空置率，产生的收入仍足以完全覆盖运营开支与房贷本息。`
@@ -31,14 +30,12 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
 
   if (breakEvenRatio > 85) {
     tierStyle = 'bg-rose-50 text-rose-950 border-rose-200';
-    badgeStyle = 'bg-rose-100 text-rose-800 border-rose-300';
     statusTitle = isZh ? '警示：高空置风险 (高于 85% 警戒线)' : 'Warning: High Vacancy Risk (Above 85%)';
     statusDesc = isZh
       ? `收支平衡比率高达 ${formatPercent(breakEvenRatio)}。物业只要出现哪怕极小的空置或租金下滑，就将直接导致现金流倒挂。建议增加首付以降低债务支出。`
       : `Break-even ratio is ${formatPercent(breakEvenRatio)}. Minor vacancy or rent concessions will cause negative cash flow. Consider higher down payment to lower debt service.`;
   } else if (breakEvenRatio > 80) {
     tierStyle = 'bg-amber-50 text-amber-950 border-amber-200';
-    badgeStyle = 'bg-amber-100 text-amber-800 border-amber-300';
     statusTitle = isZh ? '接近贷款机构风控上限 (80% - 85%)' : 'Near Lender Risk Limit (80% - 85%)';
     statusDesc = isZh
       ? `收支平衡点为 ${formatPercent(breakEvenRatio)}，处于多数商业银行风控上游边界。抗风险安全垫偏薄，需要密切关注租客续租率。`

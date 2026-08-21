@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { calculateLoanDetails } from '@/lib/loanCalculations';
-import { Sparkles, Scale } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 interface Props {
   locale: string;

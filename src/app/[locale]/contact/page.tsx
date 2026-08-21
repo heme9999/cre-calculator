@@ -2,7 +2,7 @@ import React from 'react';
 import { Metadata } from 'next';
 import { LOCALES } from '@/lib/constants';
 import { buildSeoMetadata } from '@/lib/seo';
-import { Mail, MessageSquare, Building2, HelpCircle } from 'lucide-react';
+import { Mail, Building2, HelpCircle } from 'lucide-react';
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));

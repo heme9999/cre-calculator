@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { calculateLoanDetails } from '@/lib/loanCalculations';
-import { Calculator, ArrowRightLeft, Building, Key, TrendingUp, DollarSign, CheckCircle2 } from 'lucide-react';
+import { Calculator, ArrowRightLeft, Building, Key } from 'lucide-react';
 
 interface Props {
   locale: string;
@@ -20,7 +20,7 @@ export function LeaseVsBuyCalculator({ locale }: Props) {
   const [purchasePrice, setPurchasePrice] = useState<number>(1800000);
   const [downPaymentPercent, setDownPaymentPercent] = useState<number>(25);
   const [interestRate, setInterestRate] = useState<number>(6.5);
-  const [amortizationYears, setAmortizationYears] = useState<number>(25);
+  const amortizationYears = 25;
   const [holdingYears, setHoldingYears] = useState<number>(10);
   const [annualAppreciation, setAnnualAppreciation] = useState<number>(3.0);
   const [sellingCostPercent, setSellingCostPercent] = useState<number>(5.0);
