@@ -1,4 +1,5 @@
 import React from 'react';
+import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { LOCALES } from '@/lib/constants';
