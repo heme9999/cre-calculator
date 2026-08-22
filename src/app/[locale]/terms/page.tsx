@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: isZh
       ? '使用 CRE Calculators 网站工具与服务的相关条款、计算免责声明及知识产权说明。'
       : 'Terms of Use and financial disclaimers for using CRE Calculators tools and services.',
+    noindex: true,
   });
 }
 

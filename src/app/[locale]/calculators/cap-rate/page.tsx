@@ -4,9 +4,9 @@ import { Metadata } from 'next';
 import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
 import { CapRateCalculator } from '@/components/calculators/CapRateCalculator';
-import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
-import { ArrowRight, HelpCircle, BookOpen } from 'lucide-react';
-
+import { JsonLd, getCalculatorJsonLd, getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/components/seo/JsonLd';
+import { ArrowRight, HelpCircle, BookOpen, AlertTriangle } from 'lucide-react';
+import { ComplianceDisclaimer } from '@/components/common/ComplianceDisclaimer';
 import { buildSeoMetadata } from '@/lib/seo';
 
 export function generateStaticParams() {
@@ -34,16 +34,26 @@ export default async function CapRatePage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).capRate;
-  const jsonLdData = getCalculatorJsonLd(
+  const isZh = locale === 'zh';
+
+  const calculatorSchema = getCalculatorJsonLd(
     content.h1,
     content.metaDescription,
     `${SITE_URL}/${locale}/calculators/cap-rate/`,
     locale
   );
 
+  const breadcrumbSchema = getBreadcrumbJsonLd([
+    { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
+    { name: isZh ? '计算器' : 'Calculators', url: `${SITE_URL}/${locale}/` },
+    { name: content.h1, url: `${SITE_URL}/${locale}/calculators/cap-rate/` },
+  ]);
+
+  const faqSchema = getFaqPageJsonLd(content.faqs);
+
   return (
     <article className="space-y-10 py-4">
-      <JsonLd data={jsonLdData} />
+      <JsonLd data={[calculatorSchema, breadcrumbSchema, faqSchema]} />
 
       {/* Page Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
@@ -76,6 +86,20 @@ export default async function CapRatePage({ params }: PageProps) {
           <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
             {content.whatIsContent}
           </p>
+          <div className="pt-2 text-xs text-slate-500 flex flex-wrap gap-2 items-center">
+            <span className="font-semibold text-slate-700">{isZh ? '关键关联工具：' : 'Key Related Workflow:'}</span>
+            <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? 'NOI 计算器' : 'NOI Calculator'}
+            </Link>
+            <span>•</span>
+            <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? 'DSCR 偿债覆盖率' : 'DSCR Calculator'}
+            </Link>
+            <span>•</span>
+            <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? 'Deal Analyzer 综合尽调' : 'Deal Analyzer'}
+            </Link>
+          </div>
         </section>
 
         {/* Formula */}
@@ -99,6 +123,26 @@ export default async function CapRatePage({ params }: PageProps) {
           <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
             {content.exampleContent}
+          </div>
+        </section>
+
+        {/* Pitfalls & Limitations */}
+        <section className="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 md:p-8 space-y-3">
+          <h2 className="text-lg font-bold text-amber-950 flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-amber-600" />
+            {isZh ? 'Cap Rate 的常见误区与使用限制' : 'Common Cap Rate Pitfalls & Limitations'}
+          </h2>
+          <div className="space-y-2 text-xs sm:text-sm text-amber-900 leading-relaxed">
+            <p>
+              {isZh
+                ? '1. 忽略债务结构：Cap Rate 是全现金无杠杆回报率指标，不反映贷款利率、月供及杠杆收益（正杠杆或负杠杆），需结合 Cash-on-Cash Return 和 DSCR 综合评估。'
+                : '1. Ignores Financing: Cap rate is an unleveraged metric. It does not reflect mortgage interest rates, amortization, or leveraged returns. Always evaluate Alongside Cash-on-Cash Return and DSCR.'}
+            </p>
+            <p>
+              {isZh
+                ? '2. 混淆挂牌 Pro-forma 与实际 T12：卖方挂牌常使用未来乐观预测收入，低估实际历史运营开支与资本性支出 (CapEx)。'
+                : '2. Pro-Forma vs. In-Place T12: Broker listing packages often use aggressive pro-forma assumptions. Always underwrite based on audited trailing 12-month (T12) operating statements.'}
+            </p>
           </div>
         </section>
 
@@ -182,6 +226,9 @@ export default async function CapRatePage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* Compliance & Legal Disclaimer */}
+        <ComplianceDisclaimer locale={locale} />
       </div>
     </article>
   );

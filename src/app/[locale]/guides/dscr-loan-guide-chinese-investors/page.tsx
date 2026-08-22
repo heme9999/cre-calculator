@@ -16,6 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
     locale: 'zh',
     title: content.metaTitle,
     description: content.metaDescription,
+    noindex: true,
   });
 }
 

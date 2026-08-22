@@ -4,9 +4,9 @@ import { Metadata } from 'next';
 import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
 import { DscrCalculator } from '@/components/calculators/DscrCalculator';
-import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
-import { ArrowRight, HelpCircle, BookOpen } from 'lucide-react';
-
+import { JsonLd, getCalculatorJsonLd, getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/components/seo/JsonLd';
+import { ArrowRight, HelpCircle, BookOpen, AlertTriangle } from 'lucide-react';
+import { ComplianceDisclaimer } from '@/components/common/ComplianceDisclaimer';
 import { buildSeoMetadata } from '@/lib/seo';
 
 export function generateStaticParams() {
@@ -34,16 +34,26 @@ export default async function DscrPage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).dscr;
-  const jsonLdData = getCalculatorJsonLd(
+  const isZh = locale === 'zh';
+
+  const calculatorSchema = getCalculatorJsonLd(
     content.h1,
     content.metaDescription,
     `${SITE_URL}/${locale}/calculators/dscr/`,
     locale
   );
 
+  const breadcrumbSchema = getBreadcrumbJsonLd([
+    { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
+    { name: isZh ? '计算器' : 'Calculators', url: `${SITE_URL}/${locale}/` },
+    { name: content.h1, url: `${SITE_URL}/${locale}/calculators/dscr/` },
+  ]);
+
+  const faqSchema = getFaqPageJsonLd(content.faqs);
+
   return (
     <article className="space-y-10 py-4">
-      <JsonLd data={jsonLdData} />
+      <JsonLd data={[calculatorSchema, breadcrumbSchema, faqSchema]} />
 
       {/* Page Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
@@ -76,6 +86,20 @@ export default async function DscrPage({ params }: PageProps) {
           <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
             {content.whatIsContent}
           </p>
+          <div className="pt-2 text-xs text-slate-500 flex flex-wrap gap-2 items-center">
+            <span className="font-semibold text-slate-700">{isZh ? '信贷与尽调闭环：' : 'Financing & Underwriting Chain:'}</span>
+            <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? '商业贷款月供计算器' : 'Loan Payment Calculator'}
+            </Link>
+            <span>•</span>
+            <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? 'NOI 净营业收入' : 'NOI Calculator'}
+            </Link>
+            <span>•</span>
+            <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? 'Deal Analyzer 全景尽调' : 'Deal Analyzer'}
+            </Link>
+          </div>
         </section>
 
         {/* Formula */}
@@ -99,6 +123,26 @@ export default async function DscrPage({ params }: PageProps) {
           <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
             {content.exampleContent}
+          </div>
+        </section>
+
+        {/* Pitfalls & Limitations */}
+        <section className="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 md:p-8 space-y-3">
+          <h2 className="text-lg font-bold text-amber-950 flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-amber-600" />
+            {isZh ? 'DSCR 承销常见风险与压力测试要点' : 'DSCR Underwriting Pitfalls & Stress Testing'}
+          </h2>
+          <div className="space-y-2 text-xs sm:text-sm text-amber-900 leading-relaxed">
+            <p>
+              {isZh
+                ? '1. 浮动利率与加息风险：固定期结束后或采用浮动利率贷款时，利率上升 100-200 bps 可能直接将原本 1.25x 的安全 DSCR 压低至 1.0x 以下。'
+                : '1. Floating Rate & Rate Reset Exposure: A 100–200 bps rate hike upon loan reset can rapidly erode a healthy 1.25x DSCR into debt service default territory (< 1.0x).'}
+            </p>
+            <p>
+              {isZh
+                ? '2. 租金违约与单一租户集中度：单租户商业物业若发生租约到期或租客破产，NOI 归零将导致 DSCR 瞬间崩塌，必须审查租客信用与租期剩余年限 (WALT)。'
+                : '2. Tenant Concentration & Lease Expiry: Single-tenant properties face catastrophic DSCR drop if the tenant defaults. Always stress-test against localized vacancy spikes.'}
+            </p>
           </div>
         </section>
 
@@ -182,6 +226,9 @@ export default async function DscrPage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* Compliance & Legal Disclaimer */}
+        <ComplianceDisclaimer locale={locale} />
       </div>
     </article>
   );

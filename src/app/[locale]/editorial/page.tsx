@@ -26,6 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: isZh
       ? '详细了解 CRE Calculators 的计算公式推导逻辑、假设定义、数据更新频率与全美主要机构数据来源。'
       : 'Explore our transparent underwriting formulas, variable definitions, market benchmark sources, and audit dates.',
+    noindex: true,
   });
 }
 

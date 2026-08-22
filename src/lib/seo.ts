@@ -6,7 +6,16 @@ interface SeoMetadataOptions {
   locale: 'en' | 'zh';
   title: string;
   description: string;
+  noindex?: boolean;
 }
+
+// Strictly define bilingual routes that have fully developed, indexable counterparts
+const BILINGUAL_PAIRED_ROUTES = new Set([
+  '',
+  'calculators/cap-rate',
+  'calculators/noi',
+  'calculators/dscr',
+]);
 
 function getOgImageInfo(path: string, locale: 'en' | 'zh', title: string) {
   const isZh = locale === 'zh';
@@ -65,9 +74,10 @@ export function buildSeoMetadata({
   locale,
   title,
   description,
+  noindex = false,
 }: SeoMetadataOptions): Metadata {
-  const cleanPath = path ? (path.startsWith('/') ? path.slice(1) : path) : '';
-  const normalizedPath = cleanPath ? (cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`) : '';
+  const cleanPath = path ? (path.startsWith('/') ? path.slice(1) : path).replace(/\/+$/, '') : '';
+  const normalizedPath = cleanPath ? `${cleanPath}/` : '';
 
   const enUrl = `${SITE_URL}/en/${normalizedPath}`;
   const zhUrl = `${SITE_URL}/zh/${normalizedPath}`;
@@ -75,16 +85,27 @@ export function buildSeoMetadata({
 
   const ogImage = getOgImageInfo(cleanPath, locale, title);
 
-  return {
+  // Build hreflang alternates
+  const languages: Record<string, string> = {};
+
+  if (!noindex) {
+    if (BILINGUAL_PAIRED_ROUTES.has(cleanPath)) {
+      languages['en-US'] = enUrl;
+      languages['zh-Hans'] = zhUrl;
+      languages['x-default'] = enUrl;
+    } else {
+      // English-only indexable page
+      languages['en-US'] = enUrl;
+      languages['x-default'] = enUrl;
+    }
+  }
+
+  const metadata: Metadata = {
     title,
     description,
     alternates: {
       canonical: currentUrl,
-      languages: {
-        'en-US': enUrl,
-        'zh-Hans-US': zhUrl,
-        'x-default': enUrl,
-      },
+      ...(Object.keys(languages).length > 0 ? { languages } : {}),
     },
     openGraph: {
       title,
@@ -113,4 +134,13 @@ export function buildSeoMetadata({
       google: 'wMz2VDeMwD8R6yiCgJIqFD_wM2wSzrSEauzvCtzKHyw',
     },
   };
+
+  if (noindex) {
+    metadata.robots = {
+      index: false,
+      follow: true,
+    };
+  }
+
+  return metadata;
 }

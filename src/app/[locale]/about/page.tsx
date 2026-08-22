@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: isZh
       ? 'CRE Calculators 致力于为商业地产投资者、经纪人及承销人员提供透明、精准的财务计算工具与尽调数据模型。'
       : 'CRE Calculators provides transparent, institutional-grade commercial real estate underwriting tools and financial models for investors and brokers.',
+    noindex: true,
   });
 }
 

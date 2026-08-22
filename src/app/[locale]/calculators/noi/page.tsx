@@ -4,9 +4,9 @@ import { Metadata } from 'next';
 import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
 import { NoiCalculator } from '@/components/calculators/NoiCalculator';
-import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
-import { ArrowRight, HelpCircle, BookOpen } from 'lucide-react';
-
+import { JsonLd, getCalculatorJsonLd, getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/components/seo/JsonLd';
+import { ArrowRight, HelpCircle, BookOpen, AlertTriangle } from 'lucide-react';
+import { ComplianceDisclaimer } from '@/components/common/ComplianceDisclaimer';
 import { buildSeoMetadata } from '@/lib/seo';
 
 export function generateStaticParams() {
@@ -34,16 +34,26 @@ export default async function NoiPage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).noi;
-  const jsonLdData = getCalculatorJsonLd(
+  const isZh = locale === 'zh';
+
+  const calculatorSchema = getCalculatorJsonLd(
     content.h1,
     content.metaDescription,
     `${SITE_URL}/${locale}/calculators/noi/`,
     locale
   );
 
+  const breadcrumbSchema = getBreadcrumbJsonLd([
+    { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
+    { name: isZh ? '计算器' : 'Calculators', url: `${SITE_URL}/${locale}/` },
+    { name: content.h1, url: `${SITE_URL}/${locale}/calculators/noi/` },
+  ]);
+
+  const faqSchema = getFaqPageJsonLd(content.faqs);
+
   return (
     <article className="space-y-10 py-4">
-      <JsonLd data={jsonLdData} />
+      <JsonLd data={[calculatorSchema, breadcrumbSchema, faqSchema]} />
 
       {/* Page Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
@@ -76,6 +86,20 @@ export default async function NoiPage({ params }: PageProps) {
           <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
             {content.whatIsContent}
           </p>
+          <div className="pt-2 text-xs text-slate-500 flex flex-wrap gap-2 items-center">
+            <span className="font-semibold text-slate-700">{isZh ? '后续计算步骤：' : 'Next Calculation Steps:'}</span>
+            <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? '计算 Cap Rate' : 'Cap Rate Calculator'}
+            </Link>
+            <span>•</span>
+            <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? '计算 Cash-on-Cash' : 'Cash-on-Cash Return'}
+            </Link>
+            <span>•</span>
+            <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? '测算 DSCR 偿债覆盖率' : 'DSCR Debt Coverage'}
+            </Link>
+          </div>
         </section>
 
         {/* Formula */}
@@ -99,6 +123,26 @@ export default async function NoiPage({ params }: PageProps) {
           <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
             {content.exampleContent}
+          </div>
+        </section>
+
+        {/* Pitfalls & Limitations */}
+        <section className="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 md:p-8 space-y-3">
+          <h2 className="text-lg font-bold text-amber-950 flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-amber-600" />
+            {isZh ? 'NOI 计算中的常见扣除项误区' : 'Critical NOI Calculation Pitfalls & Exclusions'}
+          </h2>
+          <div className="space-y-2 text-xs sm:text-sm text-amber-900 leading-relaxed">
+            <p>
+              {isZh
+                ? '1. 严禁扣除贷款本息：NOI 衡量的是资产本身的运营创收能力，贷款还本付息属于融资结构成本（在计算 Cash Flow 与 DSCR 时扣除）。'
+                : '1. Never Deduct Mortgage Payments: NOI strictly measures pure property operating cash flow before debt service. Debt payments are deducted only when calculating net cash flow.'}
+            </p>
+            <p>
+              {isZh
+                ? '2. 区分资本性支出 (CapEx) 与常规维修：更换整个屋顶或升级电梯属于 CapEx，不计入日常运营开支 (OpEx)；但必须为未来的重置准备金留出合理预算。'
+                : '2. Operating Expenses vs. Capital Improvements: Routine maintenance belongs in OpEx; structural roof replacement or elevator overhaul is CapEx and capitalized over time.'}
+            </p>
           </div>
         </section>
 
@@ -158,6 +202,9 @@ export default async function NoiPage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* Compliance & Legal Disclaimer */}
+        <ComplianceDisclaimer locale={locale} />
       </div>
     </article>
   );

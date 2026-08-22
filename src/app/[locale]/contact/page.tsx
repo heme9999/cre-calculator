@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: isZh
       ? '欢迎通过邮件与建议表单联系 CRE Calculators 团队，提出计算器需求、功能改进建议或商业合作。'
       : 'Get in touch with the CRE Calculators team for feature requests, calculator suggestions, or business inquiries.',
+    noindex: true,
   });
 }
 

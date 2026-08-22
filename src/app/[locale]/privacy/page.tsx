@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: isZh
       ? 'CRE Calculators 尊重并保护所有用户的隐私。我们的计算器纯客户端运行，不收集或保存你的任何物业财务测算数据。'
       : 'Learn how CRE Calculators protects your privacy. All underwriting calculation inputs run 100% locally in your browser.',
+    noindex: true,
   });
 }
 

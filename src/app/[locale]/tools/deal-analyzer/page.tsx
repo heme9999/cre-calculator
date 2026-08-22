@@ -4,9 +4,9 @@ import { Metadata } from 'next';
 import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
 import { DealAnalyzerTool } from '@/components/tools/DealAnalyzerTool';
-import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
-import { ArrowRight, HelpCircle, BookOpen } from 'lucide-react';
-
+import { JsonLd, getCalculatorJsonLd, getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/components/seo/JsonLd';
+import { ArrowRight, HelpCircle, BookOpen, AlertTriangle } from 'lucide-react';
+import { ComplianceDisclaimer } from '@/components/common/ComplianceDisclaimer';
 import { buildSeoMetadata } from '@/lib/seo';
 
 export function generateStaticParams() {
@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     locale,
     title: content.metaTitle,
     description: content.metaDescription,
+    noindex: locale === 'zh',
   });
 }
 
@@ -34,23 +35,31 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).dealAnalyzer;
-  const jsonLdData = getCalculatorJsonLd(
+  const isZh = locale === 'zh';
+
+  const calculatorSchema = getCalculatorJsonLd(
     content.h1,
     content.metaDescription,
     `${SITE_URL}/${locale}/tools/deal-analyzer/`,
     locale
   );
 
+  const breadcrumbSchema = getBreadcrumbJsonLd([
+    { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
+    { name: isZh ? '分析工具' : 'Tools', url: `${SITE_URL}/${locale}/` },
+    { name: content.h1, url: `${SITE_URL}/${locale}/tools/deal-analyzer/` },
+  ]);
+
+  const faqSchema = getFaqPageJsonLd(content.faqs);
+
   return (
     <article className="space-y-10 py-4">
-      <JsonLd data={jsonLdData} />
+      <JsonLd data={[calculatorSchema, breadcrumbSchema, faqSchema]} />
 
       {/* Page Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
           <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
-          <span>/</span>
-          <Link href={`/${locale}/tools/`} className="hover:text-emerald-600">{locale === 'zh' ? '分析工具' : 'Tools'}</Link>
           <span>/</span>
           <span className="text-slate-900 font-semibold">{content.h1}</span>
         </nav>
@@ -83,6 +92,28 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
           <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
             {content.whatIsContent}
           </p>
+          <div className="pt-2 text-xs text-slate-500 flex flex-wrap gap-2 items-center">
+            <span className="font-semibold text-slate-700">{isZh ? '支持单项测算：' : 'Explore Standalone Modules:'}</span>
+            <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? 'Cap Rate' : 'Cap Rate'}
+            </Link>
+            <span>•</span>
+            <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? 'NOI' : 'NOI'}
+            </Link>
+            <span>•</span>
+            <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? 'Cash-on-Cash' : 'Cash-on-Cash'}
+            </Link>
+            <span>•</span>
+            <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? 'DSCR' : 'DSCR'}
+            </Link>
+            <span>•</span>
+            <Link href={`/${locale}/guides/how-to-underwrite-a-deal/`} className="text-emerald-600 hover:underline font-medium">
+              {isZh ? '商业地产 6 步承销法' : 'Deal Underwriting Guide'}
+            </Link>
+          </div>
         </section>
 
         {/* Formula */}
@@ -106,6 +137,26 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
           <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
             {content.exampleContent}
+          </div>
+        </section>
+
+        {/* Pitfalls & Limitations */}
+        <section className="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 md:p-8 space-y-3">
+          <h2 className="text-lg font-bold text-amber-950 flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-amber-600" />
+            {isZh ? '商业地产全案尽调常见误区' : 'Institutional Underwriting Pitfalls & Common Mistakes'}
+          </h2>
+          <div className="space-y-2 text-xs sm:text-sm text-amber-900 leading-relaxed">
+            <p>
+              {isZh
+                ? '1. 忽视压力测试：仅看基准情景 (Base Case) 往往过于乐观。必须施加 +5% 空置与 +100 bps 利率压力，检验 DSCR 是否跌破 1.0x 违约警戒线。'
+                : '1. Overlooking Stress Testing: Underwriting only base-case pro-formas is dangerous. Always apply +5 percentage points vacancy and +100 bps interest rate stress to test debt coverage resilience.'}
+            </p>
+            <p>
+              {isZh
+                ? '2. 低估物业重置准备金：未能足额计提屋顶、HVAC 及外墙维护的资本储备金，会导致账面现金流虚高。'
+                : '2. Under-budgeting Replacement Reserves: Omitting capital expenditure reserves (e.g., $250-$350/unit/yr) creates artificially inflated initial cash flow.'}
+            </p>
           </div>
         </section>
 
@@ -143,6 +194,9 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* Compliance & Legal Disclaimer */}
+        <ComplianceDisclaimer locale={locale} />
       </div>
     </article>
   );

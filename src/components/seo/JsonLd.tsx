@@ -2,7 +2,7 @@ import React from 'react';
 import { SITE_URL } from '@/lib/constants';
 
 interface JsonLdProps {
-  data: Record<string, unknown>;
+  data: Record<string, unknown> | Record<string, unknown>[];
 }
 
 export function JsonLd({ data }: JsonLdProps) {
@@ -14,16 +14,21 @@ export function JsonLd({ data }: JsonLdProps) {
   );
 }
 
-export function getCalculatorJsonLd(name: string, description: string, url: string, locale: string) {
+export function getCalculatorJsonLd(
+  name: string,
+  description: string,
+  url: string,
+  locale: string
+) {
   return {
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
+    '@type': ['SoftwareApplication', 'WebApplication'],
     name,
     description,
     url,
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'All',
-    inLanguage: locale === 'zh' ? 'zh-Hans-US' : 'en-US',
+    inLanguage: locale === 'zh' ? 'zh-Hans' : 'en-US',
     offers: {
       '@type': 'Offer',
       price: '0',
@@ -32,14 +37,51 @@ export function getCalculatorJsonLd(name: string, description: string, url: stri
   };
 }
 
-export function getWebSiteJsonLd(name: string, description: string, url: string, locale: string) {
+export function getBreadcrumbJsonLd(
+  items: { name: string; url: string }[]
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
+export function getFaqPageJsonLd(
+  faqs: { question: string; answer: string }[]
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
+export function getWebSiteJsonLd(
+  name: string,
+  description: string,
+  url: string,
+  locale: string
+) {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name,
     url,
     description,
-    inLanguage: locale === 'zh' ? 'zh-Hans-US' : 'en-US',
+    inLanguage: locale === 'zh' ? 'zh-Hans' : 'en-US',
   };
 }
 
@@ -53,7 +95,7 @@ export function getGuidesHubJsonLd(url: string, locale: string) {
       ? '系统掌握净营业收入 NOI 重构、全美主流城市 Cap Rate 基准、DSCR 审贷流程与 6 步标准尽调方法论。'
       : 'Practical frameworks for NOI estimation, city cap rate benchmarks, DSCR financing standards, and deal underwriting due diligence.',
     url,
-    inLanguage: isZh ? 'zh-Hans-US' : 'en-US',
+    inLanguage: isZh ? 'zh-Hans' : 'en-US',
     isPartOf: {
       '@type': 'WebSite',
       name: 'CRE Calculators',
@@ -95,7 +137,7 @@ export function getArticleJsonLd(
     image: [
       `${SITE_URL}/og/cre-guides${isZh ? '-zh' : ''}.png`,
     ],
-    inLanguage: isZh ? 'zh-Hans-US' : 'en-US',
+    inLanguage: isZh ? 'zh-Hans' : 'en-US',
   };
 
   if (dateModified) {
@@ -115,7 +157,7 @@ export function getEditorialWebPageJsonLd(url: string, locale: string) {
       ? '详细了解 CRE Calculators 的计算公式推导逻辑、假设定义、数据更新频率与全美主要机构数据来源。'
       : 'Explore our transparent underwriting formulas, variable definitions, market benchmark sources, and audit dates.',
     url,
-    inLanguage: isZh ? 'zh-Hans-US' : 'en-US',
+    inLanguage: isZh ? 'zh-Hans' : 'en-US',
     isPartOf: {
       '@type': 'WebSite',
       name: 'CRE Calculators',

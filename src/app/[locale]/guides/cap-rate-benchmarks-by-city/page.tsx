@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     locale,
     title: content.metaTitle,
     description: content.metaDescription,
+    noindex: locale === 'zh',
   });
 }
 

@@ -26,6 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: isZh
       ? '综合型商业地产尽调与测算分析工具，支持单次输入计算全部指标、压力测试与一页纸PDF摘要导出。'
       : 'Comprehensive commercial real estate deal analysis tools featuring single-input underwriting, stress testing, and one-page PDF export.',
+    noindex: true,
   });
 }
 
