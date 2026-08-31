@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { PaymentType } from '@/lib/loanCalculations';
 import {
@@ -48,17 +48,23 @@ export function DealAnalyzerTool({ locale }: Props) {
   const [isExportingPdf, setIsExportingPdf] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [showSavedModal, setShowSavedModal] = useState<boolean>(false);
-  const [savedDeals, setSavedDeals] = useState<Array<{ name: string; date: string; input: DealAnalyzerInput }>>(() => {
-    if (typeof window !== 'undefined') {
+  const [savedDeals, setSavedDeals] = useState<Array<{ name: string; date: string; input: DealAnalyzerInput }>>([]);
+  const [reportDate, setReportDate] = useState<string>('');
+
+  useEffect(() => {
+    const hydrationTimer = window.setTimeout(() => {
+      setReportDate(new Date().toISOString().slice(0, 10));
+
       try {
         const stored = localStorage.getItem('cre_saved_deals');
-        return stored ? JSON.parse(stored) : [];
+        setSavedDeals(stored ? JSON.parse(stored) : []);
       } catch {
-        return [];
+        setSavedDeals([]);
       }
-    }
-    return [];
-  });
+    }, 0);
+
+    return () => window.clearTimeout(hydrationTimer);
+  }, []);
 
   const pdfTemplateRef = useRef<HTMLDivElement>(null);
 
@@ -755,7 +761,7 @@ export function DealAnalyzerTool({ locale }: Props) {
               </div>
             </div>
             <div className="text-right text-xs text-slate-500">
-              <div>Date: {new Date().toISOString().split('T')[0]}</div>
+              <div>Date: {reportDate || '—'}</div>
               <div className="font-mono text-[11px] text-emerald-700 font-bold mt-1">https://crecalculators.com</div>
             </div>
           </div>
