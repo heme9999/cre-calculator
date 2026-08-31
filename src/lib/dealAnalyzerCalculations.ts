@@ -75,7 +75,7 @@ export function calculateSingleScenario(input: DealAnalyzerInput, locale: string
   });
 
   const monthlyPayment = loanRes.monthlyPayment;
-  const annualDebtService = loanRes.firstYearDebtService;
+  const annualDebtService = monthlyPayment * 12;
 
   const netCashFlow = noi - annualDebtService;
   const cashOnCashReturn = totalCashInvested > 0 ? (netCashFlow / totalCashInvested) * 100 : 0;

@@ -184,8 +184,8 @@ export default async function EditorialPage({ params }: PageProps) {
               </a>
             </div>
 
-            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs text-emerald-950">
-              <span>{isZh ? '市场数据会随时间变化；在做出交易决策前，请通过上述原始来源核对最新发布值。' : 'Market data changes over time. Verify the latest published values directly in the primary sources above before making a transaction decision.'}</span>
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs font-mono text-emerald-950 flex items-center justify-between">
+              <span>{isZh ? '📅 数据核对与外部引用审核时间：2026 年 8 月 12 日' : '📅 Last External Citation & Data Audit: August 12, 2026'}</span>
             </div>
           </div>
         </section>

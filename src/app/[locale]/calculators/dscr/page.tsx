@@ -45,6 +45,7 @@ export default async function DscrPage({ params }: PageProps) {
 
   const breadcrumbSchema = getBreadcrumbJsonLd([
     { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
+    { name: isZh ? '计算器' : 'Calculators', url: `${SITE_URL}/${locale}/` },
     { name: content.h1, url: `${SITE_URL}/${locale}/calculators/dscr/` },
   ]);
 

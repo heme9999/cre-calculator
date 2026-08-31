@@ -11,7 +11,6 @@ export interface LoanCalculationInput {
 
 export interface LoanCalculationResult {
   monthlyPayment: number;
-  firstYearDebtService: number;
   equalInstallmentMonthly: number;
   equalPrincipalMonth1Payment: number;
   equalPrincipalMonthEndPayment: number;
@@ -31,10 +30,8 @@ export function calculateLoanDetails(input: LoanCalculationInput): LoanCalculati
   const effectiveTermMonths = Math.min(k, n);
 
   // Equal Installment (等额本息) Monthly Payment M
-  const equalInstallmentMonthly = n > 0
-    ? r > 0
-      ? (loanAmount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1)
-      : loanAmount / n
+  const equalInstallmentMonthly = (r > 0 && n > 0)
+    ? (loanAmount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1)
     : 0;
 
   // Equal Principal (等额本金) Monthly Fixed Principal P_fixed
@@ -44,7 +41,6 @@ export function calculateLoanDetails(input: LoanCalculationInput): LoanCalculati
 
   let termInterest = 0;
   let termPrincipal = 0;
-  let firstYearDebtService = 0;
   let currentBal = loanAmount;
 
   if (paymentType === 'installment') {
@@ -53,7 +49,6 @@ export function calculateLoanDetails(input: LoanCalculationInput): LoanCalculati
       const pMonth = equalInstallmentMonthly - iMonth;
       termInterest += iMonth;
       termPrincipal += pMonth;
-      if (m <= 12) firstYearDebtService += equalInstallmentMonthly;
       currentBal = Math.max(0, currentBal - pMonth);
     }
   } else {
@@ -62,7 +57,6 @@ export function calculateLoanDetails(input: LoanCalculationInput): LoanCalculati
       const pMonth = equalPrincipalFixed;
       termInterest += iMonth;
       termPrincipal += pMonth;
-      if (m <= 12) firstYearDebtService += pMonth + iMonth;
       currentBal = Math.max(0, currentBal - pMonth);
     }
   }
@@ -70,10 +64,8 @@ export function calculateLoanDetails(input: LoanCalculationInput): LoanCalculati
   let balloonBalance = 0;
   if (hasBalloon && balloonYears < amortizationYears) {
     if (paymentType === 'installment') {
-      balloonBalance = n > 0 && k < n
-        ? r > 0
-          ? loanAmount * (Math.pow(1 + r, n) - Math.pow(1 + r, k)) / (Math.pow(1 + r, n) - 1)
-          : Math.max(0, loanAmount - k * (loanAmount / n))
+      balloonBalance = (r > 0 && n > 0 && k < n)
+        ? loanAmount * (Math.pow(1 + r, n) - Math.pow(1 + r, k)) / (Math.pow(1 + r, n) - 1)
         : 0;
     } else {
       balloonBalance = Math.max(0, loanAmount - k * equalPrincipalFixed);
@@ -82,7 +74,6 @@ export function calculateLoanDetails(input: LoanCalculationInput): LoanCalculati
 
   return {
     monthlyPayment: paymentType === 'installment' ? equalInstallmentMonthly : equalPrincipalMonth1Payment,
-    firstYearDebtService,
     equalInstallmentMonthly,
     equalPrincipalMonth1Payment,
     equalPrincipalMonthEndPayment,

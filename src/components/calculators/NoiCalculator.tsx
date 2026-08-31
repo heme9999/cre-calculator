@@ -60,13 +60,12 @@ export function NoiCalculator({ locale }: Props) {
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="noi-gross-income" className="block text-xs font-semibold text-slate-600 mb-1">
+                <label className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '年潜在毛租金收入 ($)' : 'Gross Potential Income ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
-                    id="noi-gross-income"
                     type="number"
                     value={grossIncome || ''}
                     onChange={(e) => setGrossIncome(parseFloat(e.target.value) || 0)}
@@ -77,12 +76,11 @@ export function NoiCalculator({ locale }: Props) {
               </div>
 
               <div>
-                <label htmlFor="noi-vacancy-rate" className="block text-xs font-semibold text-slate-600 mb-1">
+                <label className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '预估空置与坏账率 (%)' : 'Vacancy & Credit Loss (%)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <input
-                    id="noi-vacancy-rate"
                     type="number"
                     step="0.5"
                     value={vacancyRate || ''}
@@ -108,13 +106,12 @@ export function NoiCalculator({ locale }: Props) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="noi-property-tax" className="block text-xs font-semibold text-slate-600 mb-1">
+                <label className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '物业税 (Property Tax)' : 'Property Taxes ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
-                    id="noi-property-tax"
                     type="number"
                     value={propertyTax || ''}
                     onChange={(e) => setPropertyTax(parseFloat(e.target.value) || 0)}
@@ -124,13 +121,12 @@ export function NoiCalculator({ locale }: Props) {
               </div>
 
               <div>
-                <label htmlFor="noi-insurance" className="block text-xs font-semibold text-slate-600 mb-1">
+                <label className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '物业保险 (Insurance)' : 'Property Insurance ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
-                    id="noi-insurance"
                     type="number"
                     value={insurance || ''}
                     onChange={(e) => setInsurance(parseFloat(e.target.value) || 0)}
@@ -140,13 +136,12 @@ export function NoiCalculator({ locale }: Props) {
               </div>
 
               <div>
-                <label htmlFor="noi-maintenance" className="block text-xs font-semibold text-slate-600 mb-1">
+                <label className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '维修与保养 (Maintenance)' : 'Repairs & Maintenance ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
-                    id="noi-maintenance"
                     type="number"
                     value={maintenance || ''}
                     onChange={(e) => setMaintenance(parseFloat(e.target.value) || 0)}
@@ -156,13 +151,12 @@ export function NoiCalculator({ locale }: Props) {
               </div>
 
               <div>
-                <label htmlFor="noi-management-fee" className="block text-xs font-semibold text-slate-600 mb-1">
+                <label className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '物业管理费 (Management Fee)' : 'Management Fees ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
-                    id="noi-management-fee"
                     type="number"
                     value={managementFee || ''}
                     onChange={(e) => setManagementFee(parseFloat(e.target.value) || 0)}
@@ -172,13 +166,12 @@ export function NoiCalculator({ locale }: Props) {
               </div>
 
               <div className="sm:col-span-2">
-                <label htmlFor="noi-utilities" className="block text-xs font-semibold text-slate-600 mb-1">
+                <label className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '房东负担水电与杂费 (Utilities & Other)' : 'Utilities & Other Landlord Expenses ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
-                    id="noi-utilities"
                     type="number"
                     value={utilities || ''}
                     onChange={(e) => setUtilities(parseFloat(e.target.value) || 0)}

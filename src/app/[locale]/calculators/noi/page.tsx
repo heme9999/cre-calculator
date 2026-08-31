@@ -45,6 +45,7 @@ export default async function NoiPage({ params }: PageProps) {
 
   const breadcrumbSchema = getBreadcrumbJsonLd([
     { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
+    { name: isZh ? '计算器' : 'Calculators', url: `${SITE_URL}/${locale}/` },
     { name: content.h1, url: `${SITE_URL}/${locale}/calculators/noi/` },
   ]);
 
@@ -181,32 +182,6 @@ export default async function NoiPage({ params }: PageProps) {
             <span>{locale === 'zh' ? '阅读估算指南' : 'Read Guide'}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
-        </section>
-
-        {/* Deal Analyzer Banner */}
-        <section className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4 border border-slate-700 shadow-md">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-                {isZh ? '从 NOI 进入完整承销' : 'From NOI to Full Underwriting'}
-              </span>
-              <h3 className="text-xl font-bold text-white">
-                {isZh ? '用同一组数据继续测算完整交易' : 'Carry This NOI into a Complete Deal Analysis'}
-              </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                {isZh
-                  ? '在 Deal Analyzer 中结合购买价、融资条件与现金投入，同步计算 Cap Rate、Cash-on-Cash、DSCR 和 Break-Even Ratio，并对空置率与利率进行压力测试。'
-                  : 'Combine NOI with purchase price, financing, and invested cash to calculate Cap Rate, Cash-on-Cash, DSCR, and Break-Even Ratio, then stress-test vacancy and interest rates.'}
-              </p>
-            </div>
-            <Link
-              href={`/${locale}/tools/deal-analyzer/`}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
-            >
-              <span>{isZh ? '打开 Deal Analyzer' : 'Continue in Deal Analyzer'}</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
         </section>
 
         {/* Related Calculators */}
