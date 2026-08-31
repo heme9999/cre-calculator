@@ -53,11 +53,11 @@ export function Header({ locale }: HeaderProps) {
     <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo */}
-        <Link href={`/${locale}/`} className="flex items-center gap-2.5 font-bold text-lg text-white hover:text-emerald-400 transition-colors">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-sm">
-            <Building2 className="w-5 h-5 text-white" />
+        <Link href={`/${locale}/`} className="flex items-center gap-2 md:gap-2.5 font-bold text-base md:text-lg text-white hover:text-emerald-400 transition-colors shrink min-w-0">
+          <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-sm shrink-0">
+            <Building2 className="w-4 h-4 md:w-5 md:h-5 text-white" />
           </div>
-          <span className="tracking-tight">{nav.brandName}</span>
+          <span className="tracking-tight whitespace-nowrap truncate">{nav.brandName}</span>
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -94,14 +94,14 @@ export function Header({ locale }: HeaderProps) {
         </nav>
 
         {/* Right Section: Language Switcher & Mobile Menu Button */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {/* Language Switcher Button (Always Visible) */}
           <Link
             href={targetPath}
             aria-label="Switch Language"
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-xs font-bold text-emerald-300 hover:text-emerald-200 transition-all shadow-xs"
+            className="flex items-center gap-1 sm:gap-1.5 px-2 py-1.5 sm:px-3.5 sm:py-1.5 rounded-full bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-[11px] sm:text-xs font-bold text-emerald-300 hover:text-emerald-200 transition-all shadow-xs shrink-0"
           >
-            <Globe className="w-3.5 h-3.5 text-emerald-400" />
+            <Globe className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400" />
             <span>{nav.switchLangLabel}</span>
             <ChevronRight className="w-3 h-3 text-emerald-400" />
           </Link>

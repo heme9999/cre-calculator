@@ -46,7 +46,6 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
 
   const breadcrumbSchema = getBreadcrumbJsonLd([
     { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
-    { name: isZh ? '分析工具' : 'Tools', url: `${SITE_URL}/${locale}/` },
     { name: content.h1, url: `${SITE_URL}/${locale}/tools/deal-analyzer/` },
   ]);
 

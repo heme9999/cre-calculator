@@ -104,6 +104,41 @@ export function ArticleGuideView({ content, locale, guideSlug }: Props) {
         ))}
       </div>
 
+      {/* NOI guide conversion path: estimate, calculate, then underwrite */}
+      {guideSlug === 'how-to-estimate-noi' && (
+        <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 md:p-8 space-y-4">
+          <div className="space-y-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+              {locale === 'zh' ? '把估算结果用于实际承销' : 'Put the Estimate into Practice'}
+            </span>
+            <h2 className="text-xl font-bold text-emerald-950">
+              {locale === 'zh' ? '先核算 NOI，再测试完整交易结构' : 'Calculate NOI First, Then Test the Full Deal'}
+            </h2>
+            <p className="text-sm text-emerald-900 leading-relaxed max-w-3xl">
+              {locale === 'zh'
+                ? '将租金、空置损失和运营开支输入 NOI Calculator，确认可辩护的净营业收入；随后在 Deal Analyzer 中加入价格和贷款条件，检查回报、偿债覆盖率与压力情景。'
+                : 'Enter rent, vacancy loss, and operating expenses in the NOI Calculator to confirm a defensible net operating income. Then add price and loan terms in Deal Analyzer to test returns, debt coverage, and downside scenarios.'}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href={`/${locale}/calculators/noi/`}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors"
+            >
+              <span>{locale === 'zh' ? '打开 NOI Calculator' : 'Calculate NOI'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href={`/${locale}/tools/deal-analyzer/`}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-emerald-100 text-emerald-800 font-bold text-xs border border-emerald-300 transition-colors"
+            >
+              <span>{locale === 'zh' ? '继续完整承销' : 'Continue to Deal Analyzer'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </section>
+      )}
+
       {/* FAQs */}
       {content.faqs && content.faqs.length > 0 && (
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">

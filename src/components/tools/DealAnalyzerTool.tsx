@@ -48,17 +48,22 @@ export function DealAnalyzerTool({ locale }: Props) {
   const [isExportingPdf, setIsExportingPdf] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [showSavedModal, setShowSavedModal] = useState<boolean>(false);
-  const [savedDeals, setSavedDeals] = useState<Array<{ name: string; date: string; input: DealAnalyzerInput }>>(() => {
-    if (typeof window !== 'undefined') {
+  const [savedDeals, setSavedDeals] = useState<Array<{ name: string; date: string; input: DealAnalyzerInput }>>([]);
+  const [isClient, setIsClient] = useState(false);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setIsClient(true);
       try {
         const stored = localStorage.getItem('cre_saved_deals');
-        return stored ? JSON.parse(stored) : [];
+        if (stored) {
+          setSavedDeals(JSON.parse(stored));
+        }
       } catch {
-        return [];
+        // ignore
       }
-    }
-    return [];
-  });
+    }, 0);
+  }, []);
 
   const pdfTemplateRef = useRef<HTMLDivElement>(null);
 
@@ -755,7 +760,7 @@ export function DealAnalyzerTool({ locale }: Props) {
               </div>
             </div>
             <div className="text-right text-xs text-slate-500">
-              <div>Date: {new Date().toISOString().split('T')[0]}</div>
+              <div>Date: {isClient ? new Date().toISOString().split('T')[0] : ''}</div>
               <div className="font-mono text-[11px] text-emerald-700 font-bold mt-1">https://crecalculators.com</div>
             </div>
           </div>

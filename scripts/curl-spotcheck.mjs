@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const outDir = path.join(__dirname, '..', 'out');
+const publicDir = path.join(__dirname, '..', 'public');
 
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -16,10 +17,20 @@ const mimeTypes = {
   '.txt': 'text/plain',
 };
 
+const redirects = fs.readFileSync(path.join(publicDir, '_redirects'), 'utf8')
+  .split(/\r?\n/)
+  .map((line) => line.trim())
+  .filter((line) => line && !line.startsWith('#'))
+  .map((line) => {
+    const [source, destination, status = '302'] = line.split(/\s+/);
+    return { source, destination, status: Number(status) };
+  });
+
 const server = http.createServer((req, res) => {
   let reqPath = req.url.split('?')[0];
-  if (reqPath === '' || reqPath === '/') {
-    res.writeHead(308, { Location: '/en/' });
+  const redirect = redirects.find((rule) => rule.source === reqPath);
+  if (redirect) {
+    res.writeHead(redirect.status, { Location: redirect.destination });
     res.end();
     return;
   }

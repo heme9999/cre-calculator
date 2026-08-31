@@ -1,3 +1,6 @@
+# Canonical locale entry point
+/ /en/ 308
+
 # 308 Redirect obsolete English DSCR loan guide to DSCR calculator
 /en/guides/dscr-loan-guide-chinese-investors/ /en/calculators/dscr/ 308
 /en/guides/dscr-loan-guide-chinese-investors /en/calculators/dscr/ 308
