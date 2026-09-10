@@ -119,9 +119,26 @@ export default async function NoiPage({ params }: PageProps) {
 
         {/* Real Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
-          <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
-            {content.exampleContent}
+          <h2 className="text-xl font-bold text-slate-900">{isZh ? '商业地产分析案例 (Illustrative Example)' : 'Worked Commercial Property Example'}</h2>
+          <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-3">
+            <p>
+              {isZh ? '假设您正在评估一处 24 单元的多户住宅物业（24-unit multifamily），购买价为 $2,800,000。要计算其 NOI，我们只需要关注物业自身的运营表现：' : 'Consider a hypothetical 24-unit multifamily property purchased for $2,800,000. To calculate its NOI, we only look at property-level operations:'}
+            </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>{isZh ? '年潜在毛收入: $336,000' : 'Gross potential income: $336,000'}</li>
+              <li>{isZh ? '空置率: 5% ($16,800)' : 'Vacancy loss: 5% ($16,800)'}</li>
+              <li>{isZh ? '有效毛收入 (EGI): $319,200' : 'Effective gross income (EGI): $319,200'}</li>
+              <li>{isZh ? '年度运营费用: $92,000' : 'Operating expenses: $92,000'}</li>
+            </ul>
+            <p className="font-semibold text-slate-900 mt-2">
+              {isZh ? '计算 NOI = $319,200 (EGI) - $92,000 (OpEx) = $227,200' : 'Calculation: NOI = $319,200 (EGI) - $92,000 (OpEx) = $227,200'}
+            </p>
+            <p className="mt-2">
+              {isZh ? '注意：我们在此不扣除房贷。得到 $227,200 的 NOI 后，您的下一步通常是利用这个数字来 ' : 'Note that we explicitly ignore the mortgage here. Once you have this $227,200 NOI, your typical next step is to use it to '}
+              <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '计算物业的 Cap Rate' : 'calculate the property\'s Cap Rate'}</Link>
+              {isZh ? ' 或 ' : ' or '}
+              <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '测量贷款的 DSCR' : 'measure your loan\'s DSCR'}</Link>.
+            </p>
           </div>
         </section>
 

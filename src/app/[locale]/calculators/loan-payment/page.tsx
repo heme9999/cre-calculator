@@ -100,8 +100,22 @@ export default async function LoanPaymentPage({ params }: PageProps) {
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
           <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
           <LoanScenarioComparison locale={locale} />
+          <div className="pt-4 mt-4 border-t border-slate-100 text-sm text-slate-700">
+            <p>
+              {locale === 'zh' 
+                ? '上述 $2,100,000 贷款对应我们贯穿全站的 24 单元多户住宅案例（购买价 280 万，首付 25%）。计算出您的年还贷额后，请在 '
+                : 'This $2,100,000 loan matches our ongoing 24-unit multifamily example ($2.8M purchase price, 25% down). Once you have your annual debt service, combine it with your property\'s NOI to '}
+              <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">
+                {locale === 'zh' ? 'DSCR 计算器' : 'calculate your DSCR'}
+              </Link>
+              {locale === 'zh' ? ' 中将其与 NOI 结合评估抗风险能力，或在 ' : ' to evaluate loan safety, or use the '}
+              <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
+                {locale === 'zh' ? 'Cash-on-Cash 计算器' : 'Cash-on-Cash Return calculator'}
+              </Link>
+              {locale === 'zh' ? ' 中测算扣除房贷后的现金回报。' : ' to determine your leveraged cash yield.'}
+            </p>
+          </div>
         </section>
-
         {/* FAQs */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
           <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">

@@ -61,13 +61,21 @@ export function ArticleGuideView({ content, locale, guideSlug }: Props) {
                 {locale === 'zh' ? '不用在5个单独计算器间来算去。一次输入购买价、收入开支与融资条件，同时算出 Cap Rate、CoC、DSCR、BER 并做压力测试。' : 'No need to switch across 5 separate pages. Input terms once to run Cap Rate, CoC, DSCR, and BER with stress testing.'}
               </p>
             </div>
-            <Link
-              href={`/${locale}/tools/deal-analyzer/`}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
-            >
-              <span>{locale === 'zh' ? '打开 Deal Analyzer' : 'Launch Deal Analyzer'}</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href={`/${locale}/tools/deal-analyzer/`}
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
+              >
+                <span>{locale === 'zh' ? '打开 Deal Analyzer' : 'Launch Deal Analyzer'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href={`/${locale}/calculators/cash-on-cash/`}
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-bold text-xs shrink-0 transition-colors shadow-xs"
+              >
+                <span>{locale === 'zh' ? '只测 Cash-on-Cash' : 'Just Calculate Cash-on-Cash'}</span>
+              </Link>
+            </div>
           </div>
         </section>
       )}

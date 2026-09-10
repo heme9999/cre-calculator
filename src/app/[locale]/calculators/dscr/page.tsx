@@ -119,9 +119,31 @@ export default async function DscrPage({ params }: PageProps) {
 
         {/* Real Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
-          <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
-            {content.exampleContent}
+          <h2 className="text-xl font-bold text-slate-900">{isZh ? '商业地产分析案例 (Illustrative Example)' : 'Worked Commercial Property Example'}</h2>
+          <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-3">
+            <p>
+              {isZh ? '假设您正在评估一处 24 单元的多户住宅物业（24-unit multifamily）。' : 'Consider a hypothetical 24-unit multifamily property.'}
+            </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>{isZh ? '净营业收入 (NOI): $227,200（详见 ' : 'Net Operating Income (NOI): $227,200 (see how we '}
+                <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline">{isZh ? '计算该物业的 NOI' : 'calculated this property\'s NOI'}</Link>
+                {isZh ? '）' : ')'}
+              </li>
+              <li>{isZh ? '年还本付息额 (Annual Debt Service): $170,152（基于 210万美元，6.5%利率贷款，详见 ' : 'Annual Debt Service: $170,152 (based on a $2.1M loan at 6.5%, see how we '}
+                <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">{isZh ? '测算商业贷款' : 'calculated this commercial loan payment'}</Link>
+                {isZh ? '）' : ')'}
+              </li>
+            </ul>
+            <p className="font-semibold text-slate-900 mt-2">
+              {isZh ? '计算 DSCR = $227,200 (NOI) / $170,152 (贷款偿还) = 1.34x' : 'Calculation: DSCR = $227,200 (NOI) / $170,152 (Debt Service) = 1.34x'}
+            </p>
+            <p className="mt-2">
+              {isZh ? '1.34x 是一个健康的比率，远超银行通常要求的 1.20x 门槛。确认债务安全后，你可以将扣除房贷后的剩余现金流用于 ' : 'A 1.34x ratio is very healthy, comfortably exceeding most lenders\' 1.20x minimum requirement. Once you confirm debt safety, you can use the remaining cash flow after debt to '}
+              <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '评估你的股权 Cash-on-Cash 现金回报' : 'evaluate your equity Cash-on-Cash Return'}</Link>
+              {isZh ? '，或前往 ' : ', or head to the full '}
+              <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Deal Analyzer 工具' : 'Deal Analyzer tool'}</Link>
+              {isZh ? ' 测试在空置率上升时的抗压能力。' : ' to stress-test this coverage against higher vacancy rates.'}
+            </p>
           </div>
         </section>
 

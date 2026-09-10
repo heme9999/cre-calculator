@@ -119,9 +119,28 @@ export default async function CapRatePage({ params }: PageProps) {
 
         {/* Real Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
-          <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
-            {content.exampleContent}
+          <h2 className="text-xl font-bold text-slate-900">{isZh ? '商业地产分析案例 (Illustrative Example)' : 'Worked Commercial Property Example'}</h2>
+          <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-3">
+            <p>
+              {isZh ? '假设您正在评估一处 24 单元的多户住宅物业（24-unit multifamily）。' : 'Consider a hypothetical 24-unit multifamily property.'}
+            </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>{isZh ? '购买价格: $2,800,000' : 'Purchase price: $2,800,000'}</li>
+              <li>{isZh ? '净营业收入 (NOI): $227,200（详见 ' : 'Net Operating Income (NOI): $227,200 (see how we '}
+                <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline">{isZh ? '计算该物业的 NOI' : 'calculated this property\'s NOI'}</Link>
+                {isZh ? '）' : ')'}
+              </li>
+            </ul>
+            <p className="font-semibold text-slate-900 mt-2">
+              {isZh ? '计算 Cap Rate = $227,200 (NOI) / $2,800,000 (价格) = 8.11%' : 'Calculation: Cap Rate = $227,200 (NOI) / $2,800,000 (Price) = 8.11%'}
+            </p>
+            <p className="mt-2">
+              {isZh ? '8.11% 代表如果你全款买下这栋楼，你每年的无杠杆回报率。但大多数投资者会贷款。在计算出 Cap Rate 后，你通常需要将其与房贷利率对比，然后使用 ' : 'The 8.11% represents your unleveraged return if you bought the building in all cash. But most investors use debt. After calculating your Cap Rate, you would typically compare it against mortgage rates and then use the '}
+              <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Cash-on-Cash 现金回报率计算器' : 'Cash-on-Cash Return calculator'}</Link>
+              {isZh ? ' 或综合的 ' : ' or the full '}
+              <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Deal Analyzer 工具' : 'Deal Analyzer tool'}</Link>
+              {isZh ? ' 来查看加杠杆后的真实回报率。' : ' to see your actual return on invested equity.'}
+            </p>
           </div>
         </section>
 

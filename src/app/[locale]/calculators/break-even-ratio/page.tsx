@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const resolvedParams = await params;
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).breakEvenRatio;
+  const isZh = locale === 'zh';
 
   return buildSeoMetadata({
     path: 'calculators/break-even-ratio',
@@ -35,6 +36,7 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).breakEvenRatio;
+  const isZh = locale === 'zh';
   const jsonLdData = getCalculatorJsonLd(
     content.h1,
     content.metaDescription,
@@ -97,9 +99,28 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
 
         {/* Real Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
-          <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
-            {content.exampleContent}
+          <h2 className="text-xl font-bold text-slate-900">{isZh ? '商业地产分析案例 (Illustrative Example)' : 'Worked Commercial Property Example'}</h2>
+          <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-3">
+            <p>
+              {isZh ? '回顾我们贯穿始终的 24 单元多户住宅案例（24-unit multifamily）。' : 'Returning to our ongoing 24-unit multifamily example.'}
+            </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>{isZh ? '运营费用 (OpEx): $92,000' : 'Operating Expenses (OpEx): $92,000'}</li>
+              <li>{isZh ? '年还本付息额 (Annual Debt Service): $170,152（详见 ' : 'Annual Debt Service: $170,152 (see the '}
+                <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">{isZh ? '商业贷款计算' : 'loan payment calculation'}</Link>
+                {isZh ? '）' : ')'}
+              </li>
+              <li>{isZh ? '年潜在毛收入 (Gross Potential Income): $336,000' : 'Gross Potential Income (GPI): $336,000'}</li>
+            </ul>
+            <p className="font-semibold text-slate-900 mt-2">
+              {isZh ? '计算 Break-Even Ratio = ($92,000 + $170,152) / $336,000 = 78.02%' : 'Calculation: Break-Even Ratio = ($92,000 + $170,152) / $336,000 = 78.02%'}
+            </p>
+            <p className="mt-2">
+              {isZh ? '这意味着只要该物业的入住率达到 78% 以上，就能刚好覆盖所有开销和房贷，不会产生负现金流。想在一个页面上同时测试入住率、利率和 ' : 'This means the property needs to maintain at least 78% occupancy just to pay its bills and the mortgage without negative cash flow. To test how changes in occupancy, rates, and '}
+              <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Cash-on-Cash 收益率' : 'Cash-on-Cash Return'}</Link>
+              {isZh ? ' 之间的联动关系吗？请使用 ' : ' interact together on one page, try our comprehensive '}
+              <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Deal Analyzer 综合尽调工具' : 'Deal Analyzer tool'}</Link>.
+            </p>
           </div>
         </section>
 

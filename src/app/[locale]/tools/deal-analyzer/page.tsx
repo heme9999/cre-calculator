@@ -133,9 +133,54 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
 
         {/* Real Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
-          <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
-            {content.exampleContent}
+          <h2 className="text-xl font-bold text-slate-900">{isZh ? '商业地产分析案例 (Illustrative Example)' : 'Worked Commercial Property Example'}</h2>
+          <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-4">
+            <p>
+              {isZh ? '假设您正在评估一处 24 单元的多户住宅物业（24-unit multifamily），基础数据如下：' : 'Consider a hypothetical 24-unit multifamily property with the following acquisition and operational assumptions:'}
+            </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>{isZh ? '购买价格: $2,800,000' : 'Purchase price: $2,800,000'}</li>
+              <li>{isZh ? '年潜在毛收入: $336,000' : 'Gross potential income: $336,000'}</li>
+              <li>{isZh ? '空置率: 5%' : 'Vacancy: 5%'}</li>
+              <li>{isZh ? '年度运营费用: $92,000' : 'Operating expenses: $92,000'}</li>
+              <li>{isZh ? '首付比例: 25% ($700,000)' : 'Down payment: 25% ($700,000)'}</li>
+              <li>{isZh ? '交易过户费: 2% ($56,000)' : 'Closing costs: 2% ($56,000)'}</li>
+              <li>{isZh ? '商业贷款: 6.5% 利率，25年摊销期' : 'Commercial loan: 6.5% interest rate, 25-year amortization'}</li>
+            </ul>
+            
+            <div>
+              <strong className="text-slate-900">{isZh ? '步骤 1：分析物业现金流 (NOI 与 Cap Rate)' : 'Step 1: Property-Level Cash Flow (NOI & Cap Rate)'}</strong>
+              <p className="mt-1">
+                {isZh ? '首先扣除空置损失得到有效总收入 (EGI) $319,200。减去运营费用后，我们可以 ' : 'First, deducting vacancy gives an Effective Gross Income (EGI) of $319,200. After subtracting operating expenses, we can '}
+                <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '计算该物业的 NOI' : 'calculate the property\'s NOI'}</Link>
+                {isZh ? ' 为 $227,200。基于购买价，这相当于 8.11% 的 ' : ' at $227,200. Based on the purchase price, this translates to an 8.11% '}
+                <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '无杠杆 Cap Rate' : 'unleveraged Cap Rate'}</Link>.
+              </p>
+            </div>
+
+            <div>
+              <strong className="text-slate-900">{isZh ? '步骤 2：债务与股权回报 (DSCR 与 Cash-on-Cash)' : 'Step 2: Debt Coverage & Equity Return (DSCR & Cash-on-Cash)'}</strong>
+              <p className="mt-1">
+                {isZh ? '按上述条款，年还本付息额 (Annual Debt Service) 为 $170,152。将 NOI 除以债务，我们以此来 ' : 'Based on the loan terms, the annual debt service is $170,152. By dividing the NOI by the debt service, we '}
+                <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '测试贷款方的 DSCR 阈值' : 'test the lender\'s DSCR threshold'}</Link>
+                {isZh ? '，结果为健康水平的 1.34x。扣除债务后的税前现金流为 $57,048，对比 $756,000 的总现金投入（首付+过户费），我们可以 ' : ', resulting in a healthy 1.34x coverage. The pre-tax cash flow after debt is $57,048. Compared against the $756,000 total cash invested (down payment + closing costs), we '}
+                <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '衡量投入股权的现金回报率 (Cash-on-Cash Return)' : 'measure cash return on invested equity'}</Link>
+                {isZh ? ' 为 7.55%。此交易目前的 ' : ', which yields 7.55%. Currently, the '}
+                <Link href={`/${locale}/calculators/break-even-ratio/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '盈亏平衡点 (Break-Even Ratio)' : 'Break-Even Ratio'}</Link>
+                {isZh ? ' 为 78.02%。' : ' is 78.02%.'}
+              </p>
+            </div>
+
+            <div>
+              <strong className="text-amber-700">{isZh ? '步骤 3：压力测试 (Stress Testing)' : 'Step 3: Stress Testing'}</strong>
+              <p className="mt-1">
+                {isZh ? '基础情景看似健康，但如果你将空置率上调至 10%，并将利率上调至 7.5% 呢？' : 'The base case appears healthy, but what happens if vacancy rises to 10% and interest rates climb to 7.5%?'}
+                <br />
+                {isZh ? '年还款额上升至 $186,225，而 NOI 下降至 $210,400。此时，DSCR 骤降至 1.13x（可能触发贷款违约条款），且 Cash-on-Cash Return 暴跌至 3.20%。盈亏平衡点也攀升至 82.80% 的危险区域。这就是为什么全面 ' : 'Annual debt service climbs to $186,225, while NOI drops to $210,400. In this scenario, the DSCR plummets to 1.13x (entering the warning zone for many lenders), and the Cash-on-Cash Return shrinks to 3.20%. The Break-Even Ratio also rises to a risky 82.80%. This demonstrates why it is crucial to fully '}
+                <Link href={`/${locale}/guides/how-to-underwrite-a-deal/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '承销商业地产交易' : 'underwrite a commercial real estate deal'}</Link>
+                {isZh ? ' 时必须包含下行风险。' : ' incorporating downside risk.'}
+              </p>
+            </div>
           </div>
         </section>
 

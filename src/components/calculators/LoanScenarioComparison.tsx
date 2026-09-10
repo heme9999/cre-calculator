@@ -11,7 +11,7 @@ export function LoanScenarioComparison({ locale }: Props) {
   const isZh = locale === 'zh';
 
   const benchmarkInput = {
-    loanAmount: 1300000,
+    loanAmount: 2100000,
     interestRate: 6.5,
     amortizationYears: 25,
     balloonYears: 10,
