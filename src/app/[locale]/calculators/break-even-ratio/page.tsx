@@ -21,7 +21,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const resolvedParams = await params;
   const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
   const content = getContent(locale).breakEvenRatio;
-  const isZh = locale === 'zh';
 
   return buildSeoMetadata({
     path: 'calculators/break-even-ratio',
@@ -110,13 +109,13 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
                 <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">{isZh ? '商业贷款计算' : 'loan payment calculation'}</Link>
                 {isZh ? '）' : ')'}
               </li>
-              <li>{isZh ? '年潜在毛收入 (Gross Potential Income): $336,000' : 'Gross Potential Income (GPI): $336,000'}</li>
+              <li>{isZh ? '年有效毛收入 (Effective Gross Income): $319,200' : 'Effective Gross Income (EGI): $319,200'}</li>
             </ul>
             <p className="font-semibold text-slate-900 mt-2">
-              {isZh ? '计算 Break-Even Ratio = ($92,000 + $170,152) / $336,000 = 78.02%' : 'Calculation: Break-Even Ratio = ($92,000 + $170,152) / $336,000 = 78.02%'}
+              {isZh ? '计算 Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%' : 'Calculation: Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%'}
             </p>
             <p className="mt-2">
-              {isZh ? '这意味着只要该物业的入住率达到 78% 以上，就能刚好覆盖所有开销和房贷，不会产生负现金流。想在一个页面上同时测试入住率、利率和 ' : 'This means the property needs to maintain at least 78% occupancy just to pay its bills and the mortgage without negative cash flow. To test how changes in occupancy, rates, and '}
+              {isZh ? '这意味着只要该物业的入住率达到 82% 以上，就能刚好覆盖所有开销和房贷，不会产生负现金流。想在一个页面上同时测试入住率、利率和 ' : 'This means the property needs to maintain at least 82% occupancy just to pay its bills and the mortgage without negative cash flow. To test how changes in occupancy, rates, and '}
               <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Cash-on-Cash 收益率' : 'Cash-on-Cash Return'}</Link>
               {isZh ? ' 之间的联动关系吗？请使用 ' : ' interact together on one page, try our comprehensive '}
               <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Deal Analyzer 综合尽调工具' : 'Deal Analyzer tool'}</Link>.

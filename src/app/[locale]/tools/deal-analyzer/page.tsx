@@ -167,7 +167,7 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
                 <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '衡量投入股权的现金回报率 (Cash-on-Cash Return)' : 'measure cash return on invested equity'}</Link>
                 {isZh ? ' 为 7.55%。此交易目前的 ' : ', which yields 7.55%. Currently, the '}
                 <Link href={`/${locale}/calculators/break-even-ratio/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '盈亏平衡点 (Break-Even Ratio)' : 'Break-Even Ratio'}</Link>
-                {isZh ? ' 为 78.02%。' : ' is 78.02%.'}
+                {isZh ? ' 为 82.13%。' : ' is 82.13%.'}
               </p>
             </div>
 

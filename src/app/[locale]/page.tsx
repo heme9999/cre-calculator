@@ -64,7 +64,7 @@ export default async function HomePage({ params }: PageProps) {
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl">
               {home.heroSubtitle}
             </p>
-            <p className="text-sm text-slate-500 leading-relaxed max-w-xl hidden sm:block">
+            <p className="text-sm text-slate-500 leading-relaxed max-w-xl mt-2">
               {isZh ? '正在分析加杠杆后的真实回报？直接使用我们的 ' : 'Looking to measure your leveraged equity return? Jump straight to our '}
               <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-medium">
                 {isZh ? 'Cash-on-Cash 现金回报率计算器' : 'Cash-on-Cash Return Calculator'}

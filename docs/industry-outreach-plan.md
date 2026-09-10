@@ -4,6 +4,8 @@ This plan focuses on earning legitimate, high-quality backlinks and traffic from
 
 ## 1. Core Rule & Compliance
 - **No Paid Links:** Do not buy backlinks, sponsor posts explicitly for links, or participate in private blog networks (PBNs). This violates Google's Webmaster Guidelines and risks manual penalties.
+- **Affiliate & Partnership Disclosures:** Any partnership, affiliate, or referral arrangements must explicitly include clear FTC-compliant disclosures. We do not promise dofollow links or link exchanges in return for placements.
+
 - **Value-First Approach:** We offer free, high-quality tools (especially the Deal Analyzer and Cash-on-Cash Calculator) that make brokers, educators, and syndicators look good when they share them with their audience.
 
 ## 2. Target Personas & Outreach Angles
