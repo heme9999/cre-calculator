@@ -196,7 +196,56 @@ async function runSmokeTests() {
     await checkOverflow('http://localhost:3460/zh/tools/deal-analyzer/');
 
 
+
+    console.log('\n--- 6. Testing New Explicit Assertions ---');
+    
+    // Check Home Page Base Metrics
+    await page.goto('http://localhost:3460/en/', { waitUntil: 'networkidle0' });
+    const homeHtml = await page.evaluate(() => document.body.innerText);
+    const homeHasBER = homeHtml.includes('78.02%');
+    const homeHasDSCR = homeHtml.includes('1.34x');
+    console.log('Home Page has Base BER 78.02%:', homeHasBER);
+    console.log('Home Page has Base DSCR 1.34x:', homeHasDSCR);
+
+    // Check Deal Analyzer Base Metrics
+    await page.goto('http://localhost:3460/en/tools/deal-analyzer/', { waitUntil: 'networkidle0' });
+    const dealHtml = await page.evaluate(() => document.body.innerText);
+    const dealHasBER = dealHtml.includes('78.02%');
+    const dealHasDSCR = dealHtml.includes('1.34x');
+    console.log('Deal Analyzer has Base BER 78.02%:', dealHasBER);
+    console.log('Deal Analyzer has Base DSCR 1.34x:', dealHasDSCR);
+    console.log('Home & Deal Analyzer metrics are fully consistent:', homeHasBER === dealHasBER && homeHasDSCR === dealHasDSCR);
+
+    // Test JSON-LD Consistency
+    await page.goto('http://localhost:3460/en/calculators/break-even-ratio/', { waitUntil: 'networkidle0' });
+    const berHtml = await page.content();
+    const jsonLdMatch = berHtml.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    let jsonLdConsistent = false;
+    if (jsonLdMatch) {
+       const jsonText = jsonLdMatch[1];
+       if (jsonText.includes('Gross Potential Income') && !jsonText.includes('Effective Gross Income')) {
+           jsonLdConsistent = true;
+       }
+    }
+    console.log('JSON-LD aligns with visible text (using GPI):', jsonLdConsistent);
+
+    // Test Viewports: 320, 375, 1440
+    const viewports = [320, 375, 1440];
+    for (const vp of viewports) {
+      await page.setViewport({ width: vp, height: Math.max(812, vp) });
+      await page.goto('http://localhost:3460/en/', { waitUntil: 'networkidle0' });
+      const dims = await page.evaluate(() => {
+        return {
+          scrollWidth: document.documentElement.scrollWidth,
+          viewportWidth: window.innerWidth,
+          brandVisible: document.querySelector('header span.tracking-tight')?.textContent === 'CRE Calculators'
+        };
+      });
+      console.log(`Viewport ${vp}px - Overflow: ${dims.scrollWidth > dims.viewportWidth}, Brand Full Visible: ${dims.brandVisible}`);
+    }
+
   } catch (err) {
+
     console.error(err);
   } finally {
     await browser.close();

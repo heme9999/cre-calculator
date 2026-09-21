@@ -61,36 +61,59 @@ export function Header({ locale }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-slate-300">
+        <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium text-slate-300">
           <Link
-            href={`/${locale}/`}
-            className={`hover:text-white transition-colors ${
-              pathname === `/${locale}/` || pathname === `/${locale}` ? 'text-emerald-400 font-semibold' : ''
-            }`}
+            href={`/${locale}/tools/deal-analyzer/`}
+            className={`hover:text-white transition-colors flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 hover:text-emerald-200 px-3 py-1 rounded-full border border-emerald-500/40 font-bold text-xs`}
           >
-            {nav.calculators}
+            <span>{nav.dealAnalyzer}</span>
+            <span className="text-[10px] bg-emerald-500 text-slate-950 px-1.5 py-0.2 rounded font-black uppercase">
+              {locale === 'zh' ? '综合' : 'Suite'}
+            </span>
           </Link>
 
-          {navLinks.map((item) => (
+          <Link href={`/${locale}/guides/`} className={`hover:text-white transition-colors ${pathname?.includes('/guides/') ? 'text-emerald-400 font-semibold' : ''}`}>
+            {locale === 'zh' ? '指南' : 'Guides'}
+          </Link>
+
+          <Link href={`/${locale}/calculators/cap-rate/`} className={`hover:text-white transition-colors ${pathname?.includes('/cap-rate/') ? 'text-emerald-400 font-semibold' : ''}`}>
+            {nav.capRate}
+          </Link>
+          <Link href={`/${locale}/calculators/noi/`} className={`hover:text-white transition-colors ${pathname?.includes('/noi/') ? 'text-emerald-400 font-semibold' : ''}`}>
+            {nav.noi}
+          </Link>
+          <Link href={`/${locale}/calculators/cash-on-cash/`} className={`hover:text-white transition-colors ${pathname?.includes('/cash-on-cash/') ? 'text-emerald-400 font-semibold' : ''}`}>
+            {nav.cashOnCash}
+          </Link>
+
+          <div className="relative group/nav">
             <Link
-              key={item.key}
-              href={item.href}
-              className={`hover:text-white transition-colors flex items-center gap-1.5 ${
-                item.isPrimary
-                  ? 'bg-emerald-500/20 text-emerald-300 hover:text-emerald-200 px-3 py-1 rounded-full border border-emerald-500/40 font-bold text-xs'
-                  : pathname?.includes(`/${item.key}/`)
-                  ? 'text-emerald-400 font-semibold'
-                  : ''
+              href={`/${locale}/`}
+              className={`hover:text-white transition-colors flex items-center gap-1 py-4 ${
+                pathname === `/${locale}/` || pathname === `/${locale}` ? 'text-emerald-400 font-semibold' : ''
               }`}
             >
-              <span>{item.label}</span>
-              {item.isPrimary && (
-                <span className="text-[10px] bg-emerald-500 text-slate-950 px-1.5 py-0.2 rounded font-black uppercase">
-                  {locale === 'zh' ? '综合' : 'Suite'}
-                </span>
-              )}
+              {nav.calculators}
             </Link>
-          ))}
+            
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-48 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all bg-slate-800 rounded-xl shadow-xl border border-slate-700 py-2 flex flex-col pointer-events-none group-hover/nav:pointer-events-auto">
+              <Link href={`/${locale}/calculators/loan-payment/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors">
+                {nav.loanPayment}
+              </Link>
+              <Link href={`/${locale}/calculators/dscr/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors">
+                {nav.dscr}
+              </Link>
+              <Link href={`/${locale}/calculators/1031-exchange/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors">
+                {nav.exchange1031}
+              </Link>
+              <Link href={`/${locale}/calculators/lease-vs-buy/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors">
+                {nav.leaseVsBuy}
+              </Link>
+              <Link href={`/${locale}/calculators/break-even-ratio/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors">
+                {nav.breakEvenRatio}
+              </Link>
+            </div>
+          </div>
         </nav>
 
         {/* Right Section: Language Switcher & Mobile Menu Button */}

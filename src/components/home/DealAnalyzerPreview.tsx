@@ -23,7 +23,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
     operatingExpenses: 92000,
     downPaymentPercent: 25.0,
     interestRate: 6.5,
-    amortizationYears: 30,
+    amortizationYears: 25,
     paymentType: 'installment',
     hasBalloon: false,
     balloonYears: 5,

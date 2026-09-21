@@ -12,13 +12,13 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
   const isZh = locale === 'zh';
 
   // Inputs
-  const [operatingExpenses, setOperatingExpenses] = useState<number>(70000);
-  const [annualDebtService, setAnnualDebtService] = useState<number>(121536);
-  const [effectiveGrossIncome, setEffectiveGrossIncome] = useState<number>(220000);
+  const [operatingExpenses, setOperatingExpenses] = useState<number>(92000);
+  const [annualDebtService, setAnnualDebtService] = useState<number>(170152);
+  const [grossPotentialIncome, setGrossPotentialIncome] = useState<number>(336000);
 
   // Computations
   const totalOutlay = operatingExpenses + annualDebtService;
-  const breakEvenRatio = effectiveGrossIncome > 0 ? (totalOutlay / effectiveGrossIncome) * 100 : 0;
+  const breakEvenRatio = grossPotentialIncome > 0 ? (totalOutlay / grossPotentialIncome) * 100 : 0;
   const maxAllowableVacancy = Math.max(0, 100 - breakEvenRatio);
 
   // Status Tiers
@@ -109,16 +109,16 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
           {/* Effective Gross Income */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
-              {isZh ? '年有效毛收入 ($/年 - EGI)' : 'Effective Gross Income ($/yr - EGI)'}
+              {isZh ? '年潜在毛收入 ($/年 - EGI)' : 'Effective Gross Income ($/yr - EGI)'}
             </label>
             <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
               <input
                 type="number"
-                value={effectiveGrossIncome || ''}
-                onChange={(e) => setEffectiveGrossIncome(parseFloat(e.target.value) || 0)}
+                value={grossPotentialIncome || ''}
+                onChange={(e) => setGrossPotentialIncome(parseFloat(e.target.value) || 0)}
                 className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
-                placeholder="220,000"
+                placeholder="336,000"
               />
             </div>
             <p className="text-xs text-slate-500 mt-1">

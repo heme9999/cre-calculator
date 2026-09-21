@@ -30,13 +30,13 @@ export const zhContent: LocaleContent = {
       {
         slug: 'cap-rate',
         title: '资本化率 (Cap Rate) 计算器',
-        description: '快速算出任意商业地产的资本化率，或者反向推算你能接受的最高购买价。',
+        description: '完全免费无须注册的 Cap Rate 计算器。快速算出商业地产资本化率，支持场景压力测试与 PDF/CSV 数据导出。',
         badge: '核心指标',
       },
       {
         slug: 'noi',
         title: '净营业收入 (NOI) 计算器',
-        description: '扣除空置损失与运营支出，计算物业的净营业收入——几乎所有商业地产指标的计算基础。',
+        description: '免费的净营业收入 NOI 计算器，无须注册。精准计算商业地产 NOI，支持压力测试与分析报告导出。',
         badge: '基础必备',
       },
       {
@@ -54,7 +54,7 @@ export const zhContent: LocaleContent = {
       {
         slug: 'dscr',
         title: '偿债覆盖率 (DSCR) 计算器',
-        description: '评估物业净营业收入 (NOI) 覆盖贷款债务本息的能力与商业银行风控门槛。',
+        description: '免费的商业地产 DSCR 贷款计算器。免注册评估偿债备付率，支持现金流压力测试与计算结果 PDF/CSV 导出。',
         badge: '风控审核',
       },
       {
@@ -94,13 +94,13 @@ export const zhContent: LocaleContent = {
   },
   dealAnalyzer: {
     metaTitle: '商业地产综合尽调计算器 | CRE Deal Analyzer',
-    metaDescription: '免费商业地产投资回报计算器。一次输入，综合测算 NOI、Cap Rate、DSCR、Cash-on-Cash Return 及盈亏平衡点，支持压力测试。',
+    metaDescription: '免费的商业地产投资分析计算器。无须注册，即可一站式计算收益、进行压力测试，并支持将报告导出为 PDF 与 CSV。',
     h1: '商业地产综合尽调计算器 (Deal Analyzer)',
     subtitle: '基于统一的输入假设，同时评估商业地产投资的综合现金流回报、债务覆盖能力与盈亏平衡点。',
     whatIsTitle: '这个工具能帮你做什么',
     whatIsContent: '真正尽调一笔交易，需要将多项绩效指标放在一起综合考量。此综合计算器只需要你输入一组数据，即可同时得出所有的核心指标：Cap Rate (资本化率)、DSCR (偿债覆盖率)、Cash-on-Cash Return (现金回报率) 和 Break-Even Ratio (盈亏平衡点/最低入住率)。请注意：Cash-on-Cash Return 会将首付和过户费等实际投入资本计入分母，而 NOI 的计算明确不包含任何债务偿付。你可以先建立基准情景，然后再叠加空置率与贷款利率压力测试进行下行风险分析。',
     formulaTitle: '核心尽调指标与计算公式',
-    formulaCode: '• NOI = 有效毛收入 (EGI) - 运营支出 (OpEx)\n• Cap Rate = NOI / 购买价格 × 100%\n• Cash-on-Cash Return = (NOI - 年还贷本息) / (首付款 + 过户成本) × 100%\n• DSCR = NOI / 年还贷本息\n• Break-Even Ratio = (运营支出 + 年还贷本息) / 有效毛收入 (EGI) × 100%',
+    formulaCode: '• NOI = 有效毛收入 (EGI) - 运营支出 (OpEx)\n• Cap Rate = NOI / 购买价格 × 100%\n• Cash-on-Cash Return = (NOI - 年还贷本息) / (首付款 + 过户成本) × 100%\n• DSCR = NOI / 年还贷本息\n• Break-Even Ratio = (运营支出 + 年还贷本息) / 潜在毛收入 (GPI) × 100%',
     formulaVariables: [
       { label: 'NOI', desc: '物业每年产生的净营业收入。' },
       { label: 'Cap Rate', desc: '无杠杆全款购买下的静态年化回报率。' },
@@ -109,7 +109,7 @@ export const zhContent: LocaleContent = {
       { label: 'Break-Even Ratio', desc: '涵盖运营支出与房贷本息所需维持的最低出租入住率。' },
     ],
     exampleTitle: '一个真实场景示例',
-    exampleContent: '一处购买价280万美元的物业，总潜在年收入33.6万美元，空置率5%，年运营支出9.2万美元：\n\n• NOI：$227,200 → Cap Rate：8.11%\n• 融资方案：首付25%（$700,000）加过户成本2%，贷款$2,100,000，利率6.5%，25年摊销\n• Cash-on-Cash Return：7.55% · DSCR：1.34x · Break-Even Ratio：82.13%\n• Deal Health：健康 —— DSCR和Break-Even Ratio都舒适地处于贷款机构典型门槛以内\n\n现在做个压力测试（空置率升到10%，利率升到7.5%）：\n\n• DSCR降到1.13x —— 已经压到大多数贷款机构最低门槛的边缘\n• Break-Even Ratio升到92.01% —— 进入警示区间\n\n这正是压力测试的意义：一笔在基础情景下看起来相当健康的交易，在一个只是"适度更艰难"（并不是极端情景）的假设下，安全垫可能会大幅缩水。',
+    exampleContent: '一处购买价280万美元的物业，总潜在年收入33.6万美元，空置率5%，年运营支出9.2万美元：\n\n• NOI：$227,200 → Cap Rate：8.11%\n• 融资方案：首付25%（$700,000）加过户成本2%，贷款$2,100,000，利率6.5%，25年摊销\n• Cash-on-Cash Return：7.55% · DSCR：1.34x · Break-Even Ratio：82.13%\n• Deal Health：健康 —— DSCR和Break-Even Ratio都舒适地处于贷款机构典型门槛以内\n\n现在做个压力测试（空置率升到10%，利率升到7.5%）：\n\n• DSCR降到1.13x —— 已经压到大多数贷款机构最低门槛的边缘\n• Break-Even Ratio升到82.81% —— 进入警示区间\n\n这正是压力测试的意义：一笔在基础情景下看起来相当健康的交易，在一个只是"适度更艰难"（并不是极端情景）的假设下，安全垫可能会大幅缩水。',
     faqTitle: '常见问题',
     faqs: [
       {
@@ -424,7 +424,7 @@ export const zhContent: LocaleContent = {
   },
   breakEvenRatio: {
     metaTitle: '收支平衡比率 (Break-Even Ratio) 计算器 — 商业地产空置与抗风险能力评估',
-    metaDescription: '输入年度运营支出、年度还贷总额与有效毛收入（EGI），在线计算商业地产收支平衡比率 (Break-Even Ratio)，评估保本出租率与商业银行风控放贷标准。',
+    metaDescription: '输入年度运营支出、年度还贷总额与潜在毛收入（GPI），在线计算商业地产收支平衡比率 (Break-Even Ratio)，评估保本出租率与商业银行风控放贷标准。',
     h1: '收支平衡比率 (Break-Even Ratio) 计算器',
     subtitle: '计算商业地产物业满足运营支出与还贷债务所需的最低出租率门槛与抗空置安全垫。',
     whatIsTitle: 'Break-Even Ratio 是什么，为什么重要',
@@ -446,7 +446,7 @@ export const zhContent: LocaleContent = {
       },
       {
         question: 'Break-Even Ratio 和 DSCR 有什么区别与联系？',
-        answer: '两个指标均衡量偿债能力，但视角不同：DSCR = NOI / Debt Service，关注净收入覆盖还贷的倍数；而 Break-Even Ratio = (Operating Expenses + Debt Service) / EGI，将运营开支与还贷加总后除以毛收入，直观反映了“保本所需的最少出租率”。两者相辅相成。',
+        answer: '两个指标均衡量偿债能力，但视角不同：DSCR = NOI / Debt Service，关注净收入覆盖还贷的倍数；而 Break-Even Ratio = (Operating Expenses + Debt Service) / GPI，将运营开支与还贷加总后除以毛收入，直观反映了“保本所需的最少出租率”。两者相辅相成。',
       },
       {
         question: '如何有效降低物业的收支平衡比率？',

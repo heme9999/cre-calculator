@@ -100,7 +100,7 @@ export function DealAnalyzerTool({ locale }: Props) {
       ['Cap Rate', `${base.capRate.toFixed(2)}%`, `${stress.capRate.toFixed(2)}%`],
       ['DSCR', `${base.dscr.toFixed(2)}x`, `${stress.dscr.toFixed(2)}x`],
       ['Cash-on-Cash Return', `${base.cashOnCashReturn.toFixed(2)}%`, `${stress.cashOnCashReturn.toFixed(2)}%`],
-      ['Break-Even Occupancy', `${base.breakEvenRatio.toFixed(1)}%`, `${stress.breakEvenRatio.toFixed(1)}%`],
+      ['Break-Even Ratio', `${base.breakEvenRatio.toFixed(1)}%`, `${stress.breakEvenRatio.toFixed(1)}%`],
       ['Net Annual Cash Flow', `$${(base.noi - base.annualDebtService).toLocaleString()}`, `$${(stress.noi - stress.annualDebtService).toLocaleString()}`],
     ];
 

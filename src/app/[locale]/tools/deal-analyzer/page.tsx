@@ -167,7 +167,7 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
                 <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '衡量投入股权的现金回报率 (Cash-on-Cash Return)' : 'measure cash return on invested equity'}</Link>
                 {isZh ? ' 为 7.55%。此交易目前的 ' : ', which yields 7.55%. Currently, the '}
                 <Link href={`/${locale}/calculators/break-even-ratio/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '盈亏平衡点 (Break-Even Ratio)' : 'Break-Even Ratio'}</Link>
-                {isZh ? ' 为 82.13%。' : ' is 82.13%.'}
+                {isZh ? ' 为 78.02%。' : ' is 78.02%.'}
               </p>
             </div>
 
@@ -176,7 +176,7 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
               <p className="mt-1">
                 {isZh ? '基础情景看似健康，但如果你将空置率上调至 10%，并将利率上调至 7.5% 呢？' : 'The base case appears healthy, but what happens if vacancy rises to 10% and interest rates climb to 7.5%?'}
                 <br />
-                {isZh ? '年还款额上升至 $186,225，而 NOI 下降至 $210,400。此时，DSCR 骤降至 1.13x（可能触发贷款违约条款），且 Cash-on-Cash Return 暴跌至 3.20%。盈亏平衡点也攀升至 82.80% 的危险区域。这就是为什么全面 ' : 'Annual debt service climbs to $186,225, while NOI drops to $210,400. In this scenario, the DSCR plummets to 1.13x (entering the warning zone for many lenders), and the Cash-on-Cash Return shrinks to 3.20%. The Break-Even Ratio also rises to a risky 82.80%. This demonstrates why it is crucial to fully '}
+                {isZh ? '年还款额上升至 $186,225，而 NOI 下降至 $210,400。此时，DSCR 骤降至 1.13x（可能触发贷款违约条款），且 Cash-on-Cash Return 暴跌至 3.20%。盈亏平衡点也攀升至 82.81% 的危险区域。这就是为什么全面 ' : 'Annual debt service climbs to $186,225, while NOI drops to $210,400. In this scenario, the DSCR plummets to 1.13x (entering the warning zone for many lenders), and the Cash-on-Cash Return shrinks to 3.20%. The Break-Even Ratio also rises to a risky 82.81%. This demonstrates why it is crucial to fully '}
                 <Link href={`/${locale}/guides/how-to-underwrite-a-deal/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '承销商业地产交易' : 'underwrite a commercial real estate deal'}</Link>
                 {isZh ? ' 时必须包含下行风险。' : ' incorporating downside risk.'}
               </p>

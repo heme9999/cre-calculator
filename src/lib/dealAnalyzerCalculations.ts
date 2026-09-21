@@ -81,7 +81,7 @@ export function calculateSingleScenario(input: DealAnalyzerInput, locale: string
   const cashOnCashReturn = totalCashInvested > 0 ? (netCashFlow / totalCashInvested) * 100 : 0;
 
   const dscr = annualDebtService > 0 ? noi / annualDebtService : 0;
-  const breakEvenRatio = egi > 0 ? ((operatingExpenses + annualDebtService) / egi) * 100 : 0;
+  const breakEvenRatio = grossPotentialIncome > 0 ? ((operatingExpenses + annualDebtService) / grossPotentialIncome) * 100 : 0;
 
   // Determine Health Status
   let healthStatus: HealthStatus = 'green';

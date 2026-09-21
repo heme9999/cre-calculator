@@ -76,7 +76,7 @@ export default async function HomePage({ params }: PageProps) {
                 href={`/${locale}/tools/deal-analyzer/`}
                 className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all shadow-md hover:shadow-lg"
               >
-                <span>{isZh ? '免费体验 Deal Analyzer' : 'Try Deal Analyzer Suite'}</span>
+                <span>{isZh ? '免费分析一个项目' : 'Run a Free Deal Analysis'}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
@@ -86,6 +86,9 @@ export default async function HomePage({ params }: PageProps) {
                 <span>{isZh ? 'Cap Rate 计算器' : 'Cap Rate Calculator'}</span>
               </Link>
             </div>
+            <p className="text-xs text-slate-500 font-medium">
+              {isZh ? '免费 · 无需注册 · 数据保存在本地浏览器 · 支持 PDF 与 CSV 导出' : 'Free · No signup · Your inputs stay in your browser · PDF & CSV export'}
+            </p>
           </div>
 
           {/* Right Column: Original Deal Analyzer Interactive Preview */}
