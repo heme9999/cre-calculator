@@ -96,7 +96,7 @@ export default async function LoanPaymentPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* Real Example */}
+        {/* Worked Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
           <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
           <LoanScenarioComparison locale={locale} />

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
-import { calculateDealAnalysis, DealAnalyzerInput } from '@/lib/dealAnalyzerCalculations';
+import { calculateDealAnalysis, DEFAULT_DEAL_INPUT } from '@/lib/dealAnalyzerCalculations';
 import { Building2, ArrowRight, ShieldCheck, Zap, AlertTriangle, Sparkles } from 'lucide-react';
 
 interface Props {
@@ -15,19 +15,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
   const [activeScenario, setActiveScenario] = useState<'base' | 'stress'>('base');
 
   // Baseline sample deal: 24-Unit Multifamily
-  const sampleInput: DealAnalyzerInput = {
-    purchasePrice: 2800000,
-    closingCostsPercent: 2.0,
-    grossPotentialIncome: 336000,
-    vacancyRate: 5.0,
-    operatingExpenses: 92000,
-    downPaymentPercent: 25.0,
-    interestRate: 6.5,
-    amortizationYears: 25,
-    paymentType: 'installment',
-    hasBalloon: false,
-    balloonYears: 5,
-  };
+  const sampleInput = DEFAULT_DEAL_INPUT;
 
   // Derive dynamic metrics from the unified calculation engine
   const { base, stress } = calculateDealAnalysis(sampleInput, locale);
@@ -92,8 +80,8 @@ export function DealAnalyzerPreview({ locale }: Props) {
             : (isZh ? '压力情景：' : 'Stress Case: ')}
         </span>
         {activeScenario === 'base'
-          ? (isZh ? '当前挂牌价、在租收益与约定贷款利率 (6.50% 利率 / 5.0% 空置率)' : 'Current in-place rents and term quote (6.50% Rate / 5.0% Vacancy)')
-          : (isZh ? '空置率增加5个百分点，利率增加100个基点 (7.50% 利率 / 10.0% 空置率)' : '+5 percentage points vacancy and +100 bps interest rate (7.50% Rate / 10.0% Vacancy)')}
+          ? (isZh ? '6.5% 利率 · 25 年摊销 · 5% 空置率' : '6.5% interest · 25-year amortization · 5% vacancy')
+          : (isZh ? '空置率增加5个百分点，贷款利率增加100个基点 (7.5% 利率 / 10% 空置率)' : '+5 percentage points vacancy and +100 bps interest rate (7.5% interest · 10% vacancy)')}
       </div>
 
       {/* Health Evaluation Banner */}
@@ -143,21 +131,21 @@ export function DealAnalyzerPreview({ locale }: Props) {
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
             {isZh ? '净营业收入 NOI' : 'Annual NOI'}
           </span>
-          <span className="text-sm font-black text-slate-900">{formatCurrency(current.noi)}</span>
+          <span className="text-sm font-black text-slate-900"><span data-testid="base-noi">{formatCurrency(current.noi)}</span></span>
         </div>
 
         <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100 space-y-0.5">
           <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">
             Cap Rate
           </span>
-          <span className="text-sm font-black text-emerald-700">{formatPercent(current.capRate)}</span>
+          <span className="text-sm font-black text-emerald-700"><span data-testid="base-cap-rate">{formatPercent(current.capRate)}</span></span>
         </div>
 
         <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-0.5">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
             Cash-on-Cash
           </span>
-          <span className="text-sm font-black text-slate-900">{formatPercent(current.cashOnCashReturn)}</span>
+          <span className="text-sm font-black text-slate-900"><span data-testid="base-cash-on-cash">{formatPercent(current.cashOnCashReturn)}</span></span>
         </div>
 
         <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-0.5">
@@ -169,15 +157,23 @@ export function DealAnalyzerPreview({ locale }: Props) {
               current.dscr >= 1.25 ? 'text-emerald-600' : current.dscr >= 1.0 ? 'text-amber-600' : 'text-rose-600'
             }`}
           >
-            {current.dscr.toFixed(2)}x
+            <span data-testid="base-dscr">{current.dscr.toFixed(2)}x</span>
           </span>
         </div>
 
         <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-0.5">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            {isZh ? '保本出租率' : 'Break-Even'}
-          </span>
-          <span className="text-sm font-black text-slate-900">{formatPercent(current.breakEvenRatio)}</span>
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+              {isZh ? '收支平衡比' : 'Break-Even Ratio'}
+            </span>
+            <span className="text-sm font-black text-slate-900"><span data-testid="base-ber">{formatPercent(current.breakEvenRatio)}</span></span>
+          </div>
+          <div className="flex justify-between items-center border-t border-slate-200/50 mt-1 pt-1">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+              {isZh ? '盈亏入住率' : 'Occupancy'}
+            </span>
+            <span className="text-xs font-bold text-emerald-700"><span data-testid="base-beo">{formatPercent(current.breakEvenOccupancy)}</span></span>
+          </div>
         </div>
       </div>
 

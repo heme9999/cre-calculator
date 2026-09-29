@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { PaymentType } from '@/lib/loanCalculations';
 import {
   calculateDealAnalysis,
   DealAnalyzerInput,
+  DEFAULT_DEAL_INPUT,
 } from '@/lib/dealAnalyzerCalculations';
 import { getContent } from '@/content';
 import {
@@ -30,18 +31,18 @@ export function DealAnalyzerTool({ locale }: Props) {
   const whatIsContent = getContent(locale).dealAnalyzer.whatIsContent;
   const [isInfoExpanded, setIsInfoExpanded] = useState<boolean>(false);
 
-  // Default Inputs set to real example: $2.8M purchase price, 2% closing, 336k GPI, 5% vacancy, 92k OpEx, 25% down, 6.5% interest, 25yr amort
-  const [purchasePrice, setPurchasePrice] = useState<number>(2800000);
-  const [closingCostsPercent, setClosingCostsPercent] = useState<number>(2.0);
-  const [grossPotentialIncome, setGrossPotentialIncome] = useState<number>(336000);
-  const [vacancyRate, setVacancyRate] = useState<number>(5.0);
-  const [operatingExpenses, setOperatingExpenses] = useState<number>(92000);
-  const [downPaymentPercent, setDownPaymentPercent] = useState<number>(25.0);
-  const [interestRate, setInterestRate] = useState<number>(6.5);
-  const [amortizationYears, setAmortizationYears] = useState<number>(25);
-  const [paymentType, setPaymentType] = useState<PaymentType>('installment');
-  const [hasBalloon, setHasBalloon] = useState<boolean>(false);
-  const [balloonYears, setBalloonYears] = useState<number>(10);
+  // Default Inputs
+  const [purchasePrice, setPurchasePrice] = useState<number>(DEFAULT_DEAL_INPUT.purchasePrice);
+  const [closingCostsPercent, setClosingCostsPercent] = useState<number>(DEFAULT_DEAL_INPUT.closingCostsPercent);
+  const [grossPotentialIncome, setGrossPotentialIncome] = useState<number>(DEFAULT_DEAL_INPUT.grossPotentialIncome);
+  const [vacancyRate, setVacancyRate] = useState<number>(DEFAULT_DEAL_INPUT.vacancyRate);
+  const [operatingExpenses, setOperatingExpenses] = useState<number>(DEFAULT_DEAL_INPUT.operatingExpenses);
+  const [downPaymentPercent, setDownPaymentPercent] = useState<number>(DEFAULT_DEAL_INPUT.downPaymentPercent);
+  const [interestRate, setInterestRate] = useState<number>(DEFAULT_DEAL_INPUT.interestRate);
+  const [amortizationYears, setAmortizationYears] = useState<number>(DEFAULT_DEAL_INPUT.amortizationYears);
+  const [paymentType, setPaymentType] = useState<PaymentType>(DEFAULT_DEAL_INPUT.paymentType);
+  const [hasBalloon, setHasBalloon] = useState<boolean>(DEFAULT_DEAL_INPUT.hasBalloon);
+  const [balloonYears, setBalloonYears] = useState<number>(DEFAULT_DEAL_INPUT.balloonYears);
 
   // UI state
   const [showStressTest, setShowStressTest] = useState<boolean>(false);
@@ -50,6 +51,31 @@ export function DealAnalyzerTool({ locale }: Props) {
   const [showSavedModal, setShowSavedModal] = useState<boolean>(false);
   const [savedDeals, setSavedDeals] = useState<Array<{ name: string; date: string; input: DealAnalyzerInput }>>([]);
   const [isClient, setIsClient] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
+  const moreMenuBtnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target as Node)) {
+        setMoreMenuOpen(false);
+      }
+    }
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setMoreMenuOpen(false);
+        moreMenuBtnRef.current?.focus();
+      }
+    }
+    if (moreMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [moreMenuOpen]);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -100,7 +126,8 @@ export function DealAnalyzerTool({ locale }: Props) {
       ['Cap Rate', `${base.capRate.toFixed(2)}%`, `${stress.capRate.toFixed(2)}%`],
       ['DSCR', `${base.dscr.toFixed(2)}x`, `${stress.dscr.toFixed(2)}x`],
       ['Cash-on-Cash Return', `${base.cashOnCashReturn.toFixed(2)}%`, `${stress.cashOnCashReturn.toFixed(2)}%`],
-      ['Break-Even Ratio', `${base.breakEvenRatio.toFixed(1)}%`, `${stress.breakEvenRatio.toFixed(1)}%`],
+      ['Break-Even Ratio', `${base.breakEvenRatio.toFixed(2)}%`, `${stress.breakEvenRatio.toFixed(2)}%`],
+      ['Break-Even Occupancy', `${base.breakEvenOccupancy.toFixed(2)}%`, `${stress.breakEvenOccupancy.toFixed(2)}%`],
       ['Net Annual Cash Flow', `$${(base.noi - base.annualDebtService).toLocaleString()}`, `$${(stress.noi - stress.annualDebtService).toLocaleString()}`],
     ];
 
@@ -232,8 +259,8 @@ export function DealAnalyzerTool({ locale }: Props) {
       {/* Tool Container */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         {/* Header */}
-        <div className="bg-slate-900 text-white p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
+        <div className="bg-slate-900 text-white p-5 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="hidden md:block">
             <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-2">
               <Building2 className="w-3.5 h-3.5" />
               {isZh ? '全流程商业地产尽调与测算' : 'Full Commercial CRE Underwriting Suite'}
@@ -248,47 +275,105 @@ export function DealAnalyzerTool({ locale }: Props) {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5">
-            <button
-              type="button"
-              onClick={handleSaveDeal}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
-              title={isZh ? '保存当前测算配置到浏览器本地' : 'Save current inputs to local storage'}
-            >
-              <span>{isZh ? '💾 保存交易' : '💾 Save Deal'}</span>
-            </button>
-
-            {savedDeals.length > 0 && (
+          <div className="flex flex-col md:flex-row md:items-center gap-2.5 w-full md:w-auto">
+            {/* Desktop Buttons Row */}
+            <div className="hidden md:flex flex-wrap items-center gap-2.5">
               <button
                 type="button"
-                onClick={() => setShowSavedModal(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-xs transition-all"
+                onClick={handleSaveDeal}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
+                title={isZh ? '保存当前测算配置到浏览器本地' : 'Save current inputs to local storage'}
               >
-                <span>{isZh ? `已存交易 (${savedDeals.length})` : `Saved (${savedDeals.length})`}</span>
+                <span>{isZh ? '💾 保存交易' : '💾 Save Deal'}</span>
               </button>
-            )}
 
-            <button
-              type="button"
-              onClick={handleExportCsv}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
-              title={isZh ? '导出 CSV 数据文件' : 'Export CSV data'}
-            >
-              <span>{isZh ? '📊 CSV 导出' : '📊 CSV Export'}</span>
-            </button>
+              {savedDeals.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setShowSavedModal(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-xs transition-all"
+                >
+                  <span>{isZh ? `已存交易 (${savedDeals.length})` : `Saved (${savedDeals.length})`}</span>
+                </button>
+              )}
 
-            <button
-              type="button"
-              onClick={handleCopyLink}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
-            >
-              <span>{copiedLink ? (isZh ? '✅ 链接已复制' : '✅ Link Copied') : (isZh ? '🔗 分享链接' : '🔗 Share Link')}</span>
-            </button>
+              <button
+                type="button"
+                onClick={handleExportCsv}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
+                title={isZh ? '导出 CSV 数据文件' : 'Export CSV data'}
+              >
+                <span>{isZh ? '📊 CSV 导出' : '📊 CSV Export'}</span>
+              </button>
 
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
+              >
+                <span>{copiedLink ? (isZh ? '✅ 链接已复制' : '✅ Link Copied') : (isZh ? '🔗 分享链接' : '🔗 Share Link')}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleExportPdf}
+                disabled={isExportingPdf}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all disabled:opacity-50"
+              >
+                <FileDown className="w-4 h-4" />
+                <span>{isExportingPdf ? (isZh ? '导出中...' : 'Generating...') : (isZh ? '导出 PDF' : 'Export PDF')}</span>
+              </button>
+            </div>
+
+            {/* Mobile Actions Container (Stress Test + More Dropdown) */}
+            <div className="flex md:hidden items-center gap-2 w-full">
+              <button
+                type="button"
+                onClick={() => setShowStressTest(!showStressTest)}
+                className={`flex-1 inline-flex justify-center items-center gap-1.5 px-3 py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs ${
+                  showStressTest
+                    ? 'bg-amber-500 hover:bg-amber-600 text-white'
+                    : 'bg-slate-800 text-slate-200 border border-slate-700'
+                }`}
+              >
+                <Zap className="w-4 h-4 text-amber-300" />
+                <span>{showStressTest ? (isZh ? '隐藏压力测试' : 'Hide Stress Test') : (isZh ? '压力测试' : 'Stress Test')}</span>
+              </button>
+
+              <div className="relative flex-shrink-0 z-50" ref={moreMenuRef}>
+                <button
+                  type="button"
+                  ref={moreMenuBtnRef}
+                  onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+                  aria-expanded={moreMenuOpen}
+                  aria-controls="deal-analyzer-more-menu"
+                  className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 text-slate-200 border border-slate-700 font-bold text-xs transition-all cursor-pointer"
+                >
+                  <span>{isZh ? '更多 (More)' : 'More ▾'}</span>
+                </button>
+
+                <div
+                  id="deal-analyzer-more-menu"
+                  className={`absolute right-0 top-full mt-2 w-48 bg-slate-800 border border-slate-700 rounded-xl shadow-xl flex flex-col p-1 transition-all ${moreMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+                >
+                  <button  tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleSaveDeal(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none">💾 {isZh ? '保存交易' : 'Save Deal'}</button>
+                  {savedDeals.length > 0 && (
+                    <button  tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { setShowSavedModal(true); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-emerald-300 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none">📂 {isZh ? `已存交易 (${savedDeals.length})` : `Saved Deals (${savedDeals.length})`}</button>
+                  )}
+                  <button  tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportCsv(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none">📊 {isZh ? 'CSV 导出' : 'CSV Export'}</button>
+                  <button  tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleCopyLink(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none">🔗 {copiedLink ? (isZh ? '链接已复制' : 'Link Copied') : (isZh ? '分享链接' : 'Share Link')}</button>
+                  <button  tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportPdf(); setMoreMenuOpen(false); }} disabled={isExportingPdf} className="flex items-center gap-1.5 w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg disabled:opacity-50 focus:bg-slate-700 outline-none">
+                    <FileDown className="w-3 h-3" /> {isExportingPdf ? (isZh ? '导出中...' : 'Generating...') : (isZh ? '导出 PDF' : 'Export PDF')}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Stress Test Button */}
             <button
               type="button"
               onClick={() => setShowStressTest(!showStressTest)}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl font-bold text-xs transition-all shadow-xs ${
+              className={`hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl font-bold text-xs transition-all shadow-xs ${
                 showStressTest
                   ? 'bg-amber-500 hover:bg-amber-600 text-white'
                   : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
@@ -296,16 +381,6 @@ export function DealAnalyzerTool({ locale }: Props) {
             >
               <Zap className="w-4 h-4 text-amber-300" />
               <span>{showStressTest ? (isZh ? '隐藏压力测试' : 'Hide Stress Test') : (isZh ? '压力测试' : 'Stress Test')}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handleExportPdf}
-              disabled={isExportingPdf}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-xs disabled:opacity-50"
-            >
-              <FileDown className="w-4 h-4" />
-              <span>{isExportingPdf ? (isZh ? '导出中...' : 'Generating...') : (isZh ? '导出 PDF' : 'Export PDF')}</span>
             </button>
           </div>
         </div>
@@ -576,32 +651,35 @@ export function DealAnalyzerTool({ locale }: Props) {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1">
                 <span className="text-xs font-semibold text-slate-500 block">{isZh ? '净营业收入 NOI' : 'Net Operating Income'}</span>
-                <span className="text-lg font-black text-slate-900">{formatCurrency(base.noi)}</span>
+                <span data-testid="tool-base-noi" className="text-lg font-black text-slate-900">{formatCurrency(base.noi)}</span>
               </div>
 
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1">
                 <span className="text-xs font-semibold text-slate-500 block">{isZh ? '资本化率 Cap Rate' : 'Cap Rate'}</span>
-                <span className="text-lg font-black text-emerald-600">{formatPercent(base.capRate)}</span>
+                <span data-testid="tool-base-cap-rate" className="text-lg font-black text-emerald-600">{formatPercent(base.capRate)}</span>
               </div>
 
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1">
                 <span className="text-xs font-semibold text-slate-500 block">{isZh ? '现金回报率 CoC' : 'Cash-on-Cash Return'}</span>
-                <span className="text-lg font-black text-emerald-600">{formatPercent(base.cashOnCashReturn)}</span>
+                <span data-testid="tool-base-cash-on-cash" className="text-lg font-black text-emerald-600">{formatPercent(base.cashOnCashReturn)}</span>
               </div>
 
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1">
                 <span className="text-xs font-semibold text-slate-500 block">{isZh ? '偿债覆盖率 DSCR' : 'DSCR Ratio'}</span>
-                <span className={`text-lg font-black ${base.dscr < 1.25 ? 'text-amber-600' : 'text-slate-900'}`}>{base.dscr.toFixed(2)}x</span>
+                <span data-testid="tool-base-dscr" className={`text-lg font-black ${base.dscr < 1.25 ? 'text-amber-600' : 'text-slate-900'}`}>{base.dscr.toFixed(2)}x</span>
               </div>
 
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 col-span-2">
-                <span className="text-xs font-semibold text-slate-500 block">{isZh ? '收支平衡点 BER' : 'Break-Even Ratio'}</span>
-                <div className="flex items-baseline justify-between">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '收支平衡比率 (BER)' : 'Break-Even Ratio (BER)'}</span>
                   <span className={`text-lg font-black ${base.breakEvenRatio > 85 ? 'text-amber-600' : 'text-slate-900'}`}>
-                    {formatPercent(base.breakEvenRatio)}
+                    <span data-testid="tool-base-ber">{formatPercent(base.breakEvenRatio)}</span>
                   </span>
-                  <span className="text-xs text-slate-500 font-medium">
-                    {isZh ? '标准: <= 85%' : 'Benchmark: <= 85%'}
+                </div>
+                <div className="flex items-center justify-between border-t border-slate-200 pt-1 mt-1">
+                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '盈亏平衡入住率' : 'Break-Even Occupancy'}</span>
+                  <span className="text-sm font-bold text-slate-700">
+                    <span data-testid="tool-base-beo">{formatPercent(base.breakEvenOccupancy)}</span>
                   </span>
                 </div>
               </div>
@@ -635,7 +713,7 @@ export function DealAnalyzerTool({ locale }: Props) {
               <h3 className="text-lg font-bold">{isZh ? '交易压力测试对比 (Stress Test Comparison)' : 'Stress Test Side-by-Side Comparison'}</h3>
             </div>
             <span className="text-xs bg-amber-500/20 text-amber-300 font-semibold px-3 py-1 rounded-full border border-amber-500/30">
-              {isZh ? '压力条件: 空置率 +5%, 利率 +100bps' : 'Assumptions: +5% Vacancy, +100bps Rate'}
+              {isZh ? '压力条件: 空置率 +5个百分点, 利率 +100基点' : 'Assumptions: +5 percentage points Vacancy, +100 bps Rate'}
             </span>
           </div>
 
@@ -677,9 +755,15 @@ export function DealAnalyzerTool({ locale }: Props) {
                   <span className="text-slate-400 block">{isZh ? '偿债覆盖率 DSCR' : 'Base DSCR'}</span>
                   <span className="font-bold text-sm text-emerald-400">{base.dscr.toFixed(2)}x</span>
                 </div>
-                <div className="col-span-2">
-                  <span className="text-slate-400 block">{isZh ? '收支平衡点 BER' : 'Base Break-Even Ratio'}</span>
-                  <span className="font-bold text-sm text-slate-100">{formatPercent(base.breakEvenRatio)}</span>
+                <div className="col-span-2 space-y-1 mt-2 pt-2 border-t border-slate-700">
+                  <div className="flex justify-between">
+                    <span className="text-slate-400 text-xs">{isZh ? '收支平衡比率 (BER)' : 'Base Break-Even Ratio'}</span>
+                    <span className="font-bold text-sm text-slate-100">{formatPercent(base.breakEvenRatio)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400 text-xs">{isZh ? '盈亏平衡入住率' : 'Base Occupancy'}</span>
+                    <span className="font-bold text-sm text-slate-100">{formatPercent(base.breakEvenOccupancy)}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -690,7 +774,7 @@ export function DealAnalyzerTool({ locale }: Props) {
               <div className="flex items-center justify-between border-b border-slate-700 pb-3">
                 <div>
                   <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">{isZh ? '加压悲观情景' : 'Stressed Scenario'}</span>
-                  <h4 className="text-base font-bold text-white">{isZh ? '空置+5% | 利率+1%' : 'Vac +5% | Rate +1%'}</h4>
+                  <h4 className="text-base font-bold text-white">{isZh ? '空置+5个百分点 | 利率+100基点' : 'Vac +5 pts | Rate +100 bps'}</h4>
                 </div>
                 <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${stressBadge.badge}`}>
                   {stressBadge.label}
@@ -720,11 +804,17 @@ export function DealAnalyzerTool({ locale }: Props) {
                 </div>
                 <div>
                   <span className="text-slate-400 block">{isZh ? '偿债覆盖率 DSCR' : 'Stressed DSCR'}</span>
-                  <span className={`font-bold text-sm ${stress.dscr < 1.0 ? 'text-rose-400 font-extrabold' : 'text-amber-400'}`}>{stress.dscr.toFixed(2)}x</span>
+                  <span data-testid="tool-stress-dscr" className={`font-bold text-sm ${stress.dscr < 1.0 ? 'text-rose-400 font-extrabold' : 'text-amber-400'}`}>{stress.dscr.toFixed(2)}x</span>
                 </div>
-                <div className="col-span-2">
-                  <span className="text-slate-400 block">{isZh ? '收支平衡点 BER' : 'Stressed Break-Even Ratio'}</span>
-                  <span className={`font-bold text-sm ${stress.breakEvenRatio > 90 ? 'text-rose-400' : 'text-amber-400'}`}>{formatPercent(stress.breakEvenRatio)}</span>
+                <div className="col-span-2 space-y-1 mt-2 pt-2 border-t border-slate-700">
+                  <div className="flex justify-between">
+                    <span className="text-slate-400 text-xs">{isZh ? '收支平衡比率 (BER)' : 'Stressed Break-Even Ratio'}</span>
+                    <span data-testid="tool-stress-ber" className={`font-bold text-sm ${stress.breakEvenRatio > 90 ? 'text-rose-400' : 'text-amber-400'}`}>{formatPercent(stress.breakEvenRatio)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400 text-xs">{isZh ? '盈亏平衡入住率' : 'Stressed Occupancy'}</span>
+                    <span data-testid="tool-stress-beo" className="font-bold text-sm text-amber-400">{formatPercent(stress.breakEvenOccupancy)}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -811,7 +901,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 <tr>
                   <th className="p-2.5 border border-slate-700 w-2/5">{isZh ? '评估指标' : 'Core Metric'}</th>
                   <th className="p-2.5 border border-slate-700 w-3/10">{isZh ? '基础情景' : 'Base Case'}</th>
-                  <th className="p-2.5 border border-slate-700 w-3/10">{isZh ? '压力情景 (空置率+5%, 利率+1%)' : 'Stressed Case (+5% Vac, +1% Rate)'}</th>
+                  <th className="p-2.5 border border-slate-700 w-3/10">{isZh ? '压力情景 (空置率+5个百分点, 利率+100基点)' : 'Stressed Case (+5 pts Vac, +100 bps Rate)'}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -836,9 +926,14 @@ export function DealAnalyzerTool({ locale }: Props) {
                   <td className="p-2.5 text-slate-700 border border-slate-200">{stress.dscr.toFixed(2)}x</td>
                 </tr>
                 <tr>
-                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '收支平衡点 (Break-Even Ratio)' : 'Break-Even Ratio'}</td>
+                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '收支平衡比率 (Break-Even Ratio)' : 'Break-Even Ratio'}</td>
                   <td className="p-2.5 font-bold text-slate-900 border border-slate-200">{formatPercent(base.breakEvenRatio)}</td>
                   <td className="p-2.5 text-slate-700 border border-slate-200">{formatPercent(stress.breakEvenRatio)}</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '盈亏平衡入住率 (Break-Even Occupancy)' : 'Break-Even Occupancy'}</td>
+                  <td className="p-2.5 font-bold text-slate-900 border border-slate-200">{formatPercent(base.breakEvenOccupancy)}</td>
+                  <td className="p-2.5 text-slate-700 border border-slate-200">{formatPercent(stress.breakEvenOccupancy)}</td>
                 </tr>
                 <tr>
                   <td className="p-2.5 font-bold border border-slate-200">{isZh ? '年还贷总额 (Annual Debt Service)' : 'Annual Debt Service'}</td>

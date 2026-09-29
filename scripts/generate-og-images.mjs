@@ -165,7 +165,7 @@ const templates = [
         </div>
         <div class="content">
           <h1 class="title">Deal Analyzer 商业地产综合尽调工具</h1>
-          <p class="subtitle">单次输入全量测算 Cap Rate、DSCR、CoC、保本出租率，支持 +100 bps 加息与 +5 百分点空置压力测试。</p>
+          <p class="subtitle">单次输入全量测算 Cap Rate、DSCR、CoC、BER 与 BEO，支持 +100 bps 加息与 +5 百分点空置压力测试。</p>
           <div class="grid grid-3">
             <div class="metric-card">
               <span class="m-label">基准情景测算</span>

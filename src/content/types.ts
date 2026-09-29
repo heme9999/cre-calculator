@@ -44,6 +44,17 @@ export interface HomePageContent {
     title: string;
     desc: string;
   }[];
+
+  underwritingHub: {
+    title: string;
+    subtitle: string;
+    label: string;
+    calculators: { key: string; title: string; desc: string; cta: string }[];
+    guidesLabel: string;
+    guidesTitle: string;
+    guidesDesc: string;
+    guides: { key: string; label: string; title: string; desc: string }[];
+  };
 }
 
 export interface NavContent {
@@ -83,6 +94,14 @@ export interface MarketTierRow {
   pricing: string;
 }
 
+export interface DataSourceRef {
+  org: string;
+  reportName: string;
+  date: string;
+  url: string;
+  accessed: string;
+}
+
 export interface GuidePageContent {
   metaTitle: string;
   metaDescription: string;
@@ -108,8 +127,10 @@ export interface GuidePageContent {
   chineseInvestorContent?: string;
   faqTitle: string;
   faqs: FAQItem[];
+  methodologyTitle?: string;
+  methodologyContent?: string;
   dataSourcesTitle: string;
-  dataSources: string[];
+  dataSources: (string | DataSourceRef)[];
   relatedTitle: string;
   relatedCalculators: RelatedCalculatorRef[];
 }

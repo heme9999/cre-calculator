@@ -131,7 +131,7 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* Real Example */}
+        {/* Worked Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
           <h2 className="text-xl font-bold text-slate-900">{isZh ? '商业地产分析案例 (Illustrative Example)' : 'Worked Commercial Property Example'}</h2>
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-4">
@@ -193,7 +193,7 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
           <div className="space-y-2 text-xs sm:text-sm text-amber-900 leading-relaxed">
             <p>
               {isZh
-                ? '1. 忽视压力测试：仅看基准情景 (Base Case) 往往过于乐观。必须施加 +5% 空置与 +100 bps 利率压力，检验 DSCR 是否跌破 1.0x 违约警戒线。'
+                ? '1. 忽视压力测试：仅看基准情景 (Base Case) 往往过于乐观。必须施加 +5 个百分点空置与 +100 bps 利率压力，检验 DSCR 是否跌破 1.0x 违约警戒线。'
                 : '1. Overlooking Stress Testing: Underwriting only base-case pro-formas is dangerous. Always apply +5 percentage points vacancy and +100 bps interest rate stress to test debt coverage resilience.'}
             </p>
             <p>

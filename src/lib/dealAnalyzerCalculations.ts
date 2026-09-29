@@ -14,6 +14,20 @@ export interface DealAnalyzerInput {
   balloonYears: number;
 }
 
+export const DEFAULT_DEAL_INPUT: DealAnalyzerInput = {
+  purchasePrice: 2800000,
+  closingCostsPercent: 2.0,
+  grossPotentialIncome: 336000,
+  vacancyRate: 5.0,
+  operatingExpenses: 92000,
+  downPaymentPercent: 25.0,
+  interestRate: 6.5,
+  amortizationYears: 25,
+  paymentType: 'installment',
+  hasBalloon: false,
+  balloonYears: 5,
+};
+
 export type HealthStatus = 'green' | 'yellow' | 'red';
 
 export interface SingleScenarioResult {
@@ -33,6 +47,7 @@ export interface SingleScenarioResult {
   cashOnCashReturn: number;
   dscr: number;
   breakEvenRatio: number;
+  breakEvenOccupancy: number;
   balloonBalance: number;
   balloonPercentage: number;
   healthStatus: HealthStatus;
@@ -81,7 +96,10 @@ export function calculateSingleScenario(input: DealAnalyzerInput, locale: string
   const cashOnCashReturn = totalCashInvested > 0 ? (netCashFlow / totalCashInvested) * 100 : 0;
 
   const dscr = annualDebtService > 0 ? noi / annualDebtService : 0;
-  const breakEvenRatio = grossPotentialIncome > 0 ? ((operatingExpenses + annualDebtService) / grossPotentialIncome) * 100 : 0;
+  // Break-Even Ratio is calculated against Effective Gross Income (EGI)
+  const breakEvenRatio = egi > 0 ? ((operatingExpenses + annualDebtService) / egi) * 100 : 0;
+  // Break-Even Occupancy is calculated against Gross Potential Income (GPI)
+  const breakEvenOccupancy = grossPotentialIncome > 0 ? ((operatingExpenses + annualDebtService) / grossPotentialIncome) * 100 : 0;
 
   // Determine Health Status
   let healthStatus: HealthStatus = 'green';
@@ -121,6 +139,7 @@ export function calculateSingleScenario(input: DealAnalyzerInput, locale: string
     cashOnCashReturn,
     dscr,
     breakEvenRatio,
+    breakEvenOccupancy,
     balloonBalance: loanRes.balloonBalance,
     balloonPercentage: loanRes.balloonPercentage,
     healthStatus,

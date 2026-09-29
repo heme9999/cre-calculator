@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
 import { JsonLd, getWebSiteJsonLd } from '@/components/seo/JsonLd';
-import { Calculator, ArrowRight, TrendingUp, ShieldCheck, Zap, Workflow, BookOpen, Layers, CheckCircle2 } from 'lucide-react';
+import { Calculator, ArrowRight, TrendingUp, ShieldCheck, Zap, Workflow, BookOpen, Layers } from 'lucide-react';
 import { DealAnalyzerPreview } from '@/components/home/DealAnalyzerPreview';
 import { buildSeoMetadata } from '@/lib/seo';
 
@@ -76,7 +76,7 @@ export default async function HomePage({ params }: PageProps) {
                 href={`/${locale}/tools/deal-analyzer/`}
                 className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all shadow-md hover:shadow-lg"
               >
-                <span>{isZh ? '免费分析一个项目' : 'Run a Free Deal Analysis'}</span>
+                <span>{isZh ? '免费分析一笔交易' : 'Run a Free Deal Analysis'}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
@@ -87,7 +87,7 @@ export default async function HomePage({ params }: PageProps) {
               </Link>
             </div>
             <p className="text-xs text-slate-500 font-medium">
-              {isZh ? '免费 · 无需注册 · 数据保存在本地浏览器 · 支持 PDF 与 CSV 导出' : 'Free · No signup · Your inputs stay in your browser · PDF & CSV export'}
+              {isZh ? '免费使用 · 无需注册 · 数据在浏览器本地计算 · 支持 PDF 与 CSV 导出' : 'Free · No signup · Calculations run in your browser · PDF & CSV export'}
             </p>
           </div>
 
@@ -139,282 +139,98 @@ export default async function HomePage({ params }: PageProps) {
       </section>
 
       {/* Semantic Internal Linking Hub: Underwriting Pipeline & Framework Links */}
-      {!isZh ? (
-        <section className="space-y-12 bg-white rounded-3xl p-8 md:p-10 border border-slate-200 shadow-xs">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
-              <Workflow className="w-3.5 h-3.5" />
-              <span>Structured Underwriting Workflow</span>
+            {/* Dynamic Underwriting Hub */}
+      <section className="space-y-8 bg-white rounded-3xl p-8 md:p-10 border border-slate-200 shadow-xs">
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+            <Layers className="w-3.5 h-3.5" />
+            <span>{home.underwritingHub.label}</span>
+          </div>
+          <h2 className="text-2xl font-extrabold text-slate-900">
+            {home.underwritingHub.title}
+          </h2>
+          <p className="text-sm text-slate-600 leading-relaxed max-w-2xl">
+            {home.underwritingHub.subtitle}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {home.underwritingHub.calculators.map((calc) => (
+            <div key={calc.key} className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 flex flex-col justify-between space-y-4">
+              <div className="space-y-2">
+                <h3 className="text-base font-bold text-slate-900">
+                  <Link href={`/${locale}/calculators/${calc.key}/`} className="hover:text-emerald-600 hover:underline">
+                    {calc.title}
+                  </Link>
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {calc.desc}
+                </p>
+              </div>
+              <Link href={`/${locale}/calculators/${calc.key}/`} className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1 hover:gap-2 transition-all">
+                <span>{calc.cta}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Connect Every Metric Across the Acquisition Lifecycle
-            </h2>
-            <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
-              Institutional commercial real estate acquisitions require assessing cash flow, asset yield, and debt risk in sequence. Explore our connected calculation pipeline:
-            </p>
+          ))}
+
+          <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800 flex flex-col justify-between space-y-4">
+            <div className="space-y-2">
+              <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-500/20 mb-2">
+                <Workflow className="w-5 h-5 text-emerald-400" />
+              </div>
+              <h3 className="text-base font-bold text-white">
+                <Link href={`/${locale}/tools/deal-analyzer/`} className="hover:text-emerald-300 hover:underline">
+                  {isZh ? '综合交易分析' : 'Comprehensive Deal Analyzer'}
+                </Link>
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {isZh ? '在一个工具中合并所有测算并进行压力测试。' : 'Combine all calculations into one master view with stress testing.'}
+              </p>
+            </div>
+            <Link href={`/${locale}/tools/deal-analyzer/`} className="text-xs font-bold text-emerald-300 inline-flex items-center gap-1 hover:gap-2 transition-all">
+              <span>{isZh ? '运行分析' : 'Run Analysis'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {home.underwritingHub.guides.length > 0 && (
+        <section className="space-y-8 bg-slate-50/50 rounded-3xl p-8 md:p-10 border border-slate-200">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>{home.underwritingHub.guidesLabel}</span>
+              </div>
+              <h2 className="text-2xl font-extrabold text-slate-900">
+                {home.underwritingHub.guidesTitle}
+              </h2>
+              <p className="text-sm text-slate-600 leading-relaxed max-w-2xl">
+                {home.underwritingHub.guidesDesc}
+              </p>
+            </div>
+            <Link href={`/${locale}/guides/`} className="text-xs font-bold text-emerald-600 hover:underline inline-flex items-center gap-1">
+              <span>{isZh ? '查看所有指南' : 'View All Guides'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
 
-          {/* Underwriting Sequence Steps */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-600">
-                  <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">1</span>
-                  <span>Operating Cash Flow</span>
-                </div>
-                <h3 className="text-base font-bold text-slate-900">
-                  <Link href="/en/calculators/noi/" className="hover:text-emerald-600 hover:underline">
-                    NOI Calculator
-                  </Link>
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Reconstruct true Net Operating Income by isolating gross potential revenue, vacancy losses, and operating expenses before debt service. Forms the foundation of all commercial valuation.
-                </p>
-              </div>
-              <Link href="/en/calculators/noi/" className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1 hover:gap-2 transition-all">
-                <span>Calculate NOI</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-600">
-                  <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">2</span>
-                  <span>Unleveraged Property Yield</span>
-                </div>
-                <h3 className="text-base font-bold text-slate-900">
-                  <Link href="/en/calculators/cap-rate/" className="hover:text-emerald-600 hover:underline">
-                    Cap Rate Calculator
-                  </Link>
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Determine unleveraged capitalization rates from NOI and purchase price, or reverse-calculate your maximum offer price to hit a required yield target.
-                </p>
-              </div>
-              <Link href="/en/calculators/cap-rate/" className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1 hover:gap-2 transition-all">
-                <span>Evaluate Cap Rate</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-600">
-                  <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">3</span>
-                  <span>Debt Sizing & Coverage</span>
-                </div>
-                <h3 className="text-base font-bold text-slate-900">
-                  <Link href="/en/calculators/dscr/" className="hover:text-emerald-600 hover:underline">
-                    DSCR Calculator
-                  </Link>
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Test whether property NOI comfortably covers annual mortgage debt service to meet commercial bank underwriting minimums (typically 1.20x to 1.25x).
-                </p>
-              </div>
-              <Link href="/en/calculators/dscr/" className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1 hover:gap-2 transition-all">
-                <span>Check Debt Coverage</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-600">
-                  <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">4</span>
-                  <span>Leveraged Equity Return</span>
-                </div>
-                <h3 className="text-base font-bold text-slate-900">
-                  <Link href="/en/calculators/cash-on-cash/" className="hover:text-emerald-600 hover:underline">
-                    Cash-on-Cash Return Calculator
-                  </Link>
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Calculate annual pre-tax cash flow yielded per dollar of equity invested after mortgage payments, loan origination fees, and upfront closing costs.
-                </p>
-              </div>
-              <Link href="/en/calculators/cash-on-cash/" className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1 hover:gap-2 transition-all">
-                <span>Calculate Cash-on-Cash</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-600">
-                  <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">5</span>
-                  <span>Occupancy Risk Margin</span>
-                </div>
-                <h3 className="text-base font-bold text-slate-900">
-                  <Link href="/en/calculators/break-even-ratio/" className="hover:text-emerald-600 hover:underline">
-                    Break-Even Ratio Calculator
-                  </Link>
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Determine the minimum occupancy rate required to cover all operating costs and mortgage debt payments before property cash flow becomes negative.
-                </p>
-              </div>
-              <Link href="/en/calculators/break-even-ratio/" className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1 hover:gap-2 transition-all">
-                <span>Analyze Break-Even</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            <div className="bg-emerald-900 text-white rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-sm">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-300">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>All-in-One Underwriting</span>
-                </div>
-                <h3 className="text-base font-bold text-white">
-                  <Link href="/en/tools/deal-analyzer/" className="hover:text-emerald-300 hover:underline">
-                    Deal Analyzer Suite
-                  </Link>
-                </h3>
-                <p className="text-xs text-emerald-100 leading-relaxed">
-                  Run NOI, Cap Rate, DSCR, Cash-on-Cash, and Break-Even Ratio simultaneously from a single input set, apply +5% vacancy stress tests, and export a clean PDF report.
-                </p>
-              </div>
-              <Link href="/en/tools/deal-analyzer/" className="text-xs font-bold text-emerald-300 inline-flex items-center gap-1 hover:gap-2 transition-all">
-                <span>Open Deal Analyzer</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Core Underwriting Guides Hub */}
-          <div className="pt-6 border-t border-slate-200 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div className="space-y-1">
-                <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-emerald-600" />
-                  <span>Practical Underwriting Frameworks & Guides</span>
-                </h3>
-                <p className="text-xs text-slate-500">
-                  In-depth guides on valuation metrics, market tiers, and acquisition due diligence.
-                </p>
-              </div>
-              <Link href="/en/guides/" className="text-xs font-bold text-emerald-600 hover:underline inline-flex items-center gap-1">
-                <span>View All Guides</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {home.underwritingHub.guides.map((guide) => (
               <Link
-                href="/en/guides/cap-rate-benchmarks-by-city/"
-                className="p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-slate-50 transition-all block group"
+                key={guide.key}
+                href={`/${locale}/guides/${guide.key}/`}
+                className="p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-slate-50 transition-all block group bg-white"
               >
-                <span className="text-xs font-bold text-emerald-600 group-hover:underline">Market Benchmarks</span>
-                <h4 className="text-sm font-bold text-slate-900 mt-1 mb-1">US Cap Rate Benchmarks by City & Property Type</h4>
+                <span className="text-xs font-bold text-emerald-600 group-hover:underline">{guide.label}</span>
+                <h4 className="text-sm font-bold text-slate-900 mt-1 mb-1">{guide.title}</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Compare capitalization rate ranges across Tier 1 gateway metros, high-growth Sunbelt markets, and tertiary regions.
+                  {guide.desc}
                 </p>
               </Link>
-
-              <Link
-                href="/en/guides/how-to-estimate-noi/"
-                className="p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-slate-50 transition-all block group"
-              >
-                <span className="text-xs font-bold text-emerald-600 group-hover:underline">Cash Flow Due Diligence</span>
-                <h4 className="text-sm font-bold text-slate-900 mt-1 mb-1">How to Estimate NOI from Operating Statements</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  A step-by-step methodology to reconstruct genuine Net Operating Income when broker packages contain omissions or pro-forma distortions.
-                </p>
-              </Link>
-
-              <Link
-                href="/en/guides/1031-exchange-process/"
-                className="p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-slate-50 transition-all block group"
-              >
-                <span className="text-xs font-bold text-emerald-600 group-hover:underline">Tax Deferral Strategy</span>
-                <h4 className="text-sm font-bold text-slate-900 mt-1 mb-1">1031 Exchange Process & Replacement Rules</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Master the 45-day identification deadline, 180-day closing rule, and debt replacement criteria for full capital gains tax deferral.
-                </p>
-              </Link>
-
-              <Link
-                href="/en/guides/how-to-underwrite-a-deal/"
-                className="p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-slate-50 transition-all block group"
-              >
-                <span className="text-xs font-bold text-emerald-600 group-hover:underline">Acquisition Methodology</span>
-                <h4 className="text-sm font-bold text-slate-900 mt-1 mb-1">How to Underwrite a Commercial Real Estate Deal</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  A structured 6-step framework covering rent roll audits, expense normalization, debt sizing, and stress testing.
-                </p>
-              </Link>
-            </div>
-          </div>
-        </section>
-      ) : (
-        /* Chinese Homepage Focused Hub: Limited to Approved Chinese Sitemap Pages */
-        <section className="space-y-8 bg-white rounded-3xl p-8 md:p-10 border border-slate-200 shadow-xs">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
-              <Layers className="w-3.5 h-3.5" />
-              <span>核心指标承销闭环</span>
-            </div>
-            <h2 className="text-2xl font-extrabold text-slate-900">
-              精准评估商业地产项目投资收益与杠杆安全
-            </h2>
-            <p className="text-sm text-slate-600 leading-relaxed max-w-2xl">
-              提供符合美国商业地产机构审贷标准的中文计算工具，无须注册即可直接测算：
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <h3 className="text-base font-bold text-slate-900">
-                  <Link href="/zh/calculators/cap-rate/" className="hover:text-emerald-600 hover:underline">
-                    Cap Rate 资本化率计算器
-                  </Link>
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  快速计算商业地产无杠杆资产收益率，支持根据目标回报率反向推导最高买入价格。
-                </p>
-              </div>
-              <Link href="/zh/calculators/cap-rate/" className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1">
-                <span>测算 Cap Rate</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <h3 className="text-base font-bold text-slate-900">
-                  <Link href="/zh/calculators/noi/" className="hover:text-emerald-600 hover:underline">
-                    NOI 净营业收入计算器
-                  </Link>
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  扣除空置损失与日常运营开支，还原物业实际运营创收能力，为所有估值与信贷测算提供基石。
-                </p>
-              </div>
-              <Link href="/zh/calculators/noi/" className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1">
-                <span>测算 NOI</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <h3 className="text-base font-bold text-slate-900">
-                  <Link href="/zh/calculators/dscr/" className="hover:text-emerald-600 hover:underline">
-                    DSCR 偿债覆盖率计算器
-                  </Link>
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  检验物业 NOI 对商业贷款本息月供的覆盖倍数，对照全美商业银行 1.20x–1.25x 审贷基准。
-                </p>
-              </div>
-              <Link href="/zh/calculators/dscr/" className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1">
-                <span>测算 DSCR</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
+            ))}
           </div>
         </section>
       )}

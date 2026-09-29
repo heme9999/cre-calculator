@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { getContent } from '@/content';
 import { LOCALES, SITE_URL } from '@/lib/constants';
 import { BreakEvenRatioCalculator } from '@/components/calculators/BreakEvenRatioCalculator';
-import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
+import { JsonLd, getCalculatorJsonLd, getFaqPageJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen } from 'lucide-react';
 
 import { buildSeoMetadata } from '@/lib/seo';
@@ -46,6 +46,7 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
   return (
     <article className="space-y-10 py-4">
       <JsonLd data={jsonLdData} />
+      {content.faqs && content.faqs.length > 0 && <JsonLd data={getFaqPageJsonLd(content.faqs)} />}
 
       {/* Page Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
@@ -96,7 +97,7 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* Real Example */}
+        {/* Worked Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
           <h2 className="text-xl font-bold text-slate-900">{isZh ? '商业地产分析案例 (Illustrative Example)' : 'Worked Commercial Property Example'}</h2>
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-3">
@@ -109,13 +110,13 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
                 <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">{isZh ? '商业贷款计算' : 'loan payment calculation'}</Link>
                 {isZh ? '）' : ')'}
               </li>
-              <li>{isZh ? '年潜在毛收入 (Effective Gross Income): $336,000' : 'Gross Potential Income (GPI): $336,000'}</li>
+              <li>{isZh ? '有效毛收入 (Effective Gross Income): $319,200 (基于 $336k GPI 和 5% 空置率)' : 'Effective Gross Income (EGI): $319,200 (based on $336k GPI and 5% vacancy)'}</li>
             </ul>
-            <p className="font-semibold text-slate-900 mt-2">
-              {isZh ? '计算 Break-Even Ratio = ($92,000 + $170,152) / $336,000 = 78.02%' : 'Calculation: Break-Even Ratio = ($92,000 + $170,152) / $336,000 = 78.02%'}
+            <p className="font-semibold text-slate-900 mt-2 whitespace-pre-line">
+              {isZh ? '计算 Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%\n计算 Break-Even Occupancy = ($92,000 + $170,152) / $336,000 = 78.02%' : 'Calculation: Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%\nBreak-Even Occupancy = ($92,000 + $170,152) / $336,000 = 78.02%'}
             </p>
             <p className="mt-2">
-              {isZh ? '这意味着只要该物业的入住率达到 78% 以上，就能刚好覆盖所有开销和房贷，不会产生负现金流。想在一个页面上同时测试入住率、利率和 ' : 'This means the property needs to maintain at least 78% occupancy just to pay its bills and the mortgage without negative cash flow. To test how changes in occupancy, rates, and '}
+              {isZh ? '这意味着该物业的 BEO 为 78.02%，即至少需要维持约 78% 的入住率才能刚好覆盖所有开销和房贷。而 BER 为 82.13%，符合多数商业银行低于 85% 的要求。想在一个页面上同时测试入住率、利率和 ' : 'This means the BEO is 78.02%, so the property needs to maintain at least 78% occupancy just to pay its bills. The BER is 82.13%, comfortably below the typical 85% lender maximum. To test how changes in occupancy, rates, and '}
               <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Cash-on-Cash 收益率' : 'Cash-on-Cash Return'}</Link>
               {isZh ? ' 之间的联动关系吗？请使用 ' : ' interact together on one page, try our comprehensive '}
               <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Deal Analyzer 综合尽调工具' : 'Deal Analyzer tool'}</Link>.
@@ -129,11 +130,11 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
             <HelpCircle className="w-5 h-5 text-emerald-600" />
             {content.faqTitle}
           </h2>
-          <div className="space-y-6 divide-y divide-slate-100">
+          <div className="space-y-6 divide-y divide-slate-100" data-testid="faq-list">
             {content.faqs.map((faq, idx) => (
-              <div key={idx} className={idx > 0 ? 'pt-6' : ''}>
-                <h3 className="text-base font-bold text-slate-900 mb-2">{faq.question}</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
+              <div key={idx} className={idx > 0 ? 'pt-6' : ''} data-testid="faq-item">
+                <h3 className="text-base font-bold text-slate-900 mb-2" data-testid="faq-question">{faq.question}</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed" data-testid="faq-answer">{faq.answer}</p>
               </div>
             ))}
           </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { getContent } from '@/content';
@@ -15,6 +15,33 @@ export function Header({ locale }: HeaderProps) {
   const content = getContent(locale);
   const nav = content.nav;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const [calcMenuOpen, setCalcMenuOpen] = useState(false);
+  const calcMenuRef = useRef<HTMLDivElement>(null);
+  const calcMenuBtnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (calcMenuRef.current && !calcMenuRef.current.contains(event.target as Node)) {
+        setCalcMenuOpen(false);
+      }
+    }
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setCalcMenuOpen(false);
+        calcMenuBtnRef.current?.focus();
+      }
+    }
+    if (calcMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [calcMenuOpen]);
+
 
   // Determine target language URL while preserving exact route path
   let targetPath = '/en/';
@@ -57,7 +84,7 @@ export function Header({ locale }: HeaderProps) {
           <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-sm shrink-0">
             <Building2 className="w-4 h-4 md:w-5 md:h-5 text-white" />
           </div>
-          <span className="tracking-tight whitespace-nowrap truncate">{nav.brandName}</span>
+          <span className="tracking-tight whitespace-nowrap">{nav.brandName}</span>
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -76,40 +103,49 @@ export function Header({ locale }: HeaderProps) {
             {locale === 'zh' ? '指南' : 'Guides'}
           </Link>
 
-          <Link href={`/${locale}/calculators/cap-rate/`} className={`hover:text-white transition-colors ${pathname?.includes('/cap-rate/') ? 'text-emerald-400 font-semibold' : ''}`}>
-            {nav.capRate}
-          </Link>
-          <Link href={`/${locale}/calculators/noi/`} className={`hover:text-white transition-colors ${pathname?.includes('/noi/') ? 'text-emerald-400 font-semibold' : ''}`}>
-            {nav.noi}
-          </Link>
-          <Link href={`/${locale}/calculators/cash-on-cash/`} className={`hover:text-white transition-colors ${pathname?.includes('/cash-on-cash/') ? 'text-emerald-400 font-semibold' : ''}`}>
-            {nav.cashOnCash}
-          </Link>
-
-          <div className="relative group/nav">
-            <Link
-              href={`/${locale}/`}
+          <div className="relative" ref={calcMenuRef}>
+            <button
+              ref={calcMenuBtnRef}
+              type="button"
+              onClick={() => setCalcMenuOpen(!calcMenuOpen)}
+              aria-expanded={calcMenuOpen}
+              aria-controls="calculators-navigation"
               className={`hover:text-white transition-colors flex items-center gap-1 py-4 ${
                 pathname === `/${locale}/` || pathname === `/${locale}` ? 'text-emerald-400 font-semibold' : ''
               }`}
             >
-              {nav.calculators}
-            </Link>
+              <span>{nav.calculators}</span>
+              <svg className={`w-3.5 h-3.5 transition-transform ${calcMenuOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
             
-            <div className="absolute top-full left-1/2 -translate-x-1/2 w-48 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all bg-slate-800 rounded-xl shadow-xl border border-slate-700 py-2 flex flex-col pointer-events-none group-hover/nav:pointer-events-auto">
-              <Link href={`/${locale}/calculators/loan-payment/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors">
+            <div
+              id="calculators-navigation"
+              className={`absolute top-full left-1/2 -translate-x-1/2 w-48 transition-all bg-slate-800 rounded-xl shadow-xl border border-slate-700 py-2 flex flex-col ${calcMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+            >
+              <Link onClick={() => setCalcMenuOpen(false)}  tabIndex={calcMenuOpen ? 0 : -1} href={`/${locale}/calculators/cap-rate/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors focus:bg-slate-700 outline-none">
+                {nav.capRate}
+              </Link>
+              <Link onClick={() => setCalcMenuOpen(false)}  tabIndex={calcMenuOpen ? 0 : -1} href={`/${locale}/calculators/noi/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors focus:bg-slate-700 outline-none">
+                {nav.noi}
+              </Link>
+              <Link onClick={() => setCalcMenuOpen(false)}  tabIndex={calcMenuOpen ? 0 : -1} href={`/${locale}/calculators/cash-on-cash/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors focus:bg-slate-700 outline-none">
+                {nav.cashOnCash}
+              </Link>
+              <Link onClick={() => setCalcMenuOpen(false)}  tabIndex={calcMenuOpen ? 0 : -1} href={`/${locale}/calculators/loan-payment/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors focus:bg-slate-700 outline-none">
                 {nav.loanPayment}
               </Link>
-              <Link href={`/${locale}/calculators/dscr/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors">
+              <Link onClick={() => setCalcMenuOpen(false)}  tabIndex={calcMenuOpen ? 0 : -1} href={`/${locale}/calculators/dscr/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors focus:bg-slate-700 outline-none">
                 {nav.dscr}
               </Link>
-              <Link href={`/${locale}/calculators/1031-exchange/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors">
+              <Link onClick={() => setCalcMenuOpen(false)}  tabIndex={calcMenuOpen ? 0 : -1} href={`/${locale}/calculators/1031-exchange/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors focus:bg-slate-700 outline-none">
                 {nav.exchange1031}
               </Link>
-              <Link href={`/${locale}/calculators/lease-vs-buy/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors">
+              <Link onClick={() => setCalcMenuOpen(false)}  tabIndex={calcMenuOpen ? 0 : -1} href={`/${locale}/calculators/lease-vs-buy/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors focus:bg-slate-700 outline-none">
                 {nav.leaseVsBuy}
               </Link>
-              <Link href={`/${locale}/calculators/break-even-ratio/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors">
+              <Link onClick={() => setCalcMenuOpen(false)}  tabIndex={calcMenuOpen ? 0 : -1} href={`/${locale}/calculators/break-even-ratio/`} className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors focus:bg-slate-700 outline-none">
                 {nav.breakEvenRatio}
               </Link>
             </div>

@@ -95,7 +95,7 @@ export default async function Exchange1031Page({ params }: PageProps) {
           </div>
         </section>
 
-        {/* Real Example */}
+        {/* Worked Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
           <h2 className="text-xl font-bold text-slate-900">{content.exampleTitle}</h2>
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 rounded-r-xl text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">

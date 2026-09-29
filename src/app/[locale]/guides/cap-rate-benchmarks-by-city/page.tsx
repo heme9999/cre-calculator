@@ -175,15 +175,31 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
       </section>
 
       {/* Data Sources Citations Section */}
-      <section className="bg-slate-50 rounded-2xl p-6 md:p-8 border border-slate-200 space-y-4">
+      <section className="bg-slate-50 rounded-2xl p-6 md:p-8 border border-slate-200 space-y-6">
+        {content.methodologyTitle && (
+          <div className="space-y-2 mb-6 border-b border-slate-200 pb-4">
+            <h3 className="text-sm font-bold text-slate-900">{content.methodologyTitle}</h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{content.methodologyContent}</p>
+          </div>
+        )}
+
         <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
           <Database className="w-4 h-4 text-slate-600" />
           {content.dataSourcesTitle}
         </h2>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600 list-disc list-inside">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600 list-disc list-inside">
           {content.dataSources.map((source, idx) => (
             <li key={idx} className="leading-relaxed font-mono text-[11px] text-slate-600">
-              {source}
+              {typeof source === 'string' ? (
+                <span>{source}</span>
+              ) : (
+                <div className="inline-flex flex-col gap-0.5 ml-1 align-top">
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" className="font-bold text-emerald-600 hover:underline">
+                    {source.org} - {source.reportName}
+                  </a>
+                  <span className="text-slate-400">Published: {source.date} · Accessed: {source.accessed}</span>
+                </div>
+              )}
             </li>
           ))}
         </ul>

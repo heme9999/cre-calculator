@@ -22,8 +22,8 @@ export const enContent: LocaleContent = {
   home: {
     metaTitle: 'Commercial Real Estate Calculators | CRE Tools',
     metaDescription: 'Free commercial real estate calculators for cap rate, NOI, cash-on-cash return, loan payments, DSCR and complete deal underwriting.',
-    heroH1: 'Commercial Real Estate Investment Decision Tools',
-    heroSubtitle: 'Instant, precise financial calculators backed by clear formulas, real-world examples, and industry benchmarks.',
+    heroH1: 'Commercial Real Estate Calculators & Deal Analyzer',
+    heroSubtitle: 'Instant, precise financial calculators backed by clear formulas, illustrative examples, and industry benchmarks.',
     featuredTitle: 'Essential CRE Calculators',
     featuredDesc: 'Evaluate property yield, cash flow, and debt coverage with our instant client-side tools.',
     calculators: [
@@ -72,7 +72,7 @@ export const enContent: LocaleContent = {
       {
         slug: 'break-even-ratio',
         title: 'Break-Even Ratio Calculator',
-        description: 'Determine the minimum occupancy rate required to cover operating expenses and mortgage debt service.',
+        description: 'Assess your property\'s burden ratio and estimate the break-even occupancy needed to cover operating expenses and debt service.',
         badge: 'Risk Analysis',
       },
     ],
@@ -84,13 +84,80 @@ export const enContent: LocaleContent = {
       },
       {
         title: 'Transparent Formulas & Examples',
-        desc: 'Every tool includes step-by-step formula breakdowns and real scenarios so you understand the numbers.',
+        desc: 'Every tool includes step-by-step formula breakdowns and worked examples so you understand the numbers.',
       },
       {
         title: 'Dual US & Global Perspective',
         desc: 'Tailored for US commercial property standards, underwriting practices, and investor requirements.',
       },
     ],
+
+    underwritingHub: {
+      title: 'The Commercial Underwriting Sequence',
+      subtitle: 'Analyze any deal step-by-step from gross income modeling down to post-leverage equity returns.',
+      label: 'Core CRE Metrics',
+      calculators: [
+        {
+          key: 'noi',
+          title: 'NOI Calculator',
+          desc: 'Start by deducting vacancy loss and operating expenses from your potential income to find true Net Operating Income.',
+          cta: 'Calculate NOI'
+        },
+        {
+          key: 'cap-rate',
+          title: 'Cap Rate Calculator',
+          desc: 'Divide your NOI by the purchase price to determine your unleveraged property yield and compare against market benchmarks.',
+          cta: 'Calculate Cap Rate'
+        },
+        {
+          key: 'dscr',
+          title: 'DSCR Calculator',
+          desc: 'Size your commercial loan by ensuring your NOI covers your annual debt service by at least 1.25x to meet lender standards.',
+          cta: 'Calculate DSCR'
+        },
+        {
+          key: 'cash-on-cash',
+          title: 'Cash-on-Cash Return',
+          desc: 'Measure your actual leveraged return by dividing pre-tax cash flow (NOI minus Debt Service) by your total initial cash invested.',
+          cta: 'Calculate CoC'
+        },
+        {
+          key: 'break-even-ratio',
+          title: 'Break-Even Ratio & Occupancy',
+          desc: 'Assess your property burden ratio and estimate the break-even occupancy needed to cover operating expenses and debt service.',
+          cta: 'Calculate Risk'
+        }
+      ],
+      guidesLabel: 'Essential CRE Guides',
+      guidesTitle: 'Guides & Market Benchmarks',
+      guidesDesc: 'Actionable frameworks for deal screening and acquisition.',
+      guides: [
+        {
+          key: 'cap-rate-benchmarks-by-city',
+          label: 'Market Benchmarks',
+          title: 'US Cap Rate Benchmarks by City & Property Type',
+          desc: 'Compare capitalization rate ranges across Tier 1 gateway metros, high-growth Sunbelt markets, and tertiary regions.'
+        },
+        {
+          key: 'how-to-estimate-noi',
+          label: 'Cash Flow Due Diligence',
+          title: 'How to Estimate NOI from Operating Statements',
+          desc: 'A step-by-step methodology to reconstruct genuine Net Operating Income when broker packages contain omissions or pro-forma distortions.'
+        },
+        {
+          key: '1031-exchange-process',
+          label: 'Tax Deferral Strategy',
+          title: '1031 Exchange Process & Replacement Rules',
+          desc: 'Master the 45-day identification deadline, 180-day closing rule, and debt replacement criteria for full capital gains tax deferral.'
+        },
+        {
+          key: 'how-to-underwrite-a-deal',
+          label: 'Acquisition Methodology',
+          title: 'How to Underwrite a Commercial Real Estate Deal',
+          desc: 'A structured 6-step framework covering rent roll audits, expense normalization, debt sizing, and stress testing.'
+        }
+      ]
+    },
   },
   dealAnalyzer: {
     metaTitle: 'Commercial Real Estate Investment Calculator',
@@ -98,18 +165,19 @@ export const enContent: LocaleContent = {
     h1: 'Commercial Real Estate Investment Calculator & Deal Analyzer',
     subtitle: 'Evaluate commercial property ROI, debt coverage, and cash flow yields from a single set of assumptions.',
     whatIsTitle: 'What This CRE Calculator Does',
-    whatIsContent: 'Underwriting a real deal requires looking at multiple performance metrics simultaneously. This commercial real estate investment calculator takes a single set of inputs and generates all core yields: Cap Rate, DSCR, Cash-on-Cash Return, and Break-Even Ratio (the minimum occupancy needed to pay all bills). Note that Cash-on-Cash calculates returns based on your total cash invested (down payment plus closing costs), while NOI explicitly excludes your debt service payments. Easily model a base scenario, then stress-test the underwriting against tougher vacancy and loan rate environments.',
+    whatIsContent: 'Underwriting a real deal requires looking at multiple performance metrics simultaneously. This commercial real estate investment calculator takes a single set of inputs and generates all core yields: Cap Rate, DSCR, Cash-on-Cash Return, and Break-Even Ratio and Break-Even Occupancy. Note that Cash-on-Cash calculates returns based on your total cash invested (down payment plus closing costs), while NOI explicitly excludes your debt service payments. Easily model a base scenario, then stress-test the underwriting against tougher vacancy and loan rate environments.',
     formulaTitle: 'Core Underwriting Metrics & Formulas',
-    formulaCode: '• NOI = Effective Gross Income - Operating Expenses\n• Cap Rate = NOI / Purchase Price × 100%\n• Cash-on-Cash Return = (NOI - Annual Debt Service) / Total Cash Invested × 100%\n• DSCR = NOI / Annual Debt Service\n• Break-Even Ratio = (Operating Expenses + Annual Debt Service) / Gross Potential Income × 100%',
+    formulaCode: '• NOI = Effective Gross Income - Operating Expenses\n• Cap Rate = NOI / Purchase Price × 100%\n• Cash-on-Cash Return = (NOI - Annual Debt Service) / Total Cash Invested × 100%\n• DSCR = NOI / Annual Debt Service\n• Break-Even Ratio = (Operating Expenses + Annual Debt Service) / Effective Gross Income × 100%\n• Break-Even Occupancy = (Operating Expenses + Annual Debt Service) / Gross Potential Income × 100%',
     formulaVariables: [
       { label: 'NOI', desc: 'Net Operating Income generated by the property annually.' },
       { label: 'Cap Rate', desc: 'Unleveraged annual rate of return on the purchase price.' },
       { label: 'Cash-on-Cash Return', desc: 'Leveraged annual cash flow return relative to total cash invested.' },
       { label: 'DSCR', desc: 'Ratio of net operating income to annual mortgage debt service.' },
-      { label: 'Break-Even Ratio', desc: 'Minimum occupancy percentage required to cover expenses and debt service.' },
+      { label: 'Break-Even Ratio', desc: 'The burden of operating expenses and debt service relative to effective gross income; a lower ratio means a larger income cushion.' },
+      { label: 'Break-Even Occupancy', desc: 'A simplified estimate of the occupancy required to cover operating expenses and debt service, calculated against gross potential income.' },
     ],
-    exampleTitle: 'A Real Example',
-    exampleContent: 'A $2,800,000 property with $336,000 in gross potential income, 5% vacancy, and $92,000 in annual operating expenses:\n\n• NOI: $227,200 → Cap Rate: 8.11%\n• Financed with 25% down ($700,000) plus 2% closing costs, a $2,100,000 loan at 6.5% over 25 years\n• Cash-on-Cash Return: 7.55% · DSCR: 1.34x · Break-Even Ratio: 78.02%\n• Deal Health: Healthy — both DSCR and Break-Even Ratio sit comfortably within typical lender thresholds\n\nNow stress-test it (vacancy up to 10%, rate up to 7.5%):\n\n• DSCR drops to 1.13x — right at the edge of most lenders\' minimum threshold\n• Break-Even Ratio rises to 82.81% — into the warning zone\n\nThis is exactly why stress-testing matters: a deal that looks comfortably healthy in the base case can lose most of its cushion under a modestly tougher (not extreme) scenario.',
+    exampleTitle: 'Worked Example',
+    exampleContent: 'A $2,800,000 property with $336,000 in gross potential income, 5% vacancy, and $92,000 in annual operating expenses:\n\n• NOI: $227,200 → Cap Rate: 8.11%\n• Financed with 25% down ($700,000) plus 2% closing costs, a $2,100,000 loan at 6.5% over 25 years\n• Cash-on-Cash Return: 7.55% · DSCR: 1.34x\n• Break-Even Ratio: 82.13% · Break-Even Occupancy: 78.02%\n• Deal Health: Healthy — both DSCR and Break-Even Ratio sit comfortably within typical lender thresholds\n\nNow stress-test it (vacancy up to 10%, rate up to 7.5%):\n\n• DSCR drops to 1.13x — right at the edge of most lenders\' minimum threshold\n• Break-Even Ratio rises to 92.01% (BEO to 82.81%) — into the high risk zone\n\nThis is exactly why stress-testing matters: a deal that looks comfortably healthy in the base case can lose most of its cushion under a modestly tougher (not extreme) scenario.\n\n*Note: This is a hypothetical example for illustrative purposes only, not representing a real listing, transaction, or investment advice.*',
     faqTitle: 'Frequently Asked Questions',
     faqs: [
       {
@@ -146,8 +214,8 @@ export const enContent: LocaleContent = {
       { label: 'NOI', desc: 'Annual income after operating expenses, before debt service and taxes' },
       { label: 'Purchase Price', desc: "The property's acquisition price (or current market value, if you're evaluating a property you already own)" },
     ],
-    exampleTitle: 'A Real Example',
-    exampleContent: 'Say you\'re looking at a small retail strip center listed at $2,400,000, with an NOI of $168,000/year.\n\nCap Rate = $168,000 / $2,400,000 = 7.0%\n\nIf you know your target cap rate is 7.5% and the NOI is fixed at $168,000, you can work backward: Max Purchase Price = $168,000 / 0.075 = $2,240,000 — meaning the listing is priced above what a 7.5% target would justify.',
+    exampleTitle: 'Worked Example',
+    exampleContent: 'Say you\'re looking at a small retail strip center listed at $2,400,000, with an NOI of $168,000/year.\n\nCap Rate = $168,000 / $2,400,000 = 7.0%\n\nIf you know your target cap rate is 7.5% and the NOI is fixed at $168,000, you can work backward: Max Purchase Price = $168,000 / 0.075 = $2,240,000 — meaning the listing is priced above what a 7.5% target would justify.\n\n*Note: This is a hypothetical worked example for illustrative purposes only, not representing a real listing, transaction, or investment advice.*',
     faqTitle: 'Frequently Asked Questions',
     faqs: [
       {
@@ -188,8 +256,8 @@ export const enContent: LocaleContent = {
       { label: 'Effective Gross Income (EGI)', desc: 'Gross potential rental income minus expected vacancy and unpaid rent' },
       { label: 'Operating Expenses', desc: 'Property taxes, insurance, repairs/maintenance, management fees, landlord utilities. Excludes debt service, capital improvements, and income taxes.' },
     ],
-    exampleTitle: 'A Real Example',
-    exampleContent: 'A 12-unit apartment building generates $312,000/year in gross rental income. You estimate 5% vacancy loss ($15,600), and operating expenses run $94,000/year (taxes, insurance, maintenance, management fee).\n\nEGI = $312,000 − $15,600 = $296,400\nNOI = $296,400 − $94,000 = $202,400/year (about $16,867/month)',
+    exampleTitle: 'Worked Example',
+    exampleContent: 'A 12-unit apartment building generates $312,000/year in gross rental income. You estimate 5% vacancy loss ($15,600), and operating expenses run $94,000/year (taxes, insurance, maintenance, management fee).\n\nEGI = $312,000 − $15,600 = $296,400\nNOI = $296,400 − $94,000 = $202,400/year (about $16,867/month)\n\n*Note: This is a hypothetical worked example for illustrative purposes only, not representing a real listing, transaction, or investment advice.*',
     faqTitle: 'Frequently Asked Questions',
     faqs: [
       {
@@ -230,8 +298,8 @@ export const enContent: LocaleContent = {
       { label: 'Annual Cash Flow', desc: 'NOI minus annual debt service (loan payments)' },
       { label: 'Total Cash Invested', desc: 'Down payment + closing costs + any immediate capital expenditures — not the full purchase price' },
     ],
-    exampleTitle: 'A Real Example',
-    exampleContent: 'You buy a $1,200,000 property with a 25% down payment ($300,000) plus $30,000 in closing costs and immediate repairs — total cash invested is $330,000. Annual NOI is $84,000, and your annual loan payment (debt service) is $54,000.\n\nAnnual Cash Flow = $84,000 − $54,000 = $30,000\nCash-on-Cash Return = $30,000 / $330,000 = 9.1%\n\nCompare that to the property\'s cap rate ($84,000 / $1,200,000 = 7.0%) — the leverage here is boosting your cash return above the unleveraged cap rate, because the cost of debt is lower than the property\'s yield.',
+    exampleTitle: 'Worked Example',
+    exampleContent: 'You buy a $1,200,000 property with a 25% down payment ($300,000) plus $30,000 in closing costs and immediate repairs — total cash invested is $330,000. Annual NOI is $84,000, and your annual loan payment (debt service) is $54,000.\n\nAnnual Cash Flow = $84,000 − $54,000 = $30,000\nCash-on-Cash Return = $30,000 / $330,000 = 9.1%\n\nCompare that to the property\'s cap rate ($84,000 / $1,200,000 = 7.0%) — the leverage here is boosting your cash return above the unleveraged cap rate, because the cost of debt is lower than the property\'s yield.\n\n*Note: This is a hypothetical worked example for illustrative purposes only, not representing a real listing, transaction, or investment advice.*',
     faqTitle: 'Frequently Asked Questions',
     faqs: [
       {
@@ -270,8 +338,8 @@ export const enContent: LocaleContent = {
       { label: 'n', desc: 'Total Amortization Payments (Amortization Years × 12)' },
       { label: 'm', desc: 'Payment Month Number (1 through n)' },
     ],
-    exampleTitle: 'Real Scenario Comparison ($1.3M Loan, 6.5% Rate, 25-Yr Amort, 10-Yr Maturity)',
-    exampleContent: '',
+    exampleTitle: 'Hypothetical Scenario Comparison ($1.3M Loan, 6.5% Rate, 25-Yr Amort, 10-Yr Maturity)',
+    exampleContent: '\n\n*Note: This is a hypothetical worked example for illustrative purposes only, not representing a real listing, transaction, or investment advice.*',
     faqTitle: 'Frequently Asked Questions',
     faqs: [
       {
@@ -312,8 +380,8 @@ export const enContent: LocaleContent = {
       { label: 'Annual Net Operating Income (NOI)', desc: 'Effective gross rental income minus operating expenses (before debt service and income taxes)' },
       { label: 'Annual Debt Service', desc: 'Total principal and interest paid over 12 months' },
     ],
-    exampleTitle: 'A Real Commercial Real Estate Example ($2M Office Building)',
-    exampleContent: 'Suppose you are purchasing a commercial office building for $2,000,000 with a $1,500,000 mortgage. The property generates $220,000 in effective gross income and incurs $70,000 in operating expenses, resulting in an annual NOI of $150,000.\n\nAt a 6.5% interest rate on a 25-year amortization schedule, monthly debt service is $10,128, bringing annual debt service to $121,536.\n\nDSCR = $150,000 / $121,536 = 1.23x\n\n【Interpretation】: A 1.23x ratio is near the standard lender threshold (1.20 - 1.25x). A lender might require a slightly larger down payment or debt service reserve fund to approve the loan.',
+    exampleTitle: 'A Commercial Real Estate Example ($2M Office Building)',
+    exampleContent: 'Suppose you are purchasing a commercial office building for $2,000,000 with a $1,500,000 mortgage. The property generates $220,000 in effective gross income and incurs $70,000 in operating expenses, resulting in an annual NOI of $150,000.\n\nAt a 6.5% interest rate on a 25-year amortization schedule, monthly debt service is $10,128, bringing annual debt service to $121,536.\n\nDSCR = $150,000 / $121,536 = 1.23x\n\n【Interpretation】: A 1.23x ratio is near the standard lender threshold (1.20 - 1.25x). A lender might require a slightly larger down payment or debt service reserve fund to approve the loan.\n\n*Note: This is a hypothetical worked example for illustrative purposes only, not representing a real listing, transaction, or investment advice.*',
     faqTitle: 'Frequently Asked Questions',
     faqs: [
       {
@@ -356,8 +424,8 @@ export const enContent: LocaleContent = {
       { label: 'Original Cost Basis', desc: 'Original purchase price plus capital improvements (before depreciation deduction)' },
       { label: 'Combined Tax Rate', desc: 'Estimated combined rate including Federal Capital Gains (15-20%), State Tax, Depreciation Recapture (25%), and NIIT (3.8%)' },
     ],
-    exampleTitle: 'A Real 1031 Exchange Example ($2.5M Sale)',
-    exampleContent: 'Suppose you purchased a commercial building 8 years ago for $1,200,000 and are now selling it for $2,500,000 with $150,000 in closing costs. Your estimated combined tax rate is 25%.\n\nNet Sale Proceeds = $2,500,000 − $150,000 = $2,350,000\nRealized Capital Gain = $2,350,000 − $1,200,000 = $1,150,000\nTax Liability Without 1031 = $1,150,000 × 25% = $287,500\n\n【1031 Exchange Result】: By completing a 1031 Exchange through a Qualified Intermediary (QI), you defer the entire $287,500 tax bill. You must identify replacement properties within 45 days and close on a replacement property priced at $2,350,000 or more within 180 days, preserving your full $287,500 in equity.',
+    exampleTitle: 'A 1031 Exchange Example ($2.5M Sale)',
+    exampleContent: 'Suppose you purchased a commercial building 8 years ago for $1,200,000 and are now selling it for $2,500,000 with $150,000 in closing costs. Your estimated combined tax rate is 25%.\n\nNet Sale Proceeds = $2,500,000 − $150,000 = $2,350,000\nRealized Capital Gain = $2,350,000 − $1,200,000 = $1,150,000\nTax Liability Without 1031 = $1,150,000 × 25% = $287,500\n\n【1031 Exchange Result】: By completing a 1031 Exchange through a Qualified Intermediary (QI), you defer the entire $287,500 tax bill. You must identify replacement properties within 45 days and close on a replacement property priced at $2,350,000 or more within 180 days, preserving your full $287,500 in equity.\n\n*Note: This is a hypothetical worked example for illustrative purposes only, not representing a real listing, transaction, or investment advice.*',
     faqTitle: 'Frequently Asked Questions',
     faqs: [
       {
@@ -398,8 +466,8 @@ export const enContent: LocaleContent = {
       { label: 'Purchase & Down Payment', desc: 'Property purchase price and equity down payment (SBA 504 loans require as low as 10% down; conventional 25%)' },
       { label: 'Appreciation & Exit Cost', desc: 'Expected annual property growth rate and broker commissions/closing costs upon sale (typically 5% - 6%)' },
     ],
-    exampleTitle: 'A Real 10-Year Lease vs Buy Example ($1.8M Purchase vs $10k/mo Rent)',
-    exampleContent: 'Suppose a company requires an office space for 10 years:\n- Option A (Lease): Initial monthly rent of $10,000 with 3.0% annual escalation. Total rent paid over 10 years = $1,375,666.\n- Option B (Buy): Purchase price of $1,800,000 with 25% down ($450,000) and $1,350,000 loan (6.5% interest, 25-yr amort). Annual appreciation of 3.0% and 5% selling cost at Year 10.\n  - Total mortgage debt service paid over 10 years = $1,093,836\n  - Property value grows to $2,419,049 at Year 10. Net sale proceeds after selling costs and remaining loan balance ($1,046,403) = $1,251,694\n  - Net Cost of Buying = $450,000 + $1,093,836 − $1,251,694 = $292,142\n\n【Result】: Buying saves approximately $1,083,524 over the 10-year holding period compared to leasing.',
+    exampleTitle: 'A 10-Year Lease vs Buy Example ($1.8M Purchase vs $10k/mo Rent)',
+    exampleContent: 'Suppose a company requires an office space for 10 years:\n- Option A (Lease): Initial monthly rent of $10,000 with 3.0% annual escalation. Total rent paid over 10 years = $1,375,666.\n- Option B (Buy): Purchase price of $1,800,000 with 25% down ($450,000) and $1,350,000 loan (6.5% interest, 25-yr amort). Annual appreciation of 3.0% and 5% selling cost at Year 10.\n  - Total mortgage debt service paid over 10 years = $1,093,836\n  - Property value grows to $2,419,049 at Year 10. Net sale proceeds after selling costs and remaining loan balance ($1,046,403) = $1,251,694\n  - Net Cost of Buying = $450,000 + $1,093,836 − $1,251,694 = $292,142\n\n【Result】: Buying saves approximately $1,083,524 over the 10-year holding period compared to leasing.\n\n*Note: This is a hypothetical worked example for illustrative purposes only, not representing a real listing, transaction, or investment advice.*',
     faqTitle: 'Frequently Asked Questions',
     faqs: [
       {
@@ -424,20 +492,20 @@ export const enContent: LocaleContent = {
   },
   breakEvenRatio: {
     metaTitle: 'Break-Even Ratio Calculator — Commercial Real Estate Risk Metric',
-    metaDescription: 'Calculate Break-Even Ratio (BER) for commercial real estate properties. Enter operating expenses, annual debt service, and Gross Potential Income to assess occupancy safety margins.',
+    metaDescription: 'Calculate commercial real estate Break-Even Ratio using EGI and estimate Break-Even Occupancy using GPI, operating expenses, and annual debt service.',
     h1: 'Break-Even Ratio Calculator',
-    subtitle: 'Determine the minimum occupancy rate required to cover operating expenses and mortgage debt service.',
+    subtitle: 'Assess your property\'s burden ratio and estimate the break-even occupancy needed to cover operating expenses and debt service.',
     whatIsTitle: 'What Is the Break-Even Ratio and Why It Matters',
-    whatIsContent: 'The Break-Even Ratio (BER) is a fundamental risk evaluation metric used by commercial real estate lenders and underwriting teams to gauge a property\'s vulnerability to vacancy and negative cash flow.\n\nBER shows the exact percentage of occupancy (or gross revenue) required to pay all operating expenses and annual mortgage debt service combined. A lower BER indicates a larger safety margin, meaning the property can weather economic downturns, tenant defaults, or rising expenses. Commercial lenders typically require a BER below 80% to 85%.',
+    whatIsContent: 'The Break-Even Ratio (BER) is a fundamental risk evaluation metric used by commercial real estate lenders and underwriting teams to gauge a property\'s vulnerability to negative cash flow.\n\nBreak-Even Ratio (BER) measures operating expenses and annual debt service as a percentage of the property\'s current Effective Gross Income. It is a burden ratio, not an occupancy percentage.\n\nBreak-Even Occupancy (BEO) is a separate simplified estimate calculated against Gross Potential Income. It estimates the occupancy required to cover operating expenses and debt service, assuming income changes proportionally with occupancy, without separately modeling other income, unit-level rent differences, tenant mix, or occupancy-sensitive operating expenses.',
     formulaTitle: 'The Formulas',
-    formulaCode: 'Break-Even Ratio (%) = ( Operating Expenses + Annual Debt Service ) / Effective Gross Income (EGI) × 100%\nMax Allowable Vacancy (%) = 100% − Break-Even Ratio',
+    formulaCode: 'Break-Even Ratio (%) = (Operating Expenses + Annual Debt Service) / Effective Gross Income × 100%\nBreak-Even Occupancy (%) = (Operating Expenses + Annual Debt Service) / Gross Potential Income × 100%',
     formulaVariables: [
       { label: 'Operating Expenses', desc: 'Total annual costs to operate the property (property taxes, insurance, management, repairs, utilities)' },
       { label: 'Annual Debt Service', desc: 'Total annual mortgage principal and interest payments (12 × Monthly Payment)' },
       { label: 'Effective Gross Income (EGI)', desc: 'Gross potential rent minus estimated vacancy and credit losses plus secondary income' },
     ],
-    exampleTitle: 'A Real Office Property Break-Even Example ($220k EGI)',
-    exampleContent: 'Suppose you own a commercial office building generating $220,000 in Effective Gross Income (EGI), with $70,000 in annual operating expenses and $121,536 in annual debt service:\n\nTotal Fixed Outlay = $70,000 + $121,536 = $191,536\nBreak-Even Ratio (BER) = ($191,536 / $220,000) × 100% = 87.06%\nMax Allowable Vacancy = 100% − 87.06% = 12.94%\n\n【Interpretation】: Because BER is 87.06% (exceeding lender target benchmarks of 80-85%), the financial cushion against vacancy is thin. If vacancy exceeds 12.94%, the property will experience a cash flow deficit.',
+    exampleTitle: '24-Unit Multifamily Break-Even Example',
+    exampleContent: 'Suppose you evaluate a 24-unit commercial multifamily building generating $336,000 in Gross Potential Income (GPI). With a 5% vacancy loss, the Effective Gross Income (EGI) is $319,200. The annual operating expenses are $92,000 and the annual debt service is $170,152:\n\nTotal Fixed Outlay = $92,000 + $170,152 = $262,152\nBreak-Even Ratio (BER) = ($262,152 / $319,200) × 100% = 82.13%\nBreak-Even Occupancy (BEO) = ($262,152 / $336,000) × 100% = 78.02%\n\n【Interpretation】: The BER is 82.13%, meeting typical lender benchmarks of under 85%. The BEO shows you need to maintain at least 78.02% occupancy to cover all bills. Note: BEO is a simplified estimate assuming income scales linearly with occupancy, without modeling other income or variable expenses.\n\n*Note: This is a hypothetical worked example for illustrative purposes only, not representing a real listing, transaction, or investment advice.*',
     faqTitle: 'Frequently Asked Questions',
     faqs: [
       {
@@ -445,8 +513,8 @@ export const enContent: LocaleContent = {
         answer: 'Most commercial lenders prefer a Break-Even Ratio under 80%. A BER below 80% signifies a robust financial cushion, making loan approval easier and interest terms more favorable.',
       },
       {
-        question: 'How does Break-Even Ratio differ from DSCR?',
-        answer: 'While DSCR measures net operating income against debt service (NOI / Debt Service), BER measures total fixed obligations (Expenses + Debt Service) against gross income (EGI). BER explicitly reveals the minimum required occupancy percentage to break even.',
+        question: 'How do Break-Even Ratio, Break-Even Occupancy, and DSCR differ?',
+        answer: 'DSCR measures net operating income against debt service (NOI / Debt Service). BER measures total fixed obligations (Expenses + Debt Service) against Effective Gross Income (EGI), revealing the total burden on collected income. BEO measures fixed obligations against Gross Potential Income (GPI) to provide a simplified estimate of the minimum required occupancy percentage to break even. They are distinct metrics that should not be confused.',
       },
       {
         question: 'How can an investor lower a property\'s Break-Even Ratio?',
@@ -539,14 +607,11 @@ export const enContent: LocaleContent = {
       },
     ],
     dataSourcesTitle: 'Data Sources & Citations',
+    methodologyTitle: 'Methodology & Data Limitations',
+    methodologyContent: 'The cap rate ranges presented above are synthesized as directional industry background based on the Newmark Valuation & Advisory North American Market Survey, supplemented by general illustrative industry trends for context. These ranges are educational generalizations rather than precise, itemized values extracted from any single source. Background context from other historical industry reports is used for broad trend illustration only. Investors must perform asset-specific underwriting rather than relying on aggregated benchmarks.',
     dataSources: [
-      'CBRE, U.S. Cap Rate Survey H2 2025',
-      'CBRE, U.S. Real Estate Market Outlook 2026',
-      'Newmark, 2026 Valuation & Advisory North American Market Survey',
-      'Nareit, Q1 2026 REIT Industry Tracker',
-      'Marcus & Millichap / Green Street self-storage market data, 2026',
-      'CRED iQ, CMBS-based cap rate trend data',
-      'Aggregated commercial brokerage valuation benchmarks (Cauble Group, CommercialCalc, Commercial Lending Solutions, 2026)',
+      { org: 'Newmark', reportName: '2026 Valuation & Advisory North American Market Survey', date: '2026', url: 'https://www.nmrk.com/insights/market-report/2026-valuation-advisory-north-american-market-survey', accessed: '2026-09-29' },
+      'Background context only (no direct exact figures used): Historical trends and general methodologies observed in past publications from CBRE, Nareit, Marcus & Millichap, Green Street, and CRED iQ. These are illustrative and do not reflect specific current data.'
     ],
     relatedTitle: 'Related CRE Calculators & Tools',
     relatedCalculators: [
@@ -574,7 +639,7 @@ export const enContent: LocaleContent = {
         content: "When you do get some financial documentation, don't take the bottom-line NOI at face value — reconstruct it line by line:\n\n- Verify the rent roll against the T-12 collected income: Does actual collected rent match what the rent roll claims is in place? A gap often signals concessions, delinquency, or units that have been vacant longer than disclosed.\n- Normalize the management fee: If the seller self-manages, add in a market-rate management fee (typically 3–8% of collected revenue depending on property type) rather than accepting a $0 or below-market line item — you'll likely need to pay for management once you own it.\n- Scrutinize add-backs: One-time items (a single large repair, a one-off legal settlement) are legitimate to normalize out. Recurring costs dressed up as \"one-time\" are a red flag.\n- Check for underinvestment in maintenance: A suspiciously low repairs-and-maintenance line relative to the property's age and condition often means deferred maintenance that will hit your budget shortly after closing, even if it hasn't shown up in the seller's historical NOI.",
       },
       {
-        title: "A Real Example",
+        title: "Worked Example",
         content: "You're evaluating a 20-unit apartment building. The seller provides a T-12 showing NOI of $185,000. On closer inspection:\n\n- The seller self-manages with no management fee line item — you add in a market-rate 5% management fee on $340,000 of collected income: −$17,000\n- Two units have been vacant for 4+ months (not reflected as ongoing vacancy loss in the T-12, since it only shows *actual* collected income): you apply a normalized 5% vacancy assumption going forward instead of the artificially low trailing vacancy: −$8,000\n- A one-time roof repair of $12,000 appears in the expense line as a legitimate one-off: add back +$12,000\n\nAdjusted NOI ≈ $185,000 − $17,000 − $8,000 + $12,000 = $172,000 — about 7% lower than the seller's stated figure. Run your Cap Rate, DSCR, and Cash-on-Cash calculations off this adjusted number, not the seller's headline NOI.",
       },
     ],
