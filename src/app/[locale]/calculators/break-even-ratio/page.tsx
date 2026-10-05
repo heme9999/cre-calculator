@@ -116,7 +116,7 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
               {isZh ? '计算 Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%\n计算 Break-Even Occupancy = ($92,000 + $170,152) / $336,000 = 78.02%' : 'Calculation: Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%\nBreak-Even Occupancy = ($92,000 + $170,152) / $336,000 = 78.02%'}
             </p>
             <p className="mt-2">
-              {isZh ? '这意味着该物业的 BEO 为 78.02%，即至少需要维持约 78% 的入住率才能刚好覆盖所有开销和房贷。而 BER 为 82.13%，符合多数商业银行低于 85% 的要求。想在一个页面上同时测试入住率、利率和 ' : 'This means the BEO is 78.02%, so the property needs to maintain at least 78% occupancy just to pay its bills. The BER is 82.13%, comfortably below the typical 85% lender maximum. To test how changes in occupancy, rates, and '}
+              {isZh ? '这意味着该物业的 BEO 为 78.02%，即至少需要维持约 78% 的入住率才能刚好覆盖所有开销和房贷。而 BER 为 82.13%，满足本站示例设定的 ≤85% 测算参考规则（注意：这并非全行业通用的贷方审批门槛，实际要求取决于贷款机构与产品）。想在一个页面上同时测试入住率、利率和 ' : 'This means the BEO is 78.02%, so the property needs to maintain at least 78% occupancy just to pay its bills. The BER is 82.13%, satisfying this tool\'s illustrative ≤85% reference rule (note that this is not a universal lender threshold; actual requirements vary by lender and debt program). To test how changes in occupancy, rates, and '}
               <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Cash-on-Cash 收益率' : 'Cash-on-Cash Return'}</Link>
               {isZh ? ' 之间的联动关系吗？请使用 ' : ' interact together on one page, try our comprehensive '}
               <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Deal Analyzer 综合尽调工具' : 'Deal Analyzer tool'}</Link>.

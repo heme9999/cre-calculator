@@ -85,7 +85,7 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
             {content.propertyTypeTitle}
           </h2>
           <p className="text-xs text-slate-500">
-            {locale === 'zh' ? '数据基准：2026年全美主流机构交易调研发布' : 'Aggregated 2026 valuation benchmarks across major commercial subtypes'}
+            {locale === 'zh' ? '说明：以下数据为教学测算参考示意区间（主要参考 Newmark 2026 年初市场调研与常规估值逻辑，非官方逐项交易报价发布）' : 'Note: Directional underwriting benchmark ranges for educational reference (informed by Newmark 2026 market survey and valuation conventions; not official transaction quotes)'}
           </p>
         </div>
 

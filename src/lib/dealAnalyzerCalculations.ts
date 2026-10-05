@@ -101,25 +101,25 @@ export function calculateSingleScenario(input: DealAnalyzerInput, locale: string
   // Break-Even Occupancy is calculated against Gross Potential Income (GPI)
   const breakEvenOccupancy = grossPotentialIncome > 0 ? ((operatingExpenses + annualDebtService) / grossPotentialIncome) * 100 : 0;
 
-  // Determine Health Status
+  // Determine Health Status (Illustrative heuristic benchmark, not universal lender criteria)
   let healthStatus: HealthStatus = 'green';
-  let healthTitle = isZh ? '交易健康' : 'Healthy Deal';
+  let healthTitle = isZh ? '示例评估：稳健区间' : 'Illustrative Rule: Stable Cushion';
   let healthDesc = isZh
-    ? '这笔交易在关键杠杆指标上处于健康区间（DSCR ≥ 1.25x 且 Break-Even Ratio ≤ 85%）。'
-    : 'Key leverage metrics sit comfortably within standard lender thresholds (DSCR ≥ 1.25x & BER ≤ 85%).';
+    ? '符合本站示例风险规则（测算假定 DSCR ≥ 1.25x 且 Break-Even Ratio ≤ 85%）。实际贷款审批门槛因贷方机构、贷款产品、增信担保及物业类型而异。'
+    : 'Meets this tool\'s illustrative risk rule (modeled benchmark: DSCR ≥ 1.25x & BER ≤ 85%). Actual lender underwriting criteria vary widely by institution, loan program, and asset profile.';
 
   if (dscr < 1.0 || breakEvenRatio > 90) {
     healthStatus = 'red';
-    healthTitle = isZh ? '风险警示' : 'Warning Signs';
+    healthTitle = isZh ? '示例评估：风险预警' : 'Illustrative Rule: Warning Signs';
     healthDesc = isZh
-      ? '存在明显风险信号：DSCR < 1.0x（现金流倒挂）或收支平衡比率 > 90%（抗空置能力极薄）。'
-      : 'Significant risk detected: DSCR < 1.0x (negative cash flow) or Break-Even Ratio > 90% (vulnerable to vacancy).';
+      ? '触碰本站示例风险红线：DSCR < 1.0x（经营现金流不足以偿债）或收支平衡比率 > 90%（抗空置缓冲极薄）。实际贷款门槛与违约判定需结合具体借贷合同约定。'
+      : 'Triggers illustrative risk criteria: DSCR < 1.0x (cash flow shortfall) or Break-Even Ratio > 90% (thin cushion against vacancy). Actual underwriting and default terms depend on specific loan contracts.';
   } else if (dscr < 1.25 || breakEvenRatio > 85) {
     healthStatus = 'yellow';
-    healthTitle = isZh ? '临界警戒' : 'Near Thresholds';
+    healthTitle = isZh ? '示例评估：临界警戒' : 'Illustrative Rule: Near Thresholds';
     healthDesc = isZh
-      ? '指标接近门槛（DSCR 1.0-1.25x 或 Break-Even Ratio 85%-90%），建议进一步评估或增加首付比率。'
-      : 'Near lender minimums (DSCR 1.0-1.25x or BER 85%-90%). Consider cautious underwriting or higher down payment.';
+      ? '接近本站示例警戒区间（DSCR 1.0-1.25x 或 Break-Even Ratio 85%-90%）。实际是否需要追加首付或设立偿债储备金取决于具体贷方与承销方案。'
+      : 'Approaches illustrative caution range (DSCR 1.0-1.25x or BER 85%-90%). Whether additional equity or debt service reserves are required depends on specific lender guidelines.';
   }
 
   return {

@@ -147,8 +147,8 @@ export const zhContent: LocaleContent = {
         {
           key: 'cap-rate-benchmarks-by-city',
           label: '市场基准',
-          title: '2026 年美国各城市 Cap Rate 基准数据',
-          desc: '洞察最新北美市场估值趋势与各大都会区资产收益率分布。'
+          title: '2026 年美国 Cap Rate 基准数据（按市场层级与物业类型）',
+          desc: '洞察最新北美市场估值趋势与主要都市圈层级商业资产收益率参考区间。'
         },
         {
           key: '1031-exchange-process',
@@ -177,11 +177,11 @@ export const zhContent: LocaleContent = {
       { label: 'Break-Even Occupancy', desc: '单独针对潜在毛收入计算的简化指标，估算覆盖刚性支出所需的入住水平。' },
     ],
     exampleTitle: '演算示例',
-    exampleContent: '一处购买价280万美元的物业，总潜在年收入33.6万美元，空置率5%，年运营支出9.2万美元：\n\n• NOI：$227,200 → Cap Rate：8.11%\n• 融资方案：首付25%（$700,000）加过户成本2%，贷款$2,100,000，利率6.5%，25年摊销\n• Cash-on-Cash Return：7.55% · DSCR：1.34x\n• Break-Even Ratio：82.13% · 盈亏平衡入住率：78.02%\n• Deal Health：健康 —— DSCR和Break-Even Ratio都舒适地处于贷款机构典型门槛以内\n\n现在做个压力测试（空置率升到10%，利率升到7.5%）：\n\n• DSCR降到1.13x —— 已经压到大多数贷款机构最低门槛的边缘\n• Break-Even Ratio升至92.01% (BEO升至82.81%) —— 进入高风险警示区间\n\n这正是压力测试的意义：一笔在基础情景下看起来相当健康的交易，在一个只是"适度更艰难"（并不是极端情景）的假设下，安全垫可能会大幅缩水。\n\n*注：此为演示计算逻辑的假设演算示例，不代表真实挂牌、成交或投资建议。*',
+    exampleContent: '一处购买价280万美元的物业，总潜在年收入33.6万美元，空置率5%，年运营支出9.2万美元：\n\n• NOI：$227,200 → Cap Rate：8.11%\n• 融资方案：首付25%（$700,000）加过户成本2%，贷款$2,100,000，利率6.5%，25年摊销\n• Cash-on-Cash Return：7.55% · DSCR：1.34x\n• Break-Even Ratio：82.13% · 盈亏平衡入住率：78.02%\n• Deal Health：示例稳健 —— DSCR 与 Break-Even Ratio 均符合本站示例风险规则（测算假定 DSCR ≥ 1.25x 且 BER ≤ 85%；实际贷款审批门槛因机构及具体产品而异）\n\n现在做个压力测试（空置率升到10%，利率升到7.5%）：\n\n• DSCR降到1.13x —— 已经压到大多数贷款机构最低门槛的边缘\n• Break-Even Ratio升至92.01% (BEO升至82.81%) —— 进入高风险警示区间\n\n这正是压力测试的意义：一笔在基础情景下看起来相当健康的交易，在一个只是"适度更艰难"（并不是极端情景）的假设下，安全垫可能会大幅缩水。\n\n*注：此为演示计算逻辑的假设演算示例，不代表真实挂牌、成交或投资建议。*',
     faqTitle: '常见问题',
     faqs: [
       {
-        question: '这个算出来的数字，会 me 和我单独用各个计算器算的不一样吗？',
+        question: '这个算出来的数字，会和我单独用各个计算器算的不一样吗？',
         answer: '不应该——Deal Analyzer用的是和我们独立的Cap Rate、NOI、Cash-on-Cash、DSCR、Break-Even Ratio计算器完全相同的计算逻辑。这里的优势是你只需要输入一次数据，而不是分别在五个页面各输入一次，这也避免了在不同工具之间不小心用了略有差异的输入数字这种风险。',
       },
       {
@@ -390,7 +390,7 @@ export const zhContent: LocaleContent = {
       },
       {
         question: '如果 DSCR 低于 1.0 会发生什么？',
-        answer: 'DSCR 低于 1.0x 意味着物业产生的净收益不足以支付房贷（即现金流倒挂）。在申请新贷款时，银行会直接拒绝审批；在现有贷款存续期内，可能会触发贷款违约条款（Technical Default），银行有权要求借款人注入额外资本或增加抵押物。',
+        answer: 'DSCR 低于 1.0x 意味着物业产生的净收益不足以支付房贷（即出现经营性现金流缺口）。在申请新贷款时，传统商业贷款机构通常难以按常规标准通过审批，能否获批取决于具体贷款产品、借款人整体财务实力与外部现金流补充能力、增信担保措施以及贷方的承销标准（例如过渡性过桥贷款或设有充足利息储备金的方案）；在现有贷款存续期内，是否构成违约及具体后果（如启动现金流截留 Cash Sweep、要求追加保证金或构成技术性违约 Technical Default）取决于贷款合同约定的契约条款与救济机制。',
       },
       {
         question: '如何提高物业的 DSCR 以符合贷款条件？',
@@ -398,7 +398,7 @@ export const zhContent: LocaleContent = {
       },
       {
         question: 'DSCR 和 NOI、Cap Rate 有什么关系？',
-        answer: 'NOI 是计算 DSCR 的分子。Cap Rate 决定了物业的总价值与购买价，而 DSCR 则决定了在给定的 NOI 下，你最多能从银行贷出多少资金（即最大可支持贷款额）。',
+        answer: 'NOI 是计算 DSCR 的分子。在给定且可持续的 NOI、市场适用 Cap Rate 及其他交易条件下，可用 NOI ÷ Cap Rate 作估值参考（成交价并非仅由 Cap Rate 决定，还受市场流动性、买卖双方博弈与资本成本影响）；而 DSCR 则决定了在给定的 NOI 下，物业现金流在满足贷方安全边际要求的前提下最多能支持多少还贷额（进而约束最大可支持贷款规模）。',
       },
     ],
     relatedTitle: '相关计算器',
@@ -496,7 +496,7 @@ export const zhContent: LocaleContent = {
     h1: '收支平衡比率 (Break-Even Ratio) 计算器',
     subtitle: '评估商业地产的固定支出负担比例，并估算覆盖所有运营支出与房贷所需的盈亏入住率。',
     whatIsTitle: 'Break-Even Ratio 是什么，为什么重要',
-    whatIsContent: '收支平衡比率（Break-Even Ratio，BER）衡量物业运营支出与年度还贷总额占当前有效毛收入（EGI）的比例。BER 是收入负担比率，不是出租率。BER 越低，说明当前有效收入对固定支出的覆盖缓冲越大。商业银行通常要求 BER 控制在 80% 至 85% 以下。\n\n盈亏入住率（Break-Even Occupancy，BEO）是另一个使用潜在毛收入（GPI）计算的简化指标，用于估算覆盖运营支出和债务偿付所需的入住水平。\n\n需要注意的是，BEO 是简化估算，假设收入随入住率同比变化，且未单独建模其他收入、不同租金、租户结构及随入住率变化的运营费用，因此不能代替完整现金流模型。',
+    whatIsContent: '收支平衡比率（Break-Even Ratio，BER）衡量物业运营支出与年度还贷总额占当前有效毛收入（EGI）的比例。BER 是收入负担比率，不是出租率。BER 越低，说明当前有效收入对固定支出的覆盖缓冲越大。在商业地产承销中放贷机构的风险偏好差异极大，本站示例测算参考 ≤85% 规则，但需注意这并非通用的法定或银行硬性审批门槛。\n\n盈亏入住率（Break-Even Occupancy，BEO）是另一个使用潜在毛收入（GPI）计算的简化指标，用于估算覆盖运营支出和债务偿付所需的入住水平。\n\n需要注意的是，BEO 是简化估算，假设收入随入住率同比变化，且未单独建模其他收入、不同租金、租户结构及随入住率变化的运营费用，因此不能代替完整现金流模型。',
     formulaTitle: '计算公式',
     formulaCode: 'Break-Even Ratio (收支平衡比率) = (运营支出 + 年度还贷总额) / 年有效毛收入 (EGI) × 100%\nBreak-Even Occupancy (盈亏入住率) = (运营支出 + 年度还贷总额) / 潜在毛收入 (GPI) × 100%',
     formulaVariables: [
@@ -505,12 +505,12 @@ export const zhContent: LocaleContent = {
       { label: '年有效毛收入 (Effective Gross Income)', desc: '潜在租金总收入扣除预期空置与欠租损失后的实际毛收入 (EGI)' },
     ],
     exampleTitle: '24户多户住宅盈亏平衡演算示例',
-    exampleContent: '假设你评估一处潜在毛收入 (GPI) 为 $336,000 的24户多家族商业物业。在扣除 5% 空置损失后，有效毛收入 (EGI) 为 $319,200。年度运营支出为 $92,000，按揭贷款年度还贷总额为 $170,152：\n\n刚性固定支出总额 = $92,000 + $170,152 = $262,152\n收支平衡比率 (BER) = ($262,152 / $319,200) × 100% = 82.13%\n盈亏入住率 (BEO) = ($262,152 / $336,000) × 100% = 78.02%\n\n【结果解读】：BER 为 82.13%（符合商业银行普遍低于 85% 的警戒线要求）。BEO 显示该物业至少需要维持 78.02% 的入住率才能覆盖账面开支。注：BEO 是简化估算，假设物业收入随入住率同比变化，且未单独建模其他收入和随入住率变化的运营费用。\n\n*注：此为演示计算逻辑的假设演算示例，不代表真实挂牌、成交或投资建议。*',
+    exampleContent: '假设你评估一处潜在毛收入 (GPI) 为 $336,000 的24户多家族商业物业。在扣除 5% 空置损失后，有效毛收入 (EGI) 为 $319,200。年度运营支出为 $92,000，按揭贷款年度还贷总额为 $170,152：\n\n刚性固定支出总额 = $92,000 + $170,152 = $262,152\n收支平衡比率 (BER) = ($262,152 / $319,200) × 100% = 82.13%\n盈亏入住率 (BEO) = ($262,152 / $336,000) × 100% = 78.02%\n\n【结果解读】：BER 为 82.13%，满足本站示例设定的 ≤85% 风险参考规则；需明确这并非所有贷款机构适用的通用审批标准，实际承销门槛因具体放贷机构、贷款产品及物业资质而异。BEO 显示该物业在简化假设下需要维持约 78.02% 的入住率才能覆盖账面刚性支出。注：BEO 是简化估算，假设物业收入随入住率同比变化，且未单独建模其他收入和随入住率变化的运营费用。\n\n*注：此为演示计算逻辑的假设演算示例，不代表真实挂牌、成交或投资建议。*',
     faqTitle: '常见问题',
     faqs: [
       {
-        question: '商业银行普遍接受的最高 Break-Even Ratio 是多少？',
-        answer: '多数商业地产放贷机构要求 Break-Even Ratio 不得超过 80% 至 85%。BER 低于 80% 被视为具有良好的财务安全缓冲，更容易获得贷款审批与优惠利率。',
+        question: '商业地产放贷机构对 Break-Even Ratio 有统一的审批门槛吗？',
+        answer: '没有全行业通用的法定或统一标准。放贷机构对 Break-Even Ratio 的考量因贷款类型（机构贷款、CMBS、过桥贷款等）、资产类型与借款人增信而异。部分常规商业贷款在承销经验上常以 80% 至 85% 作为参考区间，但本站示例中的 ≤85% 仅作为教学测算示意规则，实际能否获批取决于贷方的全盘核保。',
       },
       {
         question: 'Break-Even Ratio、Break-Even Occupancy 和 DSCR 有什么区别与联系？',
@@ -529,38 +529,38 @@ export const zhContent: LocaleContent = {
     ],
   },
   capRateBenchmarksGuide: {
-    metaTitle: '全美 Cap Rate 基准数据指南 — 各都市圈与物业类型 (2026最新)',
-    metaDescription: '权威整理全美一二三四级城市及住宅、工业、办公、零售、酒店、自存仓等商业地产的 Cap Rate 收益率区间与定价调整规律。',
-    h1: 'Cap Rate 基准数据指南：全美都市圈 × 全部物业类型',
-    subtitle: '基于 2026 年最新商业地产机构调研数据，整理全美各类商业资产与都市圈层级的 Cap Rate 收益率基准区间。',
-    disclaimer: 'Cap Rate会随市场行情波动。这里的区间是截至2026年年中综合多家行业机构调研数据得出的方向性参考，不是某个具体物业的报价——做投资决策前，请务必找当地经纪人核实最新的可比成交数据。',
-    propertyTypeTitle: '按物业类型的全美基准区间 (2026)',
+    metaTitle: '全美 Cap Rate 基准数据指南 — 市场层级与物业类型 (2026)',
+    metaDescription: '权威整理全美一二三四级市场层级及多户住宅、工业、办公、零售、酒店、自存仓等商业地产的 Cap Rate 收益率参考区间与定价规律。',
+    h1: 'Cap Rate 基准数据指南：市场层级 × 物业类型 (2026)',
+    subtitle: '基于商业地产估值逻辑与机构调研资料，整理主要商业资产与市场层级的 Cap Rate 收益率参考区间。',
+    disclaimer: 'Cap Rate 会随资本市场行情与利率环境波动。这里的区间是结合商业地产常规估值经验与 Newmark 2026 年北美市场调查报告的宏观定性观察整理的方向性教育基准，不代表报告原表数字摘抄或具体物业的成交报价——做投资决策前，请务必找当地经纪人核实最新的可比成交数据。',
+    propertyTypeTitle: '按物业类型的全美 Cap Rate 参考区间（教学测算示意）',
     propertyTypeTableHeader: {
       type: '物业类型 / 细分分类',
-      range: '2026年典型 Cap Rate 区间',
+      range: '方向性参考区间（教学测算示意）',
       notes: '说明与市场交易特征',
     },
     propertyTypes: [
-      { propertyType: '多户住宅（Multifamily）— Class A，核心市场', range: '4.50% – 5.25%', notes: '所有资产类型里最紧俏的，机构资金最青睐这个赛道' },
-      { propertyType: '多户住宅 — Class B，次级市场', range: '5.50% – 7.00%', notes: '典型的增值型（value-add）多户住宅交易最常见的区间' },
-      { propertyType: '多户住宅 — Class C，三级市场', range: '7.00% – 9.00%以上', notes: '收益更高，但运营和空置风险也更高' },
-      { propertyType: '工业地产（Industrial）— Class A / 大宗物流仓储', range: '5.00% – 6.50%', notes: '2022年加息周期后表现最抗跌的资产类型之一' },
-      { propertyType: '工业地产 — 单租户净租赁（Net Lease）', range: '5.00% – 5.75%', notes: '工业地产里最紧俏的细分类型，主要看租户信用等级' },
-      { propertyType: '工业灵活空间（Flex）/ 户外储存（IOS）', range: '6.50% – 9.00%', notes: '区间较宽，取决于租户和租期差异' },
-      { propertyType: '办公楼（Office）— Class A', range: '约8.4%（全美平均）', notes: '疫情后明显走高；核心城市CBD顶级资产实际成交可能明显更紧俏（6.0%–7.0%）' },
-      { propertyType: '办公楼 — Class B', range: '约8.7%（全美平均）', notes: '租户向高质量资产集中导致的二次分化' },
-      { propertyType: '办公楼 — Class C', range: '约9.0%以上（全美平均）', notes: '次级、三级市场中低价出售的情况比较常见' },
-      { propertyType: '零售（Retail）— 有超市锚定的购物中心', range: '5.75% – 6.50%', notes: '目前零售细分类型里需求最旺的一类' },
-      { propertyType: '零售 — 无锚定的小型商铺（Strip Center）', range: '7.00% – 9.00%', notes: '区间较宽，取决于租户组合和租约条款' },
-      { propertyType: '净租赁（Net Lease）— 投资级单租户', range: '5.00% – 6.00%', notes: '定价逻辑更接近债券，主要看租户信用评级' },
-      { propertyType: '酒店 — 豪华/全服务型', range: '约6.50%', notes: '高端旅游及休闲需求支撑溢价' },
-      { propertyType: '酒店 — 郊区/精选服务型', range: '约7.85%', notes: '区域型中端酒店的主流区间' },
-      { propertyType: '酒店 — 经济型/有限服务型', range: '约8.60%', notes: '酒店行业整体平均约8.2%' },
-      { propertyType: '自存仓（Self-Storage）— Class A，核心市场', range: '5.00% – 6.00%', notes: '优质资产的Cap Rate已经压缩到接近多户住宅的水平' },
-      { propertyType: '自存仓 — Class B，次级市场', range: '6.00% – 7.00%', notes: '现金流稳定，具备运营提升空间' },
-      { propertyType: '自存仓 — Class C，三级市场', range: '7.00% – 7.50%以上', notes: '人口覆盖较小的三级市场回报要求较高' },
-      { propertyType: '医疗办公楼（Medical Office）', range: '6.00% – 7.50%', notes: '长租约和优质租户信用支撑了定价' },
-      { propertyType: '数据中心（Data Centers）', range: '4.00% – 5.00%', notes: '受AI/云计算基础设施需求推动大幅压缩，是目前所有商业地产类型里最紧俏的之一' },
+      { propertyType: '多户住宅（Multifamily）— Class A，核心市场', range: '4.50% – 5.25% (示意区间)', notes: '所有资产类型里最紧俏的，机构资金最青睐这个赛道' },
+      { propertyType: '多户住宅 — Class B，次级市场', range: '5.50% – 7.00% (示意区间)', notes: '典型的增值型（value-add）多户住宅交易最常见的区间' },
+      { propertyType: '多户住宅 — Class C，三级市场', range: '7.00% – 9.00%以上 (示意区间)', notes: '收益更高，但运营和空置风险也更高' },
+      { propertyType: '工业地产（Industrial）— Class A / 大宗物流仓储', range: '5.00% – 6.50% (示意区间)', notes: '2022年加息周期后表现最抗跌的资产类型之一' },
+      { propertyType: '工业地产 — 单租户净租赁（Net Lease）', range: '5.00% – 5.75% (示意区间)', notes: '工业地产里最紧俏的细分类型，主要看租户信用等级' },
+      { propertyType: '工业灵活空间（Flex）/ 户外储存（IOS）', range: '6.50% – 9.00% (示意区间)', notes: '区间较宽，取决于租户和租期差异' },
+      { propertyType: '办公楼（Office）— Class A', range: '7.00% – 8.50% (示意区间)', notes: '疫情后明显走高并显著分化；顶级CBD地标资产与普通办公楼存在显著利差' },
+      { propertyType: '办公楼 — Class B', range: '8.00% – 9.50%以上 (示意区间)', notes: '租户向高质量资产集中导致的二次分化，再招租难度与资本开支要求推高资本化率' },
+      { propertyType: '办公楼 — Class C', range: '9.00%以上 (示意区间)', notes: '次级、三级市场中低价出售或困境折价交易比较常见' },
+      { propertyType: '零售（Retail）— 有超市锚定的购物中心', range: '5.75% – 6.50% (示意区间)', notes: '目前零售细分类型里需求最旺的一类' },
+      { propertyType: '零售 — 无锚定的小型商铺（Strip Center）', range: '7.00% – 9.00% (示意区间)', notes: '区间较宽，取决于租户组合和租约条款' },
+      { propertyType: '净租赁（Net Lease）— 投资级单租户', range: '5.00% – 6.00% (示意区间)', notes: '定价逻辑更接近债券，主要看租户信用评级' },
+      { propertyType: '酒店 — 豪华/全服务型', range: '6.50% – 7.50% (示意区间)', notes: '高端旅游及休闲需求支撑溢价，受地段与品牌壁垒保护' },
+      { propertyType: '酒店 — 郊区/精选服务型', range: '7.50% – 8.75% (示意区间)', notes: '区域型中端连锁酒店的主流参考区间，对商旅周期敏感' },
+      { propertyType: '酒店 — 经济型/有限服务型', range: '8.25% – 9.50%以上 (示意区间)', notes: '以更高名义回报补偿日常运营维护与折旧重置储备金需求' },
+      { propertyType: '自存仓（Self-Storage）— Class A，核心市场', range: '5.00% – 6.00% (示意区间)', notes: '优质资产的Cap Rate已经压缩到接近多户住宅的水平' },
+      { propertyType: '自存仓 — Class B，次级市场', range: '6.00% – 7.00% (示意区间)', notes: '现金流稳定，具备运营提升空间' },
+      { propertyType: '自存仓 — Class C，三级市场', range: '7.00% – 7.50%以上 (示意区间)', notes: '人口覆盖较小的三级市场回报要求较高' },
+      { propertyType: '医疗办公楼（Medical Office）', range: '6.00% – 7.50% (示意区间)', notes: '长租约和优质租户信用支撑了定价' },
+      { propertyType: '数据中心（Data Centers）', range: '4.00% – 5.00% (示意区间)', notes: '受AI/云计算基础设施需求推动大幅压缩，是目前所有商业地产类型里最紧俏的之一' },
     ],
     marketTierTitle: '按城市/都市圈市场层级的调整幅度',
     marketTierIntro: '行业普遍用“市场层级（Market Tier）”来描述不同城市相对全美平均水平的定价差异，而不是给每个城市单独定一个精确数字。核心/门户市场比三级市场通常紧俏 75-150 个基点 (0.75%-1.5%)。',
@@ -601,7 +601,7 @@ export const zhContent: LocaleContent = {
       },
       {
         question: '这份数据多久更新一次？',
-        answer: 'Cap Rate是商业地产里波动相对较大的指标之一——会跟着利率、资金流向、各细分行业的市场情绪变化。像CBRE这样的主要行业调研报告，通常一年发布两次（大概在1月和7月），这份指南也会跟着更新。做实际交易决策时，不建议参考超过6-12个月的Cap Rate数据。',
+        answer: 'Cap Rate 会随利率环境、信贷利差与资本市场流动性持续变动。各大商业地产调研机构（如 CBRE、Newmark 等）通常按半年度节奏发布市场调查，各家发布时点并不固定。本指南作为教学测算用的静态参考框架（最近核验日期：2026年9月），不承诺与外部机构报告实时同步更新。在开展实际项目核保与商业谈判时，务必向当地活跃商业经纪人获取最新的价值意见书（BOV）及近 3-6 个月的真实可比成交记录，切勿依赖静态参考指南。',
       },
       {
         question: '为什么办公楼的区间比其他物业类型宽这么多？',
@@ -610,9 +610,9 @@ export const zhContent: LocaleContent = {
     ],
     dataSourcesTitle: '数据来源与权威报告',
     methodologyTitle: '方法论与数据限制',
-    methodologyContent: '本页面展示的资本化率（Cap Rate）区间作为方向性的行业背景，主要基于 Newmark 估值与咨询部门北美市场调查报告进行综合提炼，并辅以一般行业趋势作为概括性说明。这些区间属于教育性归纳，并非逐项摘取自 Newmark 报告的精确原始数值。其他历史行业报告仅用作宽泛的背景阅读。投资者在进行投资决策前，必须对具体资产进行独立测算，不能仅仅依赖聚合的基准数据。',
+    methodologyContent: '本页面展示的资本化率（Cap Rate）区间为用于教学测算的方向性参考基准（Educational Benchmarks）。宏观趋势主要参考 Newmark 估值与咨询部门北美市场调查报告（2026 Valuation & Advisory North American Market Survey）对多户住宅、工业、零售及办公等核心业态的定性与利差分析，并结合行业常规核保经验综合归纳。本页所有数值并非直接摘抄自报告原表的逐项交易原值，细分子行业与数值边界均为教学测算示意。投资者在进行实际交易决策前，必须针对标的物业开展独立核保、索取经纪人价值意见书（BOV）并查验近期真实可比成交，切勿仅依赖聚合基准区间。',
     dataSources: [
-      { org: 'Newmark', reportName: '2026 Valuation & Advisory North American Market Survey', date: '2026', url: 'https://www.nmrk.com/insights/market-report/2026-valuation-advisory-north-american-market-survey', accessed: '2026-09-29' },
+      { org: 'Newmark', reportName: '2026 Valuation & Advisory North American Market Survey', date: '2026-02-18', url: 'https://www.nmrk.com/insights/market-report/2026-valuation-advisory-north-american-market-survey', accessed: '2026-09-29' },
       '仅作为背景参考 (不提供精确支持数字): 观察自 CBRE, Nareit, Marcus & Millichap, Green Street 与 CRED iQ 等机构过往报告的行业趋势与常规方法论。内容仅用于举例，不代表具体实时的市场数据。'
     ],
     relatedTitle: '相关计算器与工具',
@@ -835,8 +835,8 @@ export const zhContent: LocaleContent = {
     guides: [
       {
         slug: 'cap-rate-benchmarks-by-city',
-        title: 'Cap Rate 基准数据指南：全美都市圈 × 全部物业类型',
-        description: '基于 2026 年最新商业地产机构调研数据，整理全美各类商业资产与都市圈层级的 Cap Rate 收益率基准区间。',
+        title: 'Cap Rate 基准数据指南：市场层级 × 全部物业类型',
+        description: '基于 2026 年最新商业地产机构调研数据，整理全美各类商业资产与市场层级的 Cap Rate 收益率基准区间。',
         badge: '市场数据',
         readTime: '8 分钟阅读',
       },

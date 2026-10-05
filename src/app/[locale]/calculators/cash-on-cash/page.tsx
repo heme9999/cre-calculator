@@ -159,9 +159,9 @@ export default async function CashOnCashPage({ params }: PageProps) {
               <p className="mt-1">
                 {isZh ? '如果贷款利率上升到 7.5%，且空置率恶化至 10% 会怎样？' : 'What if loan rates rise to 7.5% and vacancy worsens to 10%?'}
                 <br />
-                {isZh ? '年还贷本息升至 $186,225，而 NOI 缩水至 $210,400。此时年税前现金流骤降至 $24,175。这意味着在压力情景下，Cash-on-Cash Return 会暴跌至 3.20%。同时，' : 'Annual debt service jumps to $186,225, while NOI shrinks to $210,400. Pre-tax cash flow plummets to $24,175. Under this stress scenario, your Cash-on-Cash Return collapses to just 3.20%. Additionally, your '}
+                {isZh ? '年还贷本息升至 $186,226，而 NOI 缩水至 $210,400。此时年税前现金流骤降至 $24,174。这意味着在压力情景下，Cash-on-Cash Return 会暴跌至 3.20%。同时，' : 'Annual debt service jumps to $186,226, while NOI shrinks to $210,400. Pre-tax cash flow plummets to $24,174. Under this stress scenario, your Cash-on-Cash Return collapses to just 3.20%. Additionally, your '}
                 <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'DSCR 偿债覆盖率' : 'DSCR (Debt Service Coverage Ratio)'}</Link>
-                {isZh ? ' 将跌至 1.13x 的违约边缘。要一次性测试这些风险，建议使用完整的 ' : ' drops to a dangerously thin 1.13x. To model these risks simultaneously, use the full '}
+                {isZh ? ' 将降至 1.13x（这已接近部分商业贷款合同约定的警戒阈值）。要一次性测试这些风险，建议使用完整的 ' : ' drops to 1.13x (approaching common lender covenant thresholds depending on the loan agreement). To model these risks simultaneously, use the full '}
                 <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Deal Analyzer 综合尽调工具' : 'Deal Analyzer underwriting tool'}</Link>.
               </p>
             </div>

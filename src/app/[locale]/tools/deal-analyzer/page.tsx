@@ -132,7 +132,7 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
         </section>
 
         {/* Worked Example */}
-        <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
+        <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4" data-testid="worked-example-section">
           <h2 className="text-xl font-bold text-slate-900">{isZh ? '商业地产分析案例 (Illustrative Example)' : 'Worked Commercial Property Example'}</h2>
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-4">
             <p>
@@ -147,8 +147,8 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
               <li>{isZh ? '交易过户费: 2% ($56,000)' : 'Closing costs: 2% ($56,000)'}</li>
               <li>{isZh ? '商业贷款: 6.5% 利率，25年摊销期' : 'Commercial loan: 6.5% interest rate, 25-year amortization'}</li>
             </ul>
-            
-            <div>
+
+            <div data-testid="worked-example-step-1">
               <strong className="text-slate-900">{isZh ? '步骤 1：分析物业现金流 (NOI 与 Cap Rate)' : 'Step 1: Property-Level Cash Flow (NOI & Cap Rate)'}</strong>
               <p className="mt-1">
                 {isZh ? '首先扣除空置损失得到有效总收入 (EGI) $319,200。减去运营费用后，我们可以 ' : 'First, deducting vacancy gives an Effective Gross Income (EGI) of $319,200. After subtracting operating expenses, we can '}
@@ -158,7 +158,7 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
               </p>
             </div>
 
-            <div>
+            <div data-testid="worked-example-step-2">
               <strong className="text-slate-900">{isZh ? '步骤 2：债务与股权回报 (DSCR 与 Cash-on-Cash)' : 'Step 2: Debt Coverage & Equity Return (DSCR & Cash-on-Cash)'}</strong>
               <p className="mt-1">
                 {isZh ? '按上述条款，年还本付息额 (Annual Debt Service) 为 $170,152。将 NOI 除以债务，我们以此来 ' : 'Based on the loan terms, the annual debt service is $170,152. By dividing the NOI by the debt service, we '}
@@ -166,19 +166,19 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
                 {isZh ? '，结果为健康水平的 1.34x。扣除债务后的税前现金流为 $57,048，对比 $756,000 的总现金投入（首付+过户费），我们可以 ' : ', resulting in a healthy 1.34x coverage. The pre-tax cash flow after debt is $57,048. Compared against the $756,000 total cash invested (down payment + closing costs), we '}
                 <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '衡量投入股权的现金回报率 (Cash-on-Cash Return)' : 'measure cash return on invested equity'}</Link>
                 {isZh ? ' 为 7.55%。此交易目前的 ' : ', which yields 7.55%. Currently, the '}
-                <Link href={`/${locale}/calculators/break-even-ratio/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '盈亏平衡点 (Break-Even Ratio)' : 'Break-Even Ratio'}</Link>
-                {isZh ? ' 为 78.02%。' : ' is 78.02%.'}
+                <Link href={`/${locale}/calculators/break-even-ratio/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '收支平衡比率 (Break-Even Ratio)' : 'Break-Even Ratio (BER)'}</Link>
+                {isZh ? ' 为 82.13%（对应的简化盈亏入住率 Break-Even Occupancy 为 78.02%）。' : ' is 82.13% (with a simplified Break-Even Occupancy of 78.02%).'}
               </p>
             </div>
 
-            <div>
+            <div data-testid="worked-example-step-3">
               <strong className="text-amber-700">{isZh ? '步骤 3：压力测试 (Stress Testing)' : 'Step 3: Stress Testing'}</strong>
               <p className="mt-1">
                 {isZh ? '基础情景看似健康，但如果你将空置率上调至 10%，并将利率上调至 7.5% 呢？' : 'The base case appears healthy, but what happens if vacancy rises to 10% and interest rates climb to 7.5%?'}
                 <br />
-                {isZh ? '年还款额上升至 $186,225，而 NOI 下降至 $210,400。此时，DSCR 骤降至 1.13x（可能触发贷款违约条款），且 Cash-on-Cash Return 暴跌至 3.20%。盈亏平衡点也攀升至 82.81% 的危险区域。这就是为什么全面 ' : 'Annual debt service climbs to $186,225, while NOI drops to $210,400. In this scenario, the DSCR plummets to 1.13x (entering the warning zone for many lenders), and the Cash-on-Cash Return shrinks to 3.20%. The Break-Even Ratio also rises to a risky 82.81%. This demonstrates why it is crucial to fully '}
+                {isZh ? '年还款额上升至 $186,226，而 NOI 下降至 $210,400。此时，DSCR 骤降至 1.13x（是否构成违约取决于具体贷款合同约定的契约条款与指标阈值，但通常已接近或触及贷方警戒线），且 Cash-on-Cash Return 暴跌至 3.20%。收支平衡比率 (BER) 亦攀升至 92.01%（盈亏入住率 BEO 达 82.81%），进入高风险区间。这就是为什么全面 ' : 'Annual debt service climbs to $186,226, while NOI drops to $210,400. In this scenario, the DSCR plummets to 1.13x (which, depending on the specific loan agreement covenants, may trigger lender watchlists, cash sweeps, or technical default discussions), and the Cash-on-Cash Return shrinks to 3.20%. The Break-Even Ratio rises to 92.01% (with Break-Even Occupancy reaching 82.81%), pushing into the high-risk zone. This demonstrates why comprehensive '}
                 <Link href={`/${locale}/guides/how-to-underwrite-a-deal/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '承销商业地产交易' : 'underwrite a commercial real estate deal'}</Link>
-                {isZh ? ' 时必须包含下行风险。' : ' incorporating downside risk.'}
+                {isZh ? ' 时应结合下行压力场景审慎评估。' : ' must evaluate downside resilience across multiple scenarios.'}
               </p>
             </div>
           </div>
@@ -193,8 +193,8 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
           <div className="space-y-2 text-xs sm:text-sm text-amber-900 leading-relaxed">
             <p>
               {isZh
-                ? '1. 忽视压力测试：仅看基准情景 (Base Case) 往往过于乐观。必须施加 +5 个百分点空置与 +100 bps 利率压力，检验 DSCR 是否跌破 1.0x 违约警戒线。'
-                : '1. Overlooking Stress Testing: Underwriting only base-case pro-formas is dangerous. Always apply +5 percentage points vacancy and +100 bps interest rate stress to test debt coverage resilience.'}
+                ? '1. 忽视压力测试：仅看基准情景 (Base Case) 往往过于乐观。建议结合市场下行假设（例如将空置率调高5个百分点或利率上浮100个基点）进行压力测试，检验物业在不利环境下的偿债安全垫，而非僵化套用单一标准。'
+                : '1. Overlooking Stress Testing: Underwriting only base-case pro-formas is dangerous. It is prudent to model sensible downside scenarios (such as +5 percentage points vacancy or +100 bps interest rate increases) to evaluate debt coverage cushion, rather than assuming a single static projection applies to every deal.'}
             </p>
             <p>
               {isZh
@@ -210,11 +210,11 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
             <HelpCircle className="w-5 h-5 text-emerald-600" />
             {content.faqTitle}
           </h2>
-          <div className="space-y-6 divide-y divide-slate-100">
+          <div className="space-y-6 divide-y divide-slate-100" data-testid="faq-list">
             {content.faqs.map((faq, idx) => (
-              <div key={idx} className={idx > 0 ? 'pt-6' : ''}>
-                <h3 className="text-base font-bold text-slate-900 mb-2">{faq.question}</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
+              <div key={idx} className={idx > 0 ? 'pt-6' : ''} data-testid="faq-item">
+                <h3 className="text-base font-bold text-slate-900 mb-2" data-testid="faq-question">{faq.question}</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed" data-testid="faq-answer">{faq.answer}</p>
               </div>
             ))}
           </div>

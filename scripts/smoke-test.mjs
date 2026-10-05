@@ -212,6 +212,8 @@ async function runSmokeTests() {
     await checkOverflow('http://localhost:3460/en/');
     await checkOverflow('http://localhost:3460/zh/calculators/noi/');
     await checkOverflow('http://localhost:3460/zh/tools/deal-analyzer/');
+    await checkOverflow('http://localhost:3460/zh/guides/cap-rate-benchmarks-by-city/');
+    await checkOverflow('http://localhost:3460/en/guides/cap-rate-benchmarks-by-city/');
 
 
 
@@ -291,6 +293,115 @@ async function runSmokeTests() {
     await assertMetrics('http://localhost:3460/zh/tools/deal-analyzer/', false);
     await assertMetrics('http://localhost:3460/en/tools/deal-analyzer/', true);
     await assertMetrics('http://localhost:3460/zh/tools/deal-analyzer/', true);
+
+    console.log('\n--- 6b. Testing Visible Case Study Scoped Binding & Metrics ---');
+    const assertVisibleWorkedExample = async (pageUrl) => {
+        await page.goto(pageUrl, { waitUntil: 'networkidle0' });
+
+        // 1. Target the exact worked example container
+        const exampleSectionExists = await page.$('[data-testid="worked-example-section"]');
+        if (!exampleSectionExists) {
+            throw new Error(`Worked example section [data-testid="worked-example-section"] not found on ${pageUrl}`);
+        }
+
+        const step2Text = await page.$eval('[data-testid="worked-example-step-2"]', el => el.innerText.trim());
+        const step3Text = await page.$eval('[data-testid="worked-example-step-3"]', el => el.innerText.trim());
+
+        const isZh = pageUrl.includes('/zh/');
+
+        // --- Step 2 (Base Case) Label-to-Value Binding Checks ---
+        // Verify BER binding to 82.13%
+        const berRegex = isZh
+            ? /收支平衡比率[^\d]*82\.13%/
+            : /Break-Even Ratio[^\d]*82\.13%/i;
+        if (!berRegex.test(step2Text)) {
+            throw new Error(`Base BER 82.13% not correctly bound to label in Step 2 on ${pageUrl}. Got: "${step2Text}"`);
+        }
+
+        // Verify BEO binding to 78.02%
+        const beoRegex = isZh
+            ? /(Break-Even Occupancy|盈亏入住率)[^\d]*78\.02%/
+            : /Break-Even Occupancy[^\d]*78\.02%/i;
+        if (!beoRegex.test(step2Text)) {
+            throw new Error(`Base BEO 78.02% not correctly bound to label in Step 2 on ${pageUrl}. Got: "${step2Text}"`);
+        }
+
+        // Assert 78.02% is NEVER labeled as Break-Even Ratio in Step 2
+        const badBer78Regex = isZh
+            ? /收支平衡比率[^，。.)]*78\.02%/
+            : /Break-Even Ratio[^.)]*is 78\.02%/i;
+        if (badBer78Regex.test(step2Text)) {
+            throw new Error(`78.02% was erroneously labeled as Break-Even Ratio in Step 2 on ${pageUrl}`);
+        }
+
+        // Verify DSCR 1.34x and Cash-on-Cash 7.55% in Step 2
+        if (!/1\.34x/.test(step2Text)) {
+            throw new Error(`Base DSCR 1.34x not found in Step 2 on ${pageUrl}`);
+        }
+        if (!/7\.55%/.test(step2Text)) {
+            throw new Error(`Base Cash-on-Cash 7.55% not found in Step 2 on ${pageUrl}`);
+        }
+        if (!/\$170,152/.test(step2Text)) {
+            throw new Error(`Base Annual Debt Service $170,152 not found in Step 2 on ${pageUrl}`);
+        }
+
+        // --- Step 3 (Stress Case) Label-to-Value Binding Checks ---
+        // Stress debt service must be $186,226 (and not $186,225)
+        if (!/\$186,226/.test(step3Text)) {
+            throw new Error(`Missing stress debt service "$186,226" in Step 3 on ${pageUrl}`);
+        }
+        if (step3Text.includes('$186,225')) {
+            throw new Error(`Outdated debt service "$186,225" found in Step 3 on ${pageUrl}`);
+        }
+
+        // Verify Stress BER binding to 92.01%
+        const stressBerRegex = isZh
+            ? /(收支平衡比率 \(BER\)|收支平衡比率|BER)[^\d]*92\.01%/
+            : /Break-Even Ratio[^\d]*92\.01%/i;
+        if (!stressBerRegex.test(step3Text)) {
+            throw new Error(`Stress BER 92.01% not correctly bound to label in Step 3 on ${pageUrl}. Got: "${step3Text}"`);
+        }
+
+        // Verify Stress BEO binding to 82.81%
+        const stressBeoRegex = isZh
+            ? /(盈亏入住率 BEO|盈亏入住率|BEO)[^\d]*82\.81%/
+            : /(Break-Even Occupancy|BEO)[^\d]*82\.81%/i;
+        if (!stressBeoRegex.test(step3Text)) {
+            throw new Error(`Stress BEO 82.81% not correctly bound to label in Step 3 on ${pageUrl}. Got: "${step3Text}"`);
+        }
+
+        // Assert 82.81% is NEVER labeled as Break-Even Ratio in Step 3
+        const badBer82Regex = isZh
+            ? /收支平衡比率[^，。.)]*82\.81%/
+            : /Break-Even Ratio[^.)]*rises to [a-z ]*82\.81%/i;
+        if (badBer82Regex.test(step3Text)) {
+            throw new Error(`82.81% was erroneously labeled as Break-Even Ratio in Step 3 on ${pageUrl}`);
+        }
+
+        // Verify Stress DSCR 1.13x and Cash-on-Cash 3.20%
+        if (!/1\.13x/.test(step3Text)) {
+            throw new Error(`Stress DSCR 1.13x not found in Step 3 on ${pageUrl}`);
+        }
+        if (!/3\.20%/.test(step3Text)) {
+            throw new Error(`Stress Cash-on-Cash 3.20% not found in Step 3 on ${pageUrl}`);
+        }
+
+        // Verify conditional default language in Step 3
+        if (isZh) {
+            if (!step3Text.includes('是否构成违约取决于具体贷款合同')) {
+                throw new Error(`Step 3 on ${pageUrl} lacks conditional default covenant clarification`);
+            }
+        } else {
+            if (!step3Text.includes('depending on the specific loan agreement covenants')) {
+                throw new Error(`Step 3 on ${pageUrl} lacks conditional default covenant clarification`);
+            }
+        }
+
+        console.log(`✅ ${pageUrl} passed scoped case study block & metric binding assertions.`);
+    };
+
+    await assertVisibleWorkedExample('http://localhost:3460/en/tools/deal-analyzer/');
+    await assertVisibleWorkedExample('http://localhost:3460/zh/tools/deal-analyzer/');
 
     console.log('\n--- 7. Testing JSON-LD Consistency ---');
 
@@ -402,6 +513,58 @@ async function runSmokeTests() {
 
     await verifyJsonLd('http://localhost:3460/en/calculators/break-even-ratio/');
     await verifyJsonLd('http://localhost:3460/zh/calculators/break-even-ratio/');
+
+    console.log('\n--- 8. Testing Cap Rate Guide Benchmarks & Health Heuristic Text ---');
+    const verifyCapRateGuideAndHealth = async () => {
+      // Check EN Cap Rate Guide
+      await page.goto('http://localhost:3460/en/guides/cap-rate-benchmarks-by-city/', { waitUntil: 'networkidle0' });
+      const enGuideText = await page.evaluate(() => document.body.innerText);
+      if (enGuideText.includes('~8.4% (national average)') || enGuideText.includes('~8.60%')) {
+        throw new Error('EN Cap Rate Guide still contains pseudo-exact national average decimal numbers');
+      }
+      if (enGuideText.includes('this guide will be updated accordingly')) {
+        throw new Error('EN Cap Rate Guide still promises automated synchronization with future surveys');
+      }
+      if (!enGuideText.includes('Illustrative Benchmark Range')) {
+        throw new Error('EN Cap Rate Guide lacks "Illustrative Benchmark Range" table header');
+      }
+
+      // Check ZH Cap Rate Guide
+      await page.goto('http://localhost:3460/zh/guides/cap-rate-benchmarks-by-city/', { waitUntil: 'networkidle0' });
+      const zhGuideText = await page.evaluate(() => document.body.innerText);
+      if (zhGuideText.includes('数据基准：2026年全美主流机构交易调研发布')) {
+        throw new Error('ZH Cap Rate Guide still claims official institutional survey release in table subtitle');
+      }
+      if (zhGuideText.includes('约8.4%（全美平均）') || zhGuideText.includes('约8.60%')) {
+        throw new Error('ZH Cap Rate Guide still contains pseudo-exact national average decimal numbers');
+      }
+      if (zhGuideText.includes('这份指南也会跟着更新')) {
+        throw new Error('ZH Cap Rate Guide still promises automated synchronization with future surveys');
+      }
+      if (!zhGuideText.includes('方向性参考区间（教学测算示意）')) {
+        throw new Error('ZH Cap Rate Guide lacks "方向性参考区间（教学测算示意）" table header');
+      }
+
+      // Check Deal Analyzer Health Heuristic
+      await page.goto('http://localhost:3460/en/tools/deal-analyzer/', { waitUntil: 'networkidle0' });
+      const enAnalyzerText = await page.evaluate(() => document.body.innerText);
+      if (!enAnalyzerText.includes('Illustrative Rule: Stable Cushion')) {
+        throw new Error('EN Deal Analyzer does not show "Illustrative Rule: Stable Cushion" health title');
+      }
+      if (enAnalyzerText.includes('within standard lender thresholds')) {
+        throw new Error('EN Deal Analyzer improperly claims "standard lender thresholds" for internal heuristic');
+      }
+
+      await page.goto('http://localhost:3460/zh/tools/deal-analyzer/', { waitUntil: 'networkidle0' });
+      const zhAnalyzerText = await page.evaluate(() => document.body.innerText);
+      if (!zhAnalyzerText.includes('示例评估：稳健区间')) {
+        throw new Error('ZH Deal Analyzer does not show "示例评估：稳健区间" health title');
+      }
+
+      console.log('✅ Cap Rate Guide educational benchmarks & Deal Analyzer illustrative rules verified on live DOM.');
+    };
+
+    await verifyCapRateGuideAndHealth();
 
 
     // Test Viewports: 320, 375, 1440

@@ -96,7 +96,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
       >
         <div className="flex items-center justify-between text-xs font-bold mb-1">
           <span className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">
-            {isZh ? '综合诊断' : 'Underwriting Evaluation'}
+            {isZh ? '全案示例规则诊断' : 'Illustrative Rule Evaluation'}
           </span>
           <span
             className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${

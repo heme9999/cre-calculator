@@ -230,7 +230,7 @@ export function DealAnalyzerTool({ locale }: Props) {
         bg: 'bg-emerald-50 border-emerald-300 text-emerald-950',
         badge: 'bg-emerald-600 text-white',
         Icon: CheckCircle2,
-        label: isZh ? '健康 (Healthy)' : 'Healthy',
+        label: isZh ? '示例评级：稳健' : 'Illustrative: Stable Cushion',
       };
     }
     if (status === 'yellow') {
@@ -238,14 +238,14 @@ export function DealAnalyzerTool({ locale }: Props) {
         bg: 'bg-amber-50 border-amber-300 text-amber-950',
         badge: 'bg-amber-600 text-white',
         Icon: AlertTriangle,
-        label: isZh ? '临界 (Caution)' : 'Caution',
+        label: isZh ? '示例评级：临界' : 'Illustrative: Near Threshold',
       };
     }
     return {
       bg: 'bg-rose-50 border-rose-300 text-rose-950',
       badge: 'bg-rose-600 text-white',
       Icon: ShieldAlert,
-      label: isZh ? '警示 (Warning)' : 'Warning',
+      label: isZh ? '示例评级：高风险' : 'Illustrative: Elevated Risk',
     };
   };
 
@@ -636,7 +636,7 @@ export function DealAnalyzerTool({ locale }: Props) {
             <div className={`p-5 rounded-2xl border ${baseBadge.bg} space-y-2 transition-all`}>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                  {isZh ? '交易综合健康度诊断' : 'Deal Health Evaluation'}
+                  {isZh ? '全案示例规则诊断' : 'Illustrative Rule Evaluation'}
                 </span>
                 <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full ${baseBadge.badge}`}>
                   <BaseIcon className="w-3.5 h-3.5" />
@@ -858,7 +858,7 @@ export function DealAnalyzerTool({ locale }: Props) {
           {/* Deal Health Banner */}
           <div className={`p-4 rounded-xl border-2 ${baseBadge.bg} flex items-center justify-between`}>
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">{isZh ? '交易健康度诊断' : 'Deal Health Evaluation'}</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">{isZh ? '全案示例规则诊断' : 'Illustrative Rule Evaluation'}</span>
               <span className="text-lg font-black">{base.healthTitle}</span>
               <p className="text-xs text-slate-700 mt-0.5">{base.healthDesc}</p>
             </div>
