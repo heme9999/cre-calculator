@@ -48,7 +48,7 @@ export function UnderwritingWorkflowDiagram({ locale }: Props) {
     {
       num: '05',
       title: isZh ? '5. 压力情景测试' : '5. Stress Testing',
-      sub: isZh ? '空置率增加5个百分点，利率增加100个基点' : '+5 percentage points Vacancy & +100 bps Rate Shock',
+      sub: isZh ? '空置率增加5个百分点，利率增加100个基点 (bps, 即1.00个百分点)' : '+5 percentage points Vacancy & +100 bps (1.00 percentage point) Rate Shock',
       desc: isZh ? '检验下行周期中的现金流安全垫与偿债能力' : 'Evaluate downside liquidity, debt coverage & solvency',
       icon: Zap,
       accent: 'bg-rose-50 text-rose-700 border-rose-200',

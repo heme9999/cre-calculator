@@ -109,9 +109,9 @@ export default async function NoiPage({ params }: PageProps) {
           </div>
           <div className="space-y-2 pt-2">
             {content.formulaVariables.map((v, idx) => (
-              <div key={idx} className="text-xs sm:text-sm flex items-start gap-2">
-                <span className="font-bold text-slate-900 min-w-[180px]">{v.label}:</span>
-                <span className="text-slate-600">{v.desc}</span>
+              <div key={idx} className="text-xs sm:text-sm flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2">
+                <span className="font-bold text-slate-900 sm:min-w-[180px]">{v.label}:</span>
+                <span className="text-slate-600 break-words">{v.desc}</span>
               </div>
             ))}
           </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { PaymentType } from '@/lib/loanCalculations';
 import {
@@ -20,6 +21,7 @@ import {
   FileDown,
   ChevronDown,
   ChevronUp,
+  ArrowRight,
 } from 'lucide-react';
 
 interface Props {
@@ -390,9 +392,18 @@ export function DealAnalyzerTool({ locale }: Props) {
           {/* Inputs Section */}
           <div className="lg:col-span-7 space-y-6">
             {/* Collapsible Tool Explanation Banner */}
-            <div className="bg-emerald-50/80 border border-emerald-200/80 rounded-xl overflow-hidden transition-all shadow-xs">
+            <div
+              className="bg-emerald-50/80 border border-emerald-200/80 rounded-xl overflow-hidden transition-all shadow-xs"
+              onKeyDown={(e) => {
+                if (e.key === 'Escape' && isInfoExpanded) {
+                  setIsInfoExpanded(false);
+                }
+              }}
+            >
               <button
                 type="button"
+                aria-expanded={isInfoExpanded}
+                aria-controls="deal-analyzer-info-panel"
                 onClick={() => setIsInfoExpanded(!isInfoExpanded)}
                 className="w-full px-4 py-3 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-emerald-950 hover:bg-emerald-100/50 transition-colors gap-2 cursor-pointer"
               >
@@ -408,7 +419,10 @@ export function DealAnalyzerTool({ locale }: Props) {
                 )}
               </button>
               {isInfoExpanded && (
-                <div className="px-4 pb-4 pt-2 border-t border-emerald-200/60 text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+                <div
+                  id="deal-analyzer-info-panel"
+                  className="px-4 pb-4 pt-2 border-t border-emerald-200/60 text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line"
+                >
                   {whatIsContent}
                 </div>
               )}
@@ -473,7 +487,7 @@ export function DealAnalyzerTool({ locale }: Props) {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label htmlFor="gpi-input" className="block text-xs font-semibold text-slate-700 mb-1">
-                    {isZh ? '总潜在年收入 (GPI, $)' : 'Gross Potential Income ($)'}
+                    {isZh ? '总潜在年收入 (GPI, $)' : 'Gross Potential Income (GPI, $)'}
                   </label>
                   <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -481,12 +495,18 @@ export function DealAnalyzerTool({ locale }: Props) {
                       id="gpi-input"
                       type="number"
                       min="0"
+                      aria-describedby="gpi-help"
                       value={grossPotentialIncome || ''}
                       onChange={(e) => setGrossPotentialIncome(parseFloat(e.target.value) || 0)}
                       className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
                       placeholder="336,000"
                     />
                   </div>
+                  <p id="gpi-help" className="text-[11px] text-slate-500 mt-1 leading-snug">
+                    {isZh
+                      ? '假设 100% 满租时的全年总租金及其他收入（扣空置和支出前）。'
+                      : '100% full-occupancy annual rent + other income before vacancy or expenses.'}
+                  </p>
                 </div>
 
                 <div>
@@ -500,6 +520,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                       step="0.5"
                       min="0"
                       max="100"
+                      aria-describedby="vacancy-help"
                       value={vacancyRate || ''}
                       onChange={(e) => setVacancyRate(parseFloat(e.target.value) || 0)}
                       className="w-full pl-3 pr-7 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
@@ -507,6 +528,11 @@ export function DealAnalyzerTool({ locale }: Props) {
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">%</span>
                   </div>
+                  <p id="vacancy-help" className="text-[11px] text-slate-500 mt-1 leading-snug">
+                    {isZh
+                      ? `未出租或欠租折损：-${formatCurrency(base.vacancyLoss)}/年。`
+                      : `Uncollected rent from empty units or default: -${formatCurrency(base.vacancyLoss)}/yr.`}
+                  </p>
                 </div>
 
                 <div>
@@ -519,18 +545,49 @@ export function DealAnalyzerTool({ locale }: Props) {
                       id="opex-input"
                       type="number"
                       min="0"
+                      aria-describedby="opex-help"
                       value={operatingExpenses || ''}
                       onChange={(e) => setOperatingExpenses(parseFloat(e.target.value) || 0)}
                       className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
                       placeholder="92,000"
                     />
                   </div>
+                  <p id="opex-help" className="text-[11px] text-slate-500 mt-1 leading-snug">
+                    {isZh
+                      ? '地税、保险、维修、管理费等日常支出（不含房贷本息）。'
+                      : 'Property tax, insurance, repairs, management (excludes loan payments).'}
+                  </p>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center justify-between text-xs bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-emerald-950 font-medium gap-2">
-                <span>{isZh ? `有效毛收入 EGI: ${formatCurrency(base.egi)}` : `EGI: ${formatCurrency(base.egi)}`}</span>
-                <span className="font-bold text-emerald-700">{isZh ? `净营业收入 NOI: ${formatCurrency(base.noi)}` : `NOI: ${formatCurrency(base.noi)}`}</span>
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 text-xs text-emerald-950 space-y-2">
+                <div className="flex flex-wrap items-center justify-between gap-2 font-medium">
+                  <span>{isZh ? `有效毛收入 (EGI): ${formatCurrency(base.egi)}` : `Effective Gross Income (EGI): ${formatCurrency(base.egi)}`}</span>
+                  <span className="font-bold text-emerald-700">{isZh ? `净营业收入 (NOI): ${formatCurrency(base.noi)}` : `Net Operating Income (NOI): ${formatCurrency(base.noi)}`}</span>
+                </div>
+                <div className="border-t border-emerald-200/70 pt-2 text-[11px] text-slate-700 space-y-1 leading-relaxed">
+                  <p>
+                    <strong>EGI:</strong>{' '}
+                    {isZh
+                      ? 'GPI × (1 − 空置率)，即扣除空置与坏账后的实际有效年收入。'
+                      : 'GPI × (1 − Vacancy %), actual collected annual revenue after vacancy and credit loss.'}
+                  </p>
+                  <p className="flex flex-wrap items-center justify-between gap-1">
+                    <span>
+                      <strong>NOI:</strong>{' '}
+                      {isZh
+                        ? 'EGI − 年运营支出 (OpEx)，即还房贷与缴所得税前的物业净营业收入。'
+                        : 'EGI − Operating Expenses (OpEx), property operating income before loan payments and taxes.'}
+                    </span>
+                    <Link
+                      href={`/${locale}/calculators/noi/`}
+                      className="text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 shrink-0"
+                    >
+                      <span>{isZh ? '如何分项计算 NOI' : 'How to calculate NOI'}</span>
+                      <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                    </Link>
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -648,39 +705,112 @@ export function DealAnalyzerTool({ locale }: Props) {
             </div>
 
             {/* Core Metrics Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1">
-                <span className="text-xs font-semibold text-slate-500 block">{isZh ? '净营业收入 NOI' : 'Net Operating Income'}</span>
-                <span data-testid="tool-base-noi" className="text-lg font-black text-slate-900">{formatCurrency(base.noi)}</span>
-              </div>
-
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1">
-                <span className="text-xs font-semibold text-slate-500 block">{isZh ? '资本化率 Cap Rate' : 'Cap Rate'}</span>
-                <span data-testid="tool-base-cap-rate" className="text-lg font-black text-emerald-600">{formatPercent(base.capRate)}</span>
-              </div>
-
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1">
-                <span className="text-xs font-semibold text-slate-500 block">{isZh ? '现金回报率 CoC' : 'Cash-on-Cash Return'}</span>
-                <span data-testid="tool-base-cash-on-cash" className="text-lg font-black text-emerald-600">{formatPercent(base.cashOnCashReturn)}</span>
-              </div>
-
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1">
-                <span className="text-xs font-semibold text-slate-500 block">{isZh ? '偿债覆盖率 DSCR' : 'DSCR Ratio'}</span>
-                <span data-testid="tool-base-dscr" className={`text-lg font-black ${base.dscr < 1.25 ? 'text-amber-600' : 'text-slate-900'}`}>{base.dscr.toFixed(2)}x</span>
-              </div>
-
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 col-span-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '收支平衡比率 (BER)' : 'Break-Even Ratio (BER)'}</span>
-                  <span className={`text-lg font-black ${base.breakEvenRatio > 85 ? 'text-amber-600' : 'text-slate-900'}`}>
-                    <span data-testid="tool-base-ber">{formatPercent(base.breakEvenRatio)}</span>
-                  </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '净营业收入 NOI' : 'Net Operating Income (NOI)'}</span>
+                  <span data-testid="tool-base-noi" className="text-lg font-black text-slate-900">{formatCurrency(base.noi)}</span>
+                  <p className="text-[11px] text-slate-500 leading-snug mt-1">
+                    {isZh ? '有效毛收入 (EGI) − 年运营支出（还贷前）' : 'EGI minus operating expenses (before debt)'}
+                  </p>
                 </div>
-                <div className="flex items-center justify-between border-t border-slate-200 pt-1 mt-1">
-                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '盈亏平衡入住率' : 'Break-Even Occupancy'}</span>
-                  <span className="text-sm font-bold text-slate-700">
-                    <span data-testid="tool-base-beo">{formatPercent(base.breakEvenOccupancy)}</span>
-                  </span>
+                <Link
+                  href={`/${locale}/calculators/noi/`}
+                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1"
+                >
+                  <span>{isZh ? '如何计算 NOI' : 'How to calculate'}</span>
+                  <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                </Link>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '资本化率 Cap Rate' : 'Cap Rate'}</span>
+                  <span data-testid="tool-base-cap-rate" className="text-lg font-black text-emerald-600">{formatPercent(base.capRate)}</span>
+                  <p className="text-[11px] text-slate-500 leading-snug mt-1">
+                    {isZh ? 'NOI ÷ 购买价格（全款无杠杆年化收益率）' : 'NOI ÷ Purchase Price (unleveraged yield)'}
+                  </p>
+                </div>
+                <Link
+                  href={`/${locale}/calculators/cap-rate/`}
+                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1"
+                >
+                  <span>{isZh ? '如何计算 Cap Rate' : 'How to calculate'}</span>
+                  <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                </Link>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '现金回报率 CoC' : 'Cash-on-Cash Return'}</span>
+                  <span data-testid="tool-base-cash-on-cash" className="text-lg font-black text-emerald-600">{formatPercent(base.cashOnCashReturn)}</span>
+                  <p className="text-[11px] text-slate-500 leading-snug mt-1">
+                    {isZh ? '(NOI − 年房贷本息) ÷ 初始投入总现金' : '(NOI − Annual Debt Service) ÷ Cash Invested'}
+                  </p>
+                </div>
+                <Link
+                  href={`/${locale}/calculators/cash-on-cash/`}
+                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1"
+                >
+                  <span>{isZh ? '如何计算 CoC' : 'How to calculate'}</span>
+                  <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                </Link>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '偿债覆盖率 DSCR' : 'DSCR (Debt Coverage)'}</span>
+                  <span data-testid="tool-base-dscr" className={`text-lg font-black ${base.dscr < 1.25 ? 'text-amber-600' : 'text-slate-900'}`}>{base.dscr.toFixed(2)}x</span>
+                  <p className="text-[11px] text-slate-500 leading-snug mt-1">
+                    {isZh ? 'NOI ÷ 年还贷总额（净营业收入够付几倍年房贷）' : 'NOI ÷ Annual Debt Service (loan payment coverage)'}
+                  </p>
+                </div>
+                <Link
+                  href={`/${locale}/calculators/dscr/`}
+                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1"
+                >
+                  <span>{isZh ? '如何计算 DSCR' : 'How to calculate'}</span>
+                  <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                </Link>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 sm:col-span-2">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-slate-500 block">{isZh ? '收支平衡比率 (BER)' : 'Break-Even Ratio (BER)'}</span>
+                    <span className={`text-lg font-black ${base.breakEvenRatio > 85 ? 'text-amber-600' : 'text-slate-900'}`}>
+                      <span data-testid="tool-base-ber">{formatPercent(base.breakEvenRatio)}</span>
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 leading-snug mt-0.5">
+                    {isZh
+                      ? '(年运营支出 + 年还贷总额) ÷ 有效毛收入 (EGI) —— 运营与还贷支出占有效总收入的负担比例。'
+                      : '(Operating Expenses + Annual Debt Service) ÷ EGI — share of effective gross income consumed by expenses and debt.'}
+                  </p>
+                </div>
+
+                <div className="border-t border-slate-200 pt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-slate-500 block">{isZh ? '盈亏平衡入住率 (BEO)' : 'Break-Even Occupancy (BEO)'}</span>
+                    <span className="text-sm font-bold text-slate-700">
+                      <span data-testid="tool-base-beo">{formatPercent(base.breakEvenOccupancy)}</span>
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 leading-snug mt-0.5">
+                    {isZh
+                      ? '(年运营支出 + 年还贷总额) ÷ 总潜在年收入 (GPI) —— 按满租潜在收入估算覆盖运营支出与房贷所需的盈亏入住率。'
+                      : '(Operating Expenses + Annual Debt Service) ÷ GPI — simplified occupancy rate on gross potential income needed to cover expenses and debt.'}
+                  </p>
+                </div>
+
+                <div className="pt-1">
+                  <Link
+                    href={`/${locale}/calculators/break-even-ratio/`}
+                    className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5"
+                  >
+                    <span>{isZh ? '如何计算 BER 与 BEO' : 'How to calculate BER & BEO'}</span>
+                    <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                  </Link>
                 </div>
               </div>
             </div>

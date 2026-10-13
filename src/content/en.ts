@@ -54,7 +54,7 @@ export const enContent: LocaleContent = {
       {
         slug: 'dscr',
         title: 'DSCR (Debt Service Coverage Ratio) Calculator',
-        description: 'Free DSCR calculator for commercial real estate loans. No signup. Evaluate debt service coverage, run stress tests, and export to PDF/CSV.',
+        description: 'Free DSCR (Debt Service Coverage Ratio) calculator for commercial loans. See how many times your Net Operating Income (NOI) covers annual loan payments.',
         badge: 'Underwriting',
       },
       {
@@ -71,8 +71,8 @@ export const enContent: LocaleContent = {
       },
       {
         slug: 'break-even-ratio',
-        title: 'Break-Even Ratio Calculator',
-        description: 'Assess your property\'s burden ratio and estimate the break-even occupancy needed to cover operating expenses and debt service.',
+        title: 'Break-Even Ratio (BER) Calculator',
+        description: 'Calculate your Break-Even Ratio (BER — the share of effective gross income consumed by operating expenses and debt service) and Break-Even Occupancy (BEO).',
         badge: 'Risk Analysis',
       },
     ],
@@ -111,8 +111,8 @@ export const enContent: LocaleContent = {
         },
         {
           key: 'dscr',
-          title: 'DSCR Calculator',
-          desc: 'Size your commercial loan by ensuring your NOI covers your annual debt service by at least 1.25x to meet lender standards.',
+          title: 'DSCR (Debt Service Coverage Ratio) Calculator',
+          desc: 'Check how many times your NOI covers annual loan payments (NOI ÷ Annual Debt Service); many commercial lenders look for at least 1.20x–1.25x.',
           cta: 'Calculate DSCR'
         },
         {
@@ -123,8 +123,8 @@ export const enContent: LocaleContent = {
         },
         {
           key: 'break-even-ratio',
-          title: 'Break-Even Ratio & Occupancy',
-          desc: 'Assess your property burden ratio and estimate the break-even occupancy needed to cover operating expenses and debt service.',
+          title: 'Break-Even Ratio (BER) & Occupancy (BEO)',
+          desc: 'Measure the share of effective gross income consumed by operating expenses and debt service (BER), plus the occupancy rate on gross potential income needed to break even (BEO).',
           cta: 'Calculate Risk'
         }
       ],
@@ -718,11 +718,11 @@ export const enContent: LocaleContent = {
     sections: [
       {
         title: "Step 1: Initial Screening (5 Minutes, Before You Waste Anyone's Time)",
-        content: "Before you request financials or schedule a tour, do a quick sanity check with whatever's in the listing:\n\n- Price per unit / per square foot: How does it compare to recent comparable sales in the same submarket? Wildly above comps needs a strong justification (value-add upside, irreplaceable location); wildly below comps is often a red flag (deferred maintenance, legal issues, distressed seller).\n- Implied cap rate at asking price: If the listing states an NOI, does the resulting cap rate look plausible for this property type and market tier? (See our Cap Rate Benchmarks Guide for typical ranges.)\n\nIf it clears this quick screen, move forward. If not, don't waste time requesting a full financial package on a deal that's obviously mispriced.",
+        content: "Before you request financials or schedule a tour, do a quick sanity check with whatever's in the listing:\n\n- Price per unit / per square foot: How does it compare to recent comparable sales (\"comps\" — recent closed sales or leases of similar nearby properties used as pricing benchmarks) in the same submarket? Wildly above comps needs a strong justification (value-add upside, irreplaceable location); wildly below comps is often a red flag (deferred maintenance, legal issues, distressed seller).\n- Implied cap rate at asking price: If the listing states an NOI, does the resulting cap rate look plausible for this property type and market tier? (See our Cap Rate Benchmarks Guide for typical ranges.)\n\nIf it clears this quick screen, move forward. If not, don't waste time requesting a full financial package on a deal that's obviously mispriced.",
       },
       {
         title: "Step 2: Request and Reconstruct the Financials",
-        content: "Ask the seller/broker for a trailing-12 (T-12) income statement, current rent roll, and (ideally) 2-3 years of historical operating statements. Then don't just accept the bottom-line NOI — reconstruct it using the method in our How to Estimate NOI guide, normalizing for owner add-backs, below-market management fees, and any gaps between the rent roll and actual collections.",
+        content: "Ask the seller/broker for a trailing-12 (T-12 — an income and expense statement showing actual monthly operating performance over the past 12 months), a current rent roll (the unit-by-unit or suite-by-suite schedule of tenants, lease terms, contracted rents, and vacancies), and (ideally) 2-3 years of historical operating statements. Then don't just accept the bottom-line NOI — reconstruct it using the method in our How to Estimate NOI guide, normalizing for owner add-backs, below-market management fees, and any gaps between the rent roll and actual collections.",
       },
       {
         title: "Step 3: Run the Core Underwriting Ratios",
@@ -730,7 +730,7 @@ export const enContent: LocaleContent = {
       },
       {
         title: "Step 4: Stress-Test the Numbers",
-        content: "Run your key ratios again under a less favorable scenario — vacancy up 3-5 points from your base case, a modest increase in operating expenses, and (if you're not locking a fixed rate) an interest rate 50-100 bps higher than today's quote. If the deal still pencils reasonably under a stress case, that's a much stronger signal than a deal that only works if everything goes exactly as planned.",
+        content: "Run your key ratios again under a less favorable scenario — vacancy up 3-5 points from your base case, a modest increase in operating expenses, and (if you're not locking a fixed rate) an interest rate 50-100 bps (basis points, where 100 bps = 1.00 percentage point) higher than today's quote. If the deal still \"pencils\" (industry shorthand meaning the numbers still work and meet your cash flow and debt-coverage targets when calculated) reasonably under a stress case, that's a much stronger signal than a deal that only works if everything goes exactly as planned.",
       },
       {
         title: "Step 5: Physical and Legal Due Diligence",

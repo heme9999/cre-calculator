@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
-import { Calculator, PieChart, Info, Layers } from 'lucide-react';
+import { Calculator, PieChart, Info, Layers, ArrowRight } from 'lucide-react';
 
 interface Props {
   locale: string;
@@ -235,12 +236,32 @@ export function NoiCalculator({ locale }: Props) {
             </div>
           </div>
 
-          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs text-emerald-900 mt-6 flex items-start gap-2">
-            <Info className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-            <div>
-              {isZh
-                ? '提示：NOI 不包含每年应还的房贷本息（Debt Service）。计算现金流时需再扣除房贷还款。'
-                : 'Note: NOI does not deduct mortgage debt service. Subtract annual loan payments to find net pre-tax cash flow.'}
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs text-emerald-900 mt-6 space-y-2.5">
+            <div className="flex items-start gap-2">
+              <Info className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
+              <div>
+                {isZh
+                  ? '提示：NOI 不包含每年应还的房贷本息（Debt Service）。计算现金流时需再扣除房贷还款。'
+                  : 'Note: NOI does not deduct mortgage debt service. Subtract annual loan payments to find net pre-tax cash flow.'}
+              </div>
+            </div>
+            <div className="pl-6 pt-1 border-t border-emerald-200/70 flex flex-wrap items-center gap-3">
+              <span className="font-semibold text-emerald-950">{isZh ? '下一步：' : 'Next step:'}</span>
+              <Link
+                href={`/${locale}/calculators/cap-rate/`}
+                className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-0.5"
+              >
+                <span>{isZh ? '2. 用 Cap Rate 比价格与收益' : '2. Compare with Cap Rate'}</span>
+                <ArrowRight className="w-3 h-3" aria-hidden="true" />
+              </Link>
+              <span className="text-emerald-400">•</span>
+              <Link
+                href={`/${locale}/tools/deal-analyzer/`}
+                className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-0.5"
+              >
+                <span>{isZh ? '3. 进入 Deal Analyzer 测融资' : '3. Test in Deal Analyzer'}</span>
+                <ArrowRight className="w-3 h-3" aria-hidden="true" />
+              </Link>
             </div>
           </div>
         </div>

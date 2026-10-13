@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
-import { Calculator, TrendingUp, AlertCircle, Info } from 'lucide-react';
+import { Calculator, TrendingUp, AlertCircle, Info, ArrowRight } from 'lucide-react';
 import { CapRateVisualGauge } from './visuals/CapRateVisualGauge';
 
 interface Props {
@@ -43,8 +44,10 @@ export function CapRateCalculator({ locale }: Props) {
         </div>
 
         {/* Mode Toggle */}
-        <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700 self-start md:self-auto">
+        <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700 self-start md:self-auto" role="group" aria-label={isZh ? '计算模式切换' : 'Calculation mode switcher'}>
           <button
+            type="button"
+            aria-pressed={mode === 'forward'}
             onClick={() => setMode('forward')}
             className={`px-4 py-2 text-xs md:text-sm font-medium rounded-lg transition-all ${
               mode === 'forward'
@@ -55,6 +58,8 @@ export function CapRateCalculator({ locale }: Props) {
             {isZh ? '正算 Cap Rate' : 'Calculate Cap Rate'}
           </button>
           <button
+            type="button"
+            aria-pressed={mode === 'reverse'}
             onClick={() => setMode('reverse')}
             className={`px-4 py-2 text-xs md:text-sm font-medium rounded-lg transition-all ${
               mode === 'reverse'
@@ -75,12 +80,13 @@ export function CapRateCalculator({ locale }: Props) {
             <>
               {/* Purchase Price Input */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label htmlFor="caprate-price-input" className="block text-sm font-semibold text-slate-700 mb-2">
                   {isZh ? '物业购买价格 (Purchase Price)' : 'Property Purchase Price ($)'}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
+                    id="caprate-price-input"
                     type="number"
                     value={purchasePrice || ''}
                     onChange={(e) => setPurchasePrice(parseFloat(e.target.value) || 0)}
@@ -88,10 +94,11 @@ export function CapRateCalculator({ locale }: Props) {
                     placeholder="2,400,000"
                   />
                 </div>
-                <div className="flex gap-2 mt-2">
+                <div className="flex flex-wrap gap-2 mt-2">
                   {[1000000, 2400000, 5000000, 10000000].map((val) => (
                     <button
                       key={val}
+                      type="button"
                       onClick={() => setPurchasePrice(val)}
                       className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium px-2.5 py-1 rounded-md transition"
                     >
@@ -103,51 +110,97 @@ export function CapRateCalculator({ locale }: Props) {
 
               {/* NOI Input */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label htmlFor="caprate-noi-input" className="block text-sm font-semibold text-slate-700 mb-2">
                   {isZh ? '年净营业收入 (Annual NOI)' : 'Annual Net Operating Income (NOI)'}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
+                    id="caprate-noi-input"
                     type="number"
+                    aria-describedby="caprate-noi-help"
                     value={noi || ''}
                     onChange={(e) => setNoi(parseFloat(e.target.value) || 0)}
                     className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
                     placeholder="168,000"
                   />
                 </div>
-                <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                  <Info className="w-3.5 h-3.5 text-slate-400" />
-                  {isZh ? '扣除运营支出后，还贷及缴税前的净收入' : 'Income after operating expenses, before debt & tax'}
-                </p>
+                <div
+                  id="caprate-noi-help"
+                  data-testid="caprate-noi-helper"
+                  className="text-xs text-slate-600 mt-2 bg-slate-50 border border-slate-200/80 rounded-xl p-3 space-y-1.5"
+                >
+                  <p className="flex items-start gap-1.5 leading-relaxed">
+                    <Info className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
+                    <span>
+                      {isZh
+                        ? 'NOI = 有效毛收入 (EGI) − 日常运营支出（地税、保险、维修、物业管理费等），不扣除房贷月供与所得税。'
+                        : 'NOI = Effective Gross Income (EGI) minus operating expenses (property tax, insurance, maintenance, management), before loan payments and income taxes.'}
+                    </span>
+                  </p>
+                  <p className="pl-5">
+                    <Link
+                      href={`/${locale}/calculators/noi/`}
+                      className="text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-1"
+                    >
+                      <span>{isZh ? '不知道如何计算 NOI？用 NOI 计算器分步算出' : 'How to calculate NOI (step-by-step calculator)'}</span>
+                      <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                    </Link>
+                  </p>
+                </div>
               </div>
             </>
           ) : (
             <>
               {/* NOI Input */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label htmlFor="caprate-noi-reverse-input" className="block text-sm font-semibold text-slate-700 mb-2">
                   {isZh ? '年净营业收入 (Annual NOI)' : 'Annual Net Operating Income (NOI)'}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
+                    id="caprate-noi-reverse-input"
                     type="number"
+                    aria-describedby="caprate-noi-reverse-help"
                     value={noi || ''}
                     onChange={(e) => setNoi(parseFloat(e.target.value) || 0)}
                     className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
                     placeholder="168,000"
                   />
                 </div>
+                <div
+                  id="caprate-noi-reverse-help"
+                  className="text-xs text-slate-600 mt-2 bg-slate-50 border border-slate-200/80 rounded-xl p-3 space-y-1.5"
+                >
+                  <p className="flex items-start gap-1.5 leading-relaxed">
+                    <Info className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
+                    <span>
+                      {isZh
+                        ? 'NOI = 有效毛收入 (EGI) − 日常运营支出（地税、保险、维修、物业管理费等），不扣除房贷月供与所得税。'
+                        : 'NOI = Effective Gross Income (EGI) minus operating expenses (property tax, insurance, maintenance, management), before loan payments and income taxes.'}
+                    </span>
+                  </p>
+                  <p className="pl-5">
+                    <Link
+                      href={`/${locale}/calculators/noi/`}
+                      className="text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-1"
+                    >
+                      <span>{isZh ? '不知道如何计算 NOI？用 NOI 计算器分步算出' : 'How to calculate NOI (step-by-step calculator)'}</span>
+                      <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                    </Link>
+                  </p>
+                </div>
               </div>
 
               {/* Target Cap Rate Input */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label htmlFor="caprate-target-input" className="block text-sm font-semibold text-slate-700 mb-2">
                   {isZh ? '目标 Cap Rate (%)' : 'Target Cap Rate (%)'}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <input
+                    id="caprate-target-input"
                     type="number"
                     step="0.1"
                     value={targetCapRate || ''}
@@ -157,10 +210,11 @@ export function CapRateCalculator({ locale }: Props) {
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">%</span>
                 </div>
-                <div className="flex gap-2 mt-2">
+                <div className="flex flex-wrap gap-2 mt-2">
                   {[5.0, 6.0, 7.0, 7.5, 8.5].map((val) => (
                     <button
                       key={val}
+                      type="button"
                       onClick={() => setTargetCapRate(val)}
                       className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium px-2.5 py-1 rounded-md transition"
                     >
@@ -172,12 +226,13 @@ export function CapRateCalculator({ locale }: Props) {
 
               {/* Optional Current Listing Price for Comparison */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label htmlFor="caprate-listing-input" className="block text-sm font-semibold text-slate-700 mb-2">
                   {isZh ? '对比：卖方挂牌价格（选填）' : 'Listing Price for Comparison (Optional)'}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
+                    id="caprate-listing-input"
                     type="number"
                     value={purchasePrice || ''}
                     onChange={(e) => setPurchasePrice(parseFloat(e.target.value) || 0)}
@@ -282,6 +337,19 @@ export function CapRateCalculator({ locale }: Props) {
                 </div>
               </div>
             )}
+          </div>
+
+          <div className="mt-6 pt-4 border-t border-slate-200/80 text-xs flex flex-wrap items-center justify-between gap-2">
+            <span className="text-slate-500">
+              {isZh ? '下一步：加入贷款与压力情景' : 'Next step: Add loan terms & stress tests'}
+            </span>
+            <Link
+              href={`/${locale}/tools/deal-analyzer/`}
+              className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-1"
+            >
+              <span>{isZh ? '进入 Deal Analyzer 测融资' : 'Test Financing in Deal Analyzer'}</span>
+              <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+            </Link>
           </div>
         </div>
       </div>

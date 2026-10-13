@@ -89,6 +89,76 @@ export default async function HomePage({ params }: PageProps) {
             <p className="text-xs text-slate-500 font-medium">
               {isZh ? '免费使用 · 无需注册 · 数据在浏览器本地计算 · 支持 PDF 与 CSV 导出' : 'Free · No signup · Calculations run in your browser · PDF & CSV export'}
             </p>
+
+            {/* New to CRE Onboarding Block */}
+            <nav
+              aria-label={isZh ? '商业地产新手入门路径' : 'New to CRE starter path'}
+              data-testid="new-to-cre-start-here"
+              className="bg-slate-50 border border-slate-200/90 rounded-2xl p-4 sm:p-5 text-left space-y-3 shadow-xs"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/80 pb-2.5">
+                <span className="text-xs font-bold text-emerald-700 flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-emerald-600 shrink-0" aria-hidden="true" />
+                  <span>{isZh ? '商业地产新手？从这里开始 (New to CRE? Start here)' : 'New to CRE? Start here'}</span>
+                </span>
+                <span className="text-[11px] font-medium text-slate-500">
+                  {isZh ? '3 步看懂第一笔商业地产交易' : '3 steps to analyze your first deal'}
+                </span>
+              </div>
+
+              <ol className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+                <li className="bg-white border border-slate-200/90 rounded-xl p-3 flex flex-col justify-between gap-1.5">
+                  <div>
+                    <Link
+                      href={`/${locale}/calculators/noi/`}
+                      className="font-bold text-slate-900 hover:text-emerald-600 inline-flex items-center gap-1 transition-colors"
+                    >
+                      <span>{isZh ? '1. 先认识 NOI' : '1. Understand NOI'}</span>
+                      <ArrowRight className="w-3 h-3 text-emerald-600 shrink-0" aria-hidden="true" />
+                    </Link>
+                    <p className="text-[11px] text-slate-600 leading-relaxed mt-1">
+                      {isZh
+                        ? '净营业收入 (Net Operating Income)：租金扣除空置与日常运营支出后、还房贷前的真实物业年收入。'
+                        : 'Net Operating Income: property rent minus vacancy and operating expenses, before any loan payments.'}
+                    </p>
+                  </div>
+                </li>
+
+                <li className="bg-white border border-slate-200/90 rounded-xl p-3 flex flex-col justify-between gap-1.5">
+                  <div>
+                    <Link
+                      href={`/${locale}/calculators/cap-rate/`}
+                      className="font-bold text-slate-900 hover:text-emerald-600 inline-flex items-center gap-1 transition-colors"
+                    >
+                      <span>{isZh ? '2. 用 Cap Rate 比价格与收益' : '2. Compare with Cap Rate'}</span>
+                      <ArrowRight className="w-3 h-3 text-emerald-600 shrink-0" aria-hidden="true" />
+                    </Link>
+                    <p className="text-[11px] text-slate-600 leading-relaxed mt-1">
+                      {isZh
+                        ? '资本化率 (Capitalization Rate = NOI ÷ 购买价)：假设全款买下时的无杠杆年收益率，横向对比价格与收益。'
+                        : 'Capitalization Rate (NOI ÷ Price): unleveraged all-cash annual yield to compare price and return across deals.'}
+                    </p>
+                  </div>
+                </li>
+
+                <li className="bg-white border border-slate-200/90 rounded-xl p-3 flex flex-col justify-between gap-1.5">
+                  <div>
+                    <Link
+                      href={`/${locale}/tools/deal-analyzer/`}
+                      className="font-bold text-slate-900 hover:text-emerald-600 inline-flex items-center gap-1 transition-colors"
+                    >
+                      <span>{isZh ? '3. 用 Deal Analyzer 看融资与压力情景' : '3. Test Financing in Deal Analyzer'}</span>
+                      <ArrowRight className="w-3 h-3 text-emerald-600 shrink-0" aria-hidden="true" />
+                    </Link>
+                    <p className="text-[11px] text-slate-600 leading-relaxed mt-1">
+                      {isZh
+                        ? '加入贷款与压力情景，检验 DSCR（偿债覆盖率，Debt Service Coverage Ratio：NOI 够付几倍年房贷）与 BER（收支平衡比率，Break-Even Ratio：运营支出加房贷占有效毛收入的比例）。'
+                        : 'Model loan terms and stress scenarios to check DSCR (Debt Service Coverage Ratio: how many times NOI covers annual loan payments) and BER (Break-Even Ratio: share of effective gross income consumed by operating expenses and debt service).'}
+                    </p>
+                  </div>
+                </li>
+              </ol>
+            </nav>
           </div>
 
           {/* Right Column: Original Deal Analyzer Interactive Preview */}

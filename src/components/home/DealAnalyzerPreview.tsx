@@ -150,7 +150,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
 
         <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-0.5">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            DSCR
+            {isZh ? 'DSCR 偿债覆盖率' : 'DSCR (Debt Coverage)'}
           </span>
           <span
             className={`text-sm font-black ${
@@ -159,18 +159,21 @@ export function DealAnalyzerPreview({ locale }: Props) {
           >
             <span data-testid="base-dscr">{current.dscr.toFixed(2)}x</span>
           </span>
+          <span className="text-[10px] text-slate-500 block leading-tight">
+            {isZh ? 'NOI ÷ 年房贷本息' : 'NOI ÷ Annual Debt'}
+          </span>
         </div>
 
         <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-0.5">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-              {isZh ? '收支平衡比' : 'Break-Even Ratio'}
+              {isZh ? '收支平衡比 BER' : 'Break-Even Ratio (BER)'}
             </span>
             <span className="text-sm font-black text-slate-900"><span data-testid="base-ber">{formatPercent(current.breakEvenRatio)}</span></span>
           </div>
           <div className="flex justify-between items-center border-t border-slate-200/50 mt-1 pt-1">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-              {isZh ? '盈亏入住率' : 'Occupancy'}
+              {isZh ? '盈亏入住率 BEO' : 'Occupancy (BEO)'}
             </span>
             <span className="text-xs font-bold text-emerald-700"><span data-testid="base-beo">{formatPercent(current.breakEvenOccupancy)}</span></span>
           </div>
