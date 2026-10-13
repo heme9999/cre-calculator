@@ -3,36 +3,45 @@ import test from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
 
-test('Header calculators dropdown accessibility attributes in static HTML', () => {
-  const enHtmlPath = path.resolve(process.cwd(), 'out/en/index.html');
-  assert.ok(fs.existsSync(enHtmlPath), 'out/en/index.html must exist');
-  const html = fs.readFileSync(enHtmlPath, 'utf-8');
+test('Header calculators disclosure navigation accessibility attributes in static HTML (EN & ZH)', () => {
+  for (const locale of ['en', 'zh']) {
+    const htmlPath = path.resolve(process.cwd(), `out/${locale}/index.html`);
+    assert.ok(fs.existsSync(htmlPath), `out/${locale}/index.html must exist`);
+    const html = fs.readFileSync(htmlPath, 'utf-8');
 
-  // 1. Verify Trigger Button WAI-ARIA attributes
-  assert.match(html, /aria-haspopup=[\"\']menu[\"\']/, 'Button must have aria-haspopup="menu"');
-  assert.match(html, /aria-controls=[\"\']calculators-navigation[\"\']/, 'Button must control calculators-navigation');
-  assert.match(html, /aria-expanded=[\"\']false[\"\']/, 'Button must default to aria-expanded="false"');
+    // 1. Native trigger button retains aria-expanded="false" and aria-controls="calculators-navigation"
+    assert.match(html, /aria-controls=["']calculators-navigation["']/, `Button must control calculators-navigation (${locale})`);
+    assert.match(html, /aria-expanded=["']false["']/, `Button must default to aria-expanded="false" (${locale})`);
 
-  // 2. Verify Menu Container has role="menu"
-  assert.match(html, /id=[\"\']calculators-navigation[\"\'][^>]*role=[\"\']menu[\"\']|role=[\"\']menu[\"\'][^>]*id=[\"\']calculators-navigation[\"\']/, 'Dropdown must have role="menu"');
+    // 2. Must NOT use menu/menuitem roles or aria-haspopup="menu"
+    assert.doesNotMatch(html, /aria-haspopup=["']menu["']/, `Button must NOT have aria-haspopup="menu" (${locale})`);
+    assert.doesNotMatch(html, /role=["']menu["']/, `Dropdown must NOT have role="menu" (${locale})`);
+    assert.doesNotMatch(html, /role=["']menuitem["']/, `Dropdown links must NOT have role="menuitem" (${locale})`);
 
-  // 3. Verify Menu items have role="menuitem"
-  const menuItemMatches = html.match(/role=[\"\']menuitem[\"\']/g);
-  assert.ok(menuItemMatches && menuItemMatches.length >= 8, `Expected at least 8 menuitems, found ${menuItemMatches?.length}`);
+    // 3. Closed links in initial static HTML must not be in focus order (tabindex="-1" and invisible)
+    const navMatch = html.match(/id=["']calculators-navigation["'][^>]*>([\s\S]*?)<\/div>/);
+    assert.ok(navMatch, `#calculators-navigation container must exist (${locale})`);
+    const navInner = navMatch[1];
+    const linkMatches = navInner.match(/<a\s[^>]*>/g) || [];
+    assert.equal(linkMatches.length, 8, `Expected 8 calculator links inside #calculators-navigation (${locale})`);
+    for (const linkTag of linkMatches) {
+      assert.match(linkTag, /tabindex=["']-1["']/, `Closed disclosure link must have tabindex="-1" (${locale}): ${linkTag}`);
+    }
 
-  // 4. Verify all 8 core calculators are present in the dropdown
-  const expectedCalculators = [
-    '/en/calculators/cap-rate/',
-    '/en/calculators/noi/',
-    '/en/calculators/cash-on-cash/',
-    '/en/calculators/loan-payment/',
-    '/en/calculators/dscr/',
-    '/en/calculators/1031-exchange/',
-    '/en/calculators/lease-vs-buy/',
-    '/en/calculators/break-even-ratio/',
-  ];
+    // 4. Verify all 8 core calculators are present in the dropdown
+    const expectedCalculators = [
+      `/${locale}/calculators/cap-rate/`,
+      `/${locale}/calculators/noi/`,
+      `/${locale}/calculators/cash-on-cash/`,
+      `/${locale}/calculators/loan-payment/`,
+      `/${locale}/calculators/dscr/`,
+      `/${locale}/calculators/1031-exchange/`,
+      `/${locale}/calculators/lease-vs-buy/`,
+      `/${locale}/calculators/break-even-ratio/`,
+    ];
 
-  for (const calc of expectedCalculators) {
-    assert.ok(html.includes(`href="${calc}"`), `Dropdown must include ${calc}`);
+    for (const calc of expectedCalculators) {
+      assert.ok(navInner.includes(`href="${calc}"`), `Dropdown must include ${calc}`);
+    }
   }
 });

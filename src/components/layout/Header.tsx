@@ -19,7 +19,6 @@ export function Header({ locale }: HeaderProps) {
   const [calcMenuOpen, setCalcMenuOpen] = useState(false);
   const calcMenuRef = useRef<HTMLDivElement>(null);
   const calcMenuBtnRef = useRef<HTMLButtonElement>(null);
-  const menuItemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const calcMenuItems = [
     { href: `/${locale}/calculators/cap-rate/`, label: nav.capRate },
@@ -40,6 +39,7 @@ export function Header({ locale }: HeaderProps) {
     }
     function handleEscape(event: KeyboardEvent) {
       if (event.key === 'Escape') {
+        event.preventDefault();
         setCalcMenuOpen(false);
         calcMenuBtnRef.current?.focus();
       }
@@ -54,56 +54,12 @@ export function Header({ locale }: HeaderProps) {
     };
   }, [calcMenuOpen]);
 
-  function handleBtnKeyDown(event: React.KeyboardEvent<HTMLButtonElement>) {
-    if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      setCalcMenuOpen(true);
-      setTimeout(() => {
-        menuItemRefs.current[0]?.focus();
-      }, 0);
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      setCalcMenuOpen(true);
-      setTimeout(() => {
-        menuItemRefs.current[calcMenuItems.length - 1]?.focus();
-      }, 0);
-    }
-  }
-
-  function handleItemKeyDown(event: React.KeyboardEvent<HTMLAnchorElement>, index: number) {
-    if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      const nextIndex = (index + 1) % calcMenuItems.length;
-      menuItemRefs.current[nextIndex]?.focus();
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      const prevIndex = (index - 1 + calcMenuItems.length) % calcMenuItems.length;
-      menuItemRefs.current[prevIndex]?.focus();
-    } else if (event.key === 'Home') {
-      event.preventDefault();
-      menuItemRefs.current[0]?.focus();
-    } else if (event.key === 'End') {
-      event.preventDefault();
-      menuItemRefs.current[calcMenuItems.length - 1]?.focus();
-    } else if (event.key === 'Escape') {
-      event.preventDefault();
-      setCalcMenuOpen(false);
-      calcMenuBtnRef.current?.focus();
-    } else if (event.key === 'Tab') {
-      if (event.shiftKey && index === 0) {
-        setCalcMenuOpen(false);
-      } else if (!event.shiftKey && index === calcMenuItems.length - 1) {
-        setCalcMenuOpen(false);
-      }
-    }
-  }
-
   function handleContainerBlur(event: React.FocusEvent<HTMLDivElement>) {
-    if (!calcMenuRef.current?.contains(event.relatedTarget as Node)) {
+    const nextFocused = event.relatedTarget as Node | null;
+    if (!calcMenuRef.current?.contains(nextFocused)) {
       setCalcMenuOpen(false);
     }
   }
-
 
   // Determine target language URL while preserving exact route path
   let targetPath = '/en/';
@@ -168,17 +124,13 @@ export function Header({ locale }: HeaderProps) {
           <div
             className="relative"
             ref={calcMenuRef}
-            onMouseEnter={() => setCalcMenuOpen(true)}
-            onMouseLeave={() => setCalcMenuOpen(false)}
             onBlur={handleContainerBlur}
           >
             <button
               ref={calcMenuBtnRef}
               type="button"
-              onClick={() => setCalcMenuOpen(!calcMenuOpen)}
-              onKeyDown={handleBtnKeyDown}
+              onClick={() => setCalcMenuOpen((prev) => !prev)}
               aria-expanded={calcMenuOpen}
-              aria-haspopup="menu"
               aria-controls="calculators-navigation"
               className={`hover:text-white transition-colors flex items-center gap-1 py-4 ${
                 pathname === `/${locale}/` || pathname === `/${locale}` ? 'text-emerald-400 font-semibold' : ''
@@ -192,19 +144,14 @@ export function Header({ locale }: HeaderProps) {
             
             <div
               id="calculators-navigation"
-              role="menu"
-              aria-label={nav.calculators}
-              className={`absolute top-full left-1/2 -translate-x-1/2 w-48 transition-all bg-slate-800 rounded-xl shadow-xl border border-slate-700 py-2 flex flex-col ${calcMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+              className={`absolute top-full left-1/2 -translate-x-1/2 w-48 bg-slate-800 rounded-xl shadow-xl border border-slate-700 py-2 flex flex-col ${calcMenuOpen ? 'opacity-100 visible pointer-events-auto' : 'opacity-0 invisible pointer-events-none'}`}
             >
-              {calcMenuItems.map((item, idx) => (
+              {calcMenuItems.map((item) => (
                 <Link
                   key={item.href}
-                  ref={(el) => { menuItemRefs.current[idx] = el; }}
                   href={item.href}
-                  role="menuitem"
-                  tabIndex={calcMenuOpen ? 0 : -1}
+                  tabIndex={calcMenuOpen ? undefined : -1}
                   onClick={() => setCalcMenuOpen(false)}
-                  onKeyDown={(e) => handleItemKeyDown(e, idx)}
                   className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors focus:bg-slate-700 focus:text-emerald-400 outline-none"
                 >
                   {item.label}
@@ -229,7 +176,10 @@ export function Header({ locale }: HeaderProps) {
 
           {/* Mobile Menu Toggle Button */}
           <button
+            type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
             className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
             aria-label="Toggle Navigation Menu"
           >
@@ -240,7 +190,7 @@ export function Header({ locale }: HeaderProps) {
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-slate-900 border-b border-slate-800 px-4 py-4 space-y-3 animate-in slide-in-from-top-2 duration-150">
+        <div id="mobile-navigation" className="lg:hidden bg-slate-900 border-b border-slate-800 px-4 py-4 space-y-3 animate-in slide-in-from-top-2 duration-150">
           <Link
             href={`/${locale}/`}
             onClick={() => setMobileMenuOpen(false)}
