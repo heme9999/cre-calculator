@@ -44,14 +44,14 @@ export function CapRateCalculator({ locale }: Props) {
         </div>
 
         {/* Mode Toggle */}
-        <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700 self-start md:self-auto" role="group" aria-label={isZh ? '计算模式切换' : 'Calculation mode switcher'}>
+        <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700/80 self-start md:self-auto" role="group" aria-label={isZh ? '计算模式切换' : 'Calculation mode switcher'}>
           <button
             type="button"
             aria-pressed={mode === 'forward'}
             onClick={() => setMode('forward')}
-            className={`px-4 py-2 text-xs md:text-sm font-medium rounded-lg transition-all ${
+            className={`px-4 py-2 text-xs md:text-sm font-semibold rounded-lg transition-[background-color,color,box-shadow,transform] duration-150 ease-out active-press ${
               mode === 'forward'
-                ? 'bg-emerald-600 text-white shadow-sm'
+                ? 'bg-emerald-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -61,9 +61,9 @@ export function CapRateCalculator({ locale }: Props) {
             type="button"
             aria-pressed={mode === 'reverse'}
             onClick={() => setMode('reverse')}
-            className={`px-4 py-2 text-xs md:text-sm font-medium rounded-lg transition-all ${
+            className={`px-4 py-2 text-xs md:text-sm font-semibold rounded-lg transition-[background-color,color,box-shadow,transform] duration-150 ease-out active-press ${
               mode === 'reverse'
-                ? 'bg-emerald-600 text-white shadow-sm'
+                ? 'bg-emerald-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -100,7 +100,7 @@ export function CapRateCalculator({ locale }: Props) {
                       key={val}
                       type="button"
                       onClick={() => setPurchasePrice(val)}
-                      className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium px-2.5 py-1 rounded-md transition"
+                      className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium px-2.5 py-1 rounded-md transition-[background-color,transform] duration-150 ease-out active-press tabular-nums"
                     >
                       {formatCurrency(val)}
                     </button>
@@ -216,7 +216,7 @@ export function CapRateCalculator({ locale }: Props) {
                       key={val}
                       type="button"
                       onClick={() => setTargetCapRate(val)}
-                      className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium px-2.5 py-1 rounded-md transition"
+                      className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium px-2.5 py-1 rounded-md transition-[background-color,transform] duration-150 ease-out active-press tabular-nums"
                     >
                       {val}%
                     </button>
@@ -246,7 +246,7 @@ export function CapRateCalculator({ locale }: Props) {
         </div>
 
         {/* Results Panel */}
-        <div className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-slate-50 border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 flex flex-col justify-between">
           <div>
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
               {isZh ? '计算结果分析' : 'Calculation Summary'}
@@ -258,7 +258,7 @@ export function CapRateCalculator({ locale }: Props) {
                   <span className="text-sm font-medium text-slate-600">
                     {isZh ? '资本化率 (Cap Rate)' : 'Capitalization Rate'}
                   </span>
-                  <div className="text-4xl md:text-5xl font-black text-emerald-600 mt-1">
+                  <div className="text-4xl md:text-5xl font-black text-emerald-600 mt-1 tabular-nums">
                     {formatPercent(calculatedCapRate)}
                   </div>
                 </div>
@@ -266,15 +266,15 @@ export function CapRateCalculator({ locale }: Props) {
                 <div className="border-t border-slate-200 pt-4 space-y-2 text-sm text-slate-700">
                   <div className="flex justify-between">
                     <span className="text-slate-500">{isZh ? '购买价格:' : 'Purchase Price:'}</span>
-                    <span className="font-semibold">{formatCurrency(purchasePrice)}</span>
+                    <span className="font-semibold tabular-nums">{formatCurrency(purchasePrice)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-500">{isZh ? '年 NOI:' : 'Annual NOI:'}</span>
-                    <span className="font-semibold">{formatCurrency(noi)}</span>
+                    <span className="font-semibold tabular-nums">{formatCurrency(noi)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-500">{isZh ? '月平均 NOI:' : 'Monthly NOI:'}</span>
-                    <span className="font-semibold">{formatCurrency(noi / 12)}</span>
+                    <span className="font-semibold tabular-nums">{formatCurrency(noi / 12)}</span>
                   </div>
                 </div>
 
@@ -305,7 +305,7 @@ export function CapRateCalculator({ locale }: Props) {
                   <span className="text-sm font-medium text-slate-600">
                     {isZh ? '最高可接受购买价格' : 'Max Acceptable Purchase Price'}
                   </span>
-                  <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1">
+                  <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1 tabular-nums">
                     {formatCurrency(calculatedMaxPrice)}
                   </div>
                 </div>
@@ -314,11 +314,11 @@ export function CapRateCalculator({ locale }: Props) {
                   <div className="border-t border-slate-200 pt-4 space-y-2 text-sm text-slate-700">
                     <div className="flex justify-between">
                       <span className="text-slate-500">{isZh ? '卖方挂牌价格:' : 'Listing Price:'}</span>
-                      <span className="font-semibold">{formatCurrency(purchasePrice)}</span>
+                      <span className="font-semibold tabular-nums">{formatCurrency(purchasePrice)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-500">{isZh ? '价格额度差距:' : 'Price Difference:'}</span>
-                      <span className={`font-bold ${priceDifference < 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                      <span className={`font-bold tabular-nums ${priceDifference < 0 ? 'text-red-600' : 'text-emerald-600'}`}>
                         {priceDifference < 0
                           ? `${isZh ? '高出 ' : 'Overpriced by '}${formatCurrency(Math.abs(priceDifference))}`
                           : `${isZh ? '低于 ' : 'Underpriced by '}${formatCurrency(priceDifference)}`}
@@ -345,7 +345,7 @@ export function CapRateCalculator({ locale }: Props) {
             </span>
             <Link
               href={`/${locale}/tools/deal-analyzer/`}
-              className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-1"
+              className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-1 active-press"
             >
               <span>{isZh ? '进入 Deal Analyzer 测融资' : 'Test Financing in Deal Analyzer'}</span>
               <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />

@@ -95,11 +95,11 @@ export function Header({ locale }: HeaderProps) {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white">
+    <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-xl border-b border-slate-800/80 text-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.3)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo */}
-        <Link href={`/${locale}/`} className="flex items-center gap-2 md:gap-2.5 font-bold text-base md:text-lg text-white hover:text-emerald-400 transition-colors shrink min-w-0">
-          <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-sm shrink-0">
+        <Link href={`/${locale}/`} className="active-press flex items-center gap-2 md:gap-2.5 font-bold text-base md:text-lg text-white hover:text-emerald-400 transition-colors shrink min-w-0">
+          <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_2px_8px_rgba(16,185,129,0.3)] shrink-0">
             <Building2 className="w-4 h-4 md:w-5 md:h-5 text-white" />
           </div>
           <span className="tracking-tight whitespace-nowrap">{nav.brandName}</span>
@@ -109,7 +109,7 @@ export function Header({ locale }: HeaderProps) {
         <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium text-slate-300">
           <Link
             href={`/${locale}/tools/deal-analyzer/`}
-            className={`hover:text-white transition-colors flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 hover:text-emerald-200 px-3 py-1 rounded-full border border-emerald-500/40 font-bold text-xs`}
+            className="active-press hover:text-white transition-colors flex items-center gap-1.5 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 hover:text-emerald-200 px-3 py-1 rounded-full border border-emerald-500/35 font-semibold text-xs shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
           >
             <span>{nav.dealAnalyzer}</span>
             <span className="text-[10px] bg-emerald-500 text-slate-950 px-1.5 py-0.2 rounded font-black uppercase">
@@ -132,19 +132,19 @@ export function Header({ locale }: HeaderProps) {
               onClick={() => setCalcMenuOpen((prev) => !prev)}
               aria-expanded={calcMenuOpen}
               aria-controls="calculators-navigation"
-              className={`hover:text-white transition-colors flex items-center gap-1 py-4 ${
-                pathname === `/${locale}/` || pathname === `/${locale}` ? 'text-emerald-400 font-semibold' : ''
+              className={`hover:text-white transition-colors flex items-center gap-1.5 py-4 text-xs font-semibold uppercase tracking-wider ${
+                pathname === `/${locale}/` || pathname === `/${locale}` ? 'text-emerald-400 font-bold' : ''
               }`}
             >
               <span>{nav.calculators}</span>
-              <svg className={`w-3.5 h-3.5 transition-transform ${calcMenuOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${calcMenuOpen ? 'rotate-180 text-emerald-400' : 'text-slate-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
             
             <div
               id="calculators-navigation"
-              className={`absolute top-full left-1/2 -translate-x-1/2 w-48 bg-slate-800 rounded-xl shadow-xl border border-slate-700 py-2 flex flex-col ${calcMenuOpen ? 'opacity-100 visible pointer-events-auto' : 'opacity-0 invisible pointer-events-none'}`}
+              className={`absolute top-full left-1/2 -translate-x-1/2 w-52 bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-[0_12px_40px_-10px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.08)] border border-slate-700/60 p-1.5 flex flex-col origin-top transition-[opacity,transform] duration-180 ease-out ${calcMenuOpen ? 'opacity-100 scale-100 visible pointer-events-auto' : 'opacity-0 scale-95 invisible pointer-events-none'}`}
             >
               {calcMenuItems.map((item) => (
                 <Link
@@ -152,7 +152,7 @@ export function Header({ locale }: HeaderProps) {
                   href={item.href}
                   tabIndex={calcMenuOpen ? undefined : -1}
                   onClick={() => setCalcMenuOpen(false)}
-                  className="px-4 py-2 hover:bg-slate-700 hover:text-emerald-400 transition-colors focus:bg-slate-700 focus:text-emerald-400 outline-none"
+                  className="px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-emerald-300 hover:bg-slate-800/80 active:scale-[0.98] transition-[background-color,color,transform] duration-120 ease-out outline-none"
                 >
                   {item.label}
                 </Link>
@@ -167,7 +167,7 @@ export function Header({ locale }: HeaderProps) {
           <Link
             href={targetPath}
             aria-label="Switch Language"
-            className="flex items-center gap-1 sm:gap-1.5 px-2 py-1.5 sm:px-3.5 sm:py-1.5 rounded-full bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-[11px] sm:text-xs font-bold text-emerald-300 hover:text-emerald-200 transition-all shadow-xs shrink-0"
+            className="active-press flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/50 text-[11px] sm:text-xs font-semibold text-emerald-300 hover:text-emerald-200 transition-[background-color,border-color,color] duration-150 shadow-xs shrink-0"
           >
             <Globe className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400" />
             <span>{nav.switchLangLabel}</span>
@@ -180,7 +180,7 @@ export function Header({ locale }: HeaderProps) {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation"
-            className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+            className="active-press lg:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors"
             aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -190,12 +190,12 @@ export function Header({ locale }: HeaderProps) {
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div id="mobile-navigation" className="lg:hidden bg-slate-900 border-b border-slate-800 px-4 py-4 space-y-3 animate-in slide-in-from-top-2 duration-150">
+        <div id="mobile-navigation" className="lg:hidden bg-slate-900/98 backdrop-blur-xl border-b border-slate-800/80 px-4 py-4 space-y-2 animate-in slide-in-from-top-2 duration-150">
           <Link
             href={`/${locale}/`}
             onClick={() => setMobileMenuOpen(false)}
-            className={`block py-2 text-sm font-semibold border-b border-slate-800 ${
-              pathname === `/${locale}/` || pathname === `/${locale}` ? 'text-emerald-400' : 'text-slate-300'
+            className={`block px-3 py-2 rounded-xl text-sm font-semibold transition-colors ${
+              pathname === `/${locale}/` || pathname === `/${locale}` ? 'bg-emerald-500/15 text-emerald-400' : 'text-slate-200 hover:bg-slate-800'
             }`}
           >
             {nav.calculators}
@@ -206,8 +206,8 @@ export function Header({ locale }: HeaderProps) {
               key={item.key}
               href={item.href}
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-sm font-medium border-b border-slate-800 last:border-0 ${
-                pathname?.includes(`/${item.key}/`) ? 'text-emerald-400 font-bold' : 'text-slate-300'
+              className={`block px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+                pathname?.includes(`/${item.key}/`) ? 'bg-emerald-500/15 text-emerald-400 font-semibold' : 'text-slate-300 hover:bg-slate-800'
               }`}
             >
               {item.label}

@@ -283,7 +283,7 @@ export function DealAnalyzerTool({ locale }: Props) {
               <button
                 type="button"
                 onClick={handleSaveDeal}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
                 title={isZh ? '保存当前测算配置到浏览器本地' : 'Save current inputs to local storage'}
               >
                 <span>{isZh ? '💾 保存交易' : '💾 Save Deal'}</span>
@@ -293,7 +293,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 <button
                   type="button"
                   onClick={() => setShowSavedModal(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-xs transition-all"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
                 >
                   <span>{isZh ? `已存交易 (${savedDeals.length})` : `Saved (${savedDeals.length})`}</span>
                 </button>
@@ -302,7 +302,7 @@ export function DealAnalyzerTool({ locale }: Props) {
               <button
                 type="button"
                 onClick={handleExportCsv}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
                 title={isZh ? '导出 CSV 数据文件' : 'Export CSV data'}
               >
                 <span>{isZh ? '📊 CSV 导出' : '📊 CSV Export'}</span>
@@ -311,7 +311,7 @@ export function DealAnalyzerTool({ locale }: Props) {
               <button
                 type="button"
                 onClick={handleCopyLink}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
               >
                 <span>{copiedLink ? (isZh ? '✅ 链接已复制' : '✅ Link Copied') : (isZh ? '🔗 分享链接' : '🔗 Share Link')}</span>
               </button>
@@ -320,7 +320,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 type="button"
                 onClick={handleExportPdf}
                 disabled={isExportingPdf}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition-all disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press disabled:opacity-50"
               >
                 <FileDown className="w-4 h-4" />
                 <span>{isExportingPdf ? (isZh ? '导出中...' : 'Generating...') : (isZh ? '导出 PDF' : 'Export PDF')}</span>
@@ -332,10 +332,10 @@ export function DealAnalyzerTool({ locale }: Props) {
               <button
                 type="button"
                 onClick={() => setShowStressTest(!showStressTest)}
-                className={`flex-1 inline-flex justify-center items-center gap-1.5 px-3 py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs ${
+                className={`flex-1 inline-flex justify-center items-center gap-1.5 px-3 py-2.5 rounded-xl font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press shadow-xs ${
                   showStressTest
                     ? 'bg-amber-500 hover:bg-amber-600 text-white'
-                    : 'bg-slate-800 text-slate-200 border border-slate-700'
+                    : 'bg-slate-800 text-slate-200 border border-slate-700/80'
                 }`}
               >
                 <Zap className="w-4 h-4 text-amber-300" />
@@ -349,22 +349,26 @@ export function DealAnalyzerTool({ locale }: Props) {
                   onClick={() => setMoreMenuOpen(!moreMenuOpen)}
                   aria-expanded={moreMenuOpen}
                   aria-controls="deal-analyzer-more-menu"
-                  className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 text-slate-200 border border-slate-700 font-bold text-xs transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press cursor-pointer"
                 >
                   <span>{isZh ? '更多 (More)' : 'More ▾'}</span>
                 </button>
 
                 <div
                   id="deal-analyzer-more-menu"
-                  className={`absolute right-0 top-full mt-2 w-48 bg-slate-800 border border-slate-700 rounded-xl shadow-xl flex flex-col p-1 transition-all ${moreMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+                  className={`absolute right-0 top-full mt-2 w-48 bg-slate-800 border border-slate-700 rounded-xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)] flex flex-col p-1 origin-top-right transition-[opacity,transform] duration-150 ease-out ${
+                    moreMenuOpen
+                      ? 'opacity-100 scale-100 visible'
+                      : 'opacity-0 scale-95 invisible pointer-events-none'
+                  }`}
                 >
-                  <button  tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleSaveDeal(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none">💾 {isZh ? '保存交易' : 'Save Deal'}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleSaveDeal(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">💾 {isZh ? '保存交易' : 'Save Deal'}</button>
                   {savedDeals.length > 0 && (
-                    <button  tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { setShowSavedModal(true); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-emerald-300 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none">📂 {isZh ? `已存交易 (${savedDeals.length})` : `Saved Deals (${savedDeals.length})`}</button>
+                    <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { setShowSavedModal(true); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-emerald-300 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">📂 {isZh ? `已存交易 (${savedDeals.length})` : `Saved Deals (${savedDeals.length})`}</button>
                   )}
-                  <button  tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportCsv(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none">📊 {isZh ? 'CSV 导出' : 'CSV Export'}</button>
-                  <button  tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleCopyLink(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none">🔗 {copiedLink ? (isZh ? '链接已复制' : 'Link Copied') : (isZh ? '分享链接' : 'Share Link')}</button>
-                  <button  tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportPdf(); setMoreMenuOpen(false); }} disabled={isExportingPdf} className="flex items-center gap-1.5 w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg disabled:opacity-50 focus:bg-slate-700 outline-none">
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportCsv(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">📊 {isZh ? 'CSV 导出' : 'CSV Export'}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleCopyLink(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">🔗 {copiedLink ? (isZh ? '链接已复制' : 'Link Copied') : (isZh ? '分享链接' : 'Share Link')}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportPdf(); setMoreMenuOpen(false); }} disabled={isExportingPdf} className="flex items-center gap-1.5 w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg disabled:opacity-50 focus:bg-slate-700 outline-none transition-colors duration-100">
                     <FileDown className="w-3 h-3" /> {isExportingPdf ? (isZh ? '导出中...' : 'Generating...') : (isZh ? '导出 PDF' : 'Export PDF')}
                   </button>
                 </div>
@@ -375,10 +379,10 @@ export function DealAnalyzerTool({ locale }: Props) {
             <button
               type="button"
               onClick={() => setShowStressTest(!showStressTest)}
-              className={`hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl font-bold text-xs transition-all shadow-xs ${
+              className={`hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press shadow-xs ${
                 showStressTest
                   ? 'bg-amber-500 hover:bg-amber-600 text-white'
-                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80'
               }`}
             >
               <Zap className="w-4 h-4 text-amber-300" />
@@ -663,9 +667,9 @@ export function DealAnalyzerTool({ locale }: Props) {
                   <button
                     type="button"
                     onClick={() => setPaymentType('installment')}
-                    className={`px-3 py-1.5 rounded-md font-bold transition-all ${
+                    className={`px-3 py-1.5 rounded-lg font-bold transition-[background-color,color,box-shadow,transform] duration-150 ease-out active-press ${
                       paymentType === 'installment'
-                        ? 'bg-slate-900 text-white'
+                        ? 'bg-slate-900 text-white shadow-xs'
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
@@ -674,9 +678,9 @@ export function DealAnalyzerTool({ locale }: Props) {
                   <button
                     type="button"
                     onClick={() => setPaymentType('principal')}
-                    className={`px-3 py-1.5 rounded-md font-bold transition-all ${
+                    className={`px-3 py-1.5 rounded-lg font-bold transition-[background-color,color,box-shadow,transform] duration-150 ease-out active-press ${
                       paymentType === 'principal'
-                        ? 'bg-slate-900 text-white'
+                        ? 'bg-slate-900 text-white shadow-xs'
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
@@ -706,79 +710,79 @@ export function DealAnalyzerTool({ locale }: Props) {
 
             {/* Core Metrics Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 flex flex-col justify-between">
+              <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-200/80 hover:border-slate-300 transition-[border-color,box-shadow] duration-150 space-y-1 flex flex-col justify-between shadow-xs">
                 <div>
                   <span className="text-xs font-semibold text-slate-500 block">{isZh ? '净营业收入 NOI' : 'Net Operating Income (NOI)'}</span>
-                  <span data-testid="tool-base-noi" className="text-lg font-black text-slate-900">{formatCurrency(base.noi)}</span>
+                  <span data-testid="tool-base-noi" className="text-lg font-black text-slate-900 tabular-nums">{formatCurrency(base.noi)}</span>
                   <p className="text-[11px] text-slate-500 leading-snug mt-1">
                     {isZh ? '有效毛收入 (EGI) − 年运营支出（还贷前）' : 'EGI minus operating expenses (before debt)'}
                   </p>
                 </div>
                 <Link
                   href={`/${locale}/calculators/noi/`}
-                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1"
+                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1 active-press"
                 >
                   <span>{isZh ? '如何计算 NOI' : 'How to calculate'}</span>
                   <ArrowRight className="w-3 h-3" aria-hidden="true" />
                 </Link>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 flex flex-col justify-between">
+              <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-200/80 hover:border-slate-300 transition-[border-color,box-shadow] duration-150 space-y-1 flex flex-col justify-between shadow-xs">
                 <div>
                   <span className="text-xs font-semibold text-slate-500 block">{isZh ? '资本化率 Cap Rate' : 'Cap Rate'}</span>
-                  <span data-testid="tool-base-cap-rate" className="text-lg font-black text-emerald-600">{formatPercent(base.capRate)}</span>
+                  <span data-testid="tool-base-cap-rate" className="text-lg font-black text-emerald-600 tabular-nums">{formatPercent(base.capRate)}</span>
                   <p className="text-[11px] text-slate-500 leading-snug mt-1">
                     {isZh ? 'NOI ÷ 购买价格（全款无杠杆年化收益率）' : 'NOI ÷ Purchase Price (unleveraged yield)'}
                   </p>
                 </div>
                 <Link
                   href={`/${locale}/calculators/cap-rate/`}
-                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1"
+                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1 active-press"
                 >
                   <span>{isZh ? '如何计算 Cap Rate' : 'How to calculate'}</span>
                   <ArrowRight className="w-3 h-3" aria-hidden="true" />
                 </Link>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 flex flex-col justify-between">
+              <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-200/80 hover:border-slate-300 transition-[border-color,box-shadow] duration-150 space-y-1 flex flex-col justify-between shadow-xs">
                 <div>
                   <span className="text-xs font-semibold text-slate-500 block">{isZh ? '现金回报率 CoC' : 'Cash-on-Cash Return'}</span>
-                  <span data-testid="tool-base-cash-on-cash" className="text-lg font-black text-emerald-600">{formatPercent(base.cashOnCashReturn)}</span>
+                  <span data-testid="tool-base-cash-on-cash" className="text-lg font-black text-emerald-600 tabular-nums">{formatPercent(base.cashOnCashReturn)}</span>
                   <p className="text-[11px] text-slate-500 leading-snug mt-1">
                     {isZh ? '(NOI − 年房贷本息) ÷ 初始投入总现金' : '(NOI − Annual Debt Service) ÷ Cash Invested'}
                   </p>
                 </div>
                 <Link
                   href={`/${locale}/calculators/cash-on-cash/`}
-                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1"
+                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1 active-press"
                 >
                   <span>{isZh ? '如何计算 CoC' : 'How to calculate'}</span>
                   <ArrowRight className="w-3 h-3" aria-hidden="true" />
                 </Link>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 flex flex-col justify-between">
+              <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-200/80 hover:border-slate-300 transition-[border-color,box-shadow] duration-150 space-y-1 flex flex-col justify-between shadow-xs">
                 <div>
                   <span className="text-xs font-semibold text-slate-500 block">{isZh ? '偿债覆盖率 DSCR' : 'DSCR (Debt Coverage)'}</span>
-                  <span data-testid="tool-base-dscr" className={`text-lg font-black ${base.dscr < 1.25 ? 'text-amber-600' : 'text-slate-900'}`}>{base.dscr.toFixed(2)}x</span>
+                  <span data-testid="tool-base-dscr" className={`text-lg font-black tabular-nums ${base.dscr < 1.25 ? 'text-amber-600' : 'text-slate-900'}`}>{base.dscr.toFixed(2)}x</span>
                   <p className="text-[11px] text-slate-500 leading-snug mt-1">
                     {isZh ? 'NOI ÷ 年还贷总额（净营业收入够付几倍年房贷）' : 'NOI ÷ Annual Debt Service (loan payment coverage)'}
                   </p>
                 </div>
                 <Link
                   href={`/${locale}/calculators/dscr/`}
-                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1"
+                  className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1 active-press"
                 >
                   <span>{isZh ? '如何计算 DSCR' : 'How to calculate'}</span>
                   <ArrowRight className="w-3 h-3" aria-hidden="true" />
                 </Link>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 sm:col-span-2">
+              <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-200/80 hover:border-slate-300 transition-[border-color,box-shadow] duration-150 space-y-2 sm:col-span-2 shadow-xs">
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-500 block">{isZh ? '收支平衡比率 (BER)' : 'Break-Even Ratio (BER)'}</span>
-                    <span className={`text-lg font-black ${base.breakEvenRatio > 85 ? 'text-amber-600' : 'text-slate-900'}`}>
+                    <span className={`text-lg font-black tabular-nums ${base.breakEvenRatio > 85 ? 'text-amber-600' : 'text-slate-900'}`}>
                       <span data-testid="tool-base-ber">{formatPercent(base.breakEvenRatio)}</span>
                     </span>
                   </div>
@@ -792,7 +796,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 <div className="border-t border-slate-200 pt-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-500 block">{isZh ? '盈亏平衡入住率 (BEO)' : 'Break-Even Occupancy (BEO)'}</span>
-                    <span className="text-sm font-bold text-slate-700">
+                    <span className="text-sm font-bold text-slate-700 tabular-nums">
                       <span data-testid="tool-base-beo">{formatPercent(base.breakEvenOccupancy)}</span>
                     </span>
                   </div>
@@ -806,7 +810,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 <div className="pt-1">
                   <Link
                     href={`/${locale}/calculators/break-even-ratio/`}
-                    className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5"
+                    className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 active-press"
                   >
                     <span>{isZh ? '如何计算 BER 与 BEO' : 'How to calculate BER & BEO'}</span>
                     <ArrowRight className="w-3 h-3" aria-hidden="true" />
@@ -816,18 +820,18 @@ export function DealAnalyzerTool({ locale }: Props) {
             </div>
 
             {/* Debt Summary Box */}
-            <div className="bg-slate-900 text-white p-5 rounded-2xl space-y-3 shadow-md">
+            <div className="bg-slate-900 text-white p-5 rounded-2xl space-y-3 shadow-md border border-slate-800">
               <div className="flex items-center justify-between text-xs border-b border-slate-800 pb-2">
                 <span className="text-slate-400 font-semibold">{isZh ? '初始投入现金 (首付+过户)' : 'Total Initial Cash Outlay'}</span>
-                <span className="font-bold text-emerald-400 text-sm">{formatCurrency(base.totalCashInvested)}</span>
+                <span className="font-bold text-emerald-400 text-sm tabular-nums">{formatCurrency(base.totalCashInvested)}</span>
               </div>
               <div className="flex items-center justify-between text-xs border-b border-slate-800 pb-2">
                 <span className="text-slate-400 font-semibold">{isZh ? '月供本息合计 (Monthly Pmt)' : 'Monthly Payment (P&I)'}</span>
-                <span className="font-bold text-slate-200">{formatCurrency(Math.round(base.monthlyPayment))}</span>
+                <span className="font-bold text-slate-200 tabular-nums">{formatCurrency(Math.round(base.monthlyPayment))}</span>
               </div>
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-400 font-semibold">{isZh ? '年还贷总额 (Annual Debt Service)' : 'Annual Debt Service'}</span>
-                <span className="font-bold text-slate-200">{formatCurrency(base.annualDebtService)}</span>
+                <span className="font-bold text-slate-200 tabular-nums">{formatCurrency(base.annualDebtService)}</span>
               </div>
             </div>
           </div>
@@ -863,36 +867,36 @@ export function DealAnalyzerTool({ locale }: Props) {
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div>
                   <span className="text-slate-400 block">{isZh ? '净营业收入 NOI' : 'Base NOI'}</span>
-                  <span className="font-bold text-sm text-slate-100">{formatCurrency(base.noi)}</span>
+                  <span className="font-bold text-sm text-slate-100 tabular-nums">{formatCurrency(base.noi)}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">{isZh ? '资本化率 Cap Rate' : 'Base Cap Rate'}</span>
-                  <span className="font-bold text-sm text-slate-100">{formatPercent(base.capRate)}</span>
+                  <span className="font-bold text-sm text-slate-100 tabular-nums">{formatPercent(base.capRate)}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">{isZh ? '月供还款额' : 'Base Monthly Pmt'}</span>
-                  <span className="font-bold text-sm text-slate-100">{formatCurrency(Math.round(base.monthlyPayment))}</span>
+                  <span className="font-bold text-sm text-slate-100 tabular-nums">{formatCurrency(Math.round(base.monthlyPayment))}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">{isZh ? '年还贷总额' : 'Base Debt Service'}</span>
-                  <span className="font-bold text-sm text-slate-100">{formatCurrency(base.annualDebtService)}</span>
+                  <span className="font-bold text-sm text-slate-100 tabular-nums">{formatCurrency(base.annualDebtService)}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">{isZh ? '现金回报率 CoC' : 'Base CoC'}</span>
-                  <span className="font-bold text-sm text-emerald-400">{formatPercent(base.cashOnCashReturn)}</span>
+                  <span className="font-bold text-sm text-emerald-400 tabular-nums">{formatPercent(base.cashOnCashReturn)}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">{isZh ? '偿债覆盖率 DSCR' : 'Base DSCR'}</span>
-                  <span className="font-bold text-sm text-emerald-400">{base.dscr.toFixed(2)}x</span>
+                  <span className="font-bold text-sm text-emerald-400 tabular-nums">{base.dscr.toFixed(2)}x</span>
                 </div>
                 <div className="col-span-2 space-y-1 mt-2 pt-2 border-t border-slate-700">
                   <div className="flex justify-between">
                     <span className="text-slate-400 text-xs">{isZh ? '收支平衡比率 (BER)' : 'Base Break-Even Ratio'}</span>
-                    <span className="font-bold text-sm text-slate-100">{formatPercent(base.breakEvenRatio)}</span>
+                    <span className="font-bold text-sm text-slate-100 tabular-nums">{formatPercent(base.breakEvenRatio)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-400 text-xs">{isZh ? '盈亏平衡入住率' : 'Base Occupancy'}</span>
-                    <span className="font-bold text-sm text-slate-100">{formatPercent(base.breakEvenOccupancy)}</span>
+                    <span className="font-bold text-sm text-slate-100 tabular-nums">{formatPercent(base.breakEvenOccupancy)}</span>
                   </div>
                 </div>
               </div>
@@ -914,36 +918,36 @@ export function DealAnalyzerTool({ locale }: Props) {
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div>
                   <span className="text-slate-400 block">{isZh ? '净营业收入 NOI' : 'Stressed NOI'}</span>
-                  <span className="font-bold text-sm text-rose-300">{formatCurrency(stress.noi)}</span>
+                  <span className="font-bold text-sm text-rose-300 tabular-nums">{formatCurrency(stress.noi)}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">{isZh ? '资本化率 Cap Rate' : 'Stressed Cap Rate'}</span>
-                  <span className="font-bold text-sm text-slate-200">{formatPercent(stress.capRate)}</span>
+                  <span className="font-bold text-sm text-slate-200 tabular-nums">{formatPercent(stress.capRate)}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">{isZh ? '月供还款额' : 'Stressed Monthly Pmt'}</span>
-                  <span className="font-bold text-sm text-rose-300">{formatCurrency(Math.round(stress.monthlyPayment))}</span>
+                  <span className="font-bold text-sm text-rose-300 tabular-nums">{formatCurrency(Math.round(stress.monthlyPayment))}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">{isZh ? '年还贷总额' : 'Stressed Debt Service'}</span>
-                  <span className="font-bold text-sm text-slate-200">{formatCurrency(stress.annualDebtService)}</span>
+                  <span className="font-bold text-sm text-slate-200 tabular-nums">{formatCurrency(stress.annualDebtService)}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">{isZh ? '现金回报率 CoC' : 'Stressed CoC'}</span>
-                  <span className="font-bold text-sm text-amber-400">{formatPercent(stress.cashOnCashReturn)}</span>
+                  <span className="font-bold text-sm text-amber-400 tabular-nums">{formatPercent(stress.cashOnCashReturn)}</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block">{isZh ? '偿债覆盖率 DSCR' : 'Stressed DSCR'}</span>
-                  <span data-testid="tool-stress-dscr" className={`font-bold text-sm ${stress.dscr < 1.0 ? 'text-rose-400 font-extrabold' : 'text-amber-400'}`}>{stress.dscr.toFixed(2)}x</span>
+                  <span data-testid="tool-stress-dscr" className={`font-bold text-sm tabular-nums ${stress.dscr < 1.0 ? 'text-rose-400 font-extrabold' : 'text-amber-400'}`}>{stress.dscr.toFixed(2)}x</span>
                 </div>
                 <div className="col-span-2 space-y-1 mt-2 pt-2 border-t border-slate-700">
                   <div className="flex justify-between">
                     <span className="text-slate-400 text-xs">{isZh ? '收支平衡比率 (BER)' : 'Stressed Break-Even Ratio'}</span>
-                    <span data-testid="tool-stress-ber" className={`font-bold text-sm ${stress.breakEvenRatio > 90 ? 'text-rose-400' : 'text-amber-400'}`}>{formatPercent(stress.breakEvenRatio)}</span>
+                    <span data-testid="tool-stress-ber" className={`font-bold text-sm tabular-nums ${stress.breakEvenRatio > 90 ? 'text-rose-400' : 'text-amber-400'}`}>{formatPercent(stress.breakEvenRatio)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-400 text-xs">{isZh ? '盈亏平衡入住率' : 'Stressed Occupancy'}</span>
-                    <span data-testid="tool-stress-beo" className="font-bold text-sm text-amber-400">{formatPercent(stress.breakEvenOccupancy)}</span>
+                    <span data-testid="tool-stress-beo" className="font-bold text-sm text-amber-400 tabular-nums">{formatPercent(stress.breakEvenOccupancy)}</span>
                   </div>
                 </div>
               </div>

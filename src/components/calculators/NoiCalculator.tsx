@@ -192,21 +192,21 @@ export function NoiCalculator({ locale }: Props) {
         </div>
 
         {/* Results Panel */}
-        <div className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-slate-50 border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 flex flex-col justify-between">
           <div>
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
               {isZh ? 'NOI 结果总览' : 'NOI Financial Summary'}
             </h3>
 
             {/* Major Result Card */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <div className="bg-white p-5 rounded-xl border border-slate-200/90 shadow-xs mb-6">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 {isZh ? '年度净营业收入 (Annual NOI)' : 'Annual Net Operating Income'}
               </span>
-              <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1">
+              <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1 tabular-nums">
                 {formatCurrency(noi)}
               </div>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-slate-500 mt-1 tabular-nums">
                 {isZh ? `月均 NOI: ${formatCurrency(monthlyNoi)} / 月` : `Monthly Avg: ${formatCurrency(monthlyNoi)} / mo`}
               </p>
             </div>
@@ -215,23 +215,23 @@ export function NoiCalculator({ locale }: Props) {
             <div className="space-y-3 text-sm border-t border-slate-200 pt-4">
               <div className="flex justify-between">
                 <span className="text-slate-600">{isZh ? '潜在毛收入 (Gross Income):' : 'Gross Potential Income:'}</span>
-                <span className="font-semibold">{formatCurrency(grossIncome)}</span>
+                <span className="font-semibold tabular-nums">{formatCurrency(grossIncome)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-600">{isZh ? '空置及坏账扣除:' : 'Vacancy Deduction:'}</span>
-                <span className="font-semibold text-amber-600">-{formatCurrency(vacancyLoss)}</span>
+                <span className="font-semibold text-amber-600 tabular-nums">-{formatCurrency(vacancyLoss)}</span>
               </div>
               <div className="flex justify-between font-semibold border-t border-slate-200 pt-2">
                 <span className="text-slate-800">{isZh ? '有效毛收入 (EGI):' : 'Effective Gross Income (EGI):'}</span>
-                <span className="text-slate-900">{formatCurrency(egi)}</span>
+                <span className="text-slate-900 tabular-nums">{formatCurrency(egi)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-600">{isZh ? '总运营支出 (OpEx):' : 'Total Operating Expenses:'}</span>
-                <span className="font-semibold text-red-600">-{formatCurrency(totalExpenses)}</span>
+                <span className="font-semibold text-red-600 tabular-nums">-{formatCurrency(totalExpenses)}</span>
               </div>
               <div className="flex justify-between text-xs text-slate-500">
                 <span>{isZh ? '运营支出占比 (OpEx Ratio):' : 'Expense Ratio (% of EGI):'}</span>
-                <span className="font-semibold">{formatPercent(expenseRatio)}</span>
+                <span className="font-semibold tabular-nums">{formatPercent(expenseRatio)}</span>
               </div>
             </div>
           </div>
@@ -249,7 +249,7 @@ export function NoiCalculator({ locale }: Props) {
               <span className="font-semibold text-emerald-950">{isZh ? '下一步：' : 'Next step:'}</span>
               <Link
                 href={`/${locale}/calculators/cap-rate/`}
-                className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-0.5"
+                className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-0.5 active-press"
               >
                 <span>{isZh ? '2. 用 Cap Rate 比价格与收益' : '2. Compare with Cap Rate'}</span>
                 <ArrowRight className="w-3 h-3" aria-hidden="true" />
@@ -257,7 +257,7 @@ export function NoiCalculator({ locale }: Props) {
               <span className="text-emerald-400">•</span>
               <Link
                 href={`/${locale}/tools/deal-analyzer/`}
-                className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-0.5"
+                className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-0.5 active-press"
               >
                 <span>{isZh ? '3. 进入 Deal Analyzer 测融资' : '3. Test in Deal Analyzer'}</span>
                 <ArrowRight className="w-3 h-3" aria-hidden="true" />

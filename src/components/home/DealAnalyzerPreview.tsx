@@ -22,11 +22,11 @@ export function DealAnalyzerPreview({ locale }: Props) {
   const current = activeScenario === 'base' ? base : stress;
 
   return (
-    <figure className="relative bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-xl transition-all duration-300 text-left overflow-hidden">
+    <figure className="relative bg-white/95 rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 text-left overflow-hidden">
       {/* Header bar */}
       <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-4 mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold" aria-hidden="true">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold shadow-[inset_0_1px_1px_rgba(16,185,129,0.2)]" aria-hidden="true">
             <Building2 className="w-4 h-4" />
           </div>
           <div>
@@ -48,7 +48,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
             type="button"
             aria-pressed={activeScenario === 'base'}
             onClick={() => setActiveScenario('base')}
-            className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none min-h-[28px] ${
+            className={`active-press px-2.5 py-1 rounded-lg transition-[background-color,color,box-shadow,transform] duration-150 cursor-pointer focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none min-h-[28px] ${
               activeScenario === 'base'
                 ? 'bg-white text-slate-900 shadow-xs font-bold'
                 : 'text-slate-500 hover:text-slate-900'
@@ -60,7 +60,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
             type="button"
             aria-pressed={activeScenario === 'stress'}
             onClick={() => setActiveScenario('stress')}
-            className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none min-h-[28px] ${
+            className={`active-press px-2.5 py-1 rounded-lg transition-[background-color,color,box-shadow,transform] duration-150 flex items-center gap-1 cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none min-h-[28px] ${
               activeScenario === 'stress'
                 ? 'bg-amber-500 text-white shadow-xs font-bold'
                 : 'text-slate-500 hover:text-slate-900'
@@ -73,8 +73,8 @@ export function DealAnalyzerPreview({ locale }: Props) {
       </div>
 
       {/* Stress testing assumption note */}
-      <div className="mb-3 text-[11px] text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200/70">
-        <span className="font-semibold text-slate-700">
+      <div className="mb-3 text-[11px] text-slate-600 bg-slate-50/80 px-3 py-1.5 rounded-xl border border-slate-200/60 leading-relaxed">
+        <span className="font-semibold text-slate-800">
           {activeScenario === 'base'
             ? (isZh ? '基准假设：' : 'Base Case: ')
             : (isZh ? '压力情景：' : 'Stress Case: ')}
@@ -86,12 +86,12 @@ export function DealAnalyzerPreview({ locale }: Props) {
 
       {/* Health Evaluation Banner */}
       <div
-        className={`p-3.5 rounded-2xl border transition-all mb-4 ${
+        className={`p-3.5 rounded-2xl border transition-[background-color,border-color,color] duration-180 mb-4 ${
           current.healthStatus === 'green'
-            ? 'bg-emerald-50/80 border-emerald-200 text-emerald-950'
+            ? 'bg-emerald-50/80 border-emerald-200/80 text-emerald-950 shadow-[0_1px_2px_rgba(16,185,129,0.05)]'
             : current.healthStatus === 'yellow'
-            ? 'bg-amber-50/90 border-amber-200 text-amber-950'
-            : 'bg-rose-50/90 border-rose-200 text-rose-950'
+            ? 'bg-amber-50/90 border-amber-200/80 text-amber-950 shadow-[0_1px_2px_rgba(245,158,11,0.05)]'
+            : 'bg-rose-50/90 border-rose-200/80 text-rose-950 shadow-[0_1px_2px_rgba(244,63,94,0.05)]'
         }`}
       >
         <div className="flex items-center justify-between text-xs font-bold mb-1">
@@ -99,7 +99,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
             {isZh ? '全案示例规则诊断' : 'Illustrative Rule Evaluation'}
           </span>
           <span
-            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold shadow-xs ${
               current.healthStatus === 'green'
                 ? 'bg-emerald-600 text-white'
                 : current.healthStatus === 'yellow'
@@ -120,40 +120,40 @@ export function DealAnalyzerPreview({ locale }: Props) {
 
       {/* 2x3 Metric Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 mb-5">
-        <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-0.5">
+        <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/70 space-y-0.5">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
             {isZh ? '购买价格' : 'Purchase Price'}
           </span>
-          <span className="text-sm font-black text-slate-900">{formatCurrency(sampleInput.purchasePrice)}</span>
+          <span className="tabular-nums text-sm font-black text-slate-900">{formatCurrency(sampleInput.purchasePrice)}</span>
         </div>
 
-        <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-0.5">
+        <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/70 space-y-0.5">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
             {isZh ? '净营业收入 NOI' : 'Annual NOI'}
           </span>
-          <span className="text-sm font-black text-slate-900"><span data-testid="base-noi">{formatCurrency(current.noi)}</span></span>
+          <span className="tabular-nums text-sm font-black text-slate-900"><span data-testid="base-noi">{formatCurrency(current.noi)}</span></span>
         </div>
 
-        <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100 space-y-0.5">
+        <div className="bg-emerald-50/60 p-3 rounded-xl border border-emerald-100/90 space-y-0.5 shadow-[inset_0_1px_1px_rgba(16,185,129,0.05)]">
           <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">
             Cap Rate
           </span>
-          <span className="text-sm font-black text-emerald-700"><span data-testid="base-cap-rate">{formatPercent(current.capRate)}</span></span>
+          <span className="tabular-nums text-sm font-black text-emerald-700"><span data-testid="base-cap-rate">{formatPercent(current.capRate)}</span></span>
         </div>
 
-        <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-0.5">
+        <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/70 space-y-0.5">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
             Cash-on-Cash
           </span>
-          <span className="text-sm font-black text-slate-900"><span data-testid="base-cash-on-cash">{formatPercent(current.cashOnCashReturn)}</span></span>
+          <span className="tabular-nums text-sm font-black text-slate-900"><span data-testid="base-cash-on-cash">{formatPercent(current.cashOnCashReturn)}</span></span>
         </div>
 
-        <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-0.5">
+        <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/70 space-y-0.5">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
             {isZh ? 'DSCR 偿债覆盖率' : 'DSCR (Debt Coverage)'}
           </span>
           <span
-            className={`text-sm font-black ${
+            className={`tabular-nums text-sm font-black ${
               current.dscr >= 1.25 ? 'text-emerald-600' : current.dscr >= 1.0 ? 'text-amber-600' : 'text-rose-600'
             }`}
           >
@@ -164,18 +164,18 @@ export function DealAnalyzerPreview({ locale }: Props) {
           </span>
         </div>
 
-        <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/80 space-y-0.5">
+        <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/70 space-y-0.5">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
               {isZh ? '收支平衡比 BER' : 'Break-Even Ratio (BER)'}
             </span>
-            <span className="text-sm font-black text-slate-900"><span data-testid="base-ber">{formatPercent(current.breakEvenRatio)}</span></span>
+            <span className="tabular-nums text-sm font-black text-slate-900"><span data-testid="base-ber">{formatPercent(current.breakEvenRatio)}</span></span>
           </div>
           <div className="flex justify-between items-center border-t border-slate-200/50 mt-1 pt-1">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
               {isZh ? '盈亏入住率 BEO' : 'Occupancy (BEO)'}
             </span>
-            <span className="text-xs font-bold text-emerald-700"><span data-testid="base-beo">{formatPercent(current.breakEvenOccupancy)}</span></span>
+            <span className="tabular-nums text-xs font-bold text-emerald-700"><span data-testid="base-beo">{formatPercent(current.breakEvenOccupancy)}</span></span>
           </div>
         </div>
       </div>
@@ -184,7 +184,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
       <Link
         href={`/${locale}/tools/deal-analyzer/`}
         aria-label={isZh ? '打开完整 Deal Analyzer 工具' : 'Launch Full Deal Analyzer Suite'}
-        className="w-full min-h-[44px] inline-flex items-center justify-between px-4 py-3 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs transition-colors shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none group/btn cursor-pointer"
+        className="active-press w-full min-h-[44px] inline-flex items-center justify-between px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-[background-color,transform] duration-150 shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none group/btn cursor-pointer"
       >
         <span className="flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-emerald-400 group-hover/btn:text-white" aria-hidden="true" />
