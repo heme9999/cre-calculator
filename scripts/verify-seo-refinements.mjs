@@ -3,6 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer-core';
+import {
+  setupAnalyticsBlocker
+} from './lib/puppeteer-analytics-blocker.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -275,11 +278,18 @@ async function runVerification() {
     const isSitemapApproved = APPROVED_SITEMAP_URLS.has(fullCanonicalUrl);
 
     const page = await browser.newPage();
+    const blocker = await setupAnalyticsBlocker(page, { silent: true });
     const consoleErrors = [];
     page.on('console', msg => {
-      if (msg.type() === 'error') consoleErrors.push(msg.text());
+      if (msg.type() === 'error') {
+        if (!blocker.isExpectedBlockError(msg)) {
+          consoleErrors.push(msg.text());
+        }
+      }
     });
-    page.on('pageerror', err => consoleErrors.push(err.toString()));
+    page.on('pageerror', err => {
+      consoleErrors.push(err.toString());
+    });
 
     const response = await page.goto(testUrl, { waitUntil: 'networkidle0' });
 

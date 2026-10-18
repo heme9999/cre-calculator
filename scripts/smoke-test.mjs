@@ -8,6 +8,9 @@ import {
   invalidSamples,
   validSamples
 } from './lib/seo-semantic-validation.mjs';
+import {
+  setupAnalyticsBlocker
+} from './lib/puppeteer-analytics-blocker.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,6 +47,10 @@ const server = http.createServer((req, res) => {
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     const ext = path.extname(filePath).toLowerCase();
     res.writeHead(200, { 'Content-Type': mimeTypes[ext] || 'application/octet-stream' });
+    if (req.method === 'HEAD') {
+      res.end();
+      return;
+    }
     fs.createReadStream(filePath).pipe(res);
   } else {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -73,15 +80,33 @@ async function runSmokeTests() {
     executablePath: CHROME_PATH
   });
   const page = await browser.newPage();
+  const blocker = await setupAnalyticsBlocker(page, { silent: false });
 
-  let consoleErrors = [];
+  const accumulatedErrors = [];
   page.on('console', msg => {
     if (msg.type() === 'error') {
-      consoleErrors.push(msg.text());
+      if (!blocker.isExpectedBlockError(msg)) {
+        const errorInfo = {
+          type: 'console_error',
+          text: msg.text(),
+          location: msg.location(),
+          url: page.url()
+        };
+        accumulatedErrors.push(errorInfo);
+        console.error(`❌ [Smoke Test ConsoleError] on ${page.url()}:`, errorInfo.text);
+      }
     }
   });
   page.on('pageerror', err => {
-    consoleErrors.push(err.toString());
+    // Uncaught runtime exceptions must NEVER pass through analytics error filtering
+    const errorInfo = {
+      type: 'pageerror',
+      message: err.message || String(err),
+      stack: err.stack,
+      url: page.url()
+    };
+    accumulatedErrors.push(errorInfo);
+    console.error(`❌ [Smoke Test PageError] on ${page.url()}:`, errorInfo.message);
   });
 
   try {
@@ -95,16 +120,16 @@ async function runSmokeTests() {
     });
 
     // Hard load English
-    consoleErrors = [];
+    const errorsBeforeEn = accumulatedErrors.length;
     await page.goto('http://localhost:3460/en/tools/deal-analyzer/', { waitUntil: 'networkidle0' });
-    console.log('EN Console Errors:', consoleErrors.length);
-    if (consoleErrors.length > 0) console.log(consoleErrors);
+    const enErrors = accumulatedErrors.length - errorsBeforeEn;
+    console.log('EN Console Errors:', enErrors);
 
     // Hard load Chinese
-    consoleErrors = [];
+    const errorsBeforeZh = accumulatedErrors.length;
     await page.goto('http://localhost:3460/zh/tools/deal-analyzer/', { waitUntil: 'networkidle0' });
-    console.log('ZH Console Errors:', consoleErrors.length);
-    if (consoleErrors.length > 0) console.log(consoleErrors);
+    const zhErrors = accumulatedErrors.length - errorsBeforeZh;
+    console.log('ZH Console Errors:', zhErrors);
 
     console.log('\n--- 2. Testing Deal Analyzer Functions ---');
     await page.goto('http://localhost:3460/en/tools/deal-analyzer/', { waitUntil: 'networkidle0' });
@@ -582,13 +607,25 @@ async function runSmokeTests() {
       console.log(`Viewport ${vp}px - Overflow: ${dims.scrollWidth > dims.viewportWidth}, Brand Full Visible: ${dims.brandVisible}`);
     }
 
+    if (accumulatedErrors.length > 0) {
+      console.error(`\n❌ Smoke tests finished with ${accumulatedErrors.length} real error(s):`);
+      for (const err of accumulatedErrors) {
+        console.error(`  - [${err.type}] ${err.text || err.message} (at ${err.url || 'unknown'})`);
+      }
+      throw new Error(`Smoke tests failed due to ${accumulatedErrors.length} runtime/console error(s).`);
+    }
+
+    console.log('\n🎉 ALL SMOKE TESTS COMPLETED WITH 0 RUNTIME/CONSOLE ERRORS!');
   } catch (err) {
     console.error(err);
     process.exitCode = 1;
   } finally {
     await browser.close();
     server.close();
-    process.exit(process.exitCode || 0);
+    if (accumulatedErrors.length > 0 || process.exitCode) {
+      process.exit(1);
+    }
+    process.exit(0);
   }
 }
 

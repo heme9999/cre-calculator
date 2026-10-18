@@ -1,4 +1,7 @@
 import puppeteer from 'puppeteer-core';
+import {
+  setupAnalyticsBlocker
+} from './lib/puppeteer-analytics-blocker.mjs';
 
 const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const ARTIFACT_DIR = '/Users/hemrmicloud.com/.gemini/antigravity/brain/38254bbf-d672-4a68-89f7-56fd707159bf';
@@ -16,6 +19,7 @@ async function verifyPage(url, locale) {
   });
 
   const page = await browser.newPage();
+  const blocker = await setupAnalyticsBlocker(page, { silent: false });
   await page.setViewport({ width: 1280, height: 1000 });
 
   const consoleLogs = [];
@@ -24,6 +28,7 @@ async function verifyPage(url, locale) {
   page.on('console', (msg) => {
     const text = msg.text();
     consoleLogs.push(`[${msg.type()}] ${text}`);
+    if (blocker.isExpectedBlockError(msg)) return;
     if (msg.type() === 'error' || text.includes('418') || text.includes('Hydration') || text.includes('mismatch')) {
       consoleErrors.push(text);
       console.error(`🚨 CONSOLE ERROR: ${text}`);
@@ -31,8 +36,9 @@ async function verifyPage(url, locale) {
   });
 
   page.on('pageerror', (err) => {
-    consoleErrors.push(err.toString());
-    console.error(`🚨 UNCAUGHT PAGE ERROR: ${err.toString()}`);
+    const text = err.toString();
+    consoleErrors.push(text);
+    console.error(`🚨 UNCAUGHT PAGE ERROR: ${text}`);
   });
 
   // 1. Initial Page Load
