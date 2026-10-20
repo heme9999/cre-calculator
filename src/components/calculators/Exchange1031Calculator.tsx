@@ -11,6 +11,8 @@ interface Props {
 
 export function Exchange1031Calculator({ locale }: Props) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
 
   // Inputs
   const [salePrice, setSalePrice] = useState<number>(2500000);
@@ -30,14 +32,24 @@ export function Exchange1031Calculator({ locale }: Props) {
         <div>
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-2">
             <Calculator className="w-3.5 h-3.5" />
-            {isZh ? '资本利得延税计算' : 'Tax Deferral Analysis'}
+            {isZh ? '资本利得延税计算' : isEs ? 'Análisis de Aplazamiento Fiscal' : isPt ? 'Análise de Diferimento Fiscal' : 'Tax Deferral Analysis'}
           </div>
           <h2 className="text-xl md:text-2xl font-bold">
-            {isZh ? '1031 Exchange 延税计算器' : '1031 Exchange Tax Deferral Calculator'}
+            {isZh
+              ? '1031 Exchange 延税计算器'
+              : isEs
+              ? 'Calculadora de Aplazamiento Fiscal (Intercambio 1031)'
+              : isPt
+              ? 'Calculadora de Diferimento Fiscal (Troca 1031)'
+              : '1031 Exchange Tax Deferral Calculator'}
           </h2>
           <p className="text-slate-400 text-sm mt-1">
             {isZh
               ? '估算出售商业地产时通过 1031 置换可延迟缴纳的资本利得税金额与再投资门槛'
+              : isEs
+              ? 'Estime el impuesto sobre ganancias de capital diferido y los objetivos de reinversión para intercambios 1031'
+              : isPt
+              ? 'Estime o imposto sobre ganho de capital diferido e as metas de reinvestimento para trocas semelhantes (1031 like-kind exchange)'
               : 'Estimate deferred capital gains tax and reinvestment targets for 1031 like-kind exchanges'}
           </p>
         </div>
@@ -51,6 +63,14 @@ export function Exchange1031Calculator({ locale }: Props) {
             <>
               <strong>重要免责声明：</strong>
               本计算器仅供初步财务估算与概念演示，不构成任何税务、法律或专业投资建议。实际递延税负受折旧追回税率 (Depreciation Recapture 25%)、联邦资本利得税 (15%-20%)、州税 (State Tax) 及净投资所得税 (NIIT 3.8%) 等多重因素影响。在进行 1031 Exchange 交易前，请务必咨询专业合规的合格中介人 (QI) 及执业注册会计师 (CPA)。
+            </>
+          ) : isEs ? (
+            <>
+              <strong>Aviso Legal y Tributario Obligatorio:</strong> Esta calculadora ofrece estimaciones simplificadas únicamente con fines informativos y no constituye asesoramiento legal o fiscal. La obligación tributaria real depende de la recuperación de depreciación (Depreciation Recapture 25%), tasas federales de ganancias de capital (15%-20%), impuestos estatales y el impuesto sobre ingresos netos de inversión (NIIT 3.8%). Consulte siempre a un Intermediario Calificado (QI) y a un Contador Público Certificado (CPA) antes de ejecutar un intercambio 1031.
+            </>
+          ) : isPt ? (
+            <>
+              <strong>Aviso Legal e Tributário Obrigatório:</strong> Esta calculadora fornece apenas estimativas simplificadas para fins informativos e não constitui consultoria jurídica ou fiscal. A carga tributária real depende da recuperação de depreciação (25%), alíquotas federais de ganho de capital (15%-20%), tributos estaduais e NIIT (3,8%). Consulte sempre um Intermediário Qualificado (QI) e um contador certificado (CPA) antes de estruturar uma troca 1031.
             </>
           ) : (
             <>
@@ -68,7 +88,7 @@ export function Exchange1031Calculator({ locale }: Props) {
             {/* Sale Price */}
             <div>
               <label htmlFor="sale-price-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '拟出售物业售价 (Sale Price)' : 'Property Sale Price ($)'}
+                {isZh ? '拟出售物业售价 (Sale Price)' : isEs ? 'Precio de Venta del Inmueble ($)' : isPt ? 'Preço de Venda do Imóvel ($)' : 'Property Sale Price ($)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -88,7 +108,7 @@ export function Exchange1031Calculator({ locale }: Props) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="cost-basis-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                  {isZh ? '原始成本基准 (Cost Basis)' : 'Original Cost Basis ($)'}
+                  {isZh ? '原始成本基准 (Cost Basis)' : isEs ? 'Base de Costo Original ($)' : isPt ? 'Custo de Aquisição Original ($)' : 'Original Cost Basis ($)'}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -106,7 +126,7 @@ export function Exchange1031Calculator({ locale }: Props) {
 
               <div>
                 <label htmlFor="selling-expenses-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                  {isZh ? '交易经纪与过户费用' : 'Selling Expenses ($)'}
+                  {isZh ? '交易经纪与过户费用' : isEs ? 'Gastos de Venta y Cierre ($)' : isPt ? 'Despesas de Venda e Corretagem ($)' : 'Selling Expenses ($)'}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -126,7 +146,7 @@ export function Exchange1031Calculator({ locale }: Props) {
             {/* Combined Tax Rate */}
             <div>
               <label htmlFor="tax-rate-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '预计综合税率 (%)' : 'Estimated Combined Tax Rate (%)'}
+                {isZh ? '预计综合税率 (%)' : isEs ? 'Tasa Impositiva Combinada Estimada (%)' : isPt ? 'Alíquota Combinada Estimada de Impostos (%)' : 'Estimated Combined Tax Rate (%)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <input
@@ -145,6 +165,10 @@ export function Exchange1031Calculator({ locale }: Props) {
               <p className="text-xs text-slate-500 mt-1">
                 {isZh
                   ? '包含联邦资本利得税 (15%-20%)、州税 (0%-13.3%)、折旧追回税 (25%) 及 NIIT (3.8%) 的综合预估税率'
+                  : isEs
+                  ? 'Estimación combinada de ganancias de capital federales, impuestos estatales, recuperación de depreciación y NIIT'
+                  : isPt
+                  ? 'Estimativa combinada de ganho de capital federal, impostos estaduais, recuperação de depreciação e NIIT'
                   : 'Combined estimate of Federal Capital Gains, State Tax, Depreciation Recapture, and NIIT'}
               </p>
             </div>
@@ -154,13 +178,13 @@ export function Exchange1031Calculator({ locale }: Props) {
           <div aria-live="polite" className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
             <div>
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-                {isZh ? '延税估算总览' : 'Tax Deferral Summary'}
+                {isZh ? '延税估算总览' : isEs ? 'Resumen de Aplazamiento Fiscal' : isPt ? 'Resumo de Diferimento Fiscal' : 'Tax Deferral Summary'}
               </h3>
 
               {/* Major Output */}
               <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  {isZh ? '预计可延迟缴纳资本利得税' : 'Estimated Deferred Tax'}
+                  {isZh ? '预计可延迟缴纳资本利得税' : isEs ? 'Impuesto Diferido Estimado' : isPt ? 'Imposto Diferido Estimado' : 'Estimated Deferred Tax'}
                 </span>
                 <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1">
                   {formatCurrency(Math.round(deferredTax))}
@@ -168,6 +192,10 @@ export function Exchange1031Calculator({ locale }: Props) {
                 <p className="text-xs text-slate-500 mt-1">
                   {isZh
                     ? `基于约 ${formatCurrency(Math.round(realizedGain))} 的资本利得收益及 ${taxRate}% 综合税率`
+                    : isEs
+                    ? `Basado en ${formatCurrency(Math.round(realizedGain))} de ganancia realizada al ${taxRate}% de tasa combinada`
+                    : isPt
+                    ? `Baseado em ${formatCurrency(Math.round(realizedGain))} de ganho realizado à alíquota de ${taxRate}%`
                     : `Based on ${formatCurrency(Math.round(realizedGain))} realized gain at ${taxRate}% combined tax rate`}
                 </p>
               </div>
@@ -175,21 +203,25 @@ export function Exchange1031Calculator({ locale }: Props) {
               {/* Breakdown */}
               <div className="space-y-3 text-sm border-t border-slate-200 pt-4">
                 <div className="flex justify-between text-slate-700">
-                  <span>{isZh ? '出售扣除费用后净所得 (Net Proceeds):' : 'Net Sale Proceeds:'}</span>
+                  <span>{isZh ? '出售扣除费用后净所得 (Net Proceeds):' : isEs ? 'Ingresos Netos de la Venta:' : isPt ? 'Receita Líquida da Venda:' : 'Net Sale Proceeds:'}</span>
                   <span className="font-semibold text-slate-900">{formatCurrency(Math.round(netSaleProceeds))}</span>
                 </div>
                 <div className="flex justify-between text-slate-700">
-                  <span>{isZh ? '变现资本利得 (Realized Gain):' : 'Realized Capital Gain:'}</span>
+                  <span>{isZh ? '变现资本利得 (Realized Gain):' : isEs ? 'Ganancia de Capital Realizada:' : isPt ? 'Ganho de Capital Realizado:' : 'Realized Capital Gain:'}</span>
                   <span className="font-semibold text-slate-900">{formatCurrency(Math.round(realizedGain))}</span>
                 </div>
                 <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs space-y-1 mt-3">
                   <div className="flex items-center gap-1.5 font-bold text-emerald-950">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>{isZh ? '100% 全额延税再投资目标:' : '100% Tax Deferral Reinvestment Rule:'}</span>
+                    <span>{isZh ? '100% 全额延税再投资目标:' : isEs ? 'Regla de Reinversión para Diferimiento al 100%:' : isPt ? 'Regra de Reinvestimento para Diferimento de 100%:' : '100% Tax Deferral Reinvestment Rule:'}</span>
                   </div>
                   <p className="text-[11px] text-emerald-800 leading-relaxed">
                     {isZh
                       ? `新购买的目标物业售价需 ≥ ${formatCurrency(Math.round(netSaleProceeds))}，且出售净现金需全部重新投入新项目中。`
+                      : isEs
+                      ? `El precio de compra del inmueble de reemplazo debe ser ≥ ${formatCurrency(Math.round(netSaleProceeds))} y todo el capital neto en efectivo debe ser reinvertido.`
+                      : isPt
+                      ? `O preço de compra do imóvel substituto deve ser ≥ ${formatCurrency(Math.round(netSaleProceeds))}, com todo o capital líquido reinvestido.`
                       : `Replacement property purchase price must be ≥ ${formatCurrency(Math.round(netSaleProceeds))} with all net cash equity reinvested.`}
                   </p>
                 </div>

@@ -132,9 +132,9 @@ export function calculateSingleScenario(input: DealAnalyzerInput, locale: string
     healthDesc = isZh
       ? '触碰本站示例风险红线：DSCR < 1.0x（经营现金流不足以偿债）或收支平衡比率 > 90%（抗空置缓冲极薄）。实际贷款门槛与违约判定需结合具体借贷合同约定。'
       : isEs
-      ? 'Activa criterios de riesgo ilustrativos: DSCR < 1.0x (déficit de flujo de caja) o Break-Even Ratio > 90% (margen muy estrecho ante vacancia). Los términos reales dependen del contrato de préstamo.'
+      ? 'Activa criterios de riesgo ilustrativos: DSCR < 1.0x (déficit de flujo de caja) o Punto de Equilibrio (BER) > 90% (margen muy estrecho ante vacancia). Los términos reales dependen del contrato de préstamo.'
       : isPt
-      ? 'Ativa critérios de risco demonstrativos: DSCR < 1.0x (déficit de fluxo de caixa) ou Break-Even Ratio > 90% (margem muito estreita contra vacância). Termos reais dependem do contrato de financiamento.'
+      ? 'Ativa critérios de risco demonstrativos: DSCR < 1.0x (déficit de fluxo de caixa) ou Ponto de Equilíbrio (BER) > 90% (margem muito estreita contra vacância). Termos reais dependem do contrato de financiamento.'
       : 'Triggers illustrative risk criteria: DSCR < 1.0x (cash flow shortfall) or Break-Even Ratio > 90% (thin cushion against vacancy). Actual underwriting and default terms depend on specific loan contracts.';
   } else if (dscr < 1.25 || breakEvenRatio > 85) {
     healthStatus = 'yellow';

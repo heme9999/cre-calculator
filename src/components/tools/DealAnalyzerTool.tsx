@@ -976,7 +976,7 @@ export function DealAnalyzerTool({ locale }: Props) {
               </div>
             </div>
             <div className="text-right text-xs text-slate-500">
-              <div>Date: {isClient ? new Date().toISOString().split('T')[0] : ''}</div>
+              <div>{locale === 'zh' ? '日期:' : locale === 'es' ? 'Fecha:' : locale === 'pt' ? 'Data:' : 'Date:'} {isClient ? new Date().toISOString().split('T')[0] : ''}</div>
               <div className="font-mono text-[11px] text-emerald-700 font-bold mt-1">https://crecalculators.com</div>
             </div>
           </div>
@@ -1012,7 +1012,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 </tr>
                 <tr>
                   <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{t.downPayment}:</strong> {downPaymentPercent}% ({formatCurrency(base.downPayment)})</td>
-                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>Loan:</strong> {formatCurrency(base.loanAmount)}</td>
+                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{locale === 'zh' ? '贷款:' : locale === 'es' ? 'Préstamo:' : locale === 'pt' ? 'Financiamento:' : 'Loan:'}</strong> {formatCurrency(base.loanAmount)}</td>
                   <td style={{ width: '33.33%', padding: '4px 0' }}><strong>{t.interestRate} / {t.amortTerm}:</strong> {interestRate}% / {t.yearsLabel(amortizationYears)}</td>
                 </tr>
               </tbody>

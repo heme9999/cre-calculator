@@ -11,6 +11,8 @@ interface Props {
 
 export function LoanPaymentCalculator({ locale }: Props) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
 
   // Inputs - Default set to 1.3M loan, 6.5% interest, 25yr amort, 10yr balloon
   const [paymentType, setPaymentType] = useState<PaymentType>('installment');
@@ -84,13 +86,19 @@ export function LoanPaymentCalculator({ locale }: Props) {
         <div>
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-2">
             <Calculator className="w-3.5 h-3.5" />
-            {isZh ? '商业贷款还款计算' : 'Commercial Debt Calculation'}
+            {isZh ? '商业贷款还款计算' : isEs ? 'Cálculo de Deuda Comercial' : isPt ? 'Cálculo de Financiamento Comercial' : 'Commercial Debt Calculation'}
           </div>
           <h2 className="text-xl md:text-2xl font-bold">
-            {isZh ? '商业地产贷款月供与气球尾款计算器' : 'Commercial Real Estate Loan Payment & Balloon Payoff Calculator'}
+            {isZh ? '商业地产贷款月供与气球尾款计算器' : isEs ? 'Calculadora de Cuota de Préstamo Comercial y Pago Balloon' : isPt ? 'Calculadora de Parcela de Financiamento e Saldo Residual Balloon' : 'Commercial Real Estate Loan Payment & Balloon Payoff Calculator'}
           </h2>
           <p className="text-slate-400 text-sm mt-1">
-            {isZh ? '支持【等额本息】与【等额本金】两种还款模式对比，精确推算月供、利息开支及到期气球尾款' : 'Compare Equal Installment (fixed) vs Equal Principal (declining) loan repayment methods'}
+            {isZh
+              ? '支持【等额本息】与【等额本金】两种还款模式对比，精确推算月供、利息开支及到期气球尾款'
+              : isEs
+              ? 'Compare métodos de amortización: Cuota Constante (fija) vs Amortización Constante (decreciente)'
+              : isPt
+              ? 'Compare formas de pagamento: Tabela Price (fixa) vs Tabela SAC (constante/decrescente)'
+              : 'Compare Equal Installment (fixed) vs Equal Principal (declining) loan repayment methods'}
           </p>
         </div>
       </div>
@@ -103,9 +111,13 @@ export function LoanPaymentCalculator({ locale }: Props) {
           <fieldset className="border-0 p-0 m-0">
             <legend className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
               <Layers className="w-4 h-4 text-emerald-600" aria-hidden="true" />
-              {isZh ? '还款方式选择 (Repayment Method)' : 'Repayment Method'}
+              {isZh ? '还款方式选择 (Repayment Method)' : isEs ? 'Método de Pago' : isPt ? 'Forma de Pagamento' : 'Repayment Method'}
             </legend>
-            <div role="radiogroup" aria-label={isZh ? '还款方式选择' : 'Repayment Method'} className="grid grid-cols-2 gap-3 p-1.5 bg-slate-100 rounded-xl border border-slate-200">
+            <div
+              role="radiogroup"
+              aria-label={isZh ? '还款方式选择' : isEs ? 'Método de Pago' : isPt ? 'Forma de Pagamento' : 'Repayment Method'}
+              className="grid grid-cols-2 gap-3 p-1.5 bg-slate-100 rounded-xl border border-slate-200"
+            >
               <button
                 type="button"
                 role="radio"
@@ -117,9 +129,11 @@ export function LoanPaymentCalculator({ locale }: Props) {
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                 }`}
               >
-                <span>{isZh ? '等额本息 (Equal Installment)' : 'Equal Installment (Fixed)'}</span>
+                <span>
+                  {isZh ? '等额本息 (Equal Installment)' : isEs ? 'Cuota Constante (P&I Fijo)' : isPt ? 'Parcela Fixa (Tabela Price)' : 'Equal Installment (Fixed)'}
+                </span>
                 <span className={`text-[10px] font-normal ${paymentType === 'installment' ? 'text-emerald-400' : 'text-slate-500'}`}>
-                  {isZh ? '每月月供固定不变 (标准模式)' : 'Fixed monthly P&I payment (Standard)'}
+                  {isZh ? '每月月供固定不变 (标准模式)' : isEs ? 'Cuota mensual fija (Estándar)' : isPt ? 'Parcela mensal fixa (Padrão)' : 'Fixed monthly P&I payment (Standard)'}
                 </span>
               </button>
 
@@ -134,9 +148,11 @@ export function LoanPaymentCalculator({ locale }: Props) {
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                 }`}
               >
-                <span>{isZh ? '等额本金 (Equal Principal)' : 'Equal Principal (Declining)'}</span>
+                <span>
+                  {isZh ? '等额本金 (Equal Principal)' : isEs ? 'Amortización Constante (Capital Fijo)' : isPt ? 'Amortização Constante (Tabela SAC)' : 'Equal Principal (Declining)'}
+                </span>
                 <span className={`text-[10px] font-normal ${paymentType === 'principal' ? 'text-emerald-400' : 'text-slate-500'}`}>
-                  {isZh ? '每月还款本金固定，月供逐月递减' : 'Fixed principal, declining total payment'}
+                  {isZh ? '每月还款本金固定，月供逐月递减' : isEs ? 'Capital fijo mensual, cuota decreciente' : isPt ? 'Amortização fixa, parcela decrescente' : 'Fixed principal, declining total payment'}
                 </span>
               </button>
             </div>
@@ -145,7 +161,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
           {/* Loan Principal */}
           <div>
             <label htmlFor="loan-amount-input" className="block text-sm font-semibold text-slate-700 mb-2">
-              {isZh ? '贷款本金总额 (Loan Amount)' : 'Principal Loan Amount ($)'}
+              {isZh ? '贷款本金总额 (Loan Amount)' : isEs ? 'Monto del Préstamo ($)' : isPt ? 'Valor do Financiamento ($)' : 'Principal Loan Amount ($)'}
             </label>
             <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold" aria-hidden="true">$</span>
@@ -156,7 +172,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
                 onChange={(e) => setLoanAmount(parseFloat(e.target.value) || 0)}
                 className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
                 placeholder="1,300,000"
-                aria-label={isZh ? '贷款本金总额' : 'Principal Loan Amount'}
+                aria-label={isZh ? '贷款本金总额' : isEs ? 'Monto del Préstamo' : isPt ? 'Valor do Financiamento' : 'Principal Loan Amount'}
               />
             </div>
             <div className="flex gap-2 mt-2">
@@ -178,7 +194,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="interest-rate-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '年利率 (%)' : 'Annual Interest Rate (%)'}
+                {isZh ? '年利率 (%)' : isEs ? 'Tasa de Interés Anual (%)' : isPt ? 'Taxa de Juros Anual (%)' : 'Annual Interest Rate (%)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <input
@@ -189,7 +205,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
                   onChange={(e) => setInterestRate(parseFloat(e.target.value) || 0)}
                   className="w-full pl-4 pr-8 py-3 text-slate-900 font-semibold focus:outline-none"
                   placeholder="6.5"
-                  aria-label={isZh ? '年利率' : 'Annual Interest Rate'}
+                  aria-label={isZh ? '年利率' : isEs ? 'Tasa de Interés Anual' : isPt ? 'Taxa de Juros Anual' : 'Annual Interest Rate'}
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold" aria-hidden="true">%</span>
               </div>
@@ -197,19 +213,19 @@ export function LoanPaymentCalculator({ locale }: Props) {
 
             <div>
               <label htmlFor="amortization-years-select" className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '摊销年限 (Amortization Term)' : 'Amortization Term (Years)'}
+                {isZh ? '摊销年限 (Amortization Term)' : isEs ? 'Plazo de Amortización (Años)' : isPt ? 'Prazo de Amortização (Anos)' : 'Amortization Term (Years)'}
               </label>
               <select
                 id="amortization-years-select"
                 value={amortizationYears}
                 onChange={(e) => setAmortizationYears(parseInt(e.target.value) || 25)}
-                aria-label={isZh ? '摊销年限' : 'Amortization Term'}
+                aria-label={isZh ? '摊销年限' : isEs ? 'Plazo de Amortización' : isPt ? 'Prazo de Amortização' : 'Amortization Term'}
                 className="w-full px-4 py-3 rounded-xl border border-slate-300 focus-ring text-slate-900 font-semibold bg-white focus:outline-none"
               >
-                <option value={15}>15 {isZh ? '年摊销' : 'Years'}</option>
-                <option value={20}>20 {isZh ? '年摊销' : 'Years'}</option>
-                <option value={25}>25 {isZh ? '年摊销 (商业主流标准)' : 'Years (Standard)'}</option>
-                <option value={30}>30 {isZh ? '年摊销' : 'Years'}</option>
+                <option value={15}>15 {isZh ? '年摊销' : isEs ? 'Años' : isPt ? 'Anos' : 'Years'}</option>
+                <option value={20}>20 {isZh ? '年摊销' : isEs ? 'Años' : isPt ? 'Anos' : 'Years'}</option>
+                <option value={25}>25 {isZh ? '年摊销 (商业主流标准)' : isEs ? 'Años (Estándar)' : isPt ? 'Anos (Padrão)' : 'Years (Standard)'}</option>
+                <option value={30}>30 {isZh ? '年摊销' : isEs ? 'Años' : isPt ? 'Anos' : 'Years'}</option>
               </select>
             </div>
           </div>
@@ -219,14 +235,20 @@ export function LoanPaymentCalculator({ locale }: Props) {
             <div className="flex items-center justify-between">
               <label htmlFor="has-balloon-checkbox" className="text-sm font-bold text-slate-800 flex items-center gap-2 cursor-pointer">
                 <Calendar className="w-4 h-4 text-emerald-600" aria-hidden="true" />
-                {isZh ? '设定到期年限与气球尾款 (Maturity Term & Balloon Payoff)' : 'Set Loan Maturity Term (Balloon Payoff)'}
+                {isZh
+                  ? '设定到期年限与气球尾款 (Maturity Term & Balloon Payoff)'
+                  : isEs
+                  ? 'Establecer Vencimiento del Préstamo (Pago Balloon)'
+                  : isPt
+                  ? 'Definir Vencimento do Financiamento (Saldo Residual Balloon)'
+                  : 'Set Loan Maturity Term (Balloon Payoff)'}
               </label>
               <input
                 id="has-balloon-checkbox"
                 type="checkbox"
                 checked={hasBalloon}
                 onChange={(e) => setHasBalloon(e.target.checked)}
-                aria-label={isZh ? '启用到期年限与气球尾款' : 'Enable loan maturity term and balloon payoff'}
+                aria-label={isZh ? '启用到期年限与气球尾款' : isEs ? 'Habilitar vencimiento del préstamo y pago balloon' : isPt ? 'Ativar vencimento do financiamento e saldo balloon' : 'Enable loan maturity term and balloon payoff'}
                 className="w-4 h-4 text-emerald-600 rounded-sm focus:ring-emerald-500 cursor-pointer"
               />
             </div>
@@ -234,19 +256,19 @@ export function LoanPaymentCalculator({ locale }: Props) {
             {hasBalloon && (
               <div>
                 <label htmlFor="balloon-years-select" className="block text-xs font-semibold text-slate-600 mb-1">
-                  {isZh ? '贷款到期年限 (Maturity Term)' : 'Loan Maturity Term (Years)'}
+                  {isZh ? '贷款到期年限 (Maturity Term)' : isEs ? 'Plazo de Vencimiento (Años)' : isPt ? 'Prazo de Vencimento (Anos)' : 'Loan Maturity Term (Years)'}
                 </label>
                 <select
                   id="balloon-years-select"
                   value={balloonYears}
                   onChange={(e) => setBalloonYears(parseInt(e.target.value) || 10)}
-                  aria-label={isZh ? '贷款到期年限' : 'Loan Maturity Term'}
+                  aria-label={isZh ? '贷款到期年限' : isEs ? 'Plazo de Vencimiento' : isPt ? 'Prazo de Vencimento' : 'Loan Maturity Term'}
                   className="w-full px-3 py-2 rounded-lg border border-slate-300 focus-ring text-slate-900 text-sm font-medium bg-white"
                 >
-                  <option value={3}>3 {isZh ? '年到期' : 'Years'}</option>
-                  <option value={5}>5 {isZh ? '年到期' : 'Years'}</option>
-                  <option value={7}>7 {isZh ? '年到期' : 'Years'}</option>
-                  <option value={10}>10 {isZh ? '年到期 (最常见)' : 'Years (Most Common)'}</option>
+                  <option value={3}>3 {isZh ? '年到期' : isEs ? 'Años' : isPt ? 'Anos' : 'Years'}</option>
+                  <option value={5}>5 {isZh ? '年到期' : isEs ? 'Años' : isPt ? 'Anos' : 'Years'}</option>
+                  <option value={7}>7 {isZh ? '年到期' : isEs ? 'Años' : isPt ? 'Anos' : 'Years'}</option>
+                  <option value={10}>10 {isZh ? '年到期 (最常见)' : isEs ? 'Años (Más Común)' : isPt ? 'Anos (Mais Comum)' : 'Years (Most Common)'}</option>
                 </select>
               </div>
             )}
@@ -257,15 +279,15 @@ export function LoanPaymentCalculator({ locale }: Props) {
         <div className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
           <div>
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-              {isZh ? '还款结果总览' : 'Loan Summary'}
+              {isZh ? '还款结果总览' : isEs ? 'Resumen del Préstamo' : isPt ? 'Resumo do Financiamento' : 'Loan Summary'}
             </h3>
 
             {/* Major Card */}
             <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 {paymentType === 'installment'
-                  ? (isZh ? '每月本息还款额 (Monthly P&I)' : 'Monthly Payment (Fixed P&I)')
-                  : (isZh ? '首月还款额 (Initial Monthly Payment)' : 'Initial Monthly Payment')}
+                  ? (isZh ? '每月本息还款额 (Monthly P&I)' : isEs ? 'Cuota Mensual (P&I Fijo)' : isPt ? 'Parcela Mensal (Tabela Price)' : 'Monthly Payment (Fixed P&I)')
+                  : (isZh ? '首月还款额 (Initial Monthly Payment)' : isEs ? 'Cuota Mensual Inicial' : isPt ? 'Parcela Mensal Inicial' : 'Initial Monthly Payment')}
               </span>
 
               <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1">
@@ -276,12 +298,20 @@ export function LoanPaymentCalculator({ locale }: Props) {
                 <p className="text-xs text-slate-500 mt-1">
                   {isZh
                     ? `每月固定供款: ${formatCurrency(Math.round(equalInstallmentMonthly))} (每年 ${formatCurrency(Math.round(equalInstallmentMonthly * 12))})`
+                    : isEs
+                    ? `Servicio mensual fijo: ${formatCurrency(Math.round(equalInstallmentMonthly))}/mes`
+                    : isPt
+                    ? `Serviço mensal fixo: ${formatCurrency(Math.round(equalInstallmentMonthly))}/mês`
                     : `Fixed Monthly Debt Service: ${formatCurrency(Math.round(equalInstallmentMonthly))}/mo`}
                 </p>
               ) : (
                 <p className="text-xs text-slate-500 mt-1">
                   {isZh
                     ? `月供按月递减：首月 ${formatCurrency(Math.round(equalPrincipalMonth1Payment))}，末月 ${formatCurrency(Math.round(equalPrincipalMonthEndPayment))}`
+                    : isEs
+                    ? `Cuota decreciente: Inicial ${formatCurrency(Math.round(equalPrincipalMonth1Payment))}, final ${formatCurrency(Math.round(equalPrincipalMonthEndPayment))}`
+                    : isPt
+                    ? `Parcela decrescente: Inicial ${formatCurrency(Math.round(equalPrincipalMonth1Payment))}, final ${formatCurrency(Math.round(equalPrincipalMonthEndPayment))}`
                     : `Declining payment: Initial ${formatCurrency(Math.round(equalPrincipalMonth1Payment))}, final ${formatCurrency(Math.round(equalPrincipalMonthEndPayment))}`}
                 </p>
               )}
@@ -292,13 +322,33 @@ export function LoanPaymentCalculator({ locale }: Props) {
               {hasBalloon && balloonYears < amortizationYears && (
                 <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs space-y-1">
                   <div className="flex justify-between font-bold text-emerald-950">
-                    <span>{isZh ? `第 ${balloonYears} 年到期气球尾款:` : `Year ${balloonYears} Balloon Payoff:`}</span>
+                    <span>
+                      {isZh
+                        ? `第 ${balloonYears} 年到期气球尾款:`
+                        : isEs
+                        ? `Pago Balloon al Año ${balloonYears}:`
+                        : isPt
+                        ? `Saldo Residual Balloon no Ano ${balloonYears}:`
+                        : `Year ${balloonYears} Balloon Payoff:`}
+                    </span>
                     <span className="text-emerald-700 font-extrabold">{formatCurrency(Math.round(balloonBalance))}</span>
                   </div>
                   <p className="text-[11px] text-emerald-800">
                     {paymentType === 'principal'
-                      ? (isZh ? `等额本金加快本金偿还，尾款降至原本金的 ${balloonPercentage.toFixed(1)}%` : `Principal balance drops faster to ${balloonPercentage.toFixed(1)}% of original`)
-                      : (isZh ? '需在到期日前办理再融资 (Refinance) 或出售物业结清' : 'Must be refinanced or paid off at loan maturity')}
+                      ? (isZh
+                          ? `等额本金加快本金偿还，尾款降至原本金的 ${balloonPercentage.toFixed(1)}%`
+                          : isEs
+                          ? `La amortización constante reduce el saldo más rápido al ${balloonPercentage.toFixed(1)}% del capital original`
+                          : isPt
+                          ? `A amortização constante reduz o saldo mais rápido para ${balloonPercentage.toFixed(1)}% do capital original`
+                          : `Principal balance drops faster to ${balloonPercentage.toFixed(1)}% of original`)
+                      : (isZh
+                          ? '需在到期日前办理再融资 (Refinance) 或出售物业结清'
+                          : isEs
+                          ? 'Debe refinanciarse o cancelarse al vencimiento del préstamo'
+                          : isPt
+                          ? 'Deve ser refinanciado ou quitado no vencimento do financiamento'
+                          : 'Must be refinanced or paid off at loan maturity')}
                   </p>
                 </div>
               )}
@@ -308,9 +358,17 @@ export function LoanPaymentCalculator({ locale }: Props) {
                 const displayYears = isBalloonActive ? balloonYears : amortizationYears;
                 const interestLabel = isZh
                   ? (isBalloonActive ? `前 ${displayYears} 年累计利息支出:` : `全周期累计利息支出 (${displayYears} 年):`)
+                  : isEs
+                  ? `Interés Total (${displayYears} años):`
+                  : isPt
+                  ? `Juros Totais (${displayYears} anos):`
                   : `Total Interest (${displayYears} yrs):`;
                 const principalLabel = isZh
                   ? (isBalloonActive ? `前 ${displayYears} 年偿还本金:` : `全周期偿还本金 (${displayYears} 年):`)
+                  : isEs
+                  ? `Capital Total Amortizado (${displayYears} años):`
+                  : isPt
+                  ? `Capital Total Amortizado (${displayYears} anos):`
                   : `Total Principal Paid (${displayYears} yrs):`;
 
                 return (
@@ -327,7 +385,7 @@ export function LoanPaymentCalculator({ locale }: Props) {
                 );
               })()}
               <div className="flex justify-between text-slate-700 font-semibold border-t border-slate-200 pt-2">
-                <span>{isZh ? '累计支付总额:' : 'Total Cumulative Payments:'}</span>
+                <span>{isZh ? '累计支付总额:' : isEs ? 'Total de Pagos Acumulados:' : isPt ? 'Total de Pagamentos Acumulados:' : 'Total Cumulative Payments:'}</span>
                 <span className="text-slate-900">{formatCurrency(Math.round(totalPaidInTerm))}</span>
               </div>
             </div>
@@ -342,26 +400,30 @@ export function LoanPaymentCalculator({ locale }: Props) {
             <TableIcon className="w-4 h-4 text-emerald-600" aria-hidden="true" />
             {isZh
               ? `首年还款明细表 (前 12 个月${paymentType === 'installment' ? '等额本息' : '等额本金'}摊销)`
+              : isEs
+              ? `Calendario de Amortización del Primer Año (${paymentType === 'installment' ? 'Cuota Constante' : 'Amortización Constante'})`
+              : isPt
+              ? `Tabela de Amortização do Primeiro Ano (${paymentType === 'installment' ? 'Tabela Price' : 'Tabela SAC'})`
               : `First Year Amortization Schedule (${paymentType === 'installment' ? 'Equal Installment' : 'Equal Principal'})`}
           </h3>
           <span className="text-xs text-slate-500 font-medium">
-            {paymentType === 'principal' && (isZh ? '注：等额本金模式下每月固定偿还本金' : 'Note: Fixed principal paid each month')}
+            {paymentType === 'principal' && (isZh ? '注：等额本金模式下每月固定偿还本金' : isEs ? 'Nota: Capital fijo amortizado cada mes' : isPt ? 'Nota: Amortização constante paga a cada mês' : 'Note: Fixed principal paid each month')}
           </span>
         </div>
 
         <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
           <table
-            aria-label={isZh ? '首年还款明细表' : 'First Year Amortization Schedule'}
+            aria-label={isZh ? '首年还款明细表' : isEs ? 'Calendario de Amortización del Primer Año' : isPt ? 'Tabela de Amortização do Primeiro Ano' : 'First Year Amortization Schedule'}
             className="w-full text-xs text-left text-slate-700"
           >
             <thead className="bg-slate-900 text-white font-semibold uppercase tracking-wider text-[11px]">
               <tr>
-                <th scope="col" className="px-4 py-3">{isZh ? '期数 (月)' : 'Month'}</th>
-                <th scope="col" className="px-4 py-3">{isZh ? '月初余额' : 'Start Balance'}</th>
-                <th scope="col" className="px-4 py-3">{isZh ? '月供总额' : 'Payment'}</th>
-                <th scope="col" className="px-4 py-3 text-emerald-400">{isZh ? '偿还本金' : 'Principal'}</th>
-                <th scope="col" className="px-4 py-3 text-red-400">{isZh ? '支付利息' : 'Interest'}</th>
-                <th scope="col" className="px-4 py-3">{isZh ? '月末余额' : 'End Balance'}</th>
+                <th scope="col" className="px-4 py-3">{isZh ? '期数 (月)' : isEs ? 'Mes' : isPt ? 'Mês' : 'Month'}</th>
+                <th scope="col" className="px-4 py-3">{isZh ? '月初余额' : isEs ? 'Saldo Inicial' : isPt ? 'Saldo Inicial' : 'Start Balance'}</th>
+                <th scope="col" className="px-4 py-3">{isZh ? '月供总额' : isEs ? 'Cuota Total' : isPt ? 'Parcela Total' : 'Payment'}</th>
+                <th scope="col" className="px-4 py-3 text-emerald-400">{isZh ? '偿还本金' : isEs ? 'Amortización' : isPt ? 'Amortização' : 'Principal'}</th>
+                <th scope="col" className="px-4 py-3 text-red-400">{isZh ? '支付利息' : isEs ? 'Intereses' : isPt ? 'Juros' : 'Interest'}</th>
+                <th scope="col" className="px-4 py-3">{isZh ? '月末余额' : isEs ? 'Saldo Final' : isPt ? 'Saldo Final' : 'End Balance'}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -382,4 +444,3 @@ export function LoanPaymentCalculator({ locale }: Props) {
     </div>
   );
 }
-

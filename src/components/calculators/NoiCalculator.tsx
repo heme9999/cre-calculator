@@ -11,6 +11,8 @@ interface Props {
 
 export function NoiCalculator({ locale }: Props) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
 
   // Inputs
   const [grossIncome, setGrossIncome] = useState<number>(312000);
@@ -38,13 +40,19 @@ export function NoiCalculator({ locale }: Props) {
         <div>
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-2">
             <Calculator className="w-3.5 h-3.5" />
-            {isZh ? 'NOI 净营业收入计算' : 'NOI Calculation Tool'}
+            {isZh ? 'NOI 净营业收入计算' : isEs ? 'Herramienta de Cálculo de NOI' : isPt ? 'Ferramenta de Cálculo de NOI' : 'NOI Calculation Tool'}
           </div>
           <h2 className="text-xl md:text-2xl font-bold">
-            {isZh ? 'NOI (净营业收入) 实时计算器' : 'Net Operating Income (NOI) Calculator'}
+            {isZh ? 'NOI (净营业收入) 实时计算器' : isEs ? 'Calculadora de Ingreso Operativo Neto (NOI)' : isPt ? 'Calculadora de Receita Operacional Líquida (NOI)' : 'Net Operating Income (NOI) Calculator'}
           </h2>
           <p className="text-slate-400 text-sm mt-1">
-            {isZh ? '输入总租金收入、空置损失及各项运营费用' : 'Enter potential income, vacancy, and itemized operating expenses'}
+            {isZh
+              ? '输入总租金收入、空置损失及各项运营费用'
+              : isEs
+              ? 'Ingrese ingresos potenciales, pérdidas por vacancia y desglose de gastos operativos'
+              : isPt
+              ? 'Insira receitas potenciais, vacância estimada e despesas operacionais detalhadas'
+              : 'Enter potential income, vacancy, and itemized operating expenses'}
           </p>
         </div>
       </div>
@@ -57,12 +65,12 @@ export function NoiCalculator({ locale }: Props) {
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
             <h3 className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
               <Layers className="w-4 h-4 text-emerald-600" />
-              {isZh ? '1. 收入与空置损失 (Income & Vacancy)' : '1. Gross Income & Vacancy'}
+              {isZh ? '1. 收入与空置损失 (Income & Vacancy)' : isEs ? '1. Ingresos y Vacancia' : isPt ? '1. Receitas e Vacância' : '1. Gross Income & Vacancy'}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="noi-gross-income" className="block text-xs font-semibold text-slate-600 mb-1">
-                  {isZh ? '年潜在毛租金收入 ($)' : 'Gross Potential Income ($/yr)'}
+                  {isZh ? '年潜在毛租金收入 ($)' : isEs ? 'Ingreso Potencial Bruto ($/año)' : isPt ? 'Receita Bruta Potencial ($/ano)' : 'Gross Potential Income ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -79,7 +87,7 @@ export function NoiCalculator({ locale }: Props) {
 
               <div>
                 <label htmlFor="noi-vacancy" className="block text-xs font-semibold text-slate-600 mb-1">
-                  {isZh ? '预估空置与坏账率 (%)' : 'Vacancy & Credit Loss (%)'}
+                  {isZh ? '预估空置与坏账率 (%)' : isEs ? 'Pérdida por Vacancia e Impago (%)' : isPt ? 'Perda por Vacância e Inadimplência (%)' : 'Vacancy & Credit Loss (%)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <input
@@ -94,7 +102,13 @@ export function NoiCalculator({ locale }: Props) {
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">%</span>
                 </div>
                 <p className="text-[11px] text-slate-500 mt-1">
-                  {isZh ? `空置损失额: ${formatCurrency(vacancyLoss)}` : `Loss: ${formatCurrency(vacancyLoss)}`}
+                  {isZh
+                    ? `空置损失额: ${formatCurrency(vacancyLoss)}`
+                    : isEs
+                    ? `Pérdida estimada: -${formatCurrency(vacancyLoss)}`
+                    : isPt
+                    ? `Perda estimada: -${formatCurrency(vacancyLoss)}`
+                    : `Loss: ${formatCurrency(vacancyLoss)}`}
                 </p>
               </div>
             </div>
@@ -104,13 +118,13 @@ export function NoiCalculator({ locale }: Props) {
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
             <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
               <PieChart className="w-4 h-4 text-slate-600" />
-              {isZh ? '2. 运营支出细项 (Itemized Expenses)' : '2. Operating Expenses Breakdown'}
+              {isZh ? '2. 运营支出细项 (Itemized Expenses)' : isEs ? '2. Desglose de Gastos Operativos' : isPt ? '2. Detalhamento de Despesas Operacionais' : '2. Operating Expenses Breakdown'}
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="noi-tax" className="block text-xs font-semibold text-slate-600 mb-1">
-                  {isZh ? '物业税 (Property Tax)' : 'Property Taxes ($/yr)'}
+                  {isZh ? '物业税 (Property Tax)' : isEs ? 'Impuestos sobre la Propiedad ($/año)' : isPt ? 'IPTU e Taxas Imobiliárias ($/ano)' : 'Property Taxes ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -126,7 +140,7 @@ export function NoiCalculator({ locale }: Props) {
 
               <div>
                 <label htmlFor="noi-insurance" className="block text-xs font-semibold text-slate-600 mb-1">
-                  {isZh ? '物业保险 (Insurance)' : 'Property Insurance ($/yr)'}
+                  {isZh ? '物业保险 (Insurance)' : isEs ? 'Seguro de la Propiedad ($/año)' : isPt ? 'Seguro do Imóvel ($/ano)' : 'Property Insurance ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -142,7 +156,7 @@ export function NoiCalculator({ locale }: Props) {
 
               <div>
                 <label htmlFor="noi-maintenance" className="block text-xs font-semibold text-slate-600 mb-1">
-                  {isZh ? '维修与保养 (Maintenance)' : 'Repairs & Maintenance ($/yr)'}
+                  {isZh ? '维修与保养 (Maintenance)' : isEs ? 'Mantenimiento y Reparaciones ($/año)' : isPt ? 'Manutenção e Reparos ($/ano)' : 'Repairs & Maintenance ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -158,7 +172,7 @@ export function NoiCalculator({ locale }: Props) {
 
               <div>
                 <label htmlFor="noi-management" className="block text-xs font-semibold text-slate-600 mb-1">
-                  {isZh ? '物业管理费 (Management Fee)' : 'Management Fees ($/yr)'}
+                  {isZh ? '物业管理费 (Management Fee)' : isEs ? 'Honorarios de Administración ($/año)' : isPt ? 'Taxa de Administração Predial ($/ano)' : 'Management Fees ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -174,7 +188,7 @@ export function NoiCalculator({ locale }: Props) {
 
               <div className="sm:col-span-2">
                 <label htmlFor="noi-utilities" className="block text-xs font-semibold text-slate-600 mb-1">
-                  {isZh ? '房东负担水电与杂费 (Utilities & Other)' : 'Utilities & Other Landlord Expenses ($/yr)'}
+                  {isZh ? '房东负担水电与杂费 (Utilities & Other)' : isEs ? 'Servicios Básicos y Otros Gastos del Propietario ($/año)' : isPt ? 'Água, Luz e Outras Despesas do Proprietário ($/ano)' : 'Utilities & Other Landlord Expenses ($/yr)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -195,42 +209,58 @@ export function NoiCalculator({ locale }: Props) {
         <div className="lg:col-span-5 bg-slate-50 border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 flex flex-col justify-between">
           <div>
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-              {isZh ? 'NOI 结果总览' : 'NOI Financial Summary'}
+              {isZh ? 'NOI 结果总览' : isEs ? 'Resumen Financiero de NOI' : isPt ? 'Resumo Financeiro de NOI' : 'NOI Financial Summary'}
             </h3>
 
             {/* Major Result Card */}
             <div className="bg-white p-5 rounded-xl border border-slate-200/90 shadow-xs mb-6">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                {isZh ? '年度净营业收入 (Annual NOI)' : 'Annual Net Operating Income'}
+                {isZh ? '年度净营业收入 (Annual NOI)' : isEs ? 'Ingreso Operativo Neto Anual (NOI)' : isPt ? 'Receita Operacional Líquida Anual (NOI)' : 'Annual Net Operating Income'}
               </span>
               <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1 tabular-nums">
                 {formatCurrency(noi)}
               </div>
               <p className="text-xs text-slate-500 mt-1 tabular-nums">
-                {isZh ? `月均 NOI: ${formatCurrency(monthlyNoi)} / 月` : `Monthly Avg: ${formatCurrency(monthlyNoi)} / mo`}
+                {isZh
+                  ? `月均 NOI: ${formatCurrency(monthlyNoi)} / 月`
+                  : isEs
+                  ? `Promedio Mensual: ${formatCurrency(monthlyNoi)} / mes`
+                  : isPt
+                  ? `Média Mensal: ${formatCurrency(monthlyNoi)} / mês`
+                  : `Monthly Avg: ${formatCurrency(monthlyNoi)} / mo`}
               </p>
             </div>
 
             {/* Income & Expense Breakdown */}
             <div className="space-y-3 text-sm border-t border-slate-200 pt-4">
               <div className="flex justify-between">
-                <span className="text-slate-600">{isZh ? '潜在毛收入 (Gross Income):' : 'Gross Potential Income:'}</span>
+                <span className="text-slate-600">
+                  {isZh ? '潜在毛收入 (Gross Income):' : isEs ? 'Ingreso Potencial Bruto:' : isPt ? 'Receita Bruta Potencial:' : 'Gross Potential Income:'}
+                </span>
                 <span className="font-semibold tabular-nums">{formatCurrency(grossIncome)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-600">{isZh ? '空置及坏账扣除:' : 'Vacancy Deduction:'}</span>
+                <span className="text-slate-600">
+                  {isZh ? '空置及坏账扣除:' : isEs ? 'Deducción por Vacancia:' : isPt ? 'Dedução por Vacância:' : 'Vacancy Deduction:'}
+                </span>
                 <span className="font-semibold text-amber-600 tabular-nums">-{formatCurrency(vacancyLoss)}</span>
               </div>
               <div className="flex justify-between font-semibold border-t border-slate-200 pt-2">
-                <span className="text-slate-800">{isZh ? '有效毛收入 (EGI):' : 'Effective Gross Income (EGI):'}</span>
+                <span className="text-slate-800">
+                  {isZh ? '有效毛收入 (EGI):' : isEs ? 'Ingreso Bruto Efectivo (EGI):' : isPt ? 'Receita Bruta Efetiva (EGI):' : 'Effective Gross Income (EGI):'}
+                </span>
                 <span className="text-slate-900 tabular-nums">{formatCurrency(egi)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-600">{isZh ? '总运营支出 (OpEx):' : 'Total Operating Expenses:'}</span>
+                <span className="text-slate-600">
+                  {isZh ? '总运营支出 (OpEx):' : isEs ? 'Gastos Operativos Totales (OpEx):' : isPt ? 'Despesas Operacionais Totais (OpEx):' : 'Total Operating Expenses:'}
+                </span>
                 <span className="font-semibold text-red-600 tabular-nums">-{formatCurrency(totalExpenses)}</span>
               </div>
               <div className="flex justify-between text-xs text-slate-500">
-                <span>{isZh ? '运营支出占比 (OpEx Ratio):' : 'Expense Ratio (% of EGI):'}</span>
+                <span>
+                  {isZh ? '运营支出占比 (OpEx Ratio):' : isEs ? 'Ratio de Gastos (% de EGI):' : isPt ? 'Índice de Despesas (% de EGI):' : 'Expense Ratio (% of EGI):'}
+                </span>
                 <span className="font-semibold tabular-nums">{formatPercent(expenseRatio)}</span>
               </div>
             </div>
@@ -242,16 +272,22 @@ export function NoiCalculator({ locale }: Props) {
               <div>
                 {isZh
                   ? '提示：NOI 不包含每年应还的房贷本息（Debt Service）。计算现金流时需再扣除房贷还款。'
+                  : isEs
+                  ? 'Nota: El NOI no deduce las cuotas del préstamo hipotecario. Reste el servicio de deuda anual para calcular el flujo de caja neto antes de impuestos.'
+                  : isPt
+                  ? 'Nota: O NOI não deduz as parcelas do financiamento imobiliário. Subtraia o serviço anual da dívida para encontrar o fluxo de caixa antes de impostos.'
                   : 'Note: NOI does not deduct mortgage debt service. Subtract annual loan payments to find net pre-tax cash flow.'}
               </div>
             </div>
             <div className="pl-6 pt-1 border-t border-emerald-200/70 flex flex-wrap items-center gap-3">
-              <span className="font-semibold text-emerald-950">{isZh ? '下一步：' : 'Next step:'}</span>
+              <span className="font-semibold text-emerald-950">
+                {isZh ? '下一步：' : isEs ? 'Siguiente paso:' : isPt ? 'Próximo passo:' : 'Next step:'}
+              </span>
               <Link
                 href={`/${locale}/calculators/cap-rate/`}
                 className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-0.5 active-press"
               >
-                <span>{isZh ? '2. 用 Cap Rate 比价格与收益' : '2. Compare with Cap Rate'}</span>
+                <span>{isZh ? '2. 用 Cap Rate 比价格与收益' : isEs ? '2. Comparar con Cap Rate' : isPt ? '2. Comparar com Cap Rate' : '2. Compare with Cap Rate'}</span>
                 <ArrowRight className="w-3 h-3" aria-hidden="true" />
               </Link>
               <span className="text-emerald-400">•</span>
@@ -259,7 +295,7 @@ export function NoiCalculator({ locale }: Props) {
                 href={`/${locale}/tools/deal-analyzer/`}
                 className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-0.5 active-press"
               >
-                <span>{isZh ? '3. 进入 Deal Analyzer 测融资' : '3. Test in Deal Analyzer'}</span>
+                <span>{isZh ? '3. 进入 Deal Analyzer 测融资' : isEs ? '3. Evaluar Financiamiento en Deal Analyzer' : isPt ? '3. Testar Financiamento no Deal Analyzer' : '3. Test in Deal Analyzer'}</span>
                 <ArrowRight className="w-3 h-3" aria-hidden="true" />
               </Link>
             </div>

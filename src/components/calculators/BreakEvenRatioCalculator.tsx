@@ -11,6 +11,8 @@ interface Props {
 
 export function BreakEvenRatioCalculator({ locale }: Props) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
 
   // Inputs
   const [operatingExpenses, setOperatingExpenses] = useState<number>(DEFAULT_DEAL_INPUT.operatingExpenses);
@@ -29,22 +31,52 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
 
   // Status Tiers (Based on Break-Even Ratio)
   let tierStyle = 'bg-emerald-50 text-emerald-900 border-emerald-200';
-  let statusTitle = isZh ? '健康收支平衡边际' : 'Healthy Break-Even Cushion';
+  let statusTitle = isZh
+    ? '健康收支平衡边际'
+    : isEs
+    ? 'Colchón Saludable de Equilibrio'
+    : isPt
+    ? 'Margem Saudável de Equilíbrio'
+    : 'Healthy Break-Even Cushion';
   let statusDesc = isZh
     ? `当前收支平衡比率 (BER) 为 ${formatPercent(breakEvenRatio)}。运营费用和债务偿付相对于有效总收入的负担比例较低，收入缓冲较大。`
+    : isEs
+    ? `El Ratio de Equilibrio (BER) es del ${formatPercent(breakEvenRatio)}. La carga de gastos operativos y servicio de deuda sobre el ingreso bruto efectivo es baja, dejando un colchón holgado frente a vacancia.`
+    : isPt
+    ? `O Índice de Ponto de Equilíbrio (BER) é de ${formatPercent(breakEvenRatio)}. O peso das despesas operacionais e do serviço da dívida sobre a receita bruta efetiva é baixo, deixando uma margem confortável contra vacância.`
     : `Break-even ratio is ${formatPercent(breakEvenRatio)}. The burden of operating expenses and debt service on effective gross income is low, leaving a healthy cushion.`;
 
   if (breakEvenRatio > 90) {
     tierStyle = 'bg-rose-50 text-rose-950 border-rose-200';
-    statusTitle = isZh ? '警示：高风险 (高于 90% 警戒线)' : 'Warning: High Risk (Above 90%)';
+    statusTitle = isZh
+      ? '警示：高风险 (高于 90% 警戒线)'
+      : isEs
+      ? 'Alerta: Alto Riesgo (Superior al 90%)'
+      : isPt
+      ? 'Alerta: Alto Risco (Acima de 90%)'
+      : 'Warning: High Risk (Above 90%)';
     statusDesc = isZh
       ? `收支平衡比率高达 ${formatPercent(breakEvenRatio)}。极小的租金下滑或意外支出都可能导致现金流为负，需要谨慎评估。`
+      : isEs
+      ? `El Ratio de Equilibrio es del ${formatPercent(breakEvenRatio)}. Pequeñas concesiones en rentas o gastos imprevistos provocarán un flujo de caja negativo. Evalúe una mayor entrada para reducir la deuda.`
+      : isPt
+      ? `O Índice de Ponto de Equilíbrio é de ${formatPercent(breakEvenRatio)}. Pequenas concessões de aluguel ou despesas imprevistas gerarão fluxo de caixa negativo. Avalie uma entrada maior para reduzir a dívida.`
       : `Break-even ratio is ${formatPercent(breakEvenRatio)}. Minor rent concessions or unexpected expenses will cause negative cash flow. Consider higher down payment to lower debt service.`;
   } else if (breakEvenRatio > 85) {
     tierStyle = 'bg-amber-50 text-amber-950 border-amber-200';
-    statusTitle = isZh ? '接近贷款机构风控上限 (85% - 90%)' : 'Near Lender Risk Limit (85% - 90%)';
+    statusTitle = isZh
+      ? '接近贷款机构风控上限 (85% - 90%)'
+      : isEs
+      ? 'Próximo al Límite de Riesgo Bancario (85% - 90%)'
+      : isPt
+      ? 'Próximo ao Limite de Risco Bancário (85% - 90%)'
+      : 'Near Lender Risk Limit (85% - 90%)';
     statusDesc = isZh
       ? `收支平衡比率达 ${formatPercent(breakEvenRatio)}，处于多数商业银行风控上游边界。抗风险安全垫偏薄。`
+      : isEs
+      ? `El Ratio de Equilibrio es del ${formatPercent(breakEvenRatio)}, acercándose al límite máximo habitual de los bancos comerciales. El margen de seguridad es estrecho.`
+      : isPt
+      ? `O Índice de Ponto de Equilíbrio é de ${formatPercent(breakEvenRatio)}, aproximando-se do limite máximo comum dos credores comerciais. A margem de segurança é apertada.`
       : `Break-even ratio is ${formatPercent(breakEvenRatio)}, approaching standard commercial lender maximum limits. Cushion is tight.`;
   }
 
@@ -55,14 +87,24 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
         <div>
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-2">
             <Calculator className="w-3.5 h-3.5" />
-            {isZh ? '风险与盈亏分析' : 'Break-Even Analysis'}
+            {isZh ? '风险与盈亏分析' : isEs ? 'Análisis de Riesgo y Equilibrio' : isPt ? 'Análise de Risco e Equilíbrio' : 'Break-Even Analysis'}
           </div>
           <h2 className="text-xl md:text-2xl font-bold">
-            {isZh ? '收支平衡点 (Break-Even) 计算器' : 'Break-Even Calculator'}
+            {isZh
+              ? '收支平衡点 (Break-Even) 计算器'
+              : isEs
+              ? 'Calculadora de Punto de Equilibrio (Break-Even)'
+              : isPt
+              ? 'Calculadora de Ponto de Equilíbrio (Break-Even)'
+              : 'Break-Even Calculator'}
           </h2>
           <p className="text-slate-400 text-sm mt-1">
             {isZh
               ? '计算商业地产的盈亏平衡比率 (BER) 和盈亏平衡入住率 (Occupancy)'
+              : isEs
+              ? 'Calcule el Ratio de Equilibrio (BER) y la Ocupación Mínima de Equilibrio (BEO) para su inmueble comercial'
+              : isPt
+              ? 'Calcule o Índice de Ponto de Equilíbrio (BER) e a Taxa de Ocupação Mínima (BEO) para seu imóvel comercial'
               : 'Determine Break-Even Ratio (BER) and Break-Even Occupancy for your commercial property'}
           </p>
         </div>
@@ -75,7 +117,7 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '年潜在总收入 ($/年 - GPI)' : 'Gross Potential Income ($/yr)'}
+                {isZh ? '年潜在总收入 ($/年 - GPI)' : isEs ? 'Ingreso Potencial Bruto ($/año - GPI)' : isPt ? 'Receita Bruta Potencial ($/ano - GPI)' : 'Gross Potential Income ($/yr)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -91,7 +133,7 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
 
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '预期空置与损失率 (%)' : 'Vacancy & Credit Loss (%)'}
+                {isZh ? '预期空置与损失率 (%)' : isEs ? 'Pérdida por Vacancia e Impago (%)' : isPt ? 'Perda por Vacância e Inadimplência (%)' : 'Vacancy & Credit Loss (%)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <input
@@ -110,7 +152,7 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '年度运营支出 ($/年 - OpEx)' : 'Operating Expenses ($/yr)'}
+                {isZh ? '年度运营支出 ($/年 - OpEx)' : isEs ? 'Gastos Operativos ($/año - OpEx)' : isPt ? 'Despesas Operacionais ($/ano - OpEx)' : 'Operating Expenses ($/yr)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -126,7 +168,7 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
 
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '年度还贷总额 ($/年 - ADS)' : 'Annual Debt Service ($/yr)'}
+                {isZh ? '年度还贷总额 ($/年 - ADS)' : isEs ? 'Servicio Anual de Deuda ($/año - ADS)' : isPt ? 'Serviço Anual da Dívida ($/ano - ADS)' : 'Annual Debt Service ($/yr)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -143,7 +185,9 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
 
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
             <div className="flex justify-between items-center text-sm">
-              <span className="text-slate-600 font-medium">{isZh ? '有效总收入 (Effective Gross Income):' : 'Effective Gross Income (EGI):'}</span>
+              <span className="text-slate-600 font-medium">
+                {isZh ? '有效总收入 (Effective Gross Income):' : isEs ? 'Ingreso Bruto Efectivo (EGI):' : isPt ? 'Receita Bruta Efetiva (EGI):' : 'Effective Gross Income (EGI):'}
+              </span>
               <span className="font-bold text-slate-900">{formatCurrency(effectiveGrossIncome)}</span>
             </div>
           </div>
@@ -153,14 +197,14 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
         <div className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
           <div className="space-y-6">
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              {isZh ? '收支平衡分析结果' : 'Break-Even Analysis'}
+              {isZh ? '收支平衡分析结果' : isEs ? 'Resultados del Análisis de Equilibrio' : isPt ? 'Resultados da Análise de Equilíbrio' : 'Break-Even Analysis'}
             </h3>
 
             {/* Primary KPI Card */}
             <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
               <div>
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  {isZh ? '收支平衡比率 (Break-Even Ratio)' : 'Break-Even Ratio'}
+                  {isZh ? '收支平衡比率 (Break-Even Ratio)' : isEs ? 'Ratio de Equilibrio (BER)' : isPt ? 'Ponto de Equilíbrio (BER)' : 'Break-Even Ratio'}
                 </span>
                 <div className="text-3xl font-black text-slate-900 mt-1">
                   {formatPercent(breakEvenRatio)}
@@ -168,13 +212,17 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
                 <p className="text-xs text-slate-500 pt-1">
                   {isZh
                     ? `(运营支出 + 债务偿还) / 有效总收入`
+                    : isEs
+                    ? `(Gastos Operativos + Servicio de Deuda) / EGI`
+                    : isPt
+                    ? `(Despesas Operacionais + Serviço da Dívida) / EGI`
                     : `(Operating Expenses + Debt Service) / EGI`}
                 </p>
               </div>
 
               <div className="pt-4 border-t border-slate-100">
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  {isZh ? '盈亏平衡入住率 (Break-Even Occupancy)' : 'Break-Even Occupancy'}
+                  {isZh ? '盈亏平衡入住率 (Break-Even Occupancy)' : isEs ? 'Ocupación de Equilibrio (BEO)' : isPt ? 'Ocupação de Equilíbrio (BEO)' : 'Break-Even Occupancy'}
                 </span>
                 <div className="text-2xl font-black text-emerald-700 mt-1">
                   {formatPercent(breakEvenOccupancy)}
@@ -182,6 +230,10 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
                 <p className="text-xs text-slate-500 pt-1">
                   {isZh
                     ? `达到保本所需的最低实际入住率`
+                    : isEs
+                    ? `Ocupación mínima estimada para cubrir gastos y deuda`
+                    : isPt
+                    ? `Estimativa de ocupação mínima para cobrir custos e dívida`
                     : `Simplified estimate of occupancy required to break even`}
                 </p>
               </div>
@@ -202,7 +254,9 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
 
             <div className="space-y-3 text-sm border-t border-slate-200 pt-4">
               <div className="flex justify-between text-slate-700">
-                <span>{isZh ? '刚性保本固定支出总额:' : 'Total Annual Debt & Ops Cost:'}</span>
+                <span>
+                  {isZh ? '刚性保本固定支出总额:' : isEs ? 'Costo Anual Total (Operaciones + Deuda):' : isPt ? 'Custo Anual Total (Operação + Dívida):' : 'Total Annual Debt & Ops Cost:'}
+                </span>
                 <span className="font-semibold text-slate-900">{formatCurrency(Math.round(totalOutlay))}</span>
               </div>
             </div>
