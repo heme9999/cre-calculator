@@ -4,21 +4,36 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { getContent } from '@/content';
-import { Building2, Globe, ChevronRight, Menu, X } from 'lucide-react';
+import { Building2, Globe, ChevronDown, Menu, X, Check } from 'lucide-react';
 
 interface HeaderProps {
   locale: string;
 }
 
+const LANGUAGES = [
+  { code: 'en', label: 'English', short: 'EN' },
+  { code: 'zh', label: '中文', short: '中' },
+  { code: 'es', label: 'Español', short: 'ES' },
+  { code: 'pt', label: 'Português', short: 'PT' },
+] as const;
+
 export function Header({ locale }: HeaderProps) {
   const pathname = usePathname();
   const content = getContent(locale);
   const nav = content.nav;
+  const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [calcMenuOpen, setCalcMenuOpen] = useState(false);
   const calcMenuRef = useRef<HTMLDivElement>(null);
   const calcMenuBtnRef = useRef<HTMLButtonElement>(null);
+
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const langMenuRef = useRef<HTMLDivElement>(null);
+  const langMenuBtnRef = useRef<HTMLButtonElement>(null);
 
   const calcMenuItems = [
     { href: `/${locale}/calculators/cap-rate/`, label: nav.capRate },
@@ -36,15 +51,24 @@ export function Header({ locale }: HeaderProps) {
       if (calcMenuRef.current && !calcMenuRef.current.contains(event.target as Node)) {
         setCalcMenuOpen(false);
       }
+      if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
+        setLangMenuOpen(false);
+      }
     }
     function handleEscape(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         event.preventDefault();
-        setCalcMenuOpen(false);
-        calcMenuBtnRef.current?.focus();
+        if (calcMenuOpen) {
+          setCalcMenuOpen(false);
+          calcMenuBtnRef.current?.focus();
+        }
+        if (langMenuOpen) {
+          setLangMenuOpen(false);
+          langMenuBtnRef.current?.focus();
+        }
       }
     }
-    if (calcMenuOpen) {
+    if (calcMenuOpen || langMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('keydown', handleEscape);
     }
@@ -52,38 +76,49 @@ export function Header({ locale }: HeaderProps) {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [calcMenuOpen]);
+  }, [calcMenuOpen, langMenuOpen]);
 
-  function handleContainerBlur(event: React.FocusEvent<HTMLDivElement>) {
+  function handleCalcBlur(event: React.FocusEvent<HTMLDivElement>) {
     const nextFocused = event.relatedTarget as Node | null;
     if (!calcMenuRef.current?.contains(nextFocused)) {
       setCalcMenuOpen(false);
     }
   }
 
-  // Determine target language URL while preserving exact route path
-  let targetPath = '/en/';
-  if (locale === 'en') {
-    // Switch to Chinese
-    targetPath = pathname ? pathname.replace(/^\/en/, '/zh') : '/zh/';
-  } else {
-    // Switch to English
-    targetPath = pathname ? pathname.replace(/^\/zh/, '/en') : '/en/';
+  function handleLangBlur(event: React.FocusEvent<HTMLDivElement>) {
+    const nextFocused = event.relatedTarget as Node | null;
+    if (!langMenuRef.current?.contains(nextFocused)) {
+      setLangMenuOpen(false);
+    }
   }
 
-  // Handle single-language guide: redirect to DSCR calculator if switching from Chinese-only DSCR guide
-  if (pathname && pathname.includes('dscr-loan-guide-chinese-investors')) {
-    targetPath = '/en/calculators/dscr/';
+  // Determine target localized path for any locale
+  function getLocalizedPath(targetLocale: string) {
+    if (!pathname) return `/${targetLocale}/`;
+    let newPath = pathname.replace(/^\/(en|zh|es|pt)/, `/${targetLocale}`);
+    // If not matching pattern, fallback
+    if (!newPath.startsWith(`/${targetLocale}`)) {
+      newPath = `/${targetLocale}${pathname.startsWith('/') ? pathname : `/${pathname}`}`;
+    }
+    // Handle single-language guide: redirect to DSCR calculator if switching away from Chinese-only DSCR guide
+    if (newPath.includes('dscr-loan-guide-chinese-investors') && targetLocale !== 'zh') {
+      newPath = `/${targetLocale}/calculators/dscr/`;
+    }
+    if (!newPath.endsWith('/')) {
+      newPath += '/';
+    }
+    return newPath;
   }
 
-  // Ensure trailing slash for static export compatibility
-  if (!targetPath.endsWith('/')) {
-    targetPath += '/';
-  }
+  const currentLang = LANGUAGES.find((l) => l.code === locale) || LANGUAGES[0];
+
+  const glossaryLabel = isZh ? '词汇表' : isEs ? 'Glosario' : isPt ? 'Glossário' : 'Glossary';
+  const guidesLabel = isZh ? '指南' : isEs ? 'Guías' : isPt ? 'Guias' : 'Guides';
 
   const navLinks = [
     { href: `/${locale}/tools/deal-analyzer/`, label: nav.dealAnalyzer, key: 'deal-analyzer', isPrimary: true },
-    { href: `/${locale}/guides/`, label: locale === 'zh' ? '指南' : 'Guides', key: 'guides' },
+    { href: `/${locale}/guides/`, label: guidesLabel, key: 'guides' },
+    { href: `/${locale}/glossary/`, label: glossaryLabel, key: 'glossary' },
     { href: `/${locale}/calculators/cap-rate/`, label: nav.capRate, key: 'cap-rate' },
     { href: `/${locale}/calculators/noi/`, label: nav.noi, key: 'noi' },
     { href: `/${locale}/calculators/cash-on-cash/`, label: nav.cashOnCash, key: 'cash-on-cash' },
@@ -113,18 +148,22 @@ export function Header({ locale }: HeaderProps) {
           >
             <span>{nav.dealAnalyzer}</span>
             <span className="text-[10px] bg-emerald-500 text-slate-950 px-1.5 py-0.2 rounded font-black uppercase">
-              {locale === 'zh' ? '综合' : 'Suite'}
+              {isZh ? '综合' : 'Suite'}
             </span>
           </Link>
 
           <Link href={`/${locale}/guides/`} className={`hover:text-white transition-colors ${pathname?.includes('/guides/') ? 'text-emerald-400 font-semibold' : ''}`}>
-            {locale === 'zh' ? '指南' : 'Guides'}
+            {guidesLabel}
+          </Link>
+
+          <Link href={`/${locale}/glossary/`} className={`hover:text-white transition-colors ${pathname?.includes('/glossary/') ? 'text-emerald-400 font-semibold' : ''}`}>
+            {glossaryLabel}
           </Link>
 
           <div
             className="relative"
             ref={calcMenuRef}
-            onBlur={handleContainerBlur}
+            onBlur={handleCalcBlur}
           >
             <button
               ref={calcMenuBtnRef}
@@ -161,18 +200,51 @@ export function Header({ locale }: HeaderProps) {
           </div>
         </nav>
 
-        {/* Right Section: Language Switcher & Mobile Menu Button */}
+        {/* Right Section: Multi-Language Switcher & Mobile Menu Button */}
         <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-          {/* Language Switcher Button (Always Visible) */}
-          <Link
-            href={targetPath}
-            aria-label="Switch Language"
-            className="active-press flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-3.5 sm:py-1.5 rounded-full bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/50 text-[11px] sm:text-xs font-semibold text-emerald-300 hover:text-emerald-200 transition-[background-color,border-color,color] duration-150 shadow-xs shrink-0"
-          >
-            <Globe className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400" />
-            <span>{nav.switchLangLabel}</span>
-            <ChevronRight className="w-3 h-3 text-emerald-400" />
-          </Link>
+          {/* Accessible Language Switcher Dropdown */}
+          <div className="relative" ref={langMenuRef} onBlur={handleLangBlur}>
+            <button
+              ref={langMenuBtnRef}
+              type="button"
+              onClick={() => setLangMenuOpen((prev) => !prev)}
+              aria-expanded={langMenuOpen}
+              aria-controls="languages-navigation"
+              aria-label="Select Language"
+              className="active-press flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/50 text-xs font-semibold text-emerald-300 hover:text-emerald-200 transition-all shadow-xs"
+            >
+              <Globe className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{currentLang.label}</span>
+              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${langMenuOpen ? 'rotate-180 text-emerald-400' : ''}`} />
+            </button>
+
+            <div
+              id="languages-navigation"
+              className={`absolute top-full right-0 mt-2 w-40 bg-slate-900/98 backdrop-blur-xl rounded-2xl shadow-[0_12px_40px_-10px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.08)] border border-slate-700/80 p-1.5 flex flex-col origin-top-right transition-[opacity,transform] duration-150 ease-out z-50 ${
+                langMenuOpen ? 'opacity-100 scale-100 visible pointer-events-auto' : 'opacity-0 scale-95 invisible pointer-events-none'
+              }`}
+            >
+              {LANGUAGES.map((lang) => {
+                const isSelected = lang.code === locale;
+                return (
+                  <Link
+                    key={lang.code}
+                    href={getLocalizedPath(lang.code)}
+                    tabIndex={langMenuOpen ? undefined : -1}
+                    onClick={() => setLangMenuOpen(false)}
+                    className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors outline-none ${
+                      isSelected
+                        ? 'bg-emerald-500/20 text-emerald-300 font-bold'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
+                    }`}
+                  >
+                    <span>{lang.label}</span>
+                    {isSelected && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Mobile Menu Toggle Button */}
           <button
@@ -190,7 +262,26 @@ export function Header({ locale }: HeaderProps) {
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div id="mobile-navigation" className="lg:hidden bg-slate-900/98 backdrop-blur-xl border-b border-slate-800/80 px-4 py-4 space-y-2 animate-in slide-in-from-top-2 duration-150">
+        <div id="mobile-navigation" className="lg:hidden bg-slate-900/98 backdrop-blur-xl border-b border-slate-800/80 px-4 py-4 space-y-3 animate-in slide-in-from-top-2 duration-150">
+          {/* Mobile Language Switcher Row */}
+          <div className="flex items-center gap-1.5 p-1 bg-slate-800/80 rounded-xl border border-slate-700/80">
+            {LANGUAGES.map((lang) => {
+              const isSelected = lang.code === locale;
+              return (
+                <Link
+                  key={lang.code}
+                  href={getLocalizedPath(lang.code)}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex-1 py-1.5 text-center text-xs font-bold rounded-lg transition-all ${
+                    isSelected ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {lang.short}
+                </Link>
+              );
+            })}
+          </div>
+
           <Link
             href={`/${locale}/`}
             onClick={() => setMobileMenuOpen(false)}

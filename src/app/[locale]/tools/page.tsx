@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { LOCALES } from '@/lib/constants';
+import { LOCALES, resolveLocale } from '@/lib/constants';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 import { buildSeoMetadata } from '@/lib/seo';
@@ -16,7 +16,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const isZh = locale === 'zh';
 
   return buildSeoMetadata({
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ToolsPage({ params }: PageProps) {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const isZh = locale === 'zh';
 
   return (

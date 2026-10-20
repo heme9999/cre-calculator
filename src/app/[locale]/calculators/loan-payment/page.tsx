@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { getContent } from '@/content';
-import { LOCALES, SITE_URL } from '@/lib/constants';
+import { LOCALES, SITE_URL, resolveLocale } from '@/lib/constants';
 import { LoanPaymentCalculator } from '@/components/calculators/LoanPaymentCalculator';
 import { LoanScenarioComparison } from '@/components/calculators/LoanScenarioComparison';
 import { JsonLd, getCalculatorJsonLd } from '@/components/seo/JsonLd';
@@ -20,7 +20,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).loanPayment;
 
   return buildSeoMetadata({
@@ -28,13 +28,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    noindex: locale === 'zh',
+    noindex: locale !== 'en',
   });
 }
 
 export default async function LoanPaymentPage({ params }: PageProps) {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).loanPayment;
   const jsonLdData = getCalculatorJsonLd(
     content.h1,

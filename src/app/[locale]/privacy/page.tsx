@@ -1,6 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { LOCALES } from '@/lib/constants';
+import { LOCALES, resolveLocale } from '@/lib/constants';
 import { buildSeoMetadata } from '@/lib/seo';
 import { ShieldCheck, Lock } from 'lucide-react';
 
@@ -14,7 +14,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const isZh = locale === 'zh';
 
   return buildSeoMetadata({
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PrivacyPage({ params }: PageProps) {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const isZh = locale === 'zh';
 
   return (

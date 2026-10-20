@@ -3,25 +3,25 @@ import { SITE_URL } from '@/lib/constants';
 
 interface SeoMetadataOptions {
   path: string; // e.g. "calculators/cap-rate" or "" for home
-  locale: 'en' | 'zh';
+  locale: 'en' | 'zh' | 'es' | 'pt';
   title: string;
   description: string;
   noindex?: boolean;
 }
 
-// Strictly define bilingual routes that have fully developed, indexable counterparts
-const BILINGUAL_PAIRED_ROUTES = new Set([
+// Strictly define multilingual core routes that have fully developed, indexable counterparts
+export const MULTILINGUAL_CORE_ROUTES = new Set([
   '',
   'calculators/cap-rate',
   'calculators/noi',
   'calculators/dscr',
 ]);
 
-function getOgImageInfo(path: string, locale: 'en' | 'zh', title: string) {
+function getOgImageInfo(path: string, locale: 'en' | 'zh' | 'es' | 'pt', title: string) {
   const isZh = locale === 'zh';
   const clean = path.replace(/^\/+|\/+$/g, '');
 
-  if (clean === '' || clean === 'en' || clean === 'zh') {
+  if (clean === '' || clean === 'en' || clean === 'zh' || clean === 'es' || clean === 'pt') {
     return {
       url: `${SITE_URL}/og/cre-calculators-default${isZh ? '-zh' : ''}.png`,
       alt: isZh ? 'CRE Calculators - 美国商业地产投资决策工具包' : 'CRE Calculators - Commercial Real Estate Decision Tools',
@@ -81,7 +81,13 @@ export function buildSeoMetadata({
 
   const enUrl = `${SITE_URL}/en/${normalizedPath}`;
   const zhUrl = `${SITE_URL}/zh/${normalizedPath}`;
-  const currentUrl = locale === 'zh' ? zhUrl : enUrl;
+  const esUrl = `${SITE_URL}/es/${normalizedPath}`;
+  const ptUrl = `${SITE_URL}/pt/${normalizedPath}`;
+
+  let currentUrl = enUrl;
+  if (locale === 'zh') currentUrl = zhUrl;
+  else if (locale === 'es') currentUrl = esUrl;
+  else if (locale === 'pt') currentUrl = ptUrl;
 
   const ogImage = getOgImageInfo(cleanPath, locale, title);
 
@@ -89,9 +95,11 @@ export function buildSeoMetadata({
   const languages: Record<string, string> = {};
 
   if (!noindex) {
-    if (BILINGUAL_PAIRED_ROUTES.has(cleanPath)) {
+    if (MULTILINGUAL_CORE_ROUTES.has(cleanPath)) {
       languages['en-US'] = enUrl;
       languages['zh-Hans'] = zhUrl;
+      languages['es'] = esUrl;
+      languages['pt'] = ptUrl;
       languages['x-default'] = enUrl;
     } else {
       // English-only indexable page
@@ -99,6 +107,11 @@ export function buildSeoMetadata({
       languages['x-default'] = enUrl;
     }
   }
+
+  let ogLocale = 'en_US';
+  if (locale === 'zh') ogLocale = 'zh_CN';
+  else if (locale === 'es') ogLocale = 'es_ES';
+  else if (locale === 'pt') ogLocale = 'pt_PT';
 
   const metadata: Metadata = {
     title,
@@ -112,7 +125,7 @@ export function buildSeoMetadata({
       description,
       url: currentUrl,
       siteName: 'CRE Calculators',
-      locale: locale === 'zh' ? 'zh_CN' : 'en_US',
+      locale: ogLocale,
       type: 'website',
       images: [
         {

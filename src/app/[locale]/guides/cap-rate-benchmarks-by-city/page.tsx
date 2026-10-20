@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { getContent } from '@/content';
-import { LOCALES, SITE_URL } from '@/lib/constants';
+import { LOCALES, SITE_URL, resolveLocale } from '@/lib/constants';
 import { JsonLd, getArticleJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen, AlertTriangle, Database, Building2 } from 'lucide-react';
 import { buildSeoMetadata } from '@/lib/seo';
@@ -17,7 +17,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).capRateBenchmarksGuide;
 
   return buildSeoMetadata({
@@ -25,13 +25,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    noindex: locale === 'zh',
+    noindex: locale !== 'en',
   });
 }
 
 export default async function CapRateBenchmarksGuidePage({ params }: PageProps) {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).capRateBenchmarksGuide;
 
   const jsonLdData = getArticleJsonLd(
@@ -142,6 +142,76 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
               ))}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      {/* Individual City Deep Dives */}
+      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
+        <div className="space-y-1">
+          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-emerald-600" />
+            {locale === 'zh' ? '重点城市商业地产 Cap Rate 专项指南' : 'Key Metro Cap Rate Benchmark Deep Dives'}
+          </h2>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            {locale === 'zh'
+              ? '深入各大热门都会区，探索本地经济驱动因素、细分物业利差与承销测算案例：'
+              : 'Explore detailed local economic drivers, asset-class spreads, and underwriting examples for high-volume investment markets:'}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Link
+            href={`/${locale}/guides/cap-rate-benchmarks-by-city/austin-tx-cap-rates/`}
+            className="p-5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:shadow-md transition group block bg-slate-50/50 hover:bg-white"
+          >
+            <div className="flex justify-between items-start">
+              <div>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Tier 2 Tech Metro</span>
+                <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Austin, TX</h3>
+                <p className="text-xs text-slate-500 mt-1">Multifamily 5.25% - 6.00% · Industrial 5.50% - 6.25%</p>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
+            </div>
+          </Link>
+          <Link
+            href={`/${locale}/guides/cap-rate-benchmarks-by-city/miami-fl-cap-rates/`}
+            className="p-5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:shadow-md transition group block bg-slate-50/50 hover:bg-white"
+          >
+            <div className="flex justify-between items-start">
+              <div>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Gateway Growth Metro</span>
+                <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Miami, FL</h3>
+                <p className="text-xs text-slate-500 mt-1">Multifamily 5.00% - 5.75% · Industrial 5.25% - 6.00%</p>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
+            </div>
+          </Link>
+          <Link
+            href={`/${locale}/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/`}
+            className="p-5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:shadow-md transition group block bg-slate-50/50 hover:bg-white"
+          >
+            <div className="flex justify-between items-start">
+              <div>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Logistics & Corporate Mega Hub</span>
+                <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Dallas - Fort Worth, TX</h3>
+                <p className="text-xs text-slate-500 mt-1">Multifamily 5.50% - 6.25% · Industrial 5.60% - 6.30%</p>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
+            </div>
+          </Link>
+          <Link
+            href={`/${locale}/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/`}
+            className="p-5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:shadow-md transition group block bg-slate-50/50 hover:bg-white"
+          >
+            <div className="flex justify-between items-start">
+              <div>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Semiconductor & Sunbelt Inflow</span>
+                <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Phoenix, AZ</h3>
+                <p className="text-xs text-slate-500 mt-1">Multifamily 5.40% - 6.15% · Industrial 5.50% - 6.25%</p>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
+            </div>
+          </Link>
         </div>
       </section>
 

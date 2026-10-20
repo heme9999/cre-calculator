@@ -73,7 +73,7 @@ export interface NavContent {
   about: string;
   switchLangLabel: string;
   switchLangTarget: string;
-  switchLangCode: 'en' | 'zh';
+  switchLangCode: string;
 }
 
 export interface CapRateBenchmarkRow {

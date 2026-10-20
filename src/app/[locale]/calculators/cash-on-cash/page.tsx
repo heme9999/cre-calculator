@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { getContent } from '@/content';
-import { LOCALES, SITE_URL } from '@/lib/constants';
+import { LOCALES, SITE_URL, resolveLocale } from '@/lib/constants';
 import { CashOnCashCalculator } from '@/components/calculators/CashOnCashCalculator';
 import { JsonLd, getCalculatorJsonLd, getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen, AlertTriangle } from 'lucide-react';
@@ -19,7 +19,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).cashOnCash;
 
   return buildSeoMetadata({
@@ -27,13 +27,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    noindex: locale === 'zh',
+    noindex: locale !== 'en',
   });
 }
 
 export default async function CashOnCashPage({ params }: PageProps) {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).cashOnCash;
   const isZh = locale === 'zh';
 

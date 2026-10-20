@@ -93,6 +93,11 @@ export function Footer({ locale }: FooterProps) {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
+                <Link href={`/${locale}/glossary/`} className="hover:text-emerald-400 transition-colors font-semibold text-emerald-400">
+                  {isZh ? 'CRE 核心指标词汇表' : 'CRE Glossary & Formulas'}
+                </Link>
+              </li>
+              <li>
                 <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/`} className="hover:text-emerald-400 transition-colors">
                   {isZh ? 'Cap Rate全美基准' : 'Cap Rate Benchmarks'}
                 </Link>

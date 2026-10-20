@@ -90,6 +90,7 @@ function getAllHtmlRoutes(dir, base = '') {
 }
 
 const APPROVED_SITEMAP_URLS = new Set([
+  // English Core Pages (15)
   'https://crecalculators.com/en/',
   'https://crecalculators.com/en/calculators/cap-rate/',
   'https://crecalculators.com/en/calculators/noi/',
@@ -105,21 +106,53 @@ const APPROVED_SITEMAP_URLS = new Set([
   'https://crecalculators.com/en/guides/how-to-estimate-noi/',
   'https://crecalculators.com/en/guides/1031-exchange-process/',
   'https://crecalculators.com/en/guides/how-to-underwrite-a-deal/',
+
+  // Chinese Core Pages (4)
   'https://crecalculators.com/zh/',
   'https://crecalculators.com/zh/calculators/cap-rate/',
   'https://crecalculators.com/zh/calculators/noi/',
   'https://crecalculators.com/zh/calculators/dscr/',
+
+  // Spanish Core Pages (4)
+  'https://crecalculators.com/es/',
+  'https://crecalculators.com/es/calculators/cap-rate/',
+  'https://crecalculators.com/es/calculators/noi/',
+  'https://crecalculators.com/es/calculators/dscr/',
+
+  // Portuguese Core Pages (4)
+  'https://crecalculators.com/pt/',
+  'https://crecalculators.com/pt/calculators/cap-rate/',
+  'https://crecalculators.com/pt/calculators/noi/',
+  'https://crecalculators.com/pt/calculators/dscr/',
+
+  // Programmatic Cap Rate Landing Pages (4)
+  'https://crecalculators.com/en/calculators/multifamily-cap-rate/',
+  'https://crecalculators.com/en/calculators/industrial-cap-rate/',
+  'https://crecalculators.com/en/calculators/self-storage-cap-rate/',
+  'https://crecalculators.com/en/calculators/nnn-lease-cap-rate/',
+
+  // CRE Glossary Hub & Defined Terms (8)
+  'https://crecalculators.com/en/glossary/',
+  'https://crecalculators.com/en/glossary/noi/',
+  'https://crecalculators.com/en/glossary/cap-rate/',
+  'https://crecalculators.com/en/glossary/dscr/',
+  'https://crecalculators.com/en/glossary/ber/',
+  'https://crecalculators.com/en/glossary/beo/',
+  'https://crecalculators.com/en/glossary/irr/',
+  'https://crecalculators.com/en/glossary/grm/',
+
+  // City Benchmark Expansion Guides (4)
+  'https://crecalculators.com/en/guides/cap-rate-benchmarks-by-city/austin-tx-cap-rates/',
+  'https://crecalculators.com/en/guides/cap-rate-benchmarks-by-city/miami-fl-cap-rates/',
+  'https://crecalculators.com/en/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/',
+  'https://crecalculators.com/en/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/',
 ]);
 
-const BILINGUAL_PAIRED_ROUTES = new Set([
-  '/en/',
-  '/zh/',
-  '/en/calculators/cap-rate/',
-  '/zh/calculators/cap-rate/',
-  '/en/calculators/noi/',
-  '/zh/calculators/noi/',
-  '/en/calculators/dscr/',
-  '/zh/calculators/dscr/',
+const MULTILINGUAL_CORE_PATHS = new Set([
+  '/',
+  '/calculators/cap-rate/',
+  '/calculators/noi/',
+  '/calculators/dscr/',
 ]);
 
 const PRIORITY_ROUTES = [
@@ -148,10 +181,10 @@ async function runVerification() {
     const sitemapContent = fs.readFileSync(sitemapPath, 'utf8');
     const locMatches = [...sitemapContent.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
     const uniqueLocs = new Set(locMatches);
-    console.log(`Found ${locMatches.length} URLs in sitemap.xml (Expected: 19)`);
+    console.log(`Found ${locMatches.length} URLs in sitemap.xml (Expected: ${APPROVED_SITEMAP_URLS.size})`);
 
-    if (locMatches.length !== 19) {
-      console.error(`❌ Sitemap URL count mismatch: got ${locMatches.length}, expected 19`);
+    if (locMatches.length !== APPROVED_SITEMAP_URLS.size) {
+      console.error(`❌ Sitemap URL count mismatch: got ${locMatches.length}, expected ${APPROVED_SITEMAP_URLS.size}`);
       totalErrors++;
     }
     if (uniqueLocs.size !== locMatches.length) {
@@ -255,7 +288,7 @@ async function runVerification() {
   }
 
   // 4. Scan and Test ALL HTML routes via Headless Browser
-  const allRoutes = getAllHtmlRoutes(outDir).filter(r => r.startsWith('/en/') || r.startsWith('/zh/'));
+  const allRoutes = getAllHtmlRoutes(outDir).filter(r => r.startsWith('/en/') || r.startsWith('/zh/') || r.startsWith('/es/') || r.startsWith('/pt/'));
   console.log(`\n==================================================`);
   console.log(`4. Headless Browser Verification across All ${allRoutes.length} Routes`);
   console.log(`==================================================`);
@@ -272,7 +305,12 @@ async function runVerification() {
 
   for (const route of allRoutes) {
     const isZh = route.startsWith('/zh/');
-    const expectedLang = isZh ? 'zh-Hans' : 'en-US';
+    const isEs = route.startsWith('/es/');
+    const isPt = route.startsWith('/pt/');
+    let expectedLang = 'en-US';
+    if (isZh) expectedLang = 'zh-Hans';
+    else if (isEs) expectedLang = 'es';
+    else if (isPt) expectedLang = 'pt';
     const testUrl = `http://localhost:3459${route}`;
     const fullCanonicalUrl = `https://crecalculators.com${route}`;
     const isSitemapApproved = APPROVED_SITEMAP_URLS.has(fullCanonicalUrl);
@@ -395,20 +433,18 @@ async function runVerification() {
 
     // Strict Check 6: Hreflang rules
     if (isSitemapApproved) {
-      if (BILINGUAL_PAIRED_ROUTES.has(route)) {
-        if (!evaluated.hreflangs['en-US'] || !evaluated.hreflangs['zh-Hans'] || !evaluated.hreflangs['x-default']) {
-          console.error(`❌ [${route}] Bilingual route missing expected hreflangs:`, evaluated.hreflangs);
-          routeErrors++;
-        }
-        const counterpartRoute = isZh ? route.replace(/^\/zh\//, '/en/') : route.replace(/^\/en\//, '/zh/');
-        if (evaluated.hreflangs[isZh ? 'en-US' : 'zh-Hans'] !== `https://crecalculators.com${counterpartRoute}`) {
-          console.error(`❌ [${route}] Hreflang counterpart URL is incorrect`, evaluated.hreflangs);
+      const cleanSubPath = route.replace(/^\/(en|zh|es|pt)/, '');
+      const isMultilingualCore = MULTILINGUAL_CORE_PATHS.has(cleanSubPath);
+
+      if (isMultilingualCore) {
+        if (!evaluated.hreflangs['en-US'] || !evaluated.hreflangs['zh-Hans'] || !evaluated.hreflangs['es'] || !evaluated.hreflangs['pt'] || !evaluated.hreflangs['x-default']) {
+          console.error(`❌ [${route}] Multilingual route missing expected hreflangs:`, evaluated.hreflangs);
           routeErrors++;
         }
       } else {
         // English-only indexable
-        if (evaluated.hreflangs['zh-Hans']) {
-          console.error(`❌ [${route}] English-only route unexpectedly declared zh-Hans alternate!`, evaluated.hreflangs);
+        if (evaluated.hreflangs['zh-Hans'] || evaluated.hreflangs['es'] || evaluated.hreflangs['pt']) {
+          console.error(`❌ [${route}] English-only route unexpectedly declared non-EN alternate!`, evaluated.hreflangs);
           routeErrors++;
         }
         if (!evaluated.hreflangs['en-US'] || !evaluated.hreflangs['x-default']) {

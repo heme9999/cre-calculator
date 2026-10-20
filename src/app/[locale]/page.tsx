@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { getContent } from '@/content';
-import { LOCALES, SITE_URL } from '@/lib/constants';
+import { LOCALES, SITE_URL, resolveLocale } from '@/lib/constants';
 import { JsonLd, getWebSiteJsonLd } from '@/components/seo/JsonLd';
 import { Calculator, ArrowRight, TrendingUp, ShieldCheck, Zap, Workflow, BookOpen, Layers } from 'lucide-react';
 import { DealAnalyzerPreview } from '@/components/home/DealAnalyzerPreview';
@@ -18,7 +18,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale);
 
   return buildSeoMetadata({
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function HomePage({ params }: PageProps) {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const isZh = locale === 'zh';
   const content = getContent(locale);
   const home = content.home;

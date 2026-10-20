@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
-import { Calculator, TrendingUp, AlertCircle, Info, ArrowRight } from 'lucide-react';
+import { Calculator, TrendingUp, AlertCircle, Info, ArrowRight, Share2, Check } from 'lucide-react';
 import { CapRateVisualGauge } from './visuals/CapRateVisualGauge';
 
 interface Props {
@@ -12,6 +12,8 @@ interface Props {
 
 export function CapRateCalculator({ locale }: Props) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
   const [mode, setMode] = useState<'forward' | 'reverse'>('forward');
 
   // Forward Mode state: Purchase Price + NOI -> Cap Rate
@@ -20,6 +22,58 @@ export function CapRateCalculator({ locale }: Props) {
 
   // Reverse Mode state: NOI + Target Cap Rate -> Max Purchase Price
   const [targetCapRate, setTargetCapRate] = useState<number>(7.5);
+
+  // Share link state
+  const [copied, setCopied] = useState<boolean>(false);
+
+  // Parse URL hash on mount if present
+  useEffect(() => {
+    const applyHashParams = () => {
+      if (typeof window === 'undefined') return;
+      const hash = window.location.hash.replace(/^#/, '');
+      if (!hash) return;
+      const params = new URLSearchParams(hash);
+      const p = params.get('price') || params.get('p');
+      const n = params.get('noi') || params.get('n');
+      const m = params.get('mode') || params.get('m');
+      const t = params.get('target') || params.get('t');
+
+      if (p && !isNaN(Number(p))) setPurchasePrice(Number(p));
+      if (n && !isNaN(Number(n))) setNoi(Number(n));
+      if (m === 'reverse' || m === 'forward') setMode(m);
+      if (t && !isNaN(Number(t))) setTargetCapRate(Number(t));
+    };
+
+    const timer = setTimeout(applyHashParams, 0);
+    window.addEventListener('hashchange', applyHashParams);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('hashchange', applyHashParams);
+    };
+  }, []);
+
+  const handleShareDeal = async () => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams();
+    if (mode === 'forward') {
+      params.set('p', purchasePrice.toString());
+      params.set('noi', noi.toString());
+    } else {
+      params.set('mode', 'reverse');
+      params.set('noi', noi.toString());
+      params.set('t', targetCapRate.toString());
+      if (purchasePrice > 0) params.set('p', purchasePrice.toString());
+    }
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${params.toString()}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // Fallback
+      window.location.hash = params.toString();
+    }
+  };
 
   // Calculations
   const calculatedCapRate = purchasePrice > 0 ? (noi / purchasePrice) * 100 : 0;
@@ -248,9 +302,29 @@ export function CapRateCalculator({ locale }: Props) {
         {/* Results Panel */}
         <div className="lg:col-span-5 bg-slate-50 border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 flex flex-col justify-between">
           <div>
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-              {isZh ? '计算结果分析' : 'Calculation Summary'}
-            </h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                {isZh ? '计算结果分析' : isEs ? 'Resumen del Cálculo' : isPt ? 'Resumo do Cálculo' : 'Calculation Summary'}
+              </h3>
+              <button
+                type="button"
+                onClick={handleShareDeal}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:text-emerald-700 hover:border-emerald-300 active:scale-95 transition-all shadow-2xs"
+                title={isZh ? '复制带参数的测算链接' : 'Copy link with parameters'}
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <span className="text-emerald-600 font-semibold">{isZh ? '链接已复制！' : 'Link Copied!'}</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-3.5 h-3.5 text-slate-500" />
+                    <span>{isZh ? '分享测算' : 'Share Deal'}</span>
+                  </>
+                )}
+              </button>
+            </div>
 
             {mode === 'forward' ? (
               <div className="space-y-6">

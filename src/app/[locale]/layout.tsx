@@ -15,8 +15,12 @@ interface LocaleLayoutProps {
 
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
-  const lang = locale === 'zh' ? 'zh-Hans' : 'en-US';
+  const rawLocale = resolvedParams.locale;
+  const locale = (rawLocale === 'zh' || rawLocale === 'es' || rawLocale === 'pt') ? rawLocale : 'en';
+  let lang = 'en-US';
+  if (locale === 'zh') lang = 'zh-Hans';
+  else if (locale === 'es') lang = 'es';
+  else if (locale === 'pt') lang = 'pt';
 
   return (
     <html lang={lang} className="h-full">

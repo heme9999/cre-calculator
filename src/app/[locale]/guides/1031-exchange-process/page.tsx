@@ -1,7 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { getContent } from '@/content';
-import { LOCALES } from '@/lib/constants';
+import { LOCALES, resolveLocale } from '@/lib/constants';
 import { ArticleGuideView } from '@/components/guides/ArticleGuideView';
 
 import { buildSeoMetadata } from '@/lib/seo';
@@ -16,7 +16,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).exchange1031ProcessGuide;
 
   return buildSeoMetadata({
@@ -24,13 +24,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     locale,
     title: content.metaTitle,
     description: content.metaDescription,
-    noindex: locale === 'zh',
+    noindex: locale !== 'en',
   });
 }
 
 export default async function Exchange1031ProcessPage({ params }: PageProps) {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale === 'zh' ? 'zh' : 'en';
+  const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).exchange1031ProcessGuide;
 
   return (
