@@ -238,6 +238,29 @@ try {
       assert.ok(!esSection.includes('Regras'), 'dealAnalyzerTranslations.ts ES section must NOT contain Portuguese "Regras"');
       assert.ok(esSection.includes('Evaluación de Reglas Ilustrativas'), 'dealAnalyzerTranslations.ts ES section must have "Reglas"');
     });
+
+    await t.test('Micro-flaw regression: Detalhe spelling, Não in Cash-on-Cash, Loan Payment a11y labels, and brackets cleanup', () => {
+      const calcIndexPath = path.join(__dirname, '../src/app/[locale]/calculators/page.tsx');
+      const calcIndexContent = fs.readFileSync(calcIndexPath, 'utf8');
+      assert.ok(!calcIndexContent.includes('Detallhe'), 'calculators/page.tsx must NOT contain typo "Detallhe"');
+      assert.ok(calcIndexContent.includes('Detalhe'), 'calculators/page.tsx must contain correct Portuguese "Detalhe"');
+
+      const cocPath = path.join(__dirname, '../src/app/[locale]/calculators/cash-on-cash/page.tsx');
+      const cocContent = fs.readFileSync(cocPath, 'utf8');
+      assert.ok(cocContent.includes("isPt ? 'Não' : 'No'"), 'cash-on-cash table must show "Não" for Portuguese');
+
+      const loanCalcPath = path.join(__dirname, '../src/components/calculators/LoanPaymentCalculator.tsx');
+      const loanCalcContent = fs.readFileSync(loanCalcPath, 'utf8');
+      assert.ok(loanCalcContent.includes('Establecer monto del préstamo en'), 'Loan payment shortcut buttons must have Spanish aria-label');
+      assert.ok(loanCalcContent.includes('Definir valor do financiamento em'), 'Loan payment shortcut buttons must have Portuguese aria-label');
+
+      const ptContent = fs.readFileSync(path.join(__dirname, '../src/content/pt.ts'), 'utf8');
+      const esContent = fs.readFileSync(path.join(__dirname, '../src/content/es.ts'), 'utf8');
+      const enContent = fs.readFileSync(path.join(__dirname, '../src/content/en.ts'), 'utf8');
+      assert.ok(!ptContent.includes('【') && !ptContent.includes('】'), 'pt.ts must NOT contain full-width brackets');
+      assert.ok(!esContent.includes('【') && !esContent.includes('】'), 'es.ts must NOT contain full-width brackets');
+      assert.ok(!enContent.includes('【') && !enContent.includes('】'), 'en.ts must NOT contain full-width brackets');
+    });
   });
 } catch (e) {
   console.error('Test setup or compilation failed:');

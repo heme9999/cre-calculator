@@ -320,8 +320,8 @@ export default async function CashOnCashPage({ params }: PageProps) {
                       ? 'Rendimento a nível de imóvel sem alavancagem com base no preço de compra'
                       : 'Unleveraged property-level yield based on purchase price'}
                   </td>
-                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : isEs || isPt ? 'No' : 'No'}</td>
-                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : isEs || isPt ? 'No' : 'No'}</td>
+                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : isEs ? 'No' : isPt ? 'Não' : 'No'}</td>
+                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : isEs ? 'No' : isPt ? 'Não' : 'No'}</td>
                 </tr>
                 <tr className="hover:bg-slate-50/50 bg-emerald-50/30">
                   <td className="px-4 py-3 font-bold text-emerald-800">Cash-on-Cash</td>
@@ -335,7 +335,7 @@ export default async function CashOnCashPage({ params }: PageProps) {
                       : 'Leveraged year-one cash yield on actual equity invested'}
                   </td>
                   <td className="px-4 py-3 text-emerald-600 font-medium">{isZh ? '是 (Yes)' : isEs ? 'Sí' : isPt ? 'Sim' : 'Yes'}</td>
-                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : isEs || isPt ? 'No' : 'No'}</td>
+                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : isEs ? 'No' : isPt ? 'Não' : 'No'}</td>
                 </tr>
                 <tr className="hover:bg-slate-50/50">
                   <td className="px-4 py-3 font-bold text-slate-900">IRR</td>

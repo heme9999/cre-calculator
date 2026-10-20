@@ -181,7 +181,15 @@ export function LoanPaymentCalculator({ locale }: Props) {
                   key={val}
                   type="button"
                   onClick={() => setLoanAmount(val)}
-                  aria-label={isZh ? `设置贷款金额为 ${formatCurrency(val)}` : `Set loan amount to ${formatCurrency(val)}`}
+                  aria-label={
+                    isZh
+                      ? `设置贷款金额为 ${formatCurrency(val)}`
+                      : isEs
+                      ? `Establecer monto del préstamo en ${formatCurrency(val)}`
+                      : isPt
+                      ? `Definir valor do financiamento em ${formatCurrency(val)}`
+                      : `Set loan amount to ${formatCurrency(val)}`
+                  }
                   className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium px-2.5 py-1 rounded-md transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   {formatCurrency(val)}

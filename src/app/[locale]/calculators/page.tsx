@@ -117,7 +117,7 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
         : isEs
         ? 'Desglose ingresos potenciales, vacancia y gastos operativos para determinar el ingreso operativo antes de deuda.'
         : isPt
-        ? 'Detallhe receitas brutas, perdas por vacância e despesas operacionais para calcular a receita líquida antes da dívida.'
+        ? 'Detalhe receitas brutas, perdas por vacância e despesas operacionais para calcular a receita líquida antes da dívida.'
         : 'Itemize gross rent, vacancy losses, and operating expenses to derive the true operational income before debt.',
       icon: Layers,
     },

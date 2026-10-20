@@ -130,10 +130,10 @@ export function LeaseVsBuyScenarioComparison({ locale }: Props) {
           {isZh
             ? `【对比结论】：在 10 年持有期内，购买自用方案相比租赁方案可节省净财务成本约：`
             : isEs
-            ? `【Conclusión】: En un horizonte de 10 años, comprar ahorra un desembolso financiero neto respecto al alquiler de:`
+            ? `Conclusión: En un horizonte de 10 años, comprar ahorra un desembolso financiero neto respecto al alquiler de:`
             : isPt
-            ? `【Conclusão】: Em um horizonte de 10 anos, comprar economiza um desembolso financeiro líquido em relação ao aluguel de:`
-            : `【Conclusion】: Over the 10-year holding period, buying saves net financial outlay compared to leasing by:`}
+            ? `Conclusão: Em um horizonte de 10 anos, comprar economiza um desembolso financeiro líquido em relação ao aluguel de:`
+            : `Conclusion: Over the 10-year holding period, buying saves net financial outlay compared to leasing by:`}
         </span>
         <span className="text-base font-black text-emerald-700 sm:text-right">
           {formatCurrency(Math.round(savings))}
