@@ -129,7 +129,7 @@ export const ptContent: LocaleContent = {
     ],
     exampleTitle: 'Exemplo Prático Ilustrativo',
     exampleContent: 'Modelagem de um imóvel multifamiliar de 24 unidades adquirido por $2.800.000 com 25% de entrada e financiamento comercial com taxa de juros de 6,0% ao ano e amortização em 30 anos.',
-    faqTitle: 'Perguntas Frecuentes sobre Análise de Investimentos',
+    faqTitle: 'Perguntas Frequentes sobre Análise de Investimentos',
     faqs: [
       { question: 'Como funciona o teste de estresse no Deal Analyzer?', answer: 'O teste de estresse aplica automaticamente um acréscimo de 5 pontos percentuais na taxa de vacância e 100 pontos-base (1,0%) na taxa de juros do empréstimo para medir a resiliência do fluxo de caixa.' },
       { question: 'Posso exportar o relatório para PDF?', answer: 'Sim, a ferramenta dispõe de gerador de memorandos executivos em PDF de alta qualidade com chancela de validação e desdobramentos completos para bancos ou investidores parceiros.' },
@@ -435,7 +435,7 @@ export const ptContent: LocaleContent = {
     ],
     exampleTitle: 'Exemplo Prático em Imóvel Multifamiliar de 24 Unidades',
     exampleContent: 'Considere um edifício multifamiliar de 24 unidades gerando $336.000 de Receita Potencial Bruta (GPI). Com 5% de vacância, a Receita Bruta Efetiva (EGI) é de $319.200. As despesas operacionais totalizam $92.000 ao ano e o serviço anual da dívida é de $170.152:\n\nEncargos Fixos Totais = $92.000 + $170.152 = $262.152\nBreak-Even Ratio (BER) = ($262.152 / $319.200) × 100% = 82,13%\nOcupação de Equilíbrio (BEO) = ($262.152 / $336.000) × 100% = 78,02%\n\n【Diagnóstico】: O BER é de 82,13%, enquadrando-se no parâmetro analítico ilustrativo de ≤85% da ferramenta (lembrando que não é uma regra bancária universal). O BEO demonstra que a propriedade precisa preservar ao menos 78,02% de ocupação para cobrir seus encargos e dívida.\n\n*Nota: Este é um exemplo hipotético para fins puramente ilustrativos, não representando uma oferta real nem recomendação de investimento.*',
-    faqTitle: 'Perguntas Frecuentes sobre o Break-Even Ratio',
+    faqTitle: 'Perguntas Frequentes sobre o Break-Even Ratio',
     faqs: [
       {
         question: 'Existe um padrão regulatório de Break-Even Ratio exigido por todos os credores?',
@@ -617,7 +617,7 @@ export const ptContent: LocaleContent = {
         content: '- Contratar o QI após a conclusão da venda — o equívoco mais frequente e sem qualquer remédio jurídico posterior.\n- Manusear ou receber os valores da venda, mesmo que por instantes — o que invalida imediatamente o benefício fiscal por recepção de fundos.\n- Presumir que os prazos de 45 ou 180 dias podem ser estendidos — são limites peremptórios instituídos por lei federal.\n- Postergar a busca de imóveis substitutos para depois da venda — 45 dias transcorrem com rapidez; a prospecção deve ocorrer em paralelo à comercialização do ativo original.\n- Designar um único imóvel sem opções de reserva caso surjam problemas na auditoria técnica ou documental.',
       },
     ],
-    faqTitle: 'Perguntas Frecuentes',
+    faqTitle: 'Perguntas Frequentes',
     faqs: [
       {
         question: 'Posso utilizar a Troca 1031 para adquirir imóveis fora dos Estados Unidos?',

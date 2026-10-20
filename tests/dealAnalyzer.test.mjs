@@ -212,6 +212,32 @@ try {
       assert.ok(!zhContent.includes('Cap Rate 决定了物业的总价值与购买价'));
       assert.ok(zhContent.includes('在给定且可持续的 NOI、市场适用 Cap Rate 及其他交易条件下，可用 NOI ÷ Cap Rate 作估值参考'));
     });
+
+    await t.test('Cross-language consistency: zero Spanish/Portuguese contamination in pt.ts and es.ts', () => {
+      const ptPath = path.join(__dirname, '../src/content/pt.ts');
+      const ptContent = fs.readFileSync(ptPath, 'utf8');
+
+      const esPath = path.join(__dirname, '../src/content/es.ts');
+      const esContent = fs.readFileSync(esPath, 'utf8');
+
+      const transPath = path.join(__dirname, '../src/lib/dealAnalyzerTranslations.ts');
+      const transContent = fs.readFileSync(transPath, 'utf8');
+
+      // Portuguese must not contain Spanish Frecuentes, Preguntas, or Alquilar
+      assert.ok(!ptContent.includes('Frecuentes'), 'pt.ts must NOT contain Spanish "Frecuentes"');
+      assert.ok(!ptContent.includes('Preguntas'), 'pt.ts must NOT contain Spanish "Preguntas"');
+      assert.ok(!ptContent.includes('Alquilar'), 'pt.ts must NOT contain Spanish "Alquilar"');
+
+      // Spanish must not contain Portuguese Regras or Perguntas
+      assert.ok(!esContent.includes('Regras'), 'es.ts must NOT contain Portuguese "Regras"');
+      assert.ok(!esContent.includes('Perguntas'), 'es.ts must NOT contain Portuguese "Perguntas"');
+      assert.ok(!esContent.includes('Alugar'), 'es.ts must NOT contain Portuguese "Alugar"');
+
+      // Check translations file
+      const esSection = transContent.substring(transContent.indexOf('es: {'), transContent.indexOf('pt: {'));
+      assert.ok(!esSection.includes('Regras'), 'dealAnalyzerTranslations.ts ES section must NOT contain Portuguese "Regras"');
+      assert.ok(esSection.includes('Evaluación de Reglas Ilustrativas'), 'dealAnalyzerTranslations.ts ES section must have "Reglas"');
+    });
   });
 } catch (e) {
   console.error('Test setup or compilation failed:');
