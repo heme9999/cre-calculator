@@ -36,6 +36,10 @@ export default async function GuidesHubPage({ params }: PageProps) {
   const content = getContent(locale).guidesHub;
   const jsonLdData = getGuidesHubJsonLd(`${SITE_URL}/${locale}/guides/`, locale);
 
+  const homeLabel = locale === 'zh' ? '首页' : locale === 'es' ? 'Inicio' : locale === 'pt' ? 'Início' : 'Home';
+  const guidesLabel = locale === 'zh' ? '实操指南' : locale === 'es' ? 'Guías' : locale === 'pt' ? 'Guias' : 'Guides';
+  const readGuideBtn = locale === 'zh' ? '阅读完整指南' : locale === 'es' ? 'Leer Guía Completa' : locale === 'pt' ? 'Ler Guia Completo' : 'Read Guide';
+
   return (
     <div className="space-y-10 py-4 max-w-5xl mx-auto">
       <JsonLd data={jsonLdData} />
@@ -43,9 +47,9 @@ export default async function GuidesHubPage({ params }: PageProps) {
       {/* Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
-          <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
+          <Link href={`/${locale}/`} className="hover:text-emerald-600">{homeLabel}</Link>
           <span>/</span>
-          <span className="text-slate-900 font-semibold">Guides</span>
+          <span className="text-slate-900 font-semibold">{guidesLabel}</span>
         </nav>
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
           {content.h1}
@@ -81,7 +85,7 @@ export default async function GuidesHubPage({ params }: PageProps) {
               </p>
             </div>
             <div className="pt-6 flex items-center text-xs font-bold text-emerald-600 group-hover:translate-x-1 transition-transform">
-              <span>{locale === 'zh' ? '阅读完整指南' : 'Read Guide'}</span>
+              <span>{readGuideBtn}</span>
               <ArrowRight className="w-4 h-4 ml-1" />
             </div>
           </Link>

@@ -194,11 +194,46 @@ export const ptContent: LocaleContent = {
     subtitle: 'Modele parcelas de principal e juros, prazos de amortização e pagamentos de balão (balloon payments).',
   },
   dscr: {
-    ...enContent.dscr,
     metaTitle: 'Calculadora de DSCR | Cobertura do Serviço da Dívida',
     metaDescription: 'Calcule o índice de cobertura da dívida (DSCR) para empréstimos comerciais e avalie a aprovação bancária da sua operação.',
     h1: 'Calculadora de DSCR (Debt Service Coverage Ratio)',
     subtitle: 'Verifique se a receita operacional líquida do imóvel atende aos critérios de aprovação de crédito dos bancos comerciais.',
+    whatIsTitle: 'O que é o DSCR e por que é fundamental?',
+    whatIsContent: 'O Índice de Cobertura do Serviço da Dívida (DSCR, na sigla em inglês) é o principal indicador de risco utilizado por credores de imóveis comerciais para avaliar pedidos de financiamento imobiliário. Ele mede a Receita Operacional Líquida (NOI) anual de um imóvel em relação ao serviço total da dívida anual (pagamentos combinados de amortização e juros), refletindo a margem de segurança entre o fluxo de caixa operacional e as obrigações hipotecárias.\n\nBancos comerciais e credores institucionais geralmente exigem um DSCR mínimo entre 1.20x e 1.25x. Essa margem garante que o imóvel gere fluxo de caixa excedente suficiente para suportar aumentos inesperados de vacância, concessões de aluguel ou custos operacionais crescentes sem inadimplência.',
+    formulaTitle: 'Fórmula do DSCR',
+    formulaCode: 'DSCR = Receita Operacional Líquida (NOI) Anual / Serviço Anual da Dívida',
+    formulaVariables: [
+      { label: 'Receita Operacional Líquida Anual (NOI)', desc: 'Receita bruta efetiva de locação menos despesas operacionais rotineiras (antes do serviço da dívida e impostos).' },
+      { label: 'Serviço Anual da Dívida', desc: 'Total de parcelas de principal e juros pagos ao longo de 12 meses.' },
+    ],
+    exampleTitle: 'Exemplo Prático em Imóveis Comerciais (Edifício Comercial de $2M)',
+    exampleContent: 'Suponha que você esteja adquirindo um edifício comercial de escritórios por $2.000.000 com um financiamento de $1.500.000. O imóvel gera $220.000 em receita bruta efetiva e tem $70.000 em despesas operacionais, resultando em um NOI anual de $150.000.\n\nCom uma taxa de juros de 6,5% e amortização em 25 anos, a parcela mensal é de $10.128, totalizando um serviço anual da dívida de $121.536.\n\nDSCR = $150.000 / $121.536 = 1,23x\n\n【Diagnóstico】: O índice de 1,23x situa-se próximo ao limite padrão exigido pelos credores (1,20x - 1,25x). O credor pode solicitar uma entrada um pouco maior ou a criação de uma conta reserva para aprovar o crédito.\n\n*Nota: Este é um exemplo hipotético para fins puramente ilustrativos, não representando uma oferta real nem recomendação de investimento.*',
+    faqTitle: 'Perguntas Frequentes sobre o DSCR',
+    faqs: [
+      {
+        question: 'Qual é um bom índice DSCR para um empréstimo imobiliário comercial?',
+        answer: 'A maioria dos bancos comerciais, emissores de CMBS e seguradoras exige um DSCR mínimo entre 1,20x e 1,25x. Imóveis estabilizados com contrato NNN e locatário com grau de investimento podem se qualificar com 1,15x, enquanto ativos mais voláteis (como hotelaria ou varejo com valor agregado) costumam exigir entre 1,35x e 1,50x.',
+      },
+      {
+        question: 'O que acontece se o DSCR cair abaixo de 1,0x?',
+        answer: 'Um DSCR inferior a 1,0x significa que a receita operacional líquida do imóvel é insuficiente para cobrir as parcelas do empréstimo, criando um déficit no fluxo de caixa operacional. Para novas operações de crédito, os credores comerciais convencionais geralmente não aprovam financiamentos padrão sem fatores compensatórios; contudo, a aprovação pode depender da modalidade de crédito, liquidez do investidor, garantias cruzadas ou reservas estruturadas. Em contratos existentes, o fato de o DSCR cair abaixo de 1,0x configurar inadimplência técnica ou deflagrar medidas de saneamento depende estritamente dos termos e cláusulas específicas do contrato de financiamento.',
+      },
+      {
+        question: 'Como um investidor pode melhorar o DSCR de um imóvel?',
+        answer: 'É possível elevar o DSCR aumentando o NOI (reajustando aluguéis, reduzindo a taxa de vacância ou otimizando despesas operacionais) ou reduzindo o serviço da dívida (aumentando a entrada para financiar um valor menor, negociando juros mais baixos ou estendendo o prazo de amortização).',
+      },
+      {
+        question: 'Qual é a diferença entre DSCR, Cap Rate e Retorno Cash-on-Cash?',
+        answer: 'O Cap Rate mede o retorno do ativo independentemente da dívida; o Cash-on-Cash mede o retorno do capital próprio efetivamente investido após o pagamento da hipoteca; o DSCR mede a margem de segurança da cobertura do empréstimo. Credores baseiam-se primordialmente no DSCR para determinar o valor máximo do empréstimo.',
+      },
+    ],
+    relatedTitle: 'Calculadoras Financeiras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de NOI', slug: 'noi' },
+      { title: 'Calculadora de Financiamento', slug: 'loan-payment' },
+      { title: 'Calculadora de Troca 1031', slug: '1031-exchange' },
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+    ],
   },
   exchange1031: {
     ...enContent.exchange1031,
@@ -228,9 +263,39 @@ export const ptContent: LocaleContent = {
   exchange1031ProcessGuide: enContent.exchange1031ProcessGuide,
   howToUnderwriteDealGuide: enContent.howToUnderwriteDealGuide,
   guidesHub: {
-    ...enContent.guidesHub,
-    metaTitle: 'Guias de Investimento e Análise Imobiliária Comercial | CRE',
+    metaTitle: 'Guias de Investimento e Análise Imobiliária Comercial | CRE Tools',
     metaDescription: 'Aprenda metodologias profissionais de análise de risco, parâmetros de Cap Rate e estruturação de empréstimos comerciais.',
     h1: 'Guias Práticos de Investimento em Imóveis Comerciais',
+    subtitle: 'Diretrizes aprofundadas e práticas de subscrição para investidores, corretores e analistas de imóveis comerciais.',
+    guides: [
+      {
+        slug: 'cap-rate-benchmarks-by-city',
+        title: 'Padrões de Cap Rate nos EUA por Região Metropolitana e Tipo de Imóvel',
+        description: 'Faixas de taxas de capitalização consolidadas por classes de ativos e níveis de mercado metropolitano com base em pesquisas de 2026.',
+        badge: 'Dados de Mercado',
+        readTime: '8 min de leitura',
+      },
+      {
+        slug: 'how-to-estimate-noi',
+        title: 'Como Estimar o NOI (Mesmo sem Histórico Financeiro Completo)',
+        description: 'Um método prático para reconstruir a receita operacional líquida quando os números do vendedor estão incompletos, inflacionados ou indisponíveis.',
+        badge: 'Metodologia',
+        readTime: '6 min de leitura',
+      },
+      {
+        slug: '1031-exchange-process',
+        title: 'O Processo Completo de Troca 1031, Passo a Passo',
+        description: 'Como estruturar uma troca 1031 corretamente: da contratação do intermediário qualificado aos prazos críticos de 45 e 180 dias.',
+        badge: 'Estratégia Fiscal',
+        readTime: '7 min de leitura',
+      },
+      {
+        slug: 'how-to-underwrite-a-deal',
+        title: 'Como Analisar um Investimento Imobiliário Comercial, Passo a Passo',
+        description: 'Um método prático para transformar uma proposta de venda em uma oferta fundamentada ou descartar o negócio.',
+        badge: 'Due Diligence',
+        readTime: '10 min de leitura',
+      },
+    ],
   },
 };

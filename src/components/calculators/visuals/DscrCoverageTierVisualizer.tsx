@@ -89,7 +89,7 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
           <div
             style={{ width: '50%' }}
             className="bg-rose-100 border-r border-rose-300 flex items-center justify-center text-rose-900 px-1 text-center font-bold"
-            title="< 1.00x Insufficient Coverage"
+            title={isZh ? '< 1.00x 覆盖不足 (Insufficient Coverage)' : isEs ? '< 1.00x Cobertura Insuficiente' : isPt ? '< 1.00x Cobertura Insuficiente' : '< 1.00x Insufficient Coverage'}
           >
             <span className="truncate">&lt; 1.00x {isZh ? '收入不抵还款' : isEs ? 'Déficit' : isPt ? 'Déficit' : 'Deficit'}</span>
           </div>
@@ -98,7 +98,7 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
           <div
             style={{ width: '12.5%' }}
             className="bg-amber-100 border-r border-amber-300 flex items-center justify-center text-amber-900 px-1 text-center font-bold"
-            title="1.00x - 1.24x Limited Cushion"
+            title={isZh ? '1.00x - 1.24x 缓冲较窄 (Limited Cushion)' : isEs ? '1.00x - 1.24x Colchón Limitado' : isPt ? '1.00x - 1.24x Margem Limitada' : '1.00x - 1.24x Limited Cushion'}
           >
             <span className="truncate">1.0–1.24x</span>
           </div>
@@ -107,7 +107,7 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
           <div
             style={{ width: '37.5%' }}
             className="bg-emerald-100 flex items-center justify-center text-emerald-900 px-1 text-center font-bold"
-            title=">= 1.25x Common Lender Threshold"
+            title={isZh ? '≥ 1.25x 机构审贷标准 (Common Lender Threshold)' : isEs ? '≥ 1.25x Umbral Estándar de Prestamistas' : isPt ? '≥ 1.25x Padrão Comum de Credores' : '>= 1.25x Common Lender Threshold'}
           >
             <span className="truncate">≥ 1.25x {isZh ? '银行主流标准' : isEs ? 'Estándar' : isPt ? 'Padrão' : 'Standard'}</span>
           </div>

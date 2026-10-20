@@ -194,11 +194,46 @@ export const esContent: LocaleContent = {
     subtitle: 'Modele pagos de principal e interés, calendarios de amortización y pagos globales (balloon payments).',
   },
   dscr: {
-    ...enContent.dscr,
     metaTitle: 'Calculadora de DSCR | Cobertura de Servicio de Deuda',
     metaDescription: 'Calcule el ratio de cobertura de deuda (DSCR) para préstamos comerciales y evalúe la aprobación bancaria de su operación.',
     h1: 'Calculadora de DSCR (Debt Service Coverage Ratio)',
     subtitle: 'Verifique si los ingresos operativos netos de su inmueble satisfacen los criterios de suscripción de los bancos comerciales.',
+    whatIsTitle: '¿Qué es el DSCR y por qué es fundamental?',
+    whatIsContent: 'El Ratio de Cobertura del Servicio de la Deuda (DSCR, por sus siglas en inglés) es la métrica de riesgo más importante utilizada por prestamistas de bienes raíces comerciales para evaluar solicitudes de hipotecas. Mide el Ingreso Operativo Neto (NOI) anual de una propiedad frente al servicio total de la deuda anual (pagos combinados de capital e intereses), reflejando el margen de seguridad entre el flujo de caja operativo y las obligaciones financieras.\n\nLos bancos comerciales y prestamistas institucionales suelen exigir un DSCR mínimo de entre 1.20x y 1.25x. Este colchón garantiza que el inmueble genere suficiente excedente para absorber aumentos imprevistos de vacancia, concesiones de alquiler o gastos operativos crecientes sin caer en impago del préstamo.',
+    formulaTitle: 'Fórmula del DSCR',
+    formulaCode: 'DSCR = Ingreso Operativo Neto (NOI) Anual / Servicio Anual de la Deuda',
+    formulaVariables: [
+      { label: 'Ingreso Operativo Neto Anual (NOI)', desc: 'Ingreso bruto efectivo por alquiler menos gastos operativos ordinarios (antes del servicio de la deuda e impuestos).' },
+      { label: 'Servicio Anual de la Deuda', desc: 'Total de amortización de principal e intereses abonados a lo largo de 12 meses.' },
+    ],
+    exampleTitle: 'Ejemplo Práctico en Bienes Raíces Comerciales ($2M Edificio de Oficinas)',
+    exampleContent: 'Suponga que adquiere un edificio comercial de oficinas por $2,000,000 con un préstamo hipotecario de $1,500,000. La propiedad genera $220,000 en ingresos brutos efectivos y tiene $70,000 en gastos operativos, lo que da un NOI anual de $150,000.\n\nCon una tasa de interés del 6.5% y una amortización a 25 años, el pago mensual de la hipoteca es de $10,128, lo que representa un servicio anual de la deuda de $121,536.\n\nDSCR = $150,000 / $121,536 = 1.23x\n\n【Diagnóstico】: Un ratio de 1.23x se sitúa cerca del umbral habitual de los prestamistas (1.20x - 1.25x). El banco podría requerir un pago inicial ligeramente superior o una reserva de servicio de deuda para aprobar el financiamiento.\n\n*Nota: Este es un caso práctico hipotético con fines estrictamente ilustrativos y no representa una oferta real ni asesoramiento de inversión.*',
+    faqTitle: 'Preguntas Frecuentes sobre DSCR',
+    faqs: [
+      {
+        question: '¿Qué ratio DSCR se considera bueno para un préstamo de bienes raíces comerciales?',
+        answer: 'La mayoría de los bancos comerciales, emisiones CMBS y compañías aseguradoras exigen un DSCR mínimo entre 1.20x y 1.25x. Propiedades estabilizadas con contratos NNN de inquilino único pueden calificar con 1.15x, mientras que activos de mayor volatilidad (como hotelería o centros comerciales) a menudo requieren entre 1.35x y 1.50x.',
+      },
+      {
+        question: '¿Qué ocurre si el DSCR cae por debajo de 1.0x?',
+        answer: 'Un DSCR inferior a 1.0x significa que el NOI del inmueble por sí solo no cubre el pago de la hipoteca, generando un déficit de flujo de caja operativo. Para nuevas financiaciones, los bancos comerciales tradicionales generalmente no aprueban préstamos permanentes estándar sin factores compensatorios; no obstante, la aprobación puede depender del tipo de producto crediticio, liquidez del prestatario, garantías cruzadas o fondos de reserva estructurados. En préstamos existentes, el hecho de que un DSCR inferior a 1.0x constituya un incumplimiento técnico o desencadene medidas correctivas depende estrictamente de las cláusulas y acuerdos de cura estipulados en el contrato de préstamo específico.',
+      },
+      {
+        question: '¿Cómo puede un inversionista mejorar el DSCR de una propiedad?',
+        answer: 'Se puede incrementar el DSCR aumentando el NOI (subiendo rentas, reduciendo la vacancia o recortando gastos operativos) o disminuyendo el servicio de la deuda (aportando mayor pago inicial para pedir prestado menos, negociando una tasa de interés más baja o extendiendo el plazo de amortización).',
+      },
+      {
+        question: '¿En qué se diferencia el DSCR del Cap Rate y del Cash-on-Cash Return?',
+        answer: 'El Cap Rate mide la rentabilidad del inmueble de forma independiente a la financiación; el Cash-on-Cash mide el rendimiento del capital efectivo aportado tras pagar la hipoteca; el DSCR mide el margen de seguridad de la cobertura de la deuda. Los prestamistas se basan en el DSCR para fijar el monto máximo del préstamo.',
+      },
+    ],
+    relatedTitle: 'Calculadoras Financieras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de NOI', slug: 'noi' },
+      { title: 'Calculadora de Pagos de Préstamos', slug: 'loan-payment' },
+      { title: 'Calculadora de Intercambio 1031', slug: '1031-exchange' },
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+    ],
   },
   exchange1031: {
     ...enContent.exchange1031,
@@ -228,9 +263,39 @@ export const esContent: LocaleContent = {
   exchange1031ProcessGuide: enContent.exchange1031ProcessGuide,
   howToUnderwriteDealGuide: enContent.howToUnderwriteDealGuide,
   guidesHub: {
-    ...enContent.guidesHub,
-    metaTitle: 'Guías de Inversión y Debida Diligencia Comercial | CRE',
+    metaTitle: 'Guías de Inversión y Debida Diligencia Comercial | CRE Tools',
     metaDescription: 'Aprenda metodologías profesionales de suscripción, puntos de referencia de Cap Rate y optimización de préstamos comerciales.',
     h1: 'Guías Prácticas de Inversión en Bienes Raíces Comerciales',
+    subtitle: 'Marcos de análisis prácticos y detallados para inversionistas, corredores y analistas de bienes raíces comerciales.',
+    guides: [
+      {
+        slug: 'cap-rate-benchmarks-by-city',
+        title: 'Puntos de Referencia de Cap Rate en EE.UU. por Mercado y Tipo de Activo',
+        description: 'Rangos de tasas de capitalización agregados por tipo de propiedad y categoría de mercado metropolitano según informes de 2026.',
+        badge: 'Datos de Mercado',
+        readTime: '8 min de lectura',
+      },
+      {
+        slug: 'how-to-estimate-noi',
+        title: 'Cómo Estimar el NOI (Incluso sin Estados Financieros Históricos)',
+        description: 'Un marco práctico para reconstruir el ingreso operativo neto cuando las cifras del vendedor son incompletas, infladas o inexistentes.',
+        badge: 'Metodología',
+        readTime: '6 min de lectura',
+      },
+      {
+        slug: '1031-exchange-process',
+        title: 'El Proceso Completo de Intercambio 1031, Paso a Paso',
+        description: 'Cómo estructurar un intercambio 1031 correctamente: desde la contratación del intermediario calificado hasta los plazos de 45 y 180 días.',
+        badge: 'Estrategia Fiscal',
+        readTime: '7 min de lectura',
+      },
+      {
+        slug: 'how-to-underwrite-a-deal',
+        title: 'Cómo Evaluar una Inversión Inmobiliaria Comercial, Paso a Paso',
+        description: 'Un método riguroso para pasar del folleto de venta a una oferta justificada o rechazar la operación a tiempo.',
+        badge: 'Debida Diligencia',
+        readTime: '10 min de lectura',
+      },
+    ],
   },
 };

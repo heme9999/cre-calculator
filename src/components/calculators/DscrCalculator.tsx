@@ -125,6 +125,50 @@ export function DscrCalculator({ locale }: Props) {
     StatusIcon = AlertTriangle;
   }
 
+  const propertyTypeOptions = {
+    en: [
+      { value: 'multifamily', label: 'Multifamily (5+ Units)' },
+      { value: 'industrial', label: 'Industrial / Warehouse' },
+      { value: 'self-storage', label: 'Self-Storage Facility' },
+      { value: 'nnn', label: 'NNN Net Lease Retail' },
+      { value: 'mixed-use', label: 'Mixed-Use Commercial' },
+    ],
+    zh: [
+      { value: 'multifamily', label: '多户住宅公寓 (5+ Units)' },
+      { value: 'industrial', label: '工业 / 仓储物流' },
+      { value: 'self-storage', label: '自助仓储 (Self-Storage)' },
+      { value: 'nnn', label: 'NNN 单租户商业零售' },
+      { value: 'mixed-use', label: '商住混合 (Mixed-Use)' },
+    ],
+    es: [
+      { value: 'multifamily', label: 'Multifamiliar (5+ Unidades)' },
+      { value: 'industrial', label: 'Industrial / Bodega' },
+      { value: 'self-storage', label: 'Almacenamiento (Self-Storage)' },
+      { value: 'nnn', label: 'Comercial con Contrato NNN' },
+      { value: 'mixed-use', label: 'Comercial de Uso Mixto' },
+    ],
+    pt: [
+      { value: 'multifamily', label: 'Multifamiliar (5+ Unidades)' },
+      { value: 'industrial', label: 'Industrial / Galpão' },
+      { value: 'self-storage', label: 'Armazenamento (Self-Storage)' },
+      { value: 'nnn', label: 'Varejo com Contrato NNN' },
+      { value: 'mixed-use', label: 'Uso Misto Comercial' },
+    ],
+  }[locale as 'en' | 'zh' | 'es' | 'pt'] || [
+    { value: 'multifamily', label: 'Multifamily (5+ Units)' },
+    { value: 'industrial', label: 'Industrial / Warehouse' },
+    { value: 'self-storage', label: 'Self-Storage Facility' },
+    { value: 'nnn', label: 'NNN Net Lease Retail' },
+    { value: 'mixed-use', label: 'Mixed-Use Commercial' },
+  ];
+
+  const privacyNote = {
+    en: 'Data Transparency: Your deal parameters are shared exclusively with vetted institutional commercial lenders solely to prepare formal term sheets upon your explicit submission. Standard browser calculations remain 100% client-side and unrecorded.',
+    zh: '数据去向说明：您的交易参数仅在您主动提交申请时，定向加密发送给合规机构贷方以获取正式条款清单；其余常规计算全程在浏览器本地运行，不留存任何数据。',
+    es: 'Transparencia de Datos: Los parámetros de su operación se comparten exclusivamente con entidades crediticias comerciales certificadas con el fin de cotizar términos formales tras su envío voluntario. Los cálculos del sitio permanecen 100% locales en su navegador.',
+    pt: 'Transparência de Dados: Os parâmetros do seu negócio são compartilhados exclusivamente com instituições financeiras certificadas para envio de propostas formais após sua solicitação ativa. Todas as simulações permanecem 100% locais no seu navegador.',
+  }[locale as 'en' | 'zh' | 'es' | 'pt'] || 'Data Transparency: Your deal parameters are shared exclusively with vetted institutional commercial lenders solely to prepare formal term sheets upon your explicit submission. Standard browser calculations remain 100% client-side and unrecorded.';
+
   return (
     <div className="space-y-8 mb-12">
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -390,11 +434,11 @@ export function DscrCalculator({ locale }: Props) {
                     onChange={(e) => setLeadPropertyType(e.target.value)}
                     className="w-full pl-8 pr-3 py-2.5 text-xs text-white font-medium bg-transparent focus:outline-none appearance-none"
                   >
-                    <option value="multifamily" className="bg-slate-900 text-white">Multifamily (5+ Units)</option>
-                    <option value="industrial" className="bg-slate-900 text-white">Industrial / Warehouse</option>
-                    <option value="self-storage" className="bg-slate-900 text-white">Self-Storage Facility</option>
-                    <option value="nnn" className="bg-slate-900 text-white">NNN Net Lease Retail</option>
-                    <option value="mixed-use" className="bg-slate-900 text-white">Mixed-Use Commercial</option>
+                    {propertyTypeOptions.map((opt) => (
+                      <option key={opt.value} value={opt.value} className="bg-slate-900 text-white">
+                        {opt.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -416,10 +460,13 @@ export function DscrCalculator({ locale }: Props) {
                 </div>
               </div>
 
-              <div className="sm:col-span-3 flex justify-end pt-2">
+              <div className="sm:col-span-3 flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+                <p className="text-[11px] text-slate-400 leading-relaxed text-left max-w-xl">
+                  {privacyNote}
+                </p>
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs transition-all shadow-sm"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs transition-all shadow-sm shrink-0"
                 >
                   <span>{t.dscrCalc.leadSubmitBtn}</span>
                   <ArrowRight className="w-3.5 h-3.5" />

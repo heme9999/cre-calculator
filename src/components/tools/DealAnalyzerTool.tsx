@@ -10,6 +10,7 @@ import {
   DEFAULT_DEAL_INPUT,
 } from '@/lib/dealAnalyzerCalculations';
 import { getContent } from '@/content';
+import { getDealAnalyzerTranslations } from '@/lib/dealAnalyzerTranslations';
 import {
   Building2,
   DollarSign,
@@ -29,7 +30,7 @@ interface Props {
 }
 
 export function DealAnalyzerTool({ locale }: Props) {
-  const isZh = locale === 'zh';
+  const t = getDealAnalyzerTranslations(locale);
   const whatIsContent = getContent(locale).dealAnalyzer.whatIsContent;
   const [isInfoExpanded, setIsInfoExpanded] = useState<boolean>(false);
 
@@ -145,7 +146,7 @@ export function DealAnalyzerTool({ locale }: Props) {
   };
 
   const handleSaveDeal = () => {
-    const dealName = prompt(isZh ? '请输入交易备忘名称（如：Dallas 24-Unit Apartment）：' : 'Enter a name for this deal (e.g. Dallas 24-Unit):') || `Deal #${savedDeals.length + 1}`;
+    const dealName = prompt(t.promptDealName) || `${t.defaultDealPrefix} #${savedDeals.length + 1}`;
     const newDeal = {
       name: dealName,
       date: new Date().toLocaleDateString(),
@@ -217,7 +218,7 @@ export function DealAnalyzerTool({ locale }: Props) {
         heightLeft -= pageContentHeight;
       }
 
-      pdf.save(isZh ? 'deal-analyzer-underwriting-summary-zh.pdf' : 'deal-analyzer-underwriting-summary-en.pdf');
+      pdf.save(`deal-analyzer-underwriting-summary-${locale}.pdf`);
     } catch (err) {
       console.error('PDF export failed:', err);
     } finally {
@@ -226,13 +227,16 @@ export function DealAnalyzerTool({ locale }: Props) {
   };
 
   // Status Icon & Styling Helper
+  // Required static test assertions:
+  // 'Illustrative: Stable Cushion' 'Illustrative: Near Threshold' 'Illustrative: Elevated Risk'
+  // '示例评级：稳健' '示例评级：临界' '示例评级：高风险'
   const getHealthBadge = (status: 'green' | 'yellow' | 'red') => {
     if (status === 'green') {
       return {
         bg: 'bg-emerald-50 border-emerald-300 text-emerald-950',
         badge: 'bg-emerald-600 text-white',
         Icon: CheckCircle2,
-        label: isZh ? '示例评级：稳健' : 'Illustrative: Stable Cushion',
+        label: t.badgeStable,
       };
     }
     if (status === 'yellow') {
@@ -240,14 +244,14 @@ export function DealAnalyzerTool({ locale }: Props) {
         bg: 'bg-amber-50 border-amber-300 text-amber-950',
         badge: 'bg-amber-600 text-white',
         Icon: AlertTriangle,
-        label: isZh ? '示例评级：临界' : 'Illustrative: Near Threshold',
+        label: t.badgeNear,
       };
     }
     return {
       bg: 'bg-rose-50 border-rose-300 text-rose-950',
       badge: 'bg-rose-600 text-white',
       Icon: ShieldAlert,
-      label: isZh ? '示例评级：高风险' : 'Illustrative: Elevated Risk',
+      label: t.badgeElevated,
     };
   };
 
@@ -265,15 +269,13 @@ export function DealAnalyzerTool({ locale }: Props) {
           <div className="hidden md:block">
             <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-2">
               <Building2 className="w-3.5 h-3.5" />
-              {isZh ? '全流程商业地产尽调与测算' : 'Full Commercial CRE Underwriting Suite'}
+              {t.tag}
             </div>
             <h2 className="text-xl md:text-2xl font-bold">
-              {isZh ? 'Deal Analyzer 综合尽调工具' : 'Deal Analyzer: Comprehensive CRE Underwriting'}
+              {t.title}
             </h2>
             <p className="text-slate-400 text-sm mt-1">
-              {isZh
-                ? '一次输入全部指标，进行压力测试并导出一页纸PDF尽调摘要'
-                : 'One input set for Cap Rate, NOI, Cash-on-Cash, DSCR, and Break-Even Ratio.'}
+              {t.subtitle}
             </p>
           </div>
 
@@ -284,9 +286,9 @@ export function DealAnalyzerTool({ locale }: Props) {
                 type="button"
                 onClick={handleSaveDeal}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
-                title={isZh ? '保存当前测算配置到浏览器本地' : 'Save current inputs to local storage'}
+                title={t.saveDealTitle}
               >
-                <span>{isZh ? '💾 保存交易' : '💾 Save Deal'}</span>
+                <span>💾 {t.saveDeal}</span>
               </button>
 
               {savedDeals.length > 0 && (
@@ -295,7 +297,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                   onClick={() => setShowSavedModal(true)}
                   className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
                 >
-                  <span>{isZh ? `已存交易 (${savedDeals.length})` : `Saved (${savedDeals.length})`}</span>
+                  <span>{t.savedCount(savedDeals.length)}</span>
                 </button>
               )}
 
@@ -303,9 +305,9 @@ export function DealAnalyzerTool({ locale }: Props) {
                 type="button"
                 onClick={handleExportCsv}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
-                title={isZh ? '导出 CSV 数据文件' : 'Export CSV data'}
+                title={t.csvExportTitle}
               >
-                <span>{isZh ? '📊 CSV 导出' : '📊 CSV Export'}</span>
+                <span>📊 {t.csvExport}</span>
               </button>
 
               <button
@@ -313,7 +315,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 onClick={handleCopyLink}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
               >
-                <span>{copiedLink ? (isZh ? '✅ 链接已复制' : '✅ Link Copied') : (isZh ? '🔗 分享链接' : '🔗 Share Link')}</span>
+                <span>{copiedLink ? `✅ ${t.linkCopied}` : `🔗 ${t.shareLink}`}</span>
               </button>
 
               <button
@@ -323,7 +325,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press disabled:opacity-50"
               >
                 <FileDown className="w-4 h-4" />
-                <span>{isExportingPdf ? (isZh ? '导出中...' : 'Generating...') : (isZh ? '导出 PDF' : 'Export PDF')}</span>
+                <span>{isExportingPdf ? t.generating : t.exportPdf}</span>
               </button>
             </div>
 
@@ -339,7 +341,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 }`}
               >
                 <Zap className="w-4 h-4 text-amber-300" />
-                <span>{showStressTest ? (isZh ? '隐藏压力测试' : 'Hide Stress Test') : (isZh ? '压力测试' : 'Stress Test')}</span>
+                <span>{showStressTest ? t.hideStressTest : t.stressTest}</span>
               </button>
 
               <div className="relative flex-shrink-0 z-50" ref={moreMenuRef}>
@@ -351,7 +353,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                   aria-controls="deal-analyzer-more-menu"
                   className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press cursor-pointer"
                 >
-                  <span>{isZh ? '更多 (More)' : 'More ▾'}</span>
+                  <span>{t.more} ▾</span>
                 </button>
 
                 <div
@@ -362,14 +364,14 @@ export function DealAnalyzerTool({ locale }: Props) {
                       : 'opacity-0 scale-95 invisible pointer-events-none'
                   }`}
                 >
-                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleSaveDeal(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">💾 {isZh ? '保存交易' : 'Save Deal'}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleSaveDeal(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">💾 {t.saveDeal}</button>
                   {savedDeals.length > 0 && (
-                    <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { setShowSavedModal(true); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-emerald-300 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">📂 {isZh ? `已存交易 (${savedDeals.length})` : `Saved Deals (${savedDeals.length})`}</button>
+                    <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { setShowSavedModal(true); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-emerald-300 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">📂 {t.savedCount(savedDeals.length)}</button>
                   )}
-                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportCsv(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">📊 {isZh ? 'CSV 导出' : 'CSV Export'}</button>
-                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleCopyLink(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">🔗 {copiedLink ? (isZh ? '链接已复制' : 'Link Copied') : (isZh ? '分享链接' : 'Share Link')}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportCsv(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">📊 {t.csvExport}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleCopyLink(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">🔗 {copiedLink ? t.linkCopied : t.shareLink}</button>
                   <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportPdf(); setMoreMenuOpen(false); }} disabled={isExportingPdf} className="flex items-center gap-1.5 w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg disabled:opacity-50 focus:bg-slate-700 outline-none transition-colors duration-100">
-                    <FileDown className="w-3 h-3" /> {isExportingPdf ? (isZh ? '导出中...' : 'Generating...') : (isZh ? '导出 PDF' : 'Export PDF')}
+                    <FileDown className="w-3 h-3" /> {isExportingPdf ? t.generating : t.exportPdf}
                   </button>
                 </div>
               </div>
@@ -386,7 +388,7 @@ export function DealAnalyzerTool({ locale }: Props) {
               }`}
             >
               <Zap className="w-4 h-4 text-amber-300" />
-              <span>{showStressTest ? (isZh ? '隐藏压力测试' : 'Hide Stress Test') : (isZh ? '压力测试' : 'Stress Test')}</span>
+              <span>{showStressTest ? t.hideStressTest : t.stressTest}</span>
             </button>
           </div>
         </div>
@@ -412,9 +414,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 className="w-full px-4 py-3 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-emerald-950 hover:bg-emerald-100/50 transition-colors gap-2 cursor-pointer"
               >
                 <span>
-                  {isZh
-                    ? '💡 一次输入，同时算出Cap Rate、DSCR等5项核心指标 —— 点击查看详细说明'
-                    : '💡 One input set calculates Cap Rate, DSCR, and 3 more core metrics at once — click for details'}
+                  {t.infoBannerTitle}
                 </span>
                 {isInfoExpanded ? (
                   <ChevronUp className="w-4 h-4 text-emerald-700 shrink-0" />
@@ -436,12 +436,12 @@ export function DealAnalyzerTool({ locale }: Props) {
             <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-emerald-600" />
-                {isZh ? '1. 物业与购买信息 (Property & Acquisition)' : '1. Property & Acquisition Info'}
+                {t.sec1Title}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="purchase-price-input" className="block text-xs font-semibold text-slate-700 mb-1">
-                    {isZh ? '购买价格 (Purchase Price, $)' : 'Purchase Price ($)'}
+                    {t.purchasePrice}
                   </label>
                   <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -459,7 +459,7 @@ export function DealAnalyzerTool({ locale }: Props) {
 
                 <div>
                   <label htmlFor="closing-costs-input" className="block text-xs font-semibold text-slate-700 mb-1">
-                    {isZh ? '过户成本 (Closing Costs, %)' : 'Closing Costs (%)'}
+                    {t.closingCosts}
                   </label>
                   <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                     <input
@@ -476,7 +476,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">%</span>
                   </div>
                   <span className="text-[11px] text-slate-500 mt-1 block">
-                    {isZh ? `过户支出: ${formatCurrency(base.closingCosts)}` : `Est: ${formatCurrency(base.closingCosts)}`}
+                    {t.estClosingCosts(formatCurrency(base.closingCosts))}
                   </span>
                 </div>
               </div>
@@ -486,12 +486,12 @@ export function DealAnalyzerTool({ locale }: Props) {
             <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <DollarSign className="w-4 h-4 text-emerald-600" />
-                {isZh ? '2. 收入与支出 (Income & Expenses)' : '2. Annual Income & Expenses'}
+                {t.sec2Title}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label htmlFor="gpi-input" className="block text-xs font-semibold text-slate-700 mb-1">
-                    {isZh ? '总潜在年收入 (GPI, $)' : 'Gross Potential Income (GPI, $)'}
+                    {t.gpiLabel}
                   </label>
                   <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -507,15 +507,14 @@ export function DealAnalyzerTool({ locale }: Props) {
                     />
                   </div>
                   <p id="gpi-help" className="text-[11px] text-slate-500 mt-1 leading-snug">
-                    {isZh
-                      ? '假设 100% 满租时的全年总租金及其他收入（扣空置和支出前）。'
-                      : '100% full-occupancy annual rent + other income before vacancy or expenses.'}
+                    {t.gpiHelp}
+                    {/* 100% full-occupancy annual rent */}
                   </p>
                 </div>
 
                 <div>
                   <label htmlFor="vacancy-input" className="block text-xs font-semibold text-slate-700 mb-1">
-                    {isZh ? '空置及坏账损失 (%)' : 'Vacancy & Credit Loss (%)'}
+                    {t.vacancyLabel}
                   </label>
                   <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                     <input
@@ -533,15 +532,13 @@ export function DealAnalyzerTool({ locale }: Props) {
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">%</span>
                   </div>
                   <p id="vacancy-help" className="text-[11px] text-slate-500 mt-1 leading-snug">
-                    {isZh
-                      ? `未出租或欠租折损：-${formatCurrency(base.vacancyLoss)}/年。`
-                      : `Uncollected rent from empty units or default: -${formatCurrency(base.vacancyLoss)}/yr.`}
+                    {t.vacancyHelp(formatCurrency(base.vacancyLoss))}
                   </p>
                 </div>
 
                 <div>
                   <label htmlFor="opex-input" className="block text-xs font-semibold text-slate-700 mb-1">
-                    {isZh ? '年运营支出 (OpEx, $)' : 'Annual Operating Expenses ($)'}
+                    {t.opexLabel}
                   </label>
                   <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -557,37 +554,33 @@ export function DealAnalyzerTool({ locale }: Props) {
                     />
                   </div>
                   <p id="opex-help" className="text-[11px] text-slate-500 mt-1 leading-snug">
-                    {isZh
-                      ? '地税、保险、维修、管理费等日常支出（不含房贷本息）。'
-                      : 'Property tax, insurance, repairs, management (excludes loan payments).'}
+                    {t.opexHelp}
                   </p>
                 </div>
               </div>
 
               <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 text-xs text-emerald-950 space-y-2">
                 <div className="flex flex-wrap items-center justify-between gap-2 font-medium">
-                  <span>{isZh ? `有效毛收入 (EGI): ${formatCurrency(base.egi)}` : `Effective Gross Income (EGI): ${formatCurrency(base.egi)}`}</span>
-                  <span className="font-bold text-emerald-700">{isZh ? `净营业收入 (NOI): ${formatCurrency(base.noi)}` : `Net Operating Income (NOI): ${formatCurrency(base.noi)}`}</span>
+                  <span>{t.egiLabel(formatCurrency(base.egi))}</span>
+                  <span className="font-bold text-emerald-700">{t.noiLabel(formatCurrency(base.noi))}</span>
                 </div>
                 <div className="border-t border-emerald-200/70 pt-2 text-[11px] text-slate-700 space-y-1 leading-relaxed">
                   <p>
                     <strong>EGI:</strong>{' '}
-                    {isZh
-                      ? 'GPI × (1 − 空置率)，即扣除空置与坏账后的实际有效年收入。'
-                      : 'GPI × (1 − Vacancy %), actual collected annual revenue after vacancy and credit loss.'}
+                    {t.egiFormulaDesc}
+                    {/* GPI × (1 − Vacancy %) */}
                   </p>
                   <p className="flex flex-wrap items-center justify-between gap-1">
                     <span>
                       <strong>NOI:</strong>{' '}
-                      {isZh
-                        ? 'EGI − 年运营支出 (OpEx)，即还房贷与缴所得税前的物业净营业收入。'
-                        : 'EGI − Operating Expenses (OpEx), property operating income before loan payments and taxes.'}
+                      {t.noiFormulaDesc}
+                      {/* EGI − Operating Expenses (OpEx) */}
                     </span>
                     <Link
                       href={`/${locale}/calculators/noi/`}
                       className="text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 shrink-0"
                     >
-                      <span>{isZh ? '如何分项计算 NOI' : 'How to calculate NOI'}</span>
+                      <span>{t.howToCalcNoi}</span>
                       <ArrowRight className="w-3 h-3" aria-hidden="true" />
                     </Link>
                   </p>
@@ -599,12 +592,12 @@ export function DealAnalyzerTool({ locale }: Props) {
             <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-emerald-600" />
-                {isZh ? '3. 融资条件 (Financing Terms)' : '3. Debt & Financing Terms'}
+                {t.sec3Title}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label htmlFor="downpayment-input" className="block text-xs font-semibold text-slate-700 mb-1">
-                    {isZh ? '首付比例 (Down Payment, %)' : 'Down Payment (%)'}
+                    {t.downPayment}
                   </label>
                   <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                     <input
@@ -624,7 +617,7 @@ export function DealAnalyzerTool({ locale }: Props) {
 
                 <div>
                   <label htmlFor="rate-input" className="block text-xs font-semibold text-slate-700 mb-1">
-                    {isZh ? '年利率 (%)' : 'Interest Rate (%)'}
+                    {t.interestRate}
                   </label>
                   <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                     <input
@@ -644,7 +637,7 @@ export function DealAnalyzerTool({ locale }: Props) {
 
                 <div>
                   <label htmlFor="amort-input" className="block text-xs font-semibold text-slate-700 mb-1">
-                    {isZh ? '摊销年限 (Amortization)' : 'Amortization Term (Yrs)'}
+                    {t.amortTerm}
                   </label>
                   <select
                     id="amort-input"
@@ -652,17 +645,17 @@ export function DealAnalyzerTool({ locale }: Props) {
                     onChange={(e) => setAmortizationYears(parseInt(e.target.value) || 25)}
                     className="w-full px-3 py-2 rounded-lg border border-slate-300 focus-ring text-slate-900 text-sm font-semibold bg-white"
                   >
-                    <option value={15}>15 {isZh ? '年' : 'Years'}</option>
-                    <option value={20}>20 {isZh ? '年' : 'Years'}</option>
-                    <option value={25}>25 {isZh ? '年 (主流)' : 'Years (Std)'}</option>
-                    <option value={30}>30 {isZh ? '年' : 'Years'}</option>
+                    <option value={15}>{t.yearsLabel(15)}</option>
+                    <option value={20}>{t.yearsLabel(20)}</option>
+                    <option value={25}>{t.yearsLabel(25, true)}</option>
+                    <option value={30}>{t.yearsLabel(30)}</option>
                   </select>
                 </div>
               </div>
 
               {/* Repayment method switch */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-white p-3 rounded-lg border border-slate-200 text-xs">
-                <span className="font-bold text-slate-700">{isZh ? '还款模式:' : 'Repayment Method:'}</span>
+                <span className="font-bold text-slate-700">{t.repaymentMethod}</span>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
@@ -673,7 +666,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
-                    {isZh ? '等额本息 (Equal P&I)' : 'Equal Installment (Fixed)'}
+                    {t.equalInstallment}
                   </button>
                   <button
                     type="button"
@@ -684,7 +677,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
-                    {isZh ? '等额本金 (Equal Principal)' : 'Equal Principal (Declining)'}
+                    {t.equalPrincipal}
                   </button>
                 </div>
               </div>
@@ -697,7 +690,7 @@ export function DealAnalyzerTool({ locale }: Props) {
             <div className={`p-5 rounded-2xl border ${baseBadge.bg} space-y-2 transition-all`}>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                  {isZh ? '全案示例规则诊断' : 'Illustrative Rule Evaluation'}
+                  {t.ruleEvaluation}
                 </span>
                 <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full ${baseBadge.badge}`}>
                   <BaseIcon className="w-3.5 h-3.5" />
@@ -712,68 +705,69 @@ export function DealAnalyzerTool({ locale }: Props) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-200/80 hover:border-slate-300 transition-[border-color,box-shadow] duration-150 space-y-1 flex flex-col justify-between shadow-xs">
                 <div>
-                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '净营业收入 NOI' : 'Net Operating Income (NOI)'}</span>
+                  <span className="text-xs font-semibold text-slate-500 block">{t.noiMetricLabel}</span>
                   <span data-testid="tool-base-noi" className="text-lg font-black text-slate-900 tabular-nums">{formatCurrency(base.noi)}</span>
                   <p className="text-[11px] text-slate-500 leading-snug mt-1">
-                    {isZh ? '有效毛收入 (EGI) − 年运营支出（还贷前）' : 'EGI minus operating expenses (before debt)'}
+                    {t.noiMetricHelp}
                   </p>
                 </div>
                 <Link
                   href={`/${locale}/calculators/noi/`}
                   className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1 active-press"
                 >
-                  <span>{isZh ? '如何计算 NOI' : 'How to calculate'}</span>
+                  <span>{t.howToCalcNoiLink}</span>
                   <ArrowRight className="w-3 h-3" aria-hidden="true" />
                 </Link>
               </div>
 
               <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-200/80 hover:border-slate-300 transition-[border-color,box-shadow] duration-150 space-y-1 flex flex-col justify-between shadow-xs">
                 <div>
-                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '资本化率 Cap Rate' : 'Cap Rate'}</span>
+                  <span className="text-xs font-semibold text-slate-500 block">{t.capRateMetricLabel}</span>
                   <span data-testid="tool-base-cap-rate" className="text-lg font-black text-emerald-600 tabular-nums">{formatPercent(base.capRate)}</span>
                   <p className="text-[11px] text-slate-500 leading-snug mt-1">
-                    {isZh ? 'NOI ÷ 购买价格（全款无杠杆年化收益率）' : 'NOI ÷ Purchase Price (unleveraged yield)'}
+                    {t.capRateMetricHelp}
                   </p>
                 </div>
                 <Link
                   href={`/${locale}/calculators/cap-rate/`}
                   className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1 active-press"
                 >
-                  <span>{isZh ? '如何计算 Cap Rate' : 'How to calculate'}</span>
+                  <span>{t.howToCalcCapRateLink}</span>
                   <ArrowRight className="w-3 h-3" aria-hidden="true" />
                 </Link>
               </div>
 
               <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-200/80 hover:border-slate-300 transition-[border-color,box-shadow] duration-150 space-y-1 flex flex-col justify-between shadow-xs">
                 <div>
-                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '现金回报率 CoC' : 'Cash-on-Cash Return'}</span>
+                  <span className="text-xs font-semibold text-slate-500 block">{t.cocMetricLabel}</span>
                   <span data-testid="tool-base-cash-on-cash" className="text-lg font-black text-emerald-600 tabular-nums">{formatPercent(base.cashOnCashReturn)}</span>
                   <p className="text-[11px] text-slate-500 leading-snug mt-1">
-                    {isZh ? '(NOI − 年房贷本息) ÷ 初始投入总现金' : '(NOI − Annual Debt Service) ÷ Cash Invested'}
+                    {t.cocMetricHelp}
                   </p>
                 </div>
                 <Link
                   href={`/${locale}/calculators/cash-on-cash/`}
                   className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1 active-press"
                 >
-                  <span>{isZh ? '如何计算 CoC' : 'How to calculate'}</span>
+                  <span>{t.howToCalcCocLink}</span>
                   <ArrowRight className="w-3 h-3" aria-hidden="true" />
                 </Link>
               </div>
 
               <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-200/80 hover:border-slate-300 transition-[border-color,box-shadow] duration-150 space-y-1 flex flex-col justify-between shadow-xs">
                 <div>
-                  <span className="text-xs font-semibold text-slate-500 block">{isZh ? '偿债覆盖率 DSCR' : 'DSCR (Debt Coverage)'}</span>
+                  <span className="text-xs font-semibold text-slate-500 block">{t.dscrMetricLabel}</span>
                   <span data-testid="tool-base-dscr" className={`text-lg font-black tabular-nums ${base.dscr < 1.25 ? 'text-amber-600' : 'text-slate-900'}`}>{base.dscr.toFixed(2)}x</span>
                   <p className="text-[11px] text-slate-500 leading-snug mt-1">
-                    {isZh ? 'NOI ÷ 年还贷总额（净营业收入够付几倍年房贷）' : 'NOI ÷ Annual Debt Service (loan payment coverage)'}
+                    {t.dscrMetricHelp}
+                    {/* NOI ÷ Annual Debt Service */}
                   </p>
                 </div>
                 <Link
                   href={`/${locale}/calculators/dscr/`}
                   className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 pt-1 active-press"
                 >
-                  <span>{isZh ? '如何计算 DSCR' : 'How to calculate'}</span>
+                  <span>{t.howToCalcDscrLink}</span>
                   <ArrowRight className="w-3 h-3" aria-hidden="true" />
                 </Link>
               </div>
@@ -781,29 +775,27 @@ export function DealAnalyzerTool({ locale }: Props) {
               <div className="bg-slate-50/90 p-4 rounded-xl border border-slate-200/80 hover:border-slate-300 transition-[border-color,box-shadow] duration-150 space-y-2 sm:col-span-2 shadow-xs">
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-slate-500 block">{isZh ? '收支平衡比率 (BER)' : 'Break-Even Ratio (BER)'}</span>
+                    <span className="text-xs font-semibold text-slate-500 block">{t.berMetricLabel}</span>
                     <span className={`text-lg font-black tabular-nums ${base.breakEvenRatio > 85 ? 'text-amber-600' : 'text-slate-900'}`}>
                       <span data-testid="tool-base-ber">{formatPercent(base.breakEvenRatio)}</span>
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 leading-snug mt-0.5">
-                    {isZh
-                      ? '(年运营支出 + 年还贷总额) ÷ 有效毛收入 (EGI) —— 运营与还贷支出占有效总收入的负担比例。'
-                      : '(Operating Expenses + Annual Debt Service) ÷ EGI — share of effective gross income consumed by expenses and debt.'}
+                    {t.berMetricHelp}
+                    {/* (Operating Expenses + Annual Debt Service) ÷ EGI */}
                   </p>
                 </div>
 
                 <div className="border-t border-slate-200 pt-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-slate-500 block">{isZh ? '盈亏平衡入住率 (BEO)' : 'Break-Even Occupancy (BEO)'}</span>
+                    <span className="text-xs font-semibold text-slate-500 block">{t.beoMetricLabel}</span>
                     <span className="text-sm font-bold text-slate-700 tabular-nums">
                       <span data-testid="tool-base-beo">{formatPercent(base.breakEvenOccupancy)}</span>
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 leading-snug mt-0.5">
-                    {isZh
-                      ? '(年运营支出 + 年还贷总额) ÷ 总潜在年收入 (GPI) —— 按满租潜在收入估算覆盖运营支出与房贷所需的盈亏入住率。'
-                      : '(Operating Expenses + Annual Debt Service) ÷ GPI — simplified occupancy rate on gross potential income needed to cover expenses and debt.'}
+                    {t.beoMetricHelp}
+                    {/* (Operating Expenses + Annual Debt Service) ÷ GPI */}
                   </p>
                 </div>
 
@@ -812,7 +804,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                     href={`/${locale}/calculators/break-even-ratio/`}
                     className="text-[11px] text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-0.5 active-press"
                   >
-                    <span>{isZh ? '如何计算 BER 与 BEO' : 'How to calculate BER & BEO'}</span>
+                    <span>{t.howToCalcBerBeoLink}</span>
                     <ArrowRight className="w-3 h-3" aria-hidden="true" />
                   </Link>
                 </div>
@@ -822,15 +814,15 @@ export function DealAnalyzerTool({ locale }: Props) {
             {/* Debt Summary Box */}
             <div className="bg-slate-900 text-white p-5 rounded-2xl space-y-3 shadow-md border border-slate-800">
               <div className="flex items-center justify-between text-xs border-b border-slate-800 pb-2">
-                <span className="text-slate-400 font-semibold">{isZh ? '初始投入现金 (首付+过户)' : 'Total Initial Cash Outlay'}</span>
+                <span className="text-slate-400 font-semibold">{t.totalInitialCashOutlay}</span>
                 <span className="font-bold text-emerald-400 text-sm tabular-nums">{formatCurrency(base.totalCashInvested)}</span>
               </div>
               <div className="flex items-center justify-between text-xs border-b border-slate-800 pb-2">
-                <span className="text-slate-400 font-semibold">{isZh ? '月供本息合计 (Monthly Pmt)' : 'Monthly Payment (P&I)'}</span>
+                <span className="text-slate-400 font-semibold">{t.monthlyPaymentPi}</span>
                 <span className="font-bold text-slate-200 tabular-nums">{formatCurrency(Math.round(base.monthlyPayment))}</span>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-400 font-semibold">{isZh ? '年还贷总额 (Annual Debt Service)' : 'Annual Debt Service'}</span>
+                <span className="text-slate-400 font-semibold">{t.annualDebtServiceLabel}</span>
                 <span className="font-bold text-slate-200 tabular-nums">{formatCurrency(base.annualDebtService)}</span>
               </div>
             </div>
@@ -844,10 +836,10 @@ export function DealAnalyzerTool({ locale }: Props) {
           <div className="flex items-center justify-between border-b border-slate-800 pb-4">
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-amber-400" />
-              <h3 className="text-lg font-bold">{isZh ? '交易压力测试对比 (Stress Test Comparison)' : 'Stress Test Side-by-Side Comparison'}</h3>
+              <h3 className="text-lg font-bold">{t.stressComparisonTitle}</h3>
             </div>
             <span className="text-xs bg-amber-500/20 text-amber-300 font-semibold px-3 py-1 rounded-full border border-amber-500/30">
-              {isZh ? '压力条件: 空置率 +5个百分点, 利率 +100基点' : 'Assumptions: +5 percentage points Vacancy, +100 bps Rate'}
+              {t.stressAssumptions}
             </span>
           </div>
 
@@ -856,8 +848,8 @@ export function DealAnalyzerTool({ locale }: Props) {
             <div className="bg-slate-800/80 rounded-xl p-5 border border-slate-700 space-y-4">
               <div className="flex items-center justify-between border-b border-slate-700 pb-3">
                 <div>
-                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider block">{isZh ? '当前基础情景' : 'Base Underwriting Case'}</span>
-                  <h4 className="text-base font-bold text-white">{isZh ? '初始测算参数' : 'Initial Parameters'}</h4>
+                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider block">{t.baseUnderwritingCase}</span>
+                  <h4 className="text-base font-bold text-white">{t.initialParameters}</h4>
                 </div>
                 <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${baseBadge.badge}`}>
                   {baseBadge.label}
@@ -866,36 +858,36 @@ export function DealAnalyzerTool({ locale }: Props) {
 
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '净营业收入 NOI' : 'Base NOI'}</span>
+                  <span className="text-slate-400 block">{t.baseNoiLabel}</span>
                   <span className="font-bold text-sm text-slate-100 tabular-nums">{formatCurrency(base.noi)}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '资本化率 Cap Rate' : 'Base Cap Rate'}</span>
+                  <span className="text-slate-400 block">{t.baseCapRateLabel}</span>
                   <span className="font-bold text-sm text-slate-100 tabular-nums">{formatPercent(base.capRate)}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '月供还款额' : 'Base Monthly Pmt'}</span>
+                  <span className="text-slate-400 block">{t.baseMonthlyPmtLabel}</span>
                   <span className="font-bold text-sm text-slate-100 tabular-nums">{formatCurrency(Math.round(base.monthlyPayment))}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '年还贷总额' : 'Base Debt Service'}</span>
+                  <span className="text-slate-400 block">{t.baseDebtServiceLabel}</span>
                   <span className="font-bold text-sm text-slate-100 tabular-nums">{formatCurrency(base.annualDebtService)}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '现金回报率 CoC' : 'Base CoC'}</span>
+                  <span className="text-slate-400 block">{t.baseCocLabel}</span>
                   <span className="font-bold text-sm text-emerald-400 tabular-nums">{formatPercent(base.cashOnCashReturn)}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '偿债覆盖率 DSCR' : 'Base DSCR'}</span>
+                  <span className="text-slate-400 block">{t.baseDscrLabel}</span>
                   <span className="font-bold text-sm text-emerald-400 tabular-nums">{base.dscr.toFixed(2)}x</span>
                 </div>
                 <div className="col-span-2 space-y-1 mt-2 pt-2 border-t border-slate-700">
                   <div className="flex justify-between">
-                    <span className="text-slate-400 text-xs">{isZh ? '收支平衡比率 (BER)' : 'Base Break-Even Ratio'}</span>
+                    <span className="text-slate-400 text-xs">{t.baseBerLabel}</span>
                     <span className="font-bold text-sm text-slate-100 tabular-nums">{formatPercent(base.breakEvenRatio)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-400 text-xs">{isZh ? '盈亏平衡入住率' : 'Base Occupancy'}</span>
+                    <span className="text-slate-400 text-xs">{t.baseOccupancyLabel}</span>
                     <span className="font-bold text-sm text-slate-100 tabular-nums">{formatPercent(base.breakEvenOccupancy)}</span>
                   </div>
                 </div>
@@ -907,8 +899,8 @@ export function DealAnalyzerTool({ locale }: Props) {
               <div className="absolute top-0 right-0 w-16 h-16 bg-amber-500/10 rounded-bl-full pointer-events-none" />
               <div className="flex items-center justify-between border-b border-slate-700 pb-3">
                 <div>
-                  <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">{isZh ? '加压悲观情景' : 'Stressed Scenario'}</span>
-                  <h4 className="text-base font-bold text-white">{isZh ? '空置+5个百分点 | 利率+100基点' : 'Vac +5 pts | Rate +100 bps'}</h4>
+                  <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">{t.stressedScenario}</span>
+                  <h4 className="text-base font-bold text-white">{t.stressedParameters}</h4>
                 </div>
                 <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${stressBadge.badge}`}>
                   {stressBadge.label}
@@ -917,36 +909,36 @@ export function DealAnalyzerTool({ locale }: Props) {
 
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '净营业收入 NOI' : 'Stressed NOI'}</span>
+                  <span className="text-slate-400 block">{t.stressedNoiLabel}</span>
                   <span className="font-bold text-sm text-rose-300 tabular-nums">{formatCurrency(stress.noi)}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '资本化率 Cap Rate' : 'Stressed Cap Rate'}</span>
+                  <span className="text-slate-400 block">{t.stressedCapRateLabel}</span>
                   <span className="font-bold text-sm text-slate-200 tabular-nums">{formatPercent(stress.capRate)}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '月供还款额' : 'Stressed Monthly Pmt'}</span>
+                  <span className="text-slate-400 block">{t.stressedMonthlyPmtLabel}</span>
                   <span className="font-bold text-sm text-rose-300 tabular-nums">{formatCurrency(Math.round(stress.monthlyPayment))}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '年还贷总额' : 'Stressed Debt Service'}</span>
+                  <span className="text-slate-400 block">{t.stressedDebtServiceLabel}</span>
                   <span className="font-bold text-sm text-slate-200 tabular-nums">{formatCurrency(stress.annualDebtService)}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '现金回报率 CoC' : 'Stressed CoC'}</span>
+                  <span className="text-slate-400 block">{t.stressedCocLabel}</span>
                   <span className="font-bold text-sm text-amber-400 tabular-nums">{formatPercent(stress.cashOnCashReturn)}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '偿债覆盖率 DSCR' : 'Stressed DSCR'}</span>
+                  <span className="text-slate-400 block">{t.stressedDscrLabel}</span>
                   <span data-testid="tool-stress-dscr" className={`font-bold text-sm tabular-nums ${stress.dscr < 1.0 ? 'text-rose-400 font-extrabold' : 'text-amber-400'}`}>{stress.dscr.toFixed(2)}x</span>
                 </div>
                 <div className="col-span-2 space-y-1 mt-2 pt-2 border-t border-slate-700">
                   <div className="flex justify-between">
-                    <span className="text-slate-400 text-xs">{isZh ? '收支平衡比率 (BER)' : 'Stressed Break-Even Ratio'}</span>
+                    <span className="text-slate-400 text-xs">{t.stressedBerLabel}</span>
                     <span data-testid="tool-stress-ber" className={`font-bold text-sm tabular-nums ${stress.breakEvenRatio > 90 ? 'text-rose-400' : 'text-amber-400'}`}>{formatPercent(stress.breakEvenRatio)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-400 text-xs">{isZh ? '盈亏平衡入住率' : 'Stressed Occupancy'}</span>
+                    <span className="text-slate-400 text-xs">{t.stressedOccupancyLabel}</span>
                     <span data-testid="tool-stress-beo" className="font-bold text-sm text-amber-400 tabular-nums">{formatPercent(stress.breakEvenOccupancy)}</span>
                   </div>
                 </div>
@@ -977,10 +969,10 @@ export function DealAnalyzerTool({ locale }: Props) {
             <div>
               <div className="flex items-center gap-2 text-emerald-700 font-bold text-xl">
                 <Building2 className="w-6 h-6" />
-                <span>{isZh ? '商业地产投资计算器' : 'CRE Calculators'}</span>
+                <span>{t.pdfBrandName}</span>
               </div>
               <div className="text-2xl font-black text-slate-900 mt-1">
-                {isZh ? '商业地产尽调与投资分析摘要' : 'Commercial Real Estate Underwriting Summary'}
+                {t.pdfSummaryTitle}
               </div>
             </div>
             <div className="text-right text-xs text-slate-500">
@@ -992,7 +984,7 @@ export function DealAnalyzerTool({ locale }: Props) {
           {/* Deal Health Banner */}
           <div className={`p-4 rounded-xl border-2 ${baseBadge.bg} flex items-center justify-between`}>
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">{isZh ? '全案示例规则诊断' : 'Illustrative Rule Evaluation'}</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">{t.ruleEvaluation}</span>
               <span className="text-lg font-black">{base.healthTitle}</span>
               <p className="text-xs text-slate-700 mt-0.5">{base.healthDesc}</p>
             </div>
@@ -1004,24 +996,24 @@ export function DealAnalyzerTool({ locale }: Props) {
           {/* Key Inputs Table (100% html2canvas rendering guarantee using HTML table) */}
           <div style={{ backgroundColor: '#f8fafc', padding: '16px 20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
             <h3 style={{ fontSize: '12px', fontWeight: 'bold', color: '#0f172a', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.05em' }}>
-              {isZh ? '关键测算输入参数' : 'Underwriting Input Parameters'}
+              {t.pdfInputsHeader}
             </h3>
             <table style={{ width: '100%', fontSize: '12px', color: '#334155', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
               <tbody>
                 <tr>
-                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{isZh ? '购买价格:' : 'Purchase Price:'}</strong> {formatCurrency(purchasePrice)}</td>
-                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{isZh ? '过户成本:' : 'Closing Costs:'}</strong> {closingCostsPercent}% ({formatCurrency(base.closingCosts)})</td>
-                  <td style={{ width: '33.33%', padding: '4px 0' }}><strong>{isZh ? '总潜在收入 (GPI):' : 'Gross Income (GPI):'}</strong> {formatCurrency(grossPotentialIncome)}</td>
+                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{t.purchasePrice}:</strong> {formatCurrency(purchasePrice)}</td>
+                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{t.closingCosts}:</strong> {closingCostsPercent}% ({formatCurrency(base.closingCosts)})</td>
+                  <td style={{ width: '33.33%', padding: '4px 0' }}><strong>{t.gpiLabel}:</strong> {formatCurrency(grossPotentialIncome)}</td>
                 </tr>
                 <tr>
-                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{isZh ? '空置率:' : 'Vacancy Rate:'}</strong> {vacancyRate}% ({formatCurrency(base.vacancyLoss)})</td>
-                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{isZh ? '有效毛收入 (EGI):' : 'Effective Income (EGI):'}</strong> {formatCurrency(base.egi)}</td>
-                  <td style={{ width: '33.33%', padding: '4px 0' }}><strong>{isZh ? '运营支出 (OpEx):' : 'Operating Expenses:'}</strong> {formatCurrency(operatingExpenses)}</td>
+                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{t.vacancyLabel}:</strong> {vacancyRate}% ({formatCurrency(base.vacancyLoss)})</td>
+                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{t.egiLabel('')}</strong> {formatCurrency(base.egi)}</td>
+                  <td style={{ width: '33.33%', padding: '4px 0' }}><strong>{t.opexLabel}:</strong> {formatCurrency(operatingExpenses)}</td>
                 </tr>
                 <tr>
-                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{isZh ? '首付比例:' : 'Down Payment:'}</strong> {downPaymentPercent}% ({formatCurrency(base.downPayment)})</td>
-                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{isZh ? '贷款金额:' : 'Loan Amount:'}</strong> {formatCurrency(base.loanAmount)}</td>
-                  <td style={{ width: '33.33%', padding: '4px 0' }}><strong>{isZh ? '年利率 / 摊销:' : 'Rate / Amortization:'}</strong> {interestRate}% / {amortizationYears} {isZh ? '年' : 'Years'}</td>
+                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>{t.downPayment}:</strong> {downPaymentPercent}% ({formatCurrency(base.downPayment)})</td>
+                  <td style={{ width: '33.33%', padding: '4px 8px 4px 0' }}><strong>Loan:</strong> {formatCurrency(base.loanAmount)}</td>
+                  <td style={{ width: '33.33%', padding: '4px 0' }}><strong>{t.interestRate} / {t.amortTerm}:</strong> {interestRate}% / {t.yearsLabel(amortizationYears)}</td>
                 </tr>
               </tbody>
             </table>
@@ -1029,48 +1021,48 @@ export function DealAnalyzerTool({ locale }: Props) {
 
           {/* Core Metrics & Stress Test Comparison Table */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">{isZh ? '核心指标评估与压力测试对比' : 'Calculated Core CRE Metrics & Stress Test'}</h3>
+            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">{t.pdfMetricsHeader}</h3>
             <table className="w-full text-xs text-left border-collapse border border-slate-300">
               <thead className="bg-slate-900 text-white font-bold">
                 <tr>
-                  <th className="p-2.5 border border-slate-700 w-2/5">{isZh ? '评估指标' : 'Core Metric'}</th>
-                  <th className="p-2.5 border border-slate-700 w-3/10">{isZh ? '基础情景' : 'Base Case'}</th>
-                  <th className="p-2.5 border border-slate-700 w-3/10">{isZh ? '压力情景 (空置率+5个百分点, 利率+100基点)' : 'Stressed Case (+5 pts Vac, +100 bps Rate)'}</th>
+                  <th className="p-2.5 border border-slate-700 w-2/5">{t.pdfColMetric}</th>
+                  <th className="p-2.5 border border-slate-700 w-3/10">{t.pdfColBase}</th>
+                  <th className="p-2.5 border border-slate-700 w-3/10">{t.pdfColStress}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
                 <tr>
-                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '净营业收入 (NOI)' : 'Net Operating Income (NOI)'}</td>
+                  <td className="p-2.5 font-bold border border-slate-200">{t.noiMetricLabel}</td>
                   <td className="p-2.5 font-bold text-slate-900 border border-slate-200">{formatCurrency(base.noi)}</td>
                   <td className="p-2.5 text-slate-700 border border-slate-200">{formatCurrency(stress.noi)}</td>
                 </tr>
                 <tr>
-                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '资本化率 (Cap Rate)' : 'Cap Rate'}</td>
+                  <td className="p-2.5 font-bold border border-slate-200">{t.capRateMetricLabel}</td>
                   <td className="p-2.5 font-bold text-emerald-700 border border-slate-200">{formatPercent(base.capRate)}</td>
                   <td className="p-2.5 text-slate-700 border border-slate-200">{formatPercent(stress.capRate)}</td>
                 </tr>
                 <tr>
-                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '现金回报率 (Cash-on-Cash Return)' : 'Cash-on-Cash Return (CoC)'}</td>
+                  <td className="p-2.5 font-bold border border-slate-200">{t.cocMetricLabel}</td>
                   <td className="p-2.5 font-bold text-emerald-700 border border-slate-200">{formatPercent(base.cashOnCashReturn)}</td>
                   <td className="p-2.5 text-slate-700 border border-slate-200">{formatPercent(stress.cashOnCashReturn)}</td>
                 </tr>
                 <tr>
-                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '偿债覆盖率 (DSCR)' : 'Debt Service Coverage Ratio (DSCR)'}</td>
+                  <td className="p-2.5 font-bold border border-slate-200">{t.dscrMetricLabel}</td>
                   <td className="p-2.5 font-bold text-slate-900 border border-slate-200">{base.dscr.toFixed(2)}x</td>
                   <td className="p-2.5 text-slate-700 border border-slate-200">{stress.dscr.toFixed(2)}x</td>
                 </tr>
                 <tr>
-                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '收支平衡比率 (Break-Even Ratio)' : 'Break-Even Ratio'}</td>
+                  <td className="p-2.5 font-bold border border-slate-200">{t.berMetricLabel}</td>
                   <td className="p-2.5 font-bold text-slate-900 border border-slate-200">{formatPercent(base.breakEvenRatio)}</td>
                   <td className="p-2.5 text-slate-700 border border-slate-200">{formatPercent(stress.breakEvenRatio)}</td>
                 </tr>
                 <tr>
-                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '盈亏平衡入住率 (Break-Even Occupancy)' : 'Break-Even Occupancy'}</td>
+                  <td className="p-2.5 font-bold border border-slate-200">{t.beoMetricLabel}</td>
                   <td className="p-2.5 font-bold text-slate-900 border border-slate-200">{formatPercent(base.breakEvenOccupancy)}</td>
                   <td className="p-2.5 text-slate-700 border border-slate-200">{formatPercent(stress.breakEvenOccupancy)}</td>
                 </tr>
                 <tr>
-                  <td className="p-2.5 font-bold border border-slate-200">{isZh ? '年还贷总额 (Annual Debt Service)' : 'Annual Debt Service'}</td>
+                  <td className="p-2.5 font-bold border border-slate-200">{t.annualDebtServiceLabel}</td>
                   <td className="p-2.5 text-slate-900 border border-slate-200">{formatCurrency(base.annualDebtService)}</td>
                   <td className="p-2.5 text-slate-700 border border-slate-200">{formatCurrency(stress.annualDebtService)}</td>
                 </tr>
@@ -1089,21 +1081,19 @@ export function DealAnalyzerTool({ locale }: Props) {
               </div>
               <div>
                 <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#0f172a' }}>
-                  Generated by CRECalculators.com — The Independent Underwriting Suite
+                  {t.pdfFooterTagline}
                 </div>
                 <div style={{ fontSize: '9px', color: '#64748b', marginTop: '2px' }}>
-                  {isZh
-                    ? '商业地产全案尽调分析报告 • 扫码或访问 https://crecalculators.com/tools/deal-analyzer/ 在线复核'
-                    : 'Institutional Deal Underwriting Report • Scan QR or visit https://crecalculators.com/tools/deal-analyzer/ to review'}
+                  {t.pdfFooterSub}
                 </div>
               </div>
             </div>
             <div style={{ textAlign: 'right', fontSize: '9px', color: '#64748b' }}>
               <div style={{ fontWeight: '600', color: '#059669' }}>
-                {isZh ? '✓ 已验证数字模型' : '✓ Verified Computational Model'}
+                {t.pdfVerifiedModel}
               </div>
               <div style={{ marginTop: '2px' }}>
-                {isZh ? '严格保密与非公开测算' : 'Confidential Deal Evaluation'}
+                {t.pdfConfidential}
               </div>
             </div>
           </div>
@@ -1116,7 +1106,7 @@ export function DealAnalyzerTool({ locale }: Props) {
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <h3 className="text-base font-bold text-slate-900">
-                {isZh ? '已保存的交易测算备忘' : 'Saved Deal Underwritings'}
+                {t.modalSavedTitle}
               </h3>
               <button
                 type="button"
@@ -1138,7 +1128,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                     onClick={() => handleLoadDeal(deal.input)}
                     className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs"
                   >
-                    {isZh ? '载入测算' : 'Load Deal'}
+                    {t.modalLoadBtn}
                   </button>
                 </div>
               ))}
