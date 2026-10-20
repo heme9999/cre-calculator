@@ -384,7 +384,7 @@ export const ptContent: LocaleContent = {
   leaseVsBuy: {
     metaTitle: 'Calculadora Alugar vs Comprar Imóveis Comerciais',
     metaDescription: 'Compare os custos a longo prazo e a formação de patrimônio entre alugar e comprar um imóvel comercial para a sua empresa.',
-    h1: 'Calculadora de Alquilar vs Comprar Comercial',
+    h1: 'Calculadora de Alugar vs Comprar Comercial',
     subtitle: 'Avalie custos do ciclo de vida completo, desembolsos operacionais e valorização patrimonial entre locar ou adquirir.',
     whatIsTitle: 'O que é a Análise de Alugar vs Comprar?',
     whatIsContent: 'A análise de Alugar vs Comprar é o modelo financeiro indispensável para empresas e investidores avaliarem a viabilidade entre locar ou adquirir imóveis corporativos, galpões industriais ou salas comerciais.\n\nA locação exige menor aporte de capital inicial e oferece flexibilidade operacional, mas 100% dos aluguéis pagos constituem despesas sem acúmulo de patrimônio. A compra exige entrada e parcelas mensais de amortização bancária, atuando como mecanismo de poupança forçada enquanto gera patrimônio com a valorização do imóvel no longo prazo.',

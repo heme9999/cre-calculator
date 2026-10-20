@@ -49,7 +49,7 @@ export function Exchange1031Calculator({ locale }: Props) {
               : isEs
               ? 'Estime el impuesto sobre ganancias de capital diferido y los objetivos de reinversión para intercambios 1031'
               : isPt
-              ? 'Estime o imposto sobre ganho de capital diferido e as metas de reinvestimento para trocas semelhantes (1031 like-kind exchange)'
+              ? 'Estime o imposto sobre ganho de capital diferido e as metas de reinvestimento para trocas de bens semelhantes (Troca 1031)'
               : 'Estimate deferred capital gains tax and reinvestment targets for 1031 like-kind exchanges'}
           </p>
         </div>
@@ -66,7 +66,7 @@ export function Exchange1031Calculator({ locale }: Props) {
             </>
           ) : isEs ? (
             <>
-              <strong>Aviso Legal y Tributario Obligatorio:</strong> Esta calculadora ofrece estimaciones simplificadas únicamente con fines informativos y no constituye asesoramiento legal o fiscal. La obligación tributaria real depende de la recuperación de depreciación (Depreciation Recapture 25%), tasas federales de ganancias de capital (15%-20%), impuestos estatales y el impuesto sobre ingresos netos de inversión (NIIT 3.8%). Consulte siempre a un Intermediario Calificado (QI) y a un Contador Público Certificado (CPA) antes de ejecutar un intercambio 1031.
+              <strong>Aviso Legal y Tributario Obligatorio:</strong> Esta calculadora ofrece estimaciones simplificadas únicamente con fines informativos y no constituye asesoramiento legal o fiscal. La obligación tributaria real depende de la recuperación de depreciación (25%), tasas federales de ganancias de capital (15%-20%), impuestos estatales y el impuesto sobre ingresos netos de inversión (NIIT del 3.8%). Consulte siempre a un Intermediario Calificado (QI) y a un Contador Público Certificado (CPA) antes de ejecutar un intercambio 1031.
             </>
           ) : isPt ? (
             <>

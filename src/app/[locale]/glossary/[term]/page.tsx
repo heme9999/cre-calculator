@@ -45,6 +45,8 @@ export default async function GlossaryTermPage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolveLocale(resolvedParams.locale);
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
   const termSlug = resolvedParams.term as GlossarySlug;
   const termsMap = glossaryContent[locale] || glossaryContent.en;
   const item = termsMap[termSlug];
@@ -54,6 +56,9 @@ export default async function GlossaryTermPage({ params }: PageProps) {
   }
 
   const currentUrl = `${SITE_URL}/${locale}/glossary/${item.slug}/`;
+
+  const homeLabel = isZh ? '首页' : isEs ? 'Inicio' : isPt ? 'Início' : 'Home';
+  const glossaryLabel = isZh ? 'CRE 词汇表' : isEs ? 'Glosario' : isPt ? 'Glossário' : 'Glossary';
 
   const definedTermSchema = {
     '@context': 'https://schema.org',
@@ -66,14 +71,78 @@ export default async function GlossaryTermPage({ params }: PageProps) {
   };
 
   const breadcrumbSchema = getBreadcrumbJsonLd([
-    { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
-    { name: isZh ? 'CRE 词汇表' : 'CRE Glossary', url: `${SITE_URL}/${locale}/glossary/` },
+    { name: homeLabel, url: `${SITE_URL}/${locale}/` },
+    { name: glossaryLabel, url: `${SITE_URL}/${locale}/glossary/` },
     { name: item.term, url: currentUrl },
   ]);
 
   const faqSchema = getFaqPageJsonLd(item.faqs);
 
   const otherTerms = GLOSSARY_SLUGS.filter((s) => s !== item.slug);
+
+  const toolBadgeText = isZh
+    ? '配套交互工具'
+    : isEs
+    ? 'Herramienta Interactiva'
+    : isPt
+    ? 'Ferramenta Interativa'
+    : 'Interactive Tool';
+
+  const whatIsTitle = isZh
+    ? `什么是 ${item.term} (${item.fullName})？`
+    : isEs
+    ? `¿Qué es ${item.term} (${item.fullName})?`
+    : isPt
+    ? `O que é ${item.term} (${item.fullName})?`
+    : `What is ${item.term} (${item.fullName})?`;
+
+  const whyItMattersTitle = isZh
+    ? '为什么这个指标在商业地产中至关重要？'
+    : isEs
+    ? '¿Por qué esta métrica es fundamental en bienes raíces comerciales?'
+    : isPt
+    ? 'Por que esta métrica é fundamental no setor imobiliário comercial?'
+    : 'Why This Metric Matters in CRE Underwriting';
+
+  const formulaTitle = isZh
+    ? `${item.term} 计算公式`
+    : isEs
+    ? `Fórmula y Ecuación de ${item.term}`
+    : isPt
+    ? `Fórmula e Equação do ${item.term}`
+    : `${item.term} Formula & Equation`;
+
+  const analysisPrefix = isZh
+    ? '分析解读：'
+    : isEs
+    ? 'Interpretación y Análisis: '
+    : isPt
+    ? 'Interpretação e Análise: '
+    : 'Analysis: ';
+
+  const benchmarksTitle = isZh
+    ? `${item.term} 行业经验法则与参考基准`
+    : isEs
+    ? `Reglas Prácticas y Puntos de Referencia de ${item.term}`
+    : isPt
+    ? `Regras Práticas e Parâmetros de Mercado do ${item.term}`
+    : `${item.term} Industry Rules of Thumb & Benchmarks`;
+
+  const faqsTitle = isZh
+    ? '常见问题与专家解答 (FAQs)'
+    : isEs
+    ? 'Preguntas Frecuentes y Respuestas de Expertos (FAQs)'
+    : isPt
+    ? 'Perguntas Frequentes e Respostas de Especialistas (FAQs)'
+    : 'Frequently Asked Questions (FAQs)';
+
+  const exploreOtherTitle = isZh
+    ? '浏览其他商业地产核心词汇'
+    : isEs
+    ? 'Explorar Otros Términos Clave de CRE'
+    : isPt
+    ? 'Explorar Outros Termos Chave de CRE'
+    : 'Explore Other CRE Glossary Terms';
 
   return (
     <article className="space-y-10 py-4 max-w-4xl mx-auto">
@@ -82,10 +151,10 @@ export default async function GlossaryTermPage({ params }: PageProps) {
       {/* Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2 flex-wrap">
-          <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
+          <Link href={`/${locale}/`} className="hover:text-emerald-600">{homeLabel}</Link>
           <span>/</span>
           <Link href={`/${locale}/glossary/`} className="hover:text-emerald-600">
-            {isZh ? 'CRE 词汇表' : 'Glossary'}
+            {glossaryLabel}
           </Link>
           <span>/</span>
           <span className="text-slate-900 font-semibold">{item.term}</span>
@@ -114,7 +183,7 @@ export default async function GlossaryTermPage({ params }: PageProps) {
         <div className="space-y-2 max-w-xl">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-white text-[11px] font-bold uppercase tracking-wider">
             <Calculator className="w-3 h-3" />
-            <span>{isZh ? '配套交互工具' : 'Interactive Tool'}</span>
+            <span>{toolBadgeText}</span>
           </div>
           <h2 className="text-xl font-bold text-white">{item.calculatorCta.title}</h2>
           <p className="text-xs text-emerald-100 leading-relaxed">{item.calculatorCta.desc}</p>
@@ -132,7 +201,7 @@ export default async function GlossaryTermPage({ params }: PageProps) {
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
         <div className="space-y-3">
           <h2 className="text-xl font-bold text-slate-900">
-            {isZh ? `什么是 ${item.term} (${item.fullName})？` : `What is ${item.term} (${item.fullName})?`}
+            {whatIsTitle}
           </h2>
           <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
             {item.fullDefinition}
@@ -142,7 +211,7 @@ export default async function GlossaryTermPage({ params }: PageProps) {
         <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
           <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>{isZh ? '为什么这个指标在商业地产中至关重要？' : 'Why This Metric Matters in CRE Underwriting'}</span>
+            <span>{whyItMattersTitle}</span>
           </h3>
           <p className="text-xs text-slate-700 leading-relaxed">
             {item.whyItMatters}
@@ -153,7 +222,7 @@ export default async function GlossaryTermPage({ params }: PageProps) {
       {/* Mathematical Formula */}
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
         <h2 className="text-xl font-bold text-slate-900">
-          {isZh ? `${item.term} 计算公式` : `${item.term} Formula & Equation`}
+          {formulaTitle}
         </h2>
         <div className="bg-slate-900 text-emerald-400 font-mono text-sm sm:text-base p-4 rounded-xl shadow-inner">
           <code>{item.formula}</code>
@@ -177,7 +246,7 @@ export default async function GlossaryTermPage({ params }: PageProps) {
             {item.example.calculation}
           </div>
           <p className="text-xs sm:text-sm text-slate-800 font-medium">
-            <strong>{isZh ? '分析解读：' : 'Analysis: '}</strong>{item.example.interpretation}
+            <strong>{analysisPrefix}</strong>{item.example.interpretation}
           </p>
         </div>
       </section>
@@ -186,7 +255,7 @@ export default async function GlossaryTermPage({ params }: PageProps) {
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
         <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
           <AlertCircle className="w-5 h-5 text-emerald-600" />
-          {isZh ? `${item.term} 行业经验法则与参考基准` : `${item.term} Industry Rules of Thumb & Benchmarks`}
+          {benchmarksTitle}
         </h2>
         <ul className="space-y-2 text-xs sm:text-sm text-slate-700 pl-5 list-disc leading-relaxed">
           {item.benchmarks.map((b, idx) => (
@@ -199,7 +268,7 @@ export default async function GlossaryTermPage({ params }: PageProps) {
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
         <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
           <HelpCircle className="w-5 h-5 text-emerald-600" />
-          {isZh ? '常见问题与专家解答 (FAQs)' : 'Frequently Asked Questions (FAQs)'}
+          {faqsTitle}
         </h2>
         <div className="space-y-6 divide-y divide-slate-100">
           {item.faqs.map((faq, idx) => (
@@ -214,7 +283,7 @@ export default async function GlossaryTermPage({ params }: PageProps) {
       {/* Explore Other Terms */}
       <section className="bg-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4">
         <h2 className="text-lg font-bold text-white">
-          {isZh ? '浏览其他商业地产核心词汇' : 'Explore Other CRE Glossary Terms'}
+          {exploreOtherTitle}
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {otherTerms.map((s) => {

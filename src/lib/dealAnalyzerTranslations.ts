@@ -351,7 +351,7 @@ export const dealAnalyzerTranslations: Record<string, DealAnalyzerTranslations> 
     repaymentMethod: 'Método de Pago:',
     equalInstallment: 'Cuota Constante (P&I Fijo)',
     equalPrincipal: 'Amortización Constante (Capital Fijo)',
-    ruleEvaluation: 'Evaluación de Regras Ilustrativas',
+    ruleEvaluation: 'Evaluación de Reglas Ilustrativas',
     badgeStable: 'Calificación Ilustrativa: Colchón Estable',
     badgeNear: 'Calificación Ilustrativa: Cerca del Umbral',
     badgeElevated: 'Calificación Ilustrativa: Riesgo Elevado',

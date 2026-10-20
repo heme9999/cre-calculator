@@ -85,7 +85,13 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
       slug: 'cap-rate',
       badge: isZh ? '核心估值' : isEs ? 'Valoración Clave' : isPt ? 'Avaliação Principal' : 'Valuation Benchmark',
       title: isZh ? 'Cap Rate (资本化率) 计算器' : isEs ? 'Calculadora de Cap Rate' : isPt ? 'Calculadora de Cap Rate' : 'Cap Rate Calculator',
-      formula: 'Cap Rate = NOI ÷ Purchase Price',
+      formula: isZh
+        ? 'Cap Rate = NOI ÷ 购买价格'
+        : isEs
+        ? 'Cap Rate = NOI ÷ Precio de Compra'
+        : isPt
+        ? 'Cap Rate = NOI ÷ Preço de Compra'
+        : 'Cap Rate = NOI ÷ Purchase Price',
       desc: isZh
         ? '衡量无杠杆全款收购时的年度净收益率，用于横向对比不同城市与物业类型的资产估值水平。'
         : isEs
@@ -99,7 +105,13 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
       slug: 'noi',
       badge: isZh ? '收益核算' : isEs ? 'Rendimiento Operativo' : isPt ? 'Receita Operacional' : 'Income Statement',
       title: isZh ? 'NOI (净营业收入) 计算器' : isEs ? 'Calculadora de NOI' : isPt ? 'Calculadora de NOI' : 'Net Operating Income (NOI) Calculator',
-      formula: 'NOI = Effective Gross Income − Operating Expenses',
+      formula: isZh
+        ? 'NOI = 有效毛收入 (EGI) − 运营支出 (OpEx)'
+        : isEs
+        ? 'NOI = Ingreso Bruto Efectivo − Gastos Operativos'
+        : isPt
+        ? 'NOI = Receita Bruta Efetiva − Despesas Operacionais'
+        : 'NOI = Effective Gross Income − Operating Expenses',
       desc: isZh
         ? '细分总毛收入、空置损失与各项运营开支（房产税、保险、维修、管理费），精确还原物业实际净收益。'
         : isEs
@@ -113,7 +125,13 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
       slug: 'dscr',
       badge: isZh ? '信贷风控' : isEs ? 'Riesgo de Deuda' : isPt ? 'Risco de Financiamento' : 'Lender Underwriting',
       title: isZh ? 'DSCR (偿债覆盖率) 计算器' : isEs ? 'Calculadora de DSCR' : isPt ? 'Calculadora de DSCR' : 'DSCR Calculator',
-      formula: 'DSCR = NOI ÷ Annual Debt Service',
+      formula: isZh
+        ? 'DSCR = NOI ÷ 年房贷还款额 (ADS)'
+        : isEs
+        ? 'DSCR = NOI ÷ Servicio Anual de Deuda'
+        : isPt
+        ? 'DSCR = NOI ÷ Serviço Anual da Dívida'
+        : 'DSCR = NOI ÷ Annual Debt Service',
       desc: isZh
         ? '商业银行衡量借款人违约风险的黄金指标。评估经营现金流覆盖年度房贷本息的倍数与安全缓冲垫。'
         : isEs
@@ -127,7 +145,13 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
       slug: 'cash-on-cash',
       badge: isZh ? '杠杆回报' : isEs ? 'Rendimiento de Capital' : isPt ? 'Retorno de Capital' : 'Equity Return',
       title: isZh ? 'Cash-on-Cash (现金回报率) 计算器' : isEs ? 'Calculadora de Retorno Cash-on-Cash' : isPt ? 'Calculadora de Retorno Cash-on-Cash' : 'Cash-on-Cash Return Calculator',
-      formula: 'CoC = Annual Pre-Tax Cash Flow ÷ Total Cash Invested',
+      formula: isZh
+        ? 'CoC = 年税前净现金流 ÷ 实际自付总现金'
+        : isEs
+        ? 'CoC = Flujo de Caja Anual Antes de Impuestos ÷ Capital Invertido'
+        : isPt
+        ? 'CoC = Fluxo de Caixa Anual Antes de Impostos ÷ Capital Investido'
+        : 'CoC = Annual Pre-Tax Cash Flow ÷ Total Cash Invested',
       desc: isZh
         ? '评估实际掏出自付现金（首付+过户费+改造）的年度资金使用效率，直观呈现正向或负向杠杆效应。'
         : isEs
@@ -141,7 +165,13 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
       slug: 'loan-payment',
       badge: isZh ? '房贷测算' : isEs ? 'Financiamiento' : isPt ? 'Financiamento' : 'Debt Structuring',
       title: isZh ? '商业贷款月供与气球尾款计算器' : isEs ? 'Calculadora de Préstamo Comercial y Balloon' : isPt ? 'Calculadora de Financiamento Comercial' : 'Commercial Loan Payment Calculator',
-      formula: 'P&I Amortization & Balloon Payoff Modeling',
+      formula: isZh
+        ? '本息摊销与到期气球尾款测算'
+        : isEs
+        ? 'Amortización de Capital e Intereses y Pago Balloon'
+        : isPt
+        ? 'Amortização de Juros e Principal e Saldo Residual Balloon'
+        : 'P&I Amortization & Balloon Payoff Modeling',
       desc: isZh
         ? '支持等额本息与等额本金双模式，提供前12个月摊销明细表，精准计算到期时的气球尾款 (Balloon Balance)。'
         : isEs
@@ -155,7 +185,13 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
       slug: '1031-exchange',
       badge: isZh ? '税务筹划' : isEs ? 'Diferimiento Fiscal' : isPt ? 'Diferimento Fiscal' : 'Tax Strategy',
       title: isZh ? '1031 Exchange 延税计算器' : isEs ? 'Calculadora de Intercambio 1031' : isPt ? 'Calculadora de Troca 1031' : '1031 Exchange Tax Calculator',
-      formula: 'Capital Gains Tax Deferral & Reinvestment Target',
+      formula: isZh
+        ? '资本利得延税额与再投资门槛测算'
+        : isEs
+        ? 'Aplazamiento de Ganancias de Capital y Reinversión'
+        : isPt
+        ? 'Diferimento de Ganho de Capital e Reinvestimento'
+        : 'Capital Gains Tax Deferral & Reinvestment Target',
       desc: isZh
         ? '测算美国商业地产出售时的资本利得税延税额度，内置 IRS 法定 45 天识别期与 180 天完成期全流程指引。'
         : isEs
@@ -169,7 +205,13 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
       slug: 'lease-vs-buy',
       badge: isZh ? '决策对比' : isEs ? 'Decisión Inmobiliaria' : isPt ? 'Decisão Imobiliária' : 'Strategic Comparison',
       title: isZh ? 'Lease vs Buy (租买对比) 计算器' : isEs ? 'Calculadora de Alquilar vs Comprar' : isPt ? 'Calculadora de Alugar vs Comprar' : 'Lease vs Buy Calculator',
-      formula: 'Cumulative Lease Cost vs Net Purchase Cost',
+      formula: isZh
+        ? '累计租金支出 vs 自购资产持有净成本'
+        : isEs
+        ? 'Costo Acumulado de Alquiler vs Costo Neto de Compra'
+        : isPt
+        ? 'Custo Acumulado de Locação vs Custo Líquido de Compra'
+        : 'Cumulative Lease Cost vs Net Purchase Cost',
       desc: isZh
         ? '全面对比5-15年持有期内租金支出与自购净成本，扣除资产升值变现与贷款本金偿付积累的净资产。'
         : isEs
@@ -183,7 +225,13 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
       slug: 'break-even-ratio',
       badge: isZh ? '安全边际' : isEs ? 'Margen de Seguridad' : isPt ? 'Margem de Segurança' : 'Risk Threshold',
       title: isZh ? '收支平衡点 (BER & BEO) 计算器' : isEs ? 'Calculadora de Punto de Equilibrio' : isPt ? 'Calculadora de Ponto de Equilíbrio' : 'Break-Even Ratio Calculator',
-      formula: 'BER = (OpEx + ADS) ÷ EGI | BEO = (OpEx + ADS) ÷ GPI',
+      formula: isZh
+        ? 'BER = (运营支出 + ADS) ÷ EGI | BEO = (运营支出 + ADS) ÷ GPI'
+        : isEs
+        ? 'BER = (OpEx + ADS) ÷ EGI | BEO = (OpEx + ADS) ÷ GPI'
+        : isPt
+        ? 'BER = (OpEx + ADS) ÷ EGI | BEO = (OpEx + ADS) ÷ GPI'
+        : 'BER = (OpEx + ADS) ÷ EGI | BEO = (OpEx + ADS) ÷ GPI',
       desc: isZh
         ? '计算覆盖运营费用与房贷偿付所需的最低收支平衡比率与保本出租率，防范现金流枯竭风险。'
         : isEs

@@ -20,14 +20,30 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const resolvedParams = await params;
   const locale = resolveLocale(resolvedParams.locale);
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
+
+  const title = isZh
+    ? '商业地产 (CRE) 核心财务指标词汇表 | CRE 词典'
+    : isEs
+    ? 'Glosario Financiero de Bienes Raíces Comerciales (CRE) | Fórmulas y Siglas'
+    : isPt
+    ? 'Glossário Financeiro de Imóveis Comerciais (CRE) | Fórmulas e Siglas'
+    : 'Commercial Real Estate (CRE) Financial Glossary & Acronyms';
+
+  const description = isZh
+    ? '详解美国商业地产核心财务缩写与指标：NOI、Cap Rate、DSCR、BER、BEO、IRR、GRM。包含公式推导与在线计算工具。'
+    : isEs
+    ? 'Glosario completo de análisis en bienes raíces comerciales: definiciones, fórmulas matemáticas y parámetros para NOI, Cap Rate, DSCR, BER, BEO, IRR y GRM.'
+    : isPt
+    ? 'Glossário completo de análise de imóveis comerciais: definições, fórmulas matemáticas e parâmetros para NOI, Cap Rate, DSCR, BER, BEO, IRR e GRM.'
+    : 'Comprehensive commercial real estate underwriting glossary. Definitions, mathematical formulas, and benchmark rules for NOI, Cap Rate, DSCR, BER, BEO, IRR, and GRM.';
 
   return buildSeoMetadata({
     path: 'glossary',
     locale,
-    title: isZh ? '商业地产 (CRE) 核心财务指标词汇表 | CRE 词典' : 'Commercial Real Estate (CRE) Financial Glossary & Acronyms',
-    description: isZh
-      ? '详解美国商业地产核心财务缩写与指标：NOI、Cap Rate、DSCR、BER、BEO、IRR、GRM。包含公式推导与在线计算工具。'
-      : 'Comprehensive commercial real estate underwriting glossary. Definitions, mathematical formulas, and benchmark rules for NOI, Cap Rate, DSCR, BER, BEO, IRR, and GRM.',
+    title,
+    description,
     noindex: locale !== 'en',
   });
 }
@@ -36,12 +52,56 @@ export default async function GlossaryHubPage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolveLocale(resolvedParams.locale);
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
   const termsMap = glossaryContent[locale] || glossaryContent.en;
 
+  const homeLabel = isZh ? '首页' : isEs ? 'Inicio' : isPt ? 'Início' : 'Home';
+  const glossaryLabel = isZh ? 'CRE 词汇表' : isEs ? 'Glosario' : isPt ? 'Glossário' : 'Glossary';
+
   const breadcrumbSchema = getBreadcrumbJsonLd([
-    { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
-    { name: isZh ? 'CRE 词汇表' : 'CRE Glossary', url: `${SITE_URL}/${locale}/glossary/` },
+    { name: homeLabel, url: `${SITE_URL}/${locale}/` },
+    { name: glossaryLabel, url: `${SITE_URL}/${locale}/glossary/` },
   ]);
+
+  const dictionaryBadge = isZh
+    ? '商业地产承销指标全书'
+    : isEs
+    ? 'Diccionario de Evaluación Inmobiliaria CRE'
+    : isPt
+    ? 'Dicionário de Análise Imobiliária CRE'
+    : 'CRE Underwriting Dictionary';
+
+  const h1Title = isZh
+    ? '商业地产 (CRE) 核心财务指标与缩写词汇表'
+    : isEs
+    ? 'Glosario de Términos Financieros y Fórmulas de Bienes Raíces Comerciales'
+    : isPt
+    ? 'Glossário de Termos Financeiros e Fórmulas de Imóveis Comerciais'
+    : 'Commercial Real Estate Financial Glossary & Formulas';
+
+  const pageDescription = isZh
+    ? '精准掌握美国商业地产尽调与银行审贷中最关键的财务指标。每个词汇均附带标准定义、计算公式、测算案例以及对应的在线计算工具。'
+    : isEs
+    ? 'Domine los acrónimos, fórmulas matemáticas y criterios bancarios esenciales en bienes raíces comerciales. Cada entrada incluye definiciones, casos de estudio y calculadoras interactivas.'
+    : isPt
+    ? 'Domine as siglas, fórmulas matemáticas e critérios bancários essenciais do setor imobiliário comercial. Cada termo traz definições, exemplos práticos e calculadoras interativas.'
+    : 'Master the fundamental underwriting acronyms, formulas, and bank criteria across commercial real estate. Each entry includes mathematical formulas, worked examples, and direct links to interactive calculators.';
+
+  const coreMetricBadge = isZh ? '核心指标' : isEs ? 'Métrica Clave' : isPt ? 'Métrica Principal' : 'Core Metric';
+  const readGuideText = isZh ? '查看详细定义与案例' : isEs ? 'Ver Definición y Guía Completa' : isPt ? 'Ver Definição e Guia Completo' : 'Read Full Definition & Guide';
+  const calculateText = isZh ? '去计算' : isEs ? 'Calcular' : isPt ? 'Calcular' : 'Calculate';
+
+  const bannerBadge = isZh ? '一体化商业地产尽调' : isEs ? 'Suite Integral de Análisis Financiero' : isPt ? 'Suíte Integrada de Análise Imobiliária' : 'All-in-One Underwriting Suite';
+  const bannerTitle = isZh ? '不想逐个指标手动计算？' : isEs ? '¿Necesita calcular todas estas métricas juntas?' : isPt ? 'Precisa calcular todas essas métricas juntas?' : 'Need All These Core Metrics Calculated Together?';
+  const bannerDesc = isZh
+    ? '使用 Deal Analyzer 综合工具，只需输入一次交易参数，自动算出 Cap Rate、NOI、DSCR、BER 及压力情景并支持导出 PDF 报告。'
+    : isEs
+    ? 'Utilice la herramienta Deal Analyzer para modelar Cap Rate, NOI, DSCR, BER y BEO en un análisis financiero unificado.'
+    : isPt
+    ? 'Use a ferramenta Deal Analyzer para projetar Cap Rate, NOI, DSCR, BER e BEO em um modelo financeiro unificado.'
+    : 'Use the Deal Analyzer tool to compute Cap Rate, NOI, DSCR, BER, and BEO in a unified institutional model.';
+  const bannerCta = isZh ? '打开 Deal Analyzer' : isEs ? 'Abrir Deal Analyzer' : isPt ? 'Abrir Deal Analyzer' : 'Launch Deal Analyzer';
 
   return (
     <article className="space-y-10 py-4 max-w-4xl mx-auto">
@@ -49,23 +109,21 @@ export default async function GlossaryHubPage({ params }: PageProps) {
 
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
-          <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
+          <Link href={`/${locale}/`} className="hover:text-emerald-600">{homeLabel}</Link>
           <span>/</span>
-          <span className="text-slate-900 font-semibold">{isZh ? 'CRE 词汇表' : 'Glossary'}</span>
+          <span className="text-slate-900 font-semibold">{glossaryLabel}</span>
         </nav>
 
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300">
           <BookMarked className="w-3.5 h-3.5" />
-          <span>{isZh ? '商业地产承销指标全书' : 'CRE Underwriting Dictionary'}</span>
+          <span>{dictionaryBadge}</span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-          {isZh ? '商业地产 (CRE) 核心财务指标与缩写词汇表' : 'Commercial Real Estate Financial Glossary & Formulas'}
+          {h1Title}
         </h1>
         <p className="text-base text-slate-600 leading-relaxed">
-          {isZh
-            ? '精准掌握美国商业地产尽调与银行审贷中最关键的财务指标。每个词汇均附带标准定义、计算公式、测算案例以及对应的在线计算工具。'
-            : 'Master the fundamental underwriting acronyms, formulas, and bank criteria across commercial real estate. Each entry includes mathematical formulas, worked examples, and direct links to interactive calculators.'}
+          {pageDescription}
         </p>
       </header>
 
@@ -86,7 +144,7 @@ export default async function GlossaryHubPage({ params }: PageProps) {
                       {item.term}
                     </span>
                     <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600">
-                      {isZh ? '核心指标' : 'Core Metric'}
+                      {coreMetricBadge}
                     </span>
                   </div>
                   <h2 className="text-sm font-bold text-slate-900">
@@ -105,7 +163,7 @@ export default async function GlossaryHubPage({ params }: PageProps) {
                     href={`/${locale}/glossary/${slug}/`}
                     className="text-xs font-bold text-emerald-700 hover:text-emerald-800 inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
                   >
-                    <span>{isZh ? '查看详细定义与案例' : 'Read Full Definition & Guide'}</span>
+                    <span>{readGuideText}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
 
@@ -115,7 +173,7 @@ export default async function GlossaryHubPage({ params }: PageProps) {
                     title={item.calculatorCta.anchorText}
                   >
                     <Calculator className="w-3 h-3 text-emerald-600" />
-                    <span>{isZh ? '去计算' : 'Calculate'}</span>
+                    <span>{calculateText}</span>
                   </Link>
                 </div>
               </div>
@@ -129,22 +187,20 @@ export default async function GlossaryHubPage({ params }: PageProps) {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-              {isZh ? '一体化商业地产尽调' : 'All-in-One Underwriting Suite'}
+              {bannerBadge}
             </span>
             <h3 className="text-xl font-bold text-white">
-              {isZh ? '不想逐个指标手动计算？' : 'Need All These Core Metrics Calculated Together?'}
+              {bannerTitle}
             </h3>
             <p className="text-xs text-slate-300 leading-relaxed">
-              {isZh
-                ? '使用 Deal Analyzer 综合工具，只需输入一次交易参数，自动算出 Cap Rate、NOI、DSCR、BER 及压力情景并支持导出 PDF 报告。'
-                : 'Use the Deal Analyzer tool to compute Cap Rate, NOI, DSCR, BER, and BEO in a unified institutional model.'}
+              {bannerDesc}
             </p>
           </div>
           <Link
             href={`/${locale}/tools/deal-analyzer/`}
             className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
           >
-            <span>{isZh ? '打开 Deal Analyzer' : 'Launch Deal Analyzer'}</span>
+            <span>{bannerCta}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
