@@ -93,8 +93,8 @@ export default function NotFound() {
 
           <div className="text-xs text-slate-500">
             Need assistance? Contact us at{' '}
-            <a href="mailto:support@crecalculators.com" className="text-emerald-600 underline hover:text-emerald-500">
-              support@crecalculators.com
+            <a href="mailto:mayday0064@gmail.com" className="text-emerald-600 underline hover:text-emerald-500">
+              mayday0064@gmail.com
             </a>
           </div>
         </main>

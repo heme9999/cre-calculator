@@ -111,10 +111,10 @@ export default async function ContactPage({ params }: PageProps) {
             <p className="text-xs text-slate-500 mt-1">{t.directEmailSub}</p>
           </div>
           <a
-            href="mailto:support@crecalculators.com"
+            href="mailto:mayday0064@gmail.com"
             className="inline-block text-emerald-600 font-bold text-sm hover:underline"
           >
-            support@crecalculators.com
+            mayday0064@gmail.com
           </a>
         </div>
 
@@ -127,10 +127,10 @@ export default async function ContactPage({ params }: PageProps) {
             <p className="text-xs text-slate-500 mt-1">{t.partnershipSub}</p>
           </div>
           <a
-            href="mailto:contact@crecalculators.com"
+            href="mailto:mayday0064@gmail.com"
             className="inline-block text-emerald-600 font-bold text-sm hover:underline"
           >
-            contact@crecalculators.com
+            mayday0064@gmail.com
           </a>
         </div>
       </div>
