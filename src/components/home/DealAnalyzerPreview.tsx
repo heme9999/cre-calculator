@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { calculateDealAnalysis, DEFAULT_DEAL_INPUT } from '@/lib/dealAnalyzerCalculations';
 import { Building2, ArrowRight, ShieldCheck, Zap, AlertTriangle, Sparkles } from 'lucide-react';
+import { getUiTranslations } from '@/lib/translations';
 
 interface Props {
   locale: string;
 }
 
 export function DealAnalyzerPreview({ locale }: Props) {
-  const isZh = locale === 'zh';
+  const t = getUiTranslations(locale);
   const [activeScenario, setActiveScenario] = useState<'base' | 'stress'>('base');
 
   // Baseline sample deal: 24-Unit Multifamily
@@ -31,19 +32,19 @@ export function DealAnalyzerPreview({ locale }: Props) {
           </div>
           <div>
             <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-              <span>{isZh ? 'Deal Analyzer 预览' : 'Deal Analyzer Preview'}</span>
+              <span>{t.preview.title}</span>
               <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 font-semibold">
-                Sample
+                {t.preview.sampleBadge}
               </span>
             </div>
             <p className="text-[11px] text-slate-400">
-              {isZh ? '示例资产：24 单元多户公寓' : 'Sample: 24-Unit Multifamily'}
+              {t.preview.sampleSubtitle}
             </p>
           </div>
         </div>
 
         {/* Scenario Toggle */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-xl text-[11px] font-semibold" role="group" aria-label={isZh ? '情景切换' : 'Scenario switcher'}>
+        <div className="flex items-center bg-slate-100 p-1 rounded-xl text-[11px] font-semibold" role="group" aria-label={t.preview.scenarioAria}>
           <button
             type="button"
             aria-pressed={activeScenario === 'base'}
@@ -54,7 +55,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
                 : 'text-slate-500 hover:text-slate-900'
             }`}
           >
-            {isZh ? '基准情景' : 'Base Case'}
+            {t.preview.baseCaseBtn}
           </button>
           <button
             type="button"
@@ -67,7 +68,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
             }`}
           >
             <Zap className="w-3 h-3" aria-hidden="true" />
-            <span>{isZh ? '压力情景' : 'Stress Case'}</span>
+            <span>{t.preview.stressCaseBtn}</span>
           </button>
         </div>
       </div>
@@ -75,13 +76,9 @@ export function DealAnalyzerPreview({ locale }: Props) {
       {/* Stress testing assumption note */}
       <div className="mb-3 text-[11px] text-slate-600 bg-slate-50/80 px-3 py-1.5 rounded-xl border border-slate-200/60 leading-relaxed">
         <span className="font-semibold text-slate-800">
-          {activeScenario === 'base'
-            ? (isZh ? '基准假设：' : 'Base Case: ')
-            : (isZh ? '压力情景：' : 'Stress Case: ')}
+          {activeScenario === 'base' ? `${t.preview.baseCaseBtn}: ` : `${t.preview.stressCaseBtn}: `}
         </span>
-        {activeScenario === 'base'
-          ? (isZh ? '6.5% 利率 · 25 年摊销 · 5% 空置率' : '6.5% interest · 25-year amortization · 5% vacancy')
-          : (isZh ? '空置率增加5个百分点，贷款利率增加100个基点 (7.5% 利率 / 10% 空置率)' : '+5 percentage points vacancy and +100 bps interest rate (7.5% interest · 10% vacancy)')}
+        {activeScenario === 'base' ? t.preview.baseAssumption : t.preview.stressAssumption}
       </div>
 
       {/* Health Evaluation Banner */}
@@ -96,7 +93,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
       >
         <div className="flex items-center justify-between text-xs font-bold mb-1">
           <span className="text-[11px] uppercase tracking-wider text-slate-500 font-semibold">
-            {isZh ? '全案示例规则诊断' : 'Illustrative Rule Evaluation'}
+            {t.preview.diagnosticLabel}
           </span>
           <span
             className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold shadow-xs ${
@@ -122,14 +119,14 @@ export function DealAnalyzerPreview({ locale }: Props) {
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 mb-5">
         <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/70 space-y-0.5">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            {isZh ? '购买价格' : 'Purchase Price'}
+            {t.preview.purchasePrice}
           </span>
           <span className="tabular-nums text-sm font-black text-slate-900">{formatCurrency(sampleInput.purchasePrice)}</span>
         </div>
 
         <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/70 space-y-0.5">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            {isZh ? '净营业收入 NOI' : 'Annual NOI'}
+            {t.preview.annualNoi}
           </span>
           <span className="tabular-nums text-sm font-black text-slate-900"><span data-testid="base-noi">{formatCurrency(current.noi)}</span></span>
         </div>
@@ -150,7 +147,7 @@ export function DealAnalyzerPreview({ locale }: Props) {
 
         <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/70 space-y-0.5">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            {isZh ? 'DSCR 偿债覆盖率' : 'DSCR (Debt Coverage)'}
+            {t.preview.dscrLabel}
           </span>
           <span
             className={`tabular-nums text-sm font-black ${
@@ -160,20 +157,20 @@ export function DealAnalyzerPreview({ locale }: Props) {
             <span data-testid="base-dscr">{current.dscr.toFixed(2)}x</span>
           </span>
           <span className="text-[10px] text-slate-500 block leading-tight">
-            {isZh ? 'NOI ÷ 年房贷本息' : 'NOI ÷ Annual Debt'}
+            {t.preview.dscrFormula} {/* NOI ÷ Annual Debt */}
           </span>
         </div>
 
         <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/70 space-y-0.5">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-              {isZh ? '收支平衡比 BER' : 'Break-Even Ratio (BER)'}
+              {t.preview.berLabel} {/* Break-Even Ratio (BER) */}
             </span>
             <span className="tabular-nums text-sm font-black text-slate-900"><span data-testid="base-ber">{formatPercent(current.breakEvenRatio)}</span></span>
           </div>
           <div className="flex justify-between items-center border-t border-slate-200/50 mt-1 pt-1">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-              {isZh ? '盈亏入住率 BEO' : 'Occupancy (BEO)'}
+              {t.preview.beoLabel}
             </span>
             <span className="tabular-nums text-xs font-bold text-emerald-700"><span data-testid="base-beo">{formatPercent(current.breakEvenOccupancy)}</span></span>
           </div>
@@ -183,20 +180,18 @@ export function DealAnalyzerPreview({ locale }: Props) {
       {/* Direct, Accessible CTA Link Button */}
       <Link
         href={`/${locale}/tools/deal-analyzer/`}
-        aria-label={isZh ? '打开完整 Deal Analyzer 工具' : 'Launch Full Deal Analyzer Suite'}
+        aria-label={t.preview.ctaAria}
         className="active-press w-full min-h-[44px] inline-flex items-center justify-between px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-[background-color,transform] duration-150 shadow-md focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none group/btn cursor-pointer"
       >
         <span className="flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-emerald-400 group-hover/btn:text-white" aria-hidden="true" />
-          <span>{isZh ? '进入 Deal Analyzer 完整实测' : 'Launch Full Deal Analyzer'}</span>
+          <span>{t.preview.ctaText}</span>
         </span>
         <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" aria-hidden="true" />
       </Link>
 
       <figcaption className="sr-only">
-        {isZh
-          ? 'Deal Analyzer 商业地产综合尽调工具预览：通过统一计算核心呈现基准情景与压力情景对比（压力情景：空置率增加5个百分点，利率增加100个基点）。'
-          : 'Deal Analyzer preview displaying unified base and stress case scenario modeling with +5 percentage points vacancy and +100 bps interest rate.'}
+        {t.preview.figcaption}
       </figcaption>
     </figure>
   );

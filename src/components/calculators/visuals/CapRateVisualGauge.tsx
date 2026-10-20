@@ -13,6 +13,8 @@ interface Props {
 
 export function CapRateVisualGauge({ capRate, purchasePrice, noi, locale }: Props) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
 
   // Validation
   const isValid = purchasePrice > 0 && isFinite(capRate) && !isNaN(capRate);
@@ -25,17 +27,17 @@ export function CapRateVisualGauge({ capRate, purchasePrice, noi, locale }: Prop
 
   // Neutral indicative labels
   const getIndicativeTier = (val: number) => {
-    if (val < 0) return isZh ? '净营业收入为负' : 'Negative NOI';
-    if (val < 4.5) return isZh ? '较低参考收益率' : 'Lower Indicative Yield (<4.5%)';
-    if (val <= 7.0) return isZh ? '中等参考收益率' : 'Mid-Range Indicative Yield (4.5–7%)';
-    if (val <= 9.5) return isZh ? '较高参考收益率' : 'Higher Indicative Yield (7–9.5%)';
-    return isZh ? '很高参考收益率' : 'Very High Indicative Yield (>9.5%)';
+    if (val < 0) return isZh ? '净营业收入为负' : isEs ? 'NOI Negativo' : isPt ? 'NOI Negativo' : 'Negative NOI';
+    if (val < 4.5) return isZh ? '较低参考收益率' : isEs ? 'Rendimiento Indicativo Bajo (<4.5%)' : isPt ? 'Rendimento Indicativo Baixo (<4,5%)' : 'Lower Indicative Yield (<4.5%)';
+    if (val <= 7.0) return isZh ? '中等参考收益率' : isEs ? 'Rendimiento Indicativo Medio (4.5–7%)' : isPt ? 'Rendimento Indicativo Médio (4,5–7%)' : 'Mid-Range Indicative Yield (4.5–7%)';
+    if (val <= 9.5) return isZh ? '较高参考收益率' : isEs ? 'Rendimiento Indicativo Alto (7–9.5%)' : isPt ? 'Rendimento Indicativo Alto (7–9,5%)' : 'Higher Indicative Yield (7–9.5%)';
+    return isZh ? '很高参考收益率' : isEs ? 'Rendimiento Indicativo Muy Alto (>9.5%)' : isPt ? 'Rendimento Indicativo Muito Alto (>9,5%)' : 'Very High Indicative Yield (>9.5%)';
   };
 
   const getPointerLabel = () => {
     if (!isValid) return '';
-    if (isNegative) return `${formatPercent(capRate)} — ${isZh ? '净收益为负' : 'negative NOI'}`;
-    if (isAboveScale) return `${formatPercent(capRate)} — ${isZh ? '超出示意区间' : 'above illustrated range'}`;
+    if (isNegative) return `${formatPercent(capRate)} — ${isZh ? '净收益为负' : isEs ? 'NOI negativo' : isPt ? 'NOI negativo' : 'negative NOI'}`;
+    if (isAboveScale) return `${formatPercent(capRate)} — ${isZh ? '超出示意区间' : isEs ? 'fuera de escala' : isPt ? 'acima da escala' : 'above illustrated range'}`;
     return formatPercent(capRate);
   };
 
@@ -45,21 +47,21 @@ export function CapRateVisualGauge({ capRate, purchasePrice, noi, locale }: Prop
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
         <div>
           <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-            {isZh ? '资本化率参考标尺' : 'Cap Rate Benchmark Scale'}
+            {isZh ? '资本化率参考标尺' : isEs ? 'Escala de Referencia de Cap Rate' : isPt ? 'Escala de Referência de Cap Rate' : 'Cap Rate Benchmark Scale'}
           </span>
           <div className="flex items-baseline gap-2 mt-0.5">
             <span className={`text-2xl font-black ${!isValid ? 'text-slate-400' : isNegative ? 'text-rose-600' : 'text-emerald-600'}`}>
               {isValid ? formatPercent(capRate) : '—'}
             </span>
             <span className="text-xs font-bold text-slate-700">
-              • {isValid ? getIndicativeTier(capRate) : (isZh ? '等待有效输入' : 'Awaiting valid inputs')}
+              • {isValid ? getIndicativeTier(capRate) : (isZh ? '等待有效输入' : isEs ? 'Esperando datos válidos' : isPt ? 'Aguardando dados válidos' : 'Awaiting valid inputs')}
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-3 text-xs text-slate-600 bg-white px-3 py-1.5 rounded-xl border border-slate-200">
           <div>
-            <span className="text-slate-400 block text-[10px] uppercase font-bold">{isZh ? '价格' : 'Price'}</span>
+            <span className="text-slate-400 block text-[10px] uppercase font-bold">{isZh ? '价格' : isEs ? 'Precio' : isPt ? 'Preço' : 'Price'}</span>
             <span className="font-bold text-slate-900">{purchasePrice > 0 ? formatCurrency(purchasePrice) : '—'}</span>
           </div>
           <div className="border-l border-slate-200 pl-3">
@@ -135,7 +137,15 @@ export function CapRateVisualGauge({ capRate, purchasePrice, noi, locale }: Prop
       ) : (
         <div className="bg-slate-100 border border-slate-200/80 rounded-xl p-3.5 text-xs text-slate-500 flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
-          <span>{isZh ? '请输入有效的购买价格与年净营业收入以查看参考标尺。' : 'Enter valid purchase price and NOI to view the illustrative scale.'}</span>
+          <span>
+            {isZh
+              ? '请输入有效的购买价格与年净营业收入以查看参考标尺。'
+              : isEs
+              ? 'Ingrese un precio de compra y un NOI válidos para ver la escala ilustrativa.'
+              : isPt
+              ? 'Insira um preço de compra e um NOI válidos para visualizar a escala demonstrativa.'
+              : 'Enter valid purchase price and NOI to view the illustrative scale.'}
+          </span>
         </div>
       )}
 
@@ -145,6 +155,10 @@ export function CapRateVisualGauge({ capRate, purchasePrice, noi, locale }: Prop
         <span>
           {isZh
             ? '以上区间仅用于示意。资本化率会因物业类型、位置、租约结构、物业状况、交易质量及市场日期而显著不同，不构成统一的投资分类或投资建议。'
+            : isEs
+            ? 'Rango meramente ilustrativo. Las tasas de capitalización varían sustancialmente según el tipo de propiedad, ubicación, estructura de contratos, calidad del activo y ciclo de mercado.'
+            : isPt
+            ? 'Faixa meramente ilustrativa. As taxas de capitalização variam substancialmente por classe de ativo, localização, estrutura dos contratos e ciclo imobiliário.'
             : 'Illustrative context only. Cap rates vary materially by property type, location, lease structure, condition, transaction quality and market date. These ranges are not universal investment classifications or investment advice.'}
         </span>
       </figcaption>

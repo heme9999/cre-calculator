@@ -14,6 +14,8 @@ interface Props {
 
 export function PropertyCapRatePageTemplate({ content, locale }: Props) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
 
   const fullUrl = `${SITE_URL}/${locale}/calculators/${content.slug}/`;
 
@@ -25,8 +27,17 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
   );
 
   const breadcrumbSchema = getBreadcrumbJsonLd([
-    { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
-    { name: isZh ? 'Cap Rate 计算器' : 'Cap Rate Calculator', url: `${SITE_URL}/${locale}/calculators/cap-rate/` },
+    { name: isZh ? '首页' : isEs ? 'Inicio' : isPt ? 'Início' : 'Home', url: `${SITE_URL}/${locale}/` },
+    {
+      name: isZh
+        ? 'Cap Rate 计算器'
+        : isEs
+        ? 'Calculadora de Cap Rate'
+        : isPt
+        ? 'Calculadora de Cap Rate'
+        : 'Cap Rate Calculator',
+      url: `${SITE_URL}/${locale}/calculators/cap-rate/`,
+    },
     { name: content.h1, url: fullUrl },
   ]);
 
@@ -39,10 +50,12 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
       {/* Page Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2 flex-wrap">
-          <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
+          <Link href={`/${locale}/`} className="hover:text-emerald-600">
+            {isZh ? '首页' : isEs ? 'Inicio' : isPt ? 'Início' : 'Home'}
+          </Link>
           <span>/</span>
           <Link href={`/${locale}/calculators/cap-rate/`} className="hover:text-emerald-600">
-            {isZh ? 'Cap Rate 计算器' : 'Cap Rate'}
+            {isZh ? 'Cap Rate 计算器' : isEs ? 'Calculadora de Cap Rate' : isPt ? 'Calculadora de Cap Rate' : 'Cap Rate'}
           </Link>
           <span>/</span>
           <span className="text-slate-900 font-semibold">{content.propertyTypeName}</span>
@@ -54,7 +67,14 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
             <span>{content.propertyTypeName}</span>
           </span>
           <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-            {isZh ? '2026 参考区间: ' : '2026 Target Range: '}{content.benchmarkRange}
+            {isZh
+              ? '2026 参考区间: '
+              : isEs
+              ? 'Rango Objetivo 2026: '
+              : isPt
+              ? 'Faixa Alvo 2026: '
+              : '2026 Target Range: '}
+            {content.benchmarkRange}
           </span>
         </div>
 
@@ -84,21 +104,23 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
           </p>
 
           <div className="pt-2 text-xs text-slate-500 flex flex-wrap gap-2 items-center">
-            <span className="font-semibold text-slate-700">{isZh ? '关键关联工具：' : 'Key Related Workflow:'}</span>
+            <span className="font-semibold text-slate-700">
+              {isZh ? '关键关联工具：' : isEs ? 'Herramientas Relacionadas:' : isPt ? 'Ferramentas Relacionadas:' : 'Key Related Workflow:'}
+            </span>
             <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-medium">
-              {isZh ? '通用 Cap Rate 计算器' : 'Universal Cap Rate'}
+              {isZh ? '通用 Cap Rate 计算器' : isEs ? 'Cap Rate Universal' : isPt ? 'Cap Rate Universal' : 'Universal Cap Rate'}
             </Link>
             <span>•</span>
             <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-medium">
-              {isZh ? 'NOI 计算器' : 'NOI Calculator'}
+              {isZh ? 'NOI 计算器' : isEs ? 'Calculadora de NOI' : isPt ? 'Calculadora de NOI' : 'NOI Calculator'}
             </Link>
             <span>•</span>
             <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-medium">
-              {isZh ? 'DSCR 偿债覆盖率' : 'DSCR Calculator'}
+              {isZh ? 'DSCR 偿债覆盖率' : isEs ? 'Calculadora de DSCR' : isPt ? 'Calculadora de DSCR' : 'DSCR Calculator'}
             </Link>
             <span>•</span>
             <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-medium">
-              {isZh ? 'Deal Analyzer 综合尽调' : 'Deal Analyzer'}
+              {isZh ? 'Deal Analyzer 综合尽调' : isEs ? 'Deal Analyzer' : isPt ? 'Deal Analyzer' : 'Deal Analyzer'}
             </Link>
           </div>
         </section>
@@ -124,16 +146,32 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
 
         {/* Formula */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">{isZh ? '计算公式与核心变量' : 'Formula & Mathematical Definition'}</h2>
+          <h2 className="text-xl font-bold text-slate-900">
+            {isZh ? '计算公式与核心变量' : isEs ? 'Fórmula y Definición Matemática' : isPt ? 'Fórmula e Definição Matemática' : 'Formula & Mathematical Definition'}
+          </h2>
           <div className="bg-slate-900 text-emerald-400 font-mono text-sm sm:text-base p-4 rounded-xl shadow-inner">
             <code>Cap Rate (%) = [ Net Operating Income (NOI) / Purchase Price ] × 100</code>
           </div>
           <div className="space-y-2 pt-2 text-xs sm:text-sm text-slate-600">
             <p>
-              <strong>NOI (Net Operating Income):</strong> {isZh ? '物业在扣除所有日常运营支出（地税、保险、管理、维护）后的净收益，不包含贷款本息与所得税。' : 'Gross operating revenue minus all operating expenses (property taxes, insurance, management, maintenance), before debt service and income taxes.'}
+              <strong>NOI (Net Operating Income):</strong>{' '}
+              {isZh
+                ? '物业在扣除所有日常运营支出（地税、保险、管理、维护）后的净收益，不包含贷款本息与所得税。'
+                : isEs
+                ? 'Ingreso bruto operativo menos todos los gastos operativos (impuestos, seguros, administración, mantenimiento), antes del servicio de deuda e impuestos sobre la renta.'
+                : isPt
+                ? 'Receita bruta operacional menos todas as despesas operacionais (impostos, seguros, taxa de administração, manutenção), antes do serviço da dívida e tributos.'
+                : 'Gross operating revenue minus all operating expenses (property taxes, insurance, management, maintenance), before debt service and income taxes.'}
             </p>
             <p>
-              <strong>Purchase Price / Value:</strong> {isZh ? '商业地产的实际成交总价或专业机构独立评估价值。' : 'Total acquisition cost or current independent appraised market value.'}
+              <strong>Purchase Price / Value:</strong>{' '}
+              {isZh
+                ? '商业地产的实际成交总价或专业机构独立评估价值。'
+                : isEs
+                ? 'Costo total de adquisición o valor tasado independiente de mercado.'
+                : isPt
+                ? 'Valor total de aquisição ou laudo independente de avaliação de mercado.'
+                : 'Total acquisition cost or current independent appraised market value.'}
             </p>
           </div>
         </section>
@@ -174,7 +212,7 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
           <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <HelpCircle className="w-5 h-5 text-emerald-600" />
-            {isZh ? '常见问题与专家答疑 (FAQs)' : 'Frequently Asked Questions (FAQs)'}
+            {isZh ? '常见问题与专家答疑 (FAQs)' : isEs ? 'Preguntas Frecuentes (FAQs)' : isPt ? 'Perguntas Frequentes (FAQs)' : 'Frequently Asked Questions (FAQs)'}
           </h2>
           <div className="space-y-6 divide-y divide-slate-100">
             {content.faqs.map((faq, idx) => (
@@ -191,11 +229,15 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
           <div className="space-y-1">
             <h3 className="text-base font-bold text-emerald-950 flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-emerald-600" />
-              {isZh ? '全美 Cap Rate 基准数据指南' : 'US Cap Rate Benchmarks Guide (2026)'}
+              {isZh ? '全美 Cap Rate 基准数据指南' : isEs ? 'Guía de Puntos de Referencia Cap Rate en EE.UU. (2026)' : isPt ? 'Guia de Benchmarks de Cap Rate nos EUA (2026)' : 'US Cap Rate Benchmarks Guide (2026)'}
             </h3>
             <p className="text-xs text-emerald-800 leading-relaxed">
               {isZh
                 ? '查看全美主要都市圈（一二三四级城市）与各类商业物业的典型 Cap Rate 收益率区间。'
+                : isEs
+                ? 'Explore los rangos de tasas de capitalización por tipo de activo y nivel metropolitano en el mercado estadounidense.'
+                : isPt
+                ? 'Explore as faixas de taxa de capitalização por classe de imóvel e nível metropolitano no mercado norte-americano.'
                 : 'Explore national capitalization rate ranges across property types and metropolitan market tiers.'}
             </p>
           </div>
@@ -203,7 +245,7 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
             href={`/${locale}/guides/cap-rate-benchmarks-by-city/`}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
           >
-            <span>{isZh ? '查看基准数据指南' : 'View Benchmark Guide'}</span>
+            <span>{isZh ? '查看基准数据指南' : isEs ? 'Ver Guía de Referencias' : isPt ? 'Ver Guia de Benchmarks' : 'View Benchmark Guide'}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </section>
@@ -213,14 +255,18 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-                {isZh ? '综合尽调系统' : 'Full Underwriting Suite'}
+                {isZh ? '综合尽调系统' : isEs ? 'Suite Integral de Suscripción' : isPt ? 'Suite Completa de Análise' : 'Full Underwriting Suite'}
               </span>
               <h3 className="text-xl font-bold text-white">
-                {isZh ? '想同时测算该物业的全部核心投资指标？' : 'Need Full Commercial Underwriting & Stress Testing?'}
+                {isZh ? '想同时测算该物业的全部核心投资指标？' : isEs ? '¿Desea Modelar el Análisis Financiero Completo con Pruebas de Estrés?' : isPt ? 'Deseja Modelar a Análise Financeira Completa com Testes de Estresse?' : 'Need Full Commercial Underwriting & Stress Testing?'}
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
                 {isZh
                   ? '使用 Deal Analyzer 综合工具，一次性算出 Cap Rate、NOI、DSCR、Cash-on-Cash 与盈亏平衡比率。'
+                  : isEs
+                  ? 'Calcule simultáneamente Cap Rate, NOI, DSCR y Cash-on-Cash a partir de un único conjunto de datos con exportación en PDF.'
+                  : isPt
+                  ? 'Calcule simultaneamente Cap Rate, NOI, DSCR e Cash-on-Cash a partir de uma única entrada de dados com exportação em PDF.'
                   : 'Run Cap Rate, NOI, DSCR, and Cash-on-Cash all together from a single set of inputs with PDF export.'}
               </p>
             </div>
@@ -228,7 +274,7 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
               href={`/${locale}/tools/deal-analyzer/`}
               className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
             >
-              <span>{isZh ? '进入 Deal Analyzer' : 'Launch Deal Analyzer'}</span>
+              <span>{isZh ? '进入 Deal Analyzer' : isEs ? 'Abrir Deal Analyzer' : isPt ? 'Abrir Deal Analyzer' : 'Launch Deal Analyzer'}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -237,7 +283,7 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
         {/* Other Property Types */}
         <section className="bg-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4">
           <h2 className="text-lg font-bold text-white">
-            {isZh ? '其他商业物业类型 Cap Rate 计算器' : 'Other Property Type Cap Rate Calculators'}
+            {isZh ? '其他商业物业类型 Cap Rate 计算器' : isEs ? 'Otras Calculadoras de Cap Rate por Tipo de Propiedad' : isPt ? 'Outras Calculadoras de Cap Rate por Tipo de Imóvel' : 'Other Property Type Cap Rate Calculators'}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
@@ -245,7 +291,7 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
               className="bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl p-4 flex items-center justify-between transition-all group"
             >
               <span className="text-sm font-semibold text-slate-200 group-hover:text-emerald-400">
-                {isZh ? '通用 Cap Rate 计算器' : 'Universal Cap Rate Calculator'}
+                {isZh ? '通用 Cap Rate 计算器' : isEs ? 'Calculadora Universal de Cap Rate' : isPt ? 'Calculadora Universal de Cap Rate' : 'Universal Cap Rate Calculator'}
               </span>
               <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
             </Link>
@@ -255,7 +301,7 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
                 className="bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl p-4 flex items-center justify-between transition-all group"
               >
                 <span className="text-sm font-semibold text-slate-200 group-hover:text-emerald-400">
-                  {isZh ? 'Multifamily 多户住宅 Cap Rate' : 'Multifamily Cap Rate'}
+                  {isZh ? 'Multifamily 多户住宅 Cap Rate' : isEs ? 'Cap Rate Multifamiliar' : isPt ? 'Cap Rate Multifamiliar' : 'Multifamily Cap Rate'}
                 </span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
               </Link>
@@ -266,7 +312,7 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
                 className="bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl p-4 flex items-center justify-between transition-all group"
               >
                 <span className="text-sm font-semibold text-slate-200 group-hover:text-emerald-400">
-                  {isZh ? 'Industrial 工业与仓储物流 Cap Rate' : 'Industrial & Warehouse Cap Rate'}
+                  {isZh ? 'Industrial 工业与仓储物流 Cap Rate' : isEs ? 'Cap Rate Industrial y Logística' : isPt ? 'Cap Rate Industrial e Galpões' : 'Industrial & Warehouse Cap Rate'}
                 </span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
               </Link>
@@ -277,7 +323,7 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
                 className="bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl p-4 flex items-center justify-between transition-all group"
               >
                 <span className="text-sm font-semibold text-slate-200 group-hover:text-emerald-400">
-                  {isZh ? 'Self-Storage 自助仓储 Cap Rate' : 'Self-Storage Cap Rate'}
+                  {isZh ? 'Self-Storage 自助仓储 Cap Rate' : isEs ? 'Cap Rate Autoalmacenamiento (Self-Storage)' : isPt ? 'Cap Rate Self-Storage' : 'Self-Storage Cap Rate'}
                 </span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
               </Link>
@@ -288,7 +334,7 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
                 className="bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl p-4 flex items-center justify-between transition-all group"
               >
                 <span className="text-sm font-semibold text-slate-200 group-hover:text-emerald-400">
-                  {isZh ? 'NNN 三净商业零售 Cap Rate' : 'NNN Lease Cap Rate'}
+                  {isZh ? 'NNN 三净商业零售 Cap Rate' : isEs ? 'Cap Rate Contratos Net Lease (NNN)' : isPt ? 'Cap Rate Contratos Net Lease (NNN)' : 'NNN Lease Cap Rate'}
                 </span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform" />
               </Link>

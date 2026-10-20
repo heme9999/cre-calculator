@@ -4,12 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { Calculator, ShieldCheck, AlertTriangle, ShieldAlert, CheckCircle2, Info, Share2, Check, ArrowRight, Building, Mail, DollarSign } from 'lucide-react';
 import { DscrCoverageTierVisualizer } from './visuals/DscrCoverageTierVisualizer';
+import { getUiTranslations } from '@/lib/translations';
 
 interface Props {
   locale: string;
 }
 
 export function DscrCalculator({ locale }: Props) {
+  const t = getUiTranslations(locale);
   const isZh = locale === 'zh';
   const isEs = locale === 'es';
   const isPt = locale === 'pt';
@@ -131,13 +133,13 @@ export function DscrCalculator({ locale }: Props) {
           <div>
             <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-2">
               <Calculator className="w-3.5 h-3.5" />
-              {isZh ? '偿债覆盖率计算' : 'DSCR Underwriting Tool'}
+              {t.dscrCalc.toolBadge}
             </div>
             <h2 className="text-xl md:text-2xl font-bold">
-              {isZh ? 'DSCR (偿债覆盖率) 实时计算器' : 'Debt Service Coverage Ratio (DSCR) Calculator'}
+              {t.dscrCalc.title}
             </h2>
             <p className="text-slate-400 text-sm mt-1">
-              {isZh ? '对照商业银行审核标准，评估物业净收入对债务本息的覆盖安全度' : 'Evaluate net operating income against annual loan payments'}
+              {t.dscrCalc.subtitle}
             </p>
           </div>
         </div>
@@ -149,7 +151,7 @@ export function DscrCalculator({ locale }: Props) {
             {/* Annual NOI */}
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '年净营业收入 (Annual NOI)' : 'Annual Net Operating Income (NOI)'}
+                {t.dscrCalc.noiLabel}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -179,7 +181,7 @@ export function DscrCalculator({ locale }: Props) {
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
               <div className="flex items-center justify-between mb-3">
                 <label className="text-sm font-semibold text-slate-700">
-                  {isZh ? '还贷计算方式' : 'Debt Service Input Mode'}
+                  {t.dscrCalc.debtModeLabel}
                 </label>
                 <div className="flex bg-slate-200 p-0.5 rounded-lg text-xs font-semibold">
                   <button
@@ -189,7 +191,7 @@ export function DscrCalculator({ locale }: Props) {
                       !isMonthlyInput ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    {isZh ? '按年输入' : 'Annual'}
+                    {t.dscrCalc.annualMode}
                   </button>
                   <button
                     type="button"
@@ -198,7 +200,7 @@ export function DscrCalculator({ locale }: Props) {
                       isMonthlyInput ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    {isZh ? '按月输入' : 'Monthly'}
+                    {t.dscrCalc.monthlyMode}
                   </button>
                 </div>
               </div>
@@ -216,7 +218,7 @@ export function DscrCalculator({ locale }: Props) {
                     />
                   </div>
                   <p className="text-xs text-slate-500 mt-1">
-                    {isZh ? '包含本金及利息的全年偿债总额 (Annual Principal & Interest)' : 'Total annual principal and interest payments'}
+                    {t.dscrCalc.annualHelp}
                   </p>
                 </div>
               ) : (
@@ -232,9 +234,7 @@ export function DscrCalculator({ locale }: Props) {
                     />
                   </div>
                   <p className="text-xs text-slate-500 mt-1">
-                    {isZh
-                      ? `折算年度还贷: ${formatCurrency(monthlyPayment * 12)} / 年`
-                      : `Equivalent Annual Debt Service: ${formatCurrency(monthlyPayment * 12)} / year`}
+                    {t.dscrCalc.monthlyHelp(formatCurrency(monthlyPayment * 12))}
                   </p>
                 </div>
               )}
@@ -244,12 +244,12 @@ export function DscrCalculator({ locale }: Props) {
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-700 space-y-2">
               <span className="font-bold text-slate-800 flex items-center gap-1.5">
                 <Info className="w-4 h-4 text-slate-500" />
-                {isZh ? '商业银行通用审核标准 (Lender Benchmarks)' : 'Standard Commercial Bank Underwriting Tiers:'}
+                {t.dscrCalc.benchmarkHeader}
               </span>
               <ul className="space-y-1 text-slate-600 pl-5 list-disc">
-                <li><strong>≥ 1.25x</strong>: {isZh ? '常规商业银行标准批准线' : 'Standard Commercial Bank Minimum Threshold'}</li>
-                <li><strong>1.15x - 1.20x</strong>: {isZh ? '优质长期单租户 (NNN) 或政府租户特别批准' : 'Acceptable for prime Long-term Net Lease/Government tenants'}</li>
-                <li><strong>&lt; 1.00x</strong>: {isZh ? '入不敷出 (无法通过常规审核)' : 'Distressed / Negative Cash Flow'}</li>
+                <li><strong>≥ 1.25x</strong>: {t.dscrCalc.benchmarkTier1}</li>
+                <li><strong>1.15x - 1.20x</strong>: {t.dscrCalc.benchmarkTier2}</li>
+                <li><strong>&lt; 1.00x</strong>: {t.dscrCalc.benchmarkTier3}</li>
               </ul>
             </div>
           </div>
@@ -259,23 +259,23 @@ export function DscrCalculator({ locale }: Props) {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  {isZh ? '偿债能力分析' : isEs ? 'Análisis de Cobertura' : isPt ? 'Análise de Cobertura' : 'Underwriting Analysis'}
+                  {t.dscrCalc.summaryTitle}
                 </h3>
                 <button
                   type="button"
                   onClick={handleShareDeal}
                   className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:text-emerald-700 hover:border-emerald-300 active:scale-95 transition-all shadow-2xs"
-                  title={isZh ? '复制带参数的测算链接' : 'Copy link with parameters'}
+                  title={t.dscrCalc.copyTitle}
                 >
                   {copied ? (
                     <>
                       <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-600 font-semibold">{isZh ? '链接已复制！' : 'Link Copied!'}</span>
+                      <span className="text-emerald-600 font-semibold">{t.dscrCalc.copied}</span>
                     </>
                   ) : (
                     <>
                       <Share2 className="w-3.5 h-3.5 text-slate-500" />
-                      <span>{isZh ? '分享测算' : 'Share Deal'}</span>
+                      <span>{t.dscrCalc.shareDeal}</span>
                     </>
                   )}
                 </button>
@@ -284,7 +284,7 @@ export function DscrCalculator({ locale }: Props) {
               {/* Major Card */}
               <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  {isZh ? 'DSCR 偿债覆盖率' : 'Debt Service Coverage Ratio (DSCR)'}
+                  {t.dscrCalc.dscrCardTitle}
                 </span>
                 <div aria-live="polite" className={`text-4xl md:text-5xl font-black mt-1 ${statusColor}`}>
                   {dscr.toFixed(2)}x
@@ -306,21 +306,21 @@ export function DscrCalculator({ locale }: Props) {
               {/* Financial Cushion Breakdown */}
               <div className="space-y-3 text-sm border-t border-slate-200 pt-4">
                 <div className="flex justify-between">
-                  <span className="text-slate-600">{isZh ? '年 NOI:' : 'Annual NOI:'}</span>
+                  <span className="text-slate-600">{t.dscrCalc.annualNoiRow}</span>
                   <span className="font-semibold">{formatCurrency(noi)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-600">{isZh ? '年度还贷总额:' : 'Annual Debt Service:'}</span>
+                  <span className="text-slate-600">{t.dscrCalc.annualDebtRow}</span>
                   <span className="font-semibold text-slate-900">{formatCurrency(effectiveDebtService)}</span>
                 </div>
                 <div className="flex justify-between font-semibold border-t border-slate-200 pt-2">
-                  <span className="text-slate-800">{isZh ? '年税前现金缓冲 (Cash Cushion):' : 'Annual Pre-Tax Cushion:'}</span>
+                  <span className="text-slate-800">{t.dscrCalc.cashCushionRow}</span>
                   <span className={cashCushion >= 0 ? 'text-emerald-600' : 'text-red-600'}>
                     {formatCurrency(cashCushion)}
                   </span>
                 </div>
                 <div className="flex justify-between text-xs text-slate-500">
-                  <span>{isZh ? '按 1.25x 标准推算最高允许年还贷:' : 'Max Allowable Debt for 1.25x:'}</span>
+                  <span>{t.dscrCalc.maxDebtRow}</span>
                   <span className="font-semibold">{formatCurrency(maxDebtForTarget)}</span>
                 </div>
               </div>
@@ -329,9 +329,7 @@ export function DscrCalculator({ locale }: Props) {
             <div className="bg-slate-100 border border-slate-200 rounded-xl p-4 text-xs text-slate-700 mt-6 flex items-start gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
-                {isZh
-                  ? '提示：DSCR 越高，表明物业抵御租客空置和利息上升的能力越强，银行给予的利率优惠也通常更大。'
-                  : 'Tip: Higher DSCR reflects a larger income cushion against tenant vacancy or rate increases.'}
+                {t.dscrCalc.tipText}
               </div>
             </div>
           </div>
@@ -343,28 +341,22 @@ export function DscrCalculator({ locale }: Props) {
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-3 border border-emerald-500/30">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>{isZh ? '商业贷款直通车' : 'Pre-Qualified Commercial Financing'}</span>
+            <span>{t.dscrCalc.leadBadge}</span>
           </div>
           <h3 className="text-xl md:text-2xl font-black text-white">
-            {isZh
-              ? '获取优质商业地产 DSCR 贷款机构报价方案'
-              : 'Connect with Top-Rated DSCR Lenders for This Deal'}
+            {t.dscrCalc.leadHeading}
           </h3>
           <p className="text-slate-300 text-xs md:text-sm mt-1 leading-relaxed">
-            {isZh
-              ? `基于当前测算的 ${dscr.toFixed(2)}x 偿债覆盖率，您的物业已满足多数商业银行与非银机构的核心准入要求。提交参数即可快速匹配最优利率与杠杆方案。`
-              : `Based on your calculated ${dscr.toFixed(2)}x DSCR, your transaction aligns with commercial lender underwriting guidelines. Request non-binding quotes from vetted national CRE and portfolio lenders.`}
+            {t.dscrCalc.leadSubtitle(dscr.toFixed(2))}
           </p>
 
           {leadSubmitted ? (
             <div className="mt-6 p-4 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-200 text-sm flex items-center gap-3">
               <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
               <div>
-                <p className="font-bold">{isZh ? '意向已提交！' : 'Quote Request Received!'}</p>
+                <p className="font-bold">{t.dscrCalc.leadSuccessTitle}</p>
                 <p className="text-xs text-emerald-300/90 mt-0.5">
-                  {isZh
-                    ? '我们的合作放贷机构团队将根据您的物业类型与 DSCR 指标准备定制报价单。'
-                    : 'Partner commercial lenders will review your deal parameters and follow up with tailored financing terms.'}
+                  {t.dscrCalc.leadSuccessSubtitle}
                 </p>
               </div>
             </div>
@@ -372,7 +364,7 @@ export function DscrCalculator({ locale }: Props) {
             <form onSubmit={handleLeadSubmit} className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  {isZh ? '期望贷款额度 ($)' : 'Target Loan Amount ($)'}
+                  {t.dscrCalc.leadLoanAmountLabel}
                 </label>
                 <div className="relative rounded-xl border border-slate-600 bg-slate-800/90 overflow-hidden focus-within:border-emerald-500">
                   <DollarSign className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -389,7 +381,7 @@ export function DscrCalculator({ locale }: Props) {
 
               <div>
                 <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  {isZh ? '物业类型' : 'Property Asset Type'}
+                  {t.dscrCalc.leadPropertyTypeLabel}
                 </label>
                 <div className="relative rounded-xl border border-slate-600 bg-slate-800/90 overflow-hidden focus-within:border-emerald-500">
                   <Building className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -409,7 +401,7 @@ export function DscrCalculator({ locale }: Props) {
 
               <div>
                 <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  {isZh ? '工作邮箱' : 'Contact Email'}
+                  {t.dscrCalc.leadEmailLabel}
                 </label>
                 <div className="relative rounded-xl border border-slate-600 bg-slate-800/90 overflow-hidden focus-within:border-emerald-500">
                   <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -429,7 +421,7 @@ export function DscrCalculator({ locale }: Props) {
                   type="submit"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs transition-all shadow-sm"
                 >
-                  <span>{isZh ? '获取贷款预审方案' : 'Request DSCR Lender Quotes'}</span>
+                  <span>{t.dscrCalc.leadSubmitBtn}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { getContent } from '@/content';
 import { Building2, ShieldAlert } from 'lucide-react';
+import { getUiTranslations } from '@/lib/translations';
 
 interface FooterProps {
   locale: string;
@@ -11,6 +12,7 @@ export function Footer({ locale }: FooterProps) {
   const isZh = locale === 'zh';
   const content = getContent(locale);
   const nav = content.nav;
+  const t = getUiTranslations(locale);
   const year = new Date().getFullYear();
 
   return (
@@ -26,21 +28,19 @@ export function Footer({ locale }: FooterProps) {
               <span>{nav.brandName}</span>
             </div>
             <p className="text-xs leading-relaxed text-slate-400 max-w-sm">
-              {isZh
-                ? '专注于美国商业地产 (CRE) 投资决策的数字分析与计算工具站，帮助投资者与经纪人快速做数字判断。'
-                : 'Commercial real estate investment calculation tools for investors, brokers, and CRE professionals.'}
+              {t.footer.brandDesc}
             </p>
           </div>
 
           {/* Calculators Nav */}
           <div className="md:col-span-3 space-y-3">
             <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
-              {isZh ? '计算器导航' : 'Calculators'}
+              {t.footer.calculatorsHeader}
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href={`/${locale}/tools/deal-analyzer/`} className="hover:text-emerald-400 transition-colors font-bold text-emerald-400">
-                  Deal Analyzer ({isZh ? '综合尽调' : 'Full Underwriting'})
+                  Deal Analyzer ({t.footer.fullUnderwriting})
                 </Link>
               </li>
               <li>
@@ -89,32 +89,32 @@ export function Footer({ locale }: FooterProps) {
           {/* Guides Nav */}
           <div className="md:col-span-3 space-y-3">
             <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
-              {isZh ? '实操指南' : 'Guides'}
+              {t.footer.guidesHeader}
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href={`/${locale}/glossary/`} className="hover:text-emerald-400 transition-colors font-semibold text-emerald-400">
-                  {isZh ? 'CRE 核心指标词汇表' : 'CRE Glossary & Formulas'}
+                  {t.footer.glossaryLink}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? 'Cap Rate全美基准' : 'Cap Rate Benchmarks'}
+                  {t.footer.benchmarksLink}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/guides/how-to-estimate-noi/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? '怎么估算NOI' : 'How to Estimate NOI'}
+                  {t.footer.estimateNoiLink}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/guides/1031-exchange-process/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? '1031 Exchange流程' : '1031 Exchange Process'}
+                  {t.footer.exchange1031Link}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/guides/how-to-underwrite-a-deal/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? '商业地产交易尽调' : 'How to Underwrite a Deal'}
+                  {t.footer.underwriteLink}
                 </Link>
               </li>
               {isZh && (
@@ -130,32 +130,32 @@ export function Footer({ locale }: FooterProps) {
           {/* Trust & Legal Nav */}
           <div className="md:col-span-2 space-y-3">
             <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
-              {isZh ? '关于与条款' : 'Company & Legal'}
+              {t.footer.companyHeader}
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href={`/${locale}/about/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? '关于我们' : 'About Us'}
+                  {t.footer.aboutUs}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/editorial/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? '公式与方法论' : 'Methodology'}
+                  {t.footer.methodology}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/contact/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? '联系我们' : 'Contact Us'}
+                  {t.footer.contactUs}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/privacy/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? '隐私政策' : 'Privacy Policy'}
+                  {t.footer.privacy}
                 </Link>
               </li>
               <li>
                 <Link href={`/${locale}/terms/`} className="hover:text-emerald-400 transition-colors">
-                  {isZh ? '服务条款' : 'Terms of Use'}
+                  {t.footer.terms}
                 </Link>
               </li>
             </ul>
@@ -166,9 +166,7 @@ export function Footer({ locale }: FooterProps) {
         <div className="bg-slate-800/60 border border-slate-800 rounded-xl p-4 mb-8 text-xs text-slate-400 flex items-start gap-2.5">
           <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <p>
-            {isZh
-              ? '免责声明：本站所有计算器与示例仅供财务估算与参考，不构成任何法律、税务或专业投资建议。商业地产投资具有风险，决策前请咨询注册会计师（CPA）及专业执业律师。'
-              : 'Disclaimer: The tools and information on this site are provided for financial estimation purposes only and do not constitute legal, tax, or professional investment advice. Always consult a qualified CPA or licensed real estate attorney before executing transactions.'}
+            {t.footer.disclaimer}
           </p>
         </div>
 

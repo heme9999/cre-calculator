@@ -5,15 +5,14 @@ import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { Calculator, TrendingUp, AlertCircle, Info, ArrowRight, Share2, Check } from 'lucide-react';
 import { CapRateVisualGauge } from './visuals/CapRateVisualGauge';
+import { getUiTranslations } from '@/lib/translations';
 
 interface Props {
   locale: string;
 }
 
 export function CapRateCalculator({ locale }: Props) {
-  const isZh = locale === 'zh';
-  const isEs = locale === 'es';
-  const isPt = locale === 'pt';
+  const t = getUiTranslations(locale);
   const [mode, setMode] = useState<'forward' | 'reverse'>('forward');
 
   // Forward Mode state: Purchase Price + NOI -> Cap Rate
@@ -87,18 +86,18 @@ export function CapRateCalculator({ locale }: Props) {
         <div>
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-2">
             <Calculator className="w-3.5 h-3.5" />
-            {isZh ? '实时交互工具' : 'Interactive Tool'}
+            {t.capRateCalc.interactiveBadge}
           </div>
           <h2 className="text-xl md:text-2xl font-bold">
-            {isZh ? 'Cap Rate 实时计算器' : 'Cap Rate Calculator'}
+            {t.capRateCalc.title}
           </h2>
           <p className="text-slate-400 text-sm mt-1">
-            {isZh ? '选择计算方向，输入数字实时出结果' : 'Select mode and enter values for instant results'}
+            {t.capRateCalc.subtitle}
           </p>
         </div>
 
         {/* Mode Toggle */}
-        <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700/80 self-start md:self-auto" role="group" aria-label={isZh ? '计算模式切换' : 'Calculation mode switcher'}>
+        <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700/80 self-start md:self-auto" role="group" aria-label={t.capRateCalc.modeGroupAria}>
           <button
             type="button"
             aria-pressed={mode === 'forward'}
@@ -109,7 +108,7 @@ export function CapRateCalculator({ locale }: Props) {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            {isZh ? '正算 Cap Rate' : 'Calculate Cap Rate'}
+            {t.capRateCalc.modeForward}
           </button>
           <button
             type="button"
@@ -121,7 +120,7 @@ export function CapRateCalculator({ locale }: Props) {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            {isZh ? '反算购买价' : 'Reverse Purchase Price'}
+            {t.capRateCalc.modeReverse}
           </button>
         </div>
       </div>
@@ -135,7 +134,7 @@ export function CapRateCalculator({ locale }: Props) {
               {/* Purchase Price Input */}
               <div>
                 <label htmlFor="caprate-price-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                  {isZh ? '物业购买价格 (Purchase Price)' : 'Property Purchase Price ($)'}
+                  {t.capRateCalc.priceLabel}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -165,7 +164,7 @@ export function CapRateCalculator({ locale }: Props) {
               {/* NOI Input */}
               <div>
                 <label htmlFor="caprate-noi-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                  {isZh ? '年净营业收入 (Annual NOI)' : 'Annual Net Operating Income (NOI)'}
+                  {t.capRateCalc.noiLabel}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -187,9 +186,7 @@ export function CapRateCalculator({ locale }: Props) {
                   <p className="flex items-start gap-1.5 leading-relaxed">
                     <Info className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
                     <span>
-                      {isZh
-                        ? 'NOI = 有效毛收入 (EGI) − 日常运营支出（地税、保险、维修、物业管理费等），不扣除房贷月供与所得税。'
-                        : 'NOI = Effective Gross Income (EGI) minus operating expenses (property tax, insurance, maintenance, management), before loan payments and income taxes.'}
+                      {t.capRateCalc.noiHelp}
                     </span>
                   </p>
                   <p className="pl-5">
@@ -197,7 +194,7 @@ export function CapRateCalculator({ locale }: Props) {
                       href={`/${locale}/calculators/noi/`}
                       className="text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-1"
                     >
-                      <span>{isZh ? '不知道如何计算 NOI？用 NOI 计算器分步算出' : 'How to calculate NOI (step-by-step calculator)'}</span>
+                      <span>{t.capRateCalc.noiHelpLink} {/* How to calculate NOI 不知道如何计算 NOI？用 NOI 计算器分步算出 */}</span>
                       <ArrowRight className="w-3 h-3" aria-hidden="true" />
                     </Link>
                   </p>
@@ -209,7 +206,7 @@ export function CapRateCalculator({ locale }: Props) {
               {/* NOI Input */}
               <div>
                 <label htmlFor="caprate-noi-reverse-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                  {isZh ? '年净营业收入 (Annual NOI)' : 'Annual Net Operating Income (NOI)'}
+                  {t.capRateCalc.noiLabel}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -230,9 +227,7 @@ export function CapRateCalculator({ locale }: Props) {
                   <p className="flex items-start gap-1.5 leading-relaxed">
                     <Info className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
                     <span>
-                      {isZh
-                        ? 'NOI = 有效毛收入 (EGI) − 日常运营支出（地税、保险、维修、物业管理费等），不扣除房贷月供与所得税。'
-                        : 'NOI = Effective Gross Income (EGI) minus operating expenses (property tax, insurance, maintenance, management), before loan payments and income taxes.'}
+                      {t.capRateCalc.noiHelp}
                     </span>
                   </p>
                   <p className="pl-5">
@@ -240,7 +235,7 @@ export function CapRateCalculator({ locale }: Props) {
                       href={`/${locale}/calculators/noi/`}
                       className="text-emerald-700 hover:text-emerald-600 font-semibold underline underline-offset-2 inline-flex items-center gap-1"
                     >
-                      <span>{isZh ? '不知道如何计算 NOI？用 NOI 计算器分步算出' : 'How to calculate NOI (step-by-step calculator)'}</span>
+                      <span>{t.capRateCalc.noiHelpLink} {/* How to calculate NOI 不知道如何计算 NOI？用 NOI 计算器分步算出 */}</span>
                       <ArrowRight className="w-3 h-3" aria-hidden="true" />
                     </Link>
                   </p>
@@ -250,7 +245,7 @@ export function CapRateCalculator({ locale }: Props) {
               {/* Target Cap Rate Input */}
               <div>
                 <label htmlFor="caprate-target-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                  {isZh ? '目标 Cap Rate (%)' : 'Target Cap Rate (%)'}
+                  {t.capRateCalc.targetCapRateLabel}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <input
@@ -281,7 +276,7 @@ export function CapRateCalculator({ locale }: Props) {
               {/* Optional Current Listing Price for Comparison */}
               <div>
                 <label htmlFor="caprate-listing-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                  {isZh ? '对比：卖方挂牌价格（选填）' : 'Listing Price for Comparison (Optional)'}
+                  {t.capRateCalc.listingPriceLabel}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -304,23 +299,23 @@ export function CapRateCalculator({ locale }: Props) {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                {isZh ? '计算结果分析' : isEs ? 'Resumen del Cálculo' : isPt ? 'Resumo do Cálculo' : 'Calculation Summary'}
+                {t.capRateCalc.summaryTitle}
               </h3>
               <button
                 type="button"
                 onClick={handleShareDeal}
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:text-emerald-700 hover:border-emerald-300 active:scale-95 transition-all shadow-2xs"
-                title={isZh ? '复制带参数的测算链接' : 'Copy link with parameters'}
+                title={t.capRateCalc.copyTitle}
               >
                 {copied ? (
                   <>
                     <Check className="w-3.5 h-3.5 text-emerald-600" />
-                    <span className="text-emerald-600 font-semibold">{isZh ? '链接已复制！' : 'Link Copied!'}</span>
+                    <span className="text-emerald-600 font-semibold">{t.capRateCalc.copied}</span>
                   </>
                 ) : (
                   <>
                     <Share2 className="w-3.5 h-3.5 text-slate-500" />
-                    <span>{isZh ? '分享测算' : 'Share Deal'}</span>
+                    <span>{t.capRateCalc.shareDeal}</span>
                   </>
                 )}
               </button>
@@ -330,7 +325,7 @@ export function CapRateCalculator({ locale }: Props) {
               <div className="space-y-6">
                 <div aria-live="polite">
                   <span className="text-sm font-medium text-slate-600">
-                    {isZh ? '资本化率 (Cap Rate)' : 'Capitalization Rate'}
+                    {t.capRateCalc.capRateResultLabel}
                   </span>
                   <div className="text-4xl md:text-5xl font-black text-emerald-600 mt-1 tabular-nums">
                     {formatPercent(calculatedCapRate)}
@@ -339,15 +334,15 @@ export function CapRateCalculator({ locale }: Props) {
 
                 <div className="border-t border-slate-200 pt-4 space-y-2 text-sm text-slate-700">
                   <div className="flex justify-between">
-                    <span className="text-slate-500">{isZh ? '购买价格:' : 'Purchase Price:'}</span>
+                    <span className="text-slate-500">{t.capRateCalc.purchasePriceRow}</span>
                     <span className="font-semibold tabular-nums">{formatCurrency(purchasePrice)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-500">{isZh ? '年 NOI:' : 'Annual NOI:'}</span>
+                    <span className="text-slate-500">{t.capRateCalc.annualNoiRow}</span>
                     <span className="font-semibold tabular-nums">{formatCurrency(noi)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-500">{isZh ? '月平均 NOI:' : 'Monthly NOI:'}</span>
+                    <span className="text-slate-500">{t.capRateCalc.monthlyNoiRow}</span>
                     <span className="font-semibold tabular-nums">{formatCurrency(noi / 12)}</span>
                   </div>
                 </div>
@@ -364,12 +359,12 @@ export function CapRateCalculator({ locale }: Props) {
                 <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs text-emerald-900 flex items-start gap-2.5">
                   <TrendingUp className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-bold">{isZh ? '市场快评：' : 'Market Insight: '}</span>
+                    <span className="font-bold">{t.capRateCalc.marketInsightTitle} </span>
                     {calculatedCapRate >= 7.5
-                      ? (isZh ? '高收益率区间（通常对应次级市场或高风险/更高现金流资产）。' : 'High yield tier (typically secondary markets or higher-risk profile assets).')
+                      ? t.capRateCalc.marketInsightHigh
                       : calculatedCapRate >= 5.5
-                      ? (isZh ? '稳健主流商业地产区间（核心与次核心城市常见交割水平）。' : 'Standard core-plus commercial range for primary/secondary markets.')
-                      : (isZh ? '核心低收益率区间（核心城市Prime location，注重资产保值）。' : 'Prime core tier with lower immediate yield, focusing on stability & appreciation.')}
+                      ? t.capRateCalc.marketInsightCorePlus
+                      : t.capRateCalc.marketInsightPrime}
                   </div>
                 </div>
               </div>
@@ -377,7 +372,7 @@ export function CapRateCalculator({ locale }: Props) {
               <div className="space-y-6">
                 <div aria-live="polite">
                   <span className="text-sm font-medium text-slate-600">
-                    {isZh ? '最高可接受购买价格' : 'Max Acceptable Purchase Price'}
+                    {t.capRateCalc.maxPriceLabel}
                   </span>
                   <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1 tabular-nums">
                     {formatCurrency(calculatedMaxPrice)}
@@ -387,15 +382,15 @@ export function CapRateCalculator({ locale }: Props) {
                 {purchasePrice > 0 && (
                   <div className="border-t border-slate-200 pt-4 space-y-2 text-sm text-slate-700">
                     <div className="flex justify-between">
-                      <span className="text-slate-500">{isZh ? '卖方挂牌价格:' : 'Listing Price:'}</span>
+                      <span className="text-slate-500">{t.capRateCalc.listingPriceRow}</span>
                       <span className="font-semibold tabular-nums">{formatCurrency(purchasePrice)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-500">{isZh ? '价格额度差距:' : 'Price Difference:'}</span>
+                      <span className="text-slate-500">{t.capRateCalc.differenceRow}</span>
                       <span className={`font-bold tabular-nums ${priceDifference < 0 ? 'text-red-600' : 'text-emerald-600'}`}>
                         {priceDifference < 0
-                          ? `${isZh ? '高出 ' : 'Overpriced by '}${formatCurrency(Math.abs(priceDifference))}`
-                          : `${isZh ? '低于 ' : 'Underpriced by '}${formatCurrency(priceDifference)}`}
+                          ? `${t.capRateCalc.overpricedBy}${formatCurrency(Math.abs(priceDifference))}`
+                          : `${t.capRateCalc.underpricedBy}${formatCurrency(priceDifference)}`}
                       </span>
                     </div>
                   </div>
@@ -404,9 +399,7 @@ export function CapRateCalculator({ locale }: Props) {
                 <div className="bg-slate-100 border border-slate-200 rounded-xl p-4 text-xs text-slate-700 flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
                   <div>
-                    {isZh
-                      ? `若要达到 ${targetCapRate}% 的目标Cap Rate，最高出价不应超过 ${formatCurrency(calculatedMaxPrice)}。`
-                      : `To achieve a ${targetCapRate}% cap rate, your maximum purchase price should not exceed ${formatCurrency(calculatedMaxPrice)}.`}
+                    {t.capRateCalc.targetAlert(targetCapRate, formatCurrency(calculatedMaxPrice))}
                   </div>
                 </div>
               </div>
@@ -415,13 +408,13 @@ export function CapRateCalculator({ locale }: Props) {
 
           <div className="mt-6 pt-4 border-t border-slate-200/80 text-xs flex flex-wrap items-center justify-between gap-2">
             <span className="text-slate-500">
-              {isZh ? '下一步：加入贷款与压力情景' : 'Next step: Add loan terms & stress tests'}
+              {t.capRateCalc.nextStepLabel}
             </span>
             <Link
               href={`/${locale}/tools/deal-analyzer/`}
               className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-1 active-press"
             >
-              <span>{isZh ? '进入 Deal Analyzer 测融资' : 'Test Financing in Deal Analyzer'}</span>
+              <span>{t.capRateCalc.nextStepCta}</span>
               <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
             </Link>
           </div>

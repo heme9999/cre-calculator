@@ -13,6 +13,8 @@ interface Props {
 
 export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: Props) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
 
   // Pointer position clamped between 0x and 2.0x for visual bar
   const clampedDscr = Math.min(Math.max(dscr, 0), 2.0);
@@ -29,7 +31,7 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
         <div>
           <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-            {isZh ? 'DSCR 承销覆盖率层级' : 'DSCR Underwriting Benchmark Tier'}
+            {isZh ? 'DSCR 承销覆盖率层级' : isEs ? 'Nivel de Cobertura DSCR' : isPt ? 'Nível de Cobertura DSCR' : 'DSCR Underwriting Benchmark Tier'}
           </span>
           <div className="flex items-baseline gap-2 mt-0.5">
             <span
@@ -44,13 +46,25 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
               {dscr < 1.0
                 ? isZh
                   ? '覆盖不足 / 现金流缺口'
+                  : isEs
+                  ? 'Cobertura Insuficiente / Déficit'
+                  : isPt
+                  ? 'Cobertura Insuficiente / Déficit'
                   : 'Insufficient Coverage'
                 : dscr < 1.25
                 ? isZh
                   ? '安全垫较窄 / 临界门槛'
+                  : isEs
+                  ? 'Margen Ajustado (1.00–1.24x)'
+                  : isPt
+                  ? 'Margem Estreita (1.00–1.24x)'
                   : 'Limited Cushion (1.00–1.24x)'
                 : isZh
                 ? '达标 / 满足主流审贷标准'
+                : isEs
+                ? 'Estándar Bancario Institucional (≥1.25x)'
+                : isPt
+                ? 'Padrão Bancário Institucional (≥1.25x)'
                 : 'Meets Common Lender Threshold (≥1.25x)'}
             </span>
           </div>
@@ -62,7 +76,7 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
             <span className="font-bold text-slate-900">{formatCurrency(noi)}</span>
           </div>
           <div className="border-l border-slate-200 pl-3">
-            <span className="text-slate-400 block text-[10px] uppercase font-bold">{isZh ? '还本付息' : 'Debt Service'}</span>
+            <span className="text-slate-400 block text-[10px] uppercase font-bold">{isZh ? '还本付息' : isEs ? 'Servicio Deuda' : isPt ? 'Serviço Dívida' : 'Debt Service'}</span>
             <span className="font-bold text-slate-900">{formatCurrency(debtService)}</span>
           </div>
         </div>
@@ -77,7 +91,7 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
             className="bg-rose-100 border-r border-rose-300 flex items-center justify-center text-rose-900 px-1 text-center font-bold"
             title="< 1.00x Insufficient Coverage"
           >
-            <span className="truncate">&lt; 1.00x {isZh ? '收入不抵还款' : 'Deficit'}</span>
+            <span className="truncate">&lt; 1.00x {isZh ? '收入不抵还款' : isEs ? 'Déficit' : isPt ? 'Déficit' : 'Deficit'}</span>
           </div>
 
           {/* Tier 2: 1.00 to 1.25x (12.5% width) */}
@@ -95,7 +109,7 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
             className="bg-emerald-100 flex items-center justify-center text-emerald-900 px-1 text-center font-bold"
             title=">= 1.25x Common Lender Threshold"
           >
-            <span className="truncate">≥ 1.25x {isZh ? '银行主流标准' : 'Standard'}</span>
+            <span className="truncate">≥ 1.25x {isZh ? '银行主流标准' : isEs ? 'Estándar' : isPt ? 'Padrão' : 'Standard'}</span>
           </div>
         </div>
 
@@ -133,7 +147,7 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
             <span>&lt; 1.00x</span>
           </div>
           <p className="text-[10px] text-slate-500 leading-tight">
-            {isZh ? '净收入不足以覆盖还本付息，存在偿债风险' : 'Income fails to cover debt payments (cash deficit)'}
+            {isZh ? '净收入不足以覆盖还本付息，存在偿债风险' : isEs ? 'Los ingresos no cubren el pago del préstamo (déficit de flujo)' : isPt ? 'A receita não cobre os pagamentos da dívida (déficit de caixa)' : 'Income fails to cover debt payments (cash deficit)'}
           </p>
         </div>
 
@@ -143,7 +157,7 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
             <span>1.00x – 1.24x</span>
           </div>
           <p className="text-[10px] text-slate-500 leading-tight">
-            {isZh ? '虽有微盈但安全垫较窄，多数商业银行要求补充担保' : 'Tight cushion; most conventional lenders require 1.20x+'}
+            {isZh ? '虽有微盈但安全垫较窄，多数商业银行要求补充担保' : isEs ? 'Margen estrecho; prestamistas convencionales requieren ≥1.20x' : isPt ? 'Margem estreita; a maioria dos bancos exige ≥1.20x' : 'Tight cushion; most conventional lenders require 1.20x+'}
           </p>
         </div>
 
@@ -153,7 +167,7 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
             <span>≥ 1.25x</span>
           </div>
           <p className="text-[10px] text-slate-500 leading-tight">
-            {isZh ? 'Fannie/Freddie 与商业银行常规审核标准' : 'Standard institutional lender target for agency/CRE loans'}
+            {isZh ? 'Fannie/Freddie 与商业银行常规审核标准' : isEs ? 'Objetivo estándar institucional para préstamos comerciales' : isPt ? 'Meta padrão para aprovação em financiamento comercial' : 'Standard institutional lender target for agency/CRE loans'}
           </p>
         </div>
       </div>
@@ -164,6 +178,10 @@ export function DscrCoverageTierVisualizer({ dscr, noi, debtService, locale }: P
         <span>
           {isZh
             ? '重要提示：实际审贷标准因贷款机构类型、物业业态（如多户公寓通常要求 1.20–1.25x，办公或酒店可能要求 1.30–1.40x）及借款人资质而异。'
+            : isEs
+            ? 'Aviso importante: Los requisitos de DSCR varían según el tipo de inmueble (multifamiliar suele exigir 1.20–1.25x frente a hoteles/oficinas a 1.30–1.40x) y el perfil crediticio.'
+            : isPt
+            ? 'Aviso importante: Os critérios de DSCR variam conforme o tipo de imóvel (multifamiliar tipicamente 1.20–1.25x versus hotel/escritório a 1.30–1.40x) e o programa de crédito.'
             : 'Important: Lender DSCR requirements vary by property type (multifamily typically 1.20–1.25x vs. hospitality/office at 1.30–1.40x), loan program, and borrower credit.'}
         </span>
       </figcaption>

@@ -64,7 +64,13 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
         </nav>
         <div className="flex items-center gap-2">
           <span className="text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full shadow-xs">
-            {locale === 'zh' ? '全流程综合尽调工具' : 'Full Underwriting Suite'}
+            {locale === 'zh'
+              ? '全流程综合尽调工具'
+              : locale === 'es'
+              ? 'Suite Integral de Suscripción'
+              : locale === 'pt'
+              ? 'Suite Completa de Análise'
+              : 'Full Underwriting Suite'}
           </span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
@@ -92,7 +98,15 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
             {content.whatIsContent}
           </p>
           <div className="pt-2 text-xs text-slate-500 flex flex-wrap gap-2 items-center">
-            <span className="font-semibold text-slate-700">{isZh ? '支持单项测算：' : 'Explore Standalone Modules:'}</span>
+            <span className="font-semibold text-slate-700">
+              {isZh
+                ? '支持单项测算：'
+                : locale === 'es'
+                ? 'Explorar Módulos Individuales:'
+                : locale === 'pt'
+                ? 'Explorar Módulos Individuais:'
+                : 'Explore Standalone Modules:'}
+            </span>
             <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-medium">
               {isZh ? 'Cap Rate' : 'Cap Rate'}
             </Link>
@@ -110,7 +124,13 @@ export default async function DealAnalyzerPage({ params }: PageProps) {
             </Link>
             <span>•</span>
             <Link href={`/${locale}/guides/how-to-underwrite-a-deal/`} className="text-emerald-600 hover:underline font-medium">
-              {isZh ? '商业地产 6 步承销法' : 'Deal Underwriting Guide'}
+              {isZh
+                ? '商业地产 6 步承销法'
+                : locale === 'es'
+                ? 'Guía de Suscripción en 6 Pasos'
+                : locale === 'pt'
+                ? 'Guia de Análise em 6 Passos'
+                : 'Deal Underwriting Guide'}
             </Link>
           </div>
         </section>
