@@ -36,6 +36,12 @@ export default async function LeaseVsBuyPage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).leaseVsBuy;
+  const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
+
+  const homeLabel = isZh ? '首页' : isEs ? 'Inicio' : isPt ? 'Início' : 'Home';
+
   const jsonLdData = getCalculatorJsonLd(
     content.h1,
     content.metaDescription,
@@ -50,7 +56,7 @@ export default async function LeaseVsBuyPage({ params }: PageProps) {
       {/* Page Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
-          <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
+          <Link href={`/${locale}/`} className="hover:text-emerald-600">{homeLabel}</Link>
           <span>/</span>
           <span className="text-slate-900 font-semibold">{content.h1}</span>
         </nav>

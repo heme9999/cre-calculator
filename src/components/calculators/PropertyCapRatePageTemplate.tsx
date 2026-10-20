@@ -255,7 +255,7 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-                {isZh ? '综合尽调系统' : isEs ? 'Suite Integral de Suscripción' : isPt ? 'Suite Completa de Análise' : 'Full Underwriting Suite'}
+                {isZh ? '综合尽调系统' : isEs ? 'Suite Integral de Evaluación' : isPt ? 'Suite Completa de Análise' : 'Full Underwriting Suite'}
               </span>
               <h3 className="text-xl font-bold text-white">
                 {isZh ? '想同时测算该物业的全部核心投资指标？' : isEs ? '¿Desea Modelar el Análisis Financiero Completo con Pruebas de Estrés?' : isPt ? 'Deseja Modelar a Análise Financeira Completa com Testes de Estresse?' : 'Need Full Commercial Underwriting & Stress Testing?'}

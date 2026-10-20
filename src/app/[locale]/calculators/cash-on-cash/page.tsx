@@ -36,6 +36,10 @@ export default async function CashOnCashPage({ params }: PageProps) {
   const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).cashOnCash;
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
+
+  const homeLabel = isZh ? '首页' : isEs ? 'Inicio' : isPt ? 'Início' : 'Home';
 
   const calculatorSchema = getCalculatorJsonLd(
     content.h1,
@@ -45,7 +49,7 @@ export default async function CashOnCashPage({ params }: PageProps) {
   );
 
   const breadcrumbSchema = getBreadcrumbJsonLd([
-    { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
+    { name: homeLabel, url: `${SITE_URL}/${locale}/` },
     { name: content.h1, url: `${SITE_URL}/${locale}/calculators/cash-on-cash/` },
   ]);
 
@@ -58,7 +62,7 @@ export default async function CashOnCashPage({ params }: PageProps) {
       {/* Page Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
-          <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
+          <Link href={`/${locale}/`} className="hover:text-emerald-600">{homeLabel}</Link>
           <span>/</span>
           <span className="text-slate-900 font-semibold">{content.h1}</span>
         </nav>
@@ -87,21 +91,23 @@ export default async function CashOnCashPage({ params }: PageProps) {
             {content.whatIsContent}
           </p>
           <div className="pt-2 text-xs text-slate-500 flex flex-wrap gap-2 items-center">
-            <span className="font-semibold text-slate-700">{isZh ? '杠杆与承销链路：' : 'Leveraged Underwriting Pipeline:'}</span>
+            <span className="font-semibold text-slate-700">
+              {isZh ? '杠杆与承销链路：' : isEs ? 'Flujo de Evaluación con Apalancamiento:' : isPt ? 'Fluxo de Avaliação com Alavancagem:' : 'Leveraged Underwriting Pipeline:'}
+            </span>
             <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-medium">
-              {isZh ? 'Cap Rate 无杠杆率' : 'Cap Rate Calculator'}
+              {isZh ? 'Cap Rate 无杠杆率' : isEs ? 'Calculadora de Cap Rate' : isPt ? 'Calculadora de Cap Rate' : 'Cap Rate Calculator'}
             </Link>
             <span>•</span>
             <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline font-medium">
-              {isZh ? '贷款月供测算' : 'Loan Payment Calculator'}
+              {isZh ? '贷款月供测算' : isEs ? 'Calculadora de Préstamo Comercial' : isPt ? 'Calculadora de Financiamento Comercial' : 'Loan Payment Calculator'}
             </Link>
             <span>•</span>
             <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-medium">
-              {isZh ? 'DSCR 偿债覆盖率' : 'DSCR Calculator'}
+              {isZh ? 'DSCR 偿债覆盖率' : isEs ? 'Calculadora de DSCR' : isPt ? 'Calculadora de DSCR' : 'DSCR Calculator'}
             </Link>
             <span>•</span>
             <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-medium">
-              {isZh ? 'Deal Analyzer 综合尽调' : 'Deal Analyzer'}
+              {isZh ? 'Deal Analyzer 综合尽调' : isEs ? 'Deal Analyzer (Evaluación Completa)' : isPt ? 'Deal Analyzer (Avaliação Completa)' : 'Deal Analyzer'}
             </Link>
           </div>
         </section>
@@ -124,45 +130,156 @@ export default async function CashOnCashPage({ params }: PageProps) {
 
         {/* Worked Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">{isZh ? '商业地产分析案例 (Illustrative Example)' : 'Worked Commercial Property Example'}</h2>
+          <h2 className="text-xl font-bold text-slate-900">
+            {isZh ? '商业地产分析案例 (Illustrative Example)' : isEs ? 'Ejemplo Práctico en Propiedad Comercial' : isPt ? 'Exemplo Prático em Imóvel Comercial' : 'Worked Commercial Property Example'}
+          </h2>
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-4">
             <p>
-              {isZh ? '假设您正在评估一处 24 单元的多户住宅物业（24-unit multifamily），购买价为 $2,800,000。' : 'Consider a hypothetical 24-unit multifamily property purchased for $2,800,000.'}
+              {isZh
+                ? '假设您正在评估一处 24 单元的多户住宅物业（24-unit multifamily），购买价为 $2,800,000。'
+                : isEs
+                ? 'Considere una propiedad multifamiliar hipotética de 24 unidades adquirida por $2,800,000.'
+                : isPt
+                ? 'Considere um imóvel multifamiliar hipotético de 24 unidades adquirido por $2.800.000.'
+                : 'Consider a hypothetical 24-unit multifamily property purchased for $2,800,000.'}
             </p>
             <ul className="list-disc pl-5 space-y-1">
-              <li>{isZh ? '实际投入总现金: $756,000（25% 首付 $700k，加 2% 过户费 $56k）' : 'Total cash invested: $756,000 (25% down payment of $700k, plus 2% closing costs of $56k)'}</li>
-              <li>{isZh ? '年有效毛收入 (EGI): $319,200（潜在毛收入 $336k，减去 5% 空置率损失）' : 'Effective gross income (EGI): $319,200 ($336k gross, minus 5% vacancy)'}</li>
-              <li>{isZh ? '运营费用 (OpEx): $92,000' : 'Operating expenses: $92,000'}</li>
-              <li>{isZh ? '贷款条件: $2,100,000，6.5% 利率，25年摊销' : 'Loan terms: $2,100,000 at 6.5% interest, 25-year amortization'}</li>
+              <li>
+                {isZh
+                  ? '实际投入总现金: $756,000（25% 首付 $700k，加 2% 过户费 $56k）'
+                  : isEs
+                  ? 'Capital total invertido: $756,000 (25% de anticipo de $700k, más 2% de costos de cierre de $56k)'
+                  : isPt
+                  ? 'Capital total investido: $756.000 (25% de entrada de $700k, mais 2% de custos de fechamento de $56k)'
+                  : 'Total cash invested: $756,000 (25% down payment of $700k, plus 2% closing costs of $56k)'}
+              </li>
+              <li>
+                {isZh
+                  ? '年有效毛收入 (EGI): $319,200（潜在毛收入 $336k，减去 5% 空置率损失）'
+                  : isEs
+                  ? 'Ingreso bruto efectivo (EGI): $319,200 ($336k brutos menos 5% de desocupación)'
+                  : isPt
+                  ? 'Receita bruta efetiva (EGI): $319.200 ($336k brutos menos 5% de vacância)'
+                  : 'Effective gross income (EGI): $319,200 ($336k gross, minus 5% vacancy)'}
+              </li>
+              <li>
+                {isZh
+                  ? '运营费用 (OpEx): $92,000'
+                  : isEs
+                  ? 'Gastos operativos (OpEx): $92,000'
+                  : isPt
+                  ? 'Despesas operacionais (OpEx): $92.000'
+                  : 'Operating expenses: $92,000'}
+              </li>
+              <li>
+                {isZh
+                  ? '贷款条件: $2,100,000，6.5% 利率，25年摊销'
+                  : isEs
+                  ? 'Condiciones del préstamo: $2,100,000 al 6.5% de interés, amortización a 25 años'
+                  : isPt
+                  ? 'Condições do financiamento: $2.100.000 a 6,5% de juros, amortização em 25 anos'
+                  : 'Loan terms: $2,100,000 at 6.5% interest, 25-year amortization'}
+              </li>
             </ul>
             
             <div>
-              <strong className="text-slate-900">{isZh ? '步骤 1：从 NOI 到税前现金流' : 'Step 1: From NOI to Pre-Tax Cash Flow'}</strong>
+              <strong className="text-slate-900">
+                {isZh ? '步骤 1：从 NOI 到税前现金流' : isEs ? 'Paso 1: Del NOI al Flujo de Caja Antes de Impuestos' : isPt ? 'Passo 1: Do NOI ao Fluxo de Caixa Antes dos Impostos' : 'Step 1: From NOI to Pre-Tax Cash Flow'}
+              </strong>
               <p className="mt-1">
-                {isZh ? '首先扣除运营费用，我们可以 ' : 'By deducting operating expenses, we '}
-                <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '计算该物业的 NOI' : 'calculate the property\'s NOI'}</Link>
-                {isZh ? ' 为 $227,200（这也是 ' : ' at $227,200 (which is used to determine the '}
-                <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? '无杠杆 Cap Rate' : 'unleveraged Cap Rate'}</Link>
-                {isZh ? ' 的基础）。接着，计算出每年 $170,152 的还贷本息 (Debt Service)。扣除房贷后，您的年税前现金流 (Annual Pre-Tax Cash Flow) 为 $57,048。' : '). Next, we calculate the annual debt service at $170,152. Subtracting the debt service gives you an Annual Pre-Tax Cash Flow of $57,048.'}
+                {isZh ? (
+                  <>
+                    首先扣除运营费用，我们可以{' '}
+                    <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-semibold">计算该物业的 NOI</Link>
+                    {' '}为 $227,200（这也是{' '}
+                    <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">无杠杆 Cap Rate</Link>
+                    {' '}的基础）。接着，计算出每年 $170,152 的还贷本息 (Debt Service)。扣除房贷后，您的年税前现金流 (Annual Pre-Tax Cash Flow) 为 $57,048。
+                  </>
+                ) : isEs ? (
+                  <>
+                    Al deducir los gastos operativos,{' '}
+                    <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-semibold">calculamos el NOI de la propiedad</Link>
+                    {' '}en $227,200 (que sirve de base para el{' '}
+                    <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">Cap Rate sin apalancamiento</Link>
+                    ). A continuación, calculamos el servicio anual de la deuda en $170,152. Al restar el servicio de la deuda, se obtiene un Flujo de Caja Anual Antes de Impuestos de $57,048.
+                  </>
+                ) : isPt ? (
+                  <>
+                    Ao deduzir as despesas operacionais,{' '}
+                    <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-semibold">calculamos o NOI do imóvel</Link>
+                    {' '}em $227.200 (que serve de base para o{' '}
+                    <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">Cap Rate sem alavancagem</Link>
+                    ). Em seguida, calculamos o serviço anual da dívida em $170.152. Ao subtrair o serviço da dívida, obtém-se um Fluxo de Caixa Anual Antes dos Impostos de $57.048.
+                  </>
+                ) : (
+                  <>
+                    By deducting operating expenses, we{' '}
+                    <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-semibold">calculate the property&apos;s NOI</Link>
+                    {' '}at $227,200 (which is used to determine the{' '}
+                    <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">unleveraged Cap Rate</Link>
+                    ). Next, we calculate the annual debt service at $170,152. Subtracting the debt service gives you an Annual Pre-Tax Cash Flow of $57,048.
+                  </>
+                )}
               </p>
             </div>
 
             <div>
-              <strong className="text-slate-900">{isZh ? '步骤 2：计算 Cash-on-Cash Return' : 'Step 2: Calculate Cash-on-Cash Return'}</strong>
+              <strong className="text-slate-900">
+                {isZh ? '步骤 2：计算 Cash-on-Cash Return' : isEs ? 'Paso 2: Calcular el Rendimiento Cash-on-Cash' : isPt ? 'Passo 2: Calcular o Retorno Cash-on-Cash' : 'Step 2: Calculate Cash-on-Cash Return'}
+              </strong>
               <p className="mt-1">
-                {isZh ? '将您的 $57,048 税前现金流除以 $756,000 的初始现金投入，您的首年杠杆现金回报率为 7.55%。因为贷款成本 (6.5%) 低于物业的自然收益率 (8.11% Cap Rate)，这被称为正杠杆 (Positive Leverage)。' : 'Dividing your $57,048 cash flow by your $756,000 initial cash invested yields a leveraged Cash-on-Cash Return of 7.55%. Because the debt cost (6.5%) is lower than the property\'s natural yield (8.11% Cap Rate), this represents Positive Leverage.'}
+                {isZh
+                  ? '将您的 $57,048 税前现金流除以 $756,000 的初始现金投入，您的首年杠杆现金回报率为 7.55%。因为贷款成本 (6.5%) 低于物业的自然收益率 (8.11% Cap Rate)，这被称为正杠杆 (Positive Leverage)。'
+                  : isEs
+                  ? 'Al dividir el flujo de caja de $57,048 entre los $756,000 de capital inicialmente invertido, se obtiene un Rendimiento Cash-on-Cash apalancado del 7.55%. Dado que el costo de la deuda (6.5%) es inferior al rendimiento natural de la propiedad (Cap Rate del 8.11%), esto representa Apalancamiento Positivo.'
+                  : isPt
+                  ? 'Ao dividir o fluxo de caixa de $57.048 pelo capital inicial investido de $756.000, obtém-se um Retorno Cash-on-Cash alavancado de 7,55%. Como o custo da dívida (6,5%) é inferior ao rendimento natural do imóvel (Cap Rate de 8,11%), isso representa Alavancagem Positiva.'
+                  : 'Dividing your $57,048 cash flow by your $756,000 initial cash invested yields a leveraged Cash-on-Cash Return of 7.55%. Because the debt cost (6.5%) is lower than the property\'s natural yield (8.11% Cap Rate), this represents Positive Leverage.'}
               </p>
             </div>
 
             <div>
-              <strong className="text-amber-700">{isZh ? '步骤 3：压力测试 (Stress Testing)' : 'Step 3: Stress Testing'}</strong>
+              <strong className="text-amber-700">
+                {isZh ? '步骤 3：压力测试 (Stress Testing)' : isEs ? 'Paso 3: Prueba de Estrés (Stress Testing)' : isPt ? 'Passo 3: Teste de Estresse (Stress Testing)' : 'Step 3: Stress Testing'}
+              </strong>
               <p className="mt-1">
-                {isZh ? '如果贷款利率上升到 7.5%，且空置率恶化至 10% 会怎样？' : 'What if loan rates rise to 7.5% and vacancy worsens to 10%?'}
-                <br />
-                {isZh ? '年还贷本息升至 $186,226，而 NOI 缩水至 $210,400。此时年税前现金流骤降至 $24,174。这意味着在压力情景下，Cash-on-Cash Return 会暴跌至 3.20%。同时，' : 'Annual debt service jumps to $186,226, while NOI shrinks to $210,400. Pre-tax cash flow plummets to $24,174. Under this stress scenario, your Cash-on-Cash Return collapses to just 3.20%. Additionally, your '}
-                <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'DSCR 偿债覆盖率' : 'DSCR (Debt Service Coverage Ratio)'}</Link>
-                {isZh ? ' 将降至 1.13x（这已接近部分商业贷款合同约定的警戒阈值）。要一次性测试这些风险，建议使用完整的 ' : ' drops to 1.13x (approaching common lender covenant thresholds depending on the loan agreement). To model these risks simultaneously, use the full '}
-                <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Deal Analyzer 综合尽调工具' : 'Deal Analyzer underwriting tool'}</Link>.
+                {isZh ? (
+                  <>
+                    如果贷款利率上升到 7.5%，且空置率恶化至 10% 会怎样？
+                    <br />
+                    年还贷本息升至 $186,226，而 NOI 缩水至 $210,400。此时年税前现金流骤降至 $24,174。这意味着在压力情景下，Cash-on-Cash Return 会暴跌至 3.20%。同时，{' '}
+                    <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">DSCR 偿债覆盖率</Link>
+                    {' '}将降至 1.13x（这已接近部分商业贷款合同约定的警戒阈值）。要一次性测试这些风险，建议使用完整的{' '}
+                    <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">Deal Analyzer 综合尽调工具</Link>。
+                  </>
+                ) : isEs ? (
+                  <>
+                    ¿Qué sucede si las tasas del préstamo suben al 7.5% y la desocupación empeora al 10%?
+                    <br />
+                    El servicio anual de la deuda aumenta a $186,226, mientras que el NOI se reduce a $210,400. El flujo de caja antes de impuestos cae a $24,174. Bajo este escenario de estrés, su Rendimiento Cash-on-Cash se reduce a solo el 3.20%. Además, su{' '}
+                    <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">DSCR (Cobertura del Servicio de la Deuda)</Link>
+                    {' '}desciende a 1.13x (acercándose a los umbrales típicos de convenios crediticios según el contrato de préstamo). Para modelar estos riesgos de forma simultánea, utilice la herramienta integral{' '}
+                    <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">Deal Analyzer</Link>.
+                  </>
+                ) : isPt ? (
+                  <>
+                    E se os juros subirem para 7,5% e a vacância piorar para 10%?
+                    <br />
+                    O serviço anual da dívida sobe para $186.226, enquanto o NOI cai para $210.400. O fluxo de caixa antes dos impostos despenca para $24.174. Sob esse cenário de estresse, seu Retorno Cash-on-Cash cai para apenas 3,20%. Além disso, seu{' '}
+                    <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">DSCR (Índice de Cobertura do Serviço da Dívida)</Link>
+                    {' '}cai para 1,13x (aproximando-se dos limites exigidos por credores conforme o contrato de financiamento). Para modelar esses riscos simultaneamente, utilize a ferramenta completa{' '}
+                    <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">Deal Analyzer</Link>.
+                  </>
+                ) : (
+                  <>
+                    What if loan rates rise to 7.5% and vacancy worsens to 10%?
+                    <br />
+                    Annual debt service jumps to $186,226, while NOI shrinks to $210,400. Pre-tax cash flow plummets to $24,174. Under this stress scenario, your Cash-on-Cash Return collapses to just 3.20%. Additionally, your{' '}
+                    <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">DSCR (Debt Service Coverage Ratio)</Link>
+                    {' '}drops to 1.13x (approaching common lender covenant thresholds depending on the loan agreement). To model these risks simultaneously, use the full{' '}
+                    <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">Deal Analyzer underwriting tool</Link>.
+                  </>
+                )}
               </p>
             </div>
           </div>
@@ -170,35 +287,69 @@ export default async function CashOnCashPage({ params }: PageProps) {
 
         {/* Comparison Table */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">{isZh ? '指标对比：Cash-on-Cash vs. Cap Rate vs. IRR' : 'Comparison: Cash-on-Cash vs. Cap Rate vs. IRR'}</h2>
+          <h2 className="text-xl font-bold text-slate-900">
+            {isZh ? '指标对比：Cash-on-Cash vs. Cap Rate vs. IRR' : isEs ? 'Comparación: Cash-on-Cash vs. Cap Rate vs. TIR (IRR)' : isPt ? 'Comparação: Cash-on-Cash vs. Cap Rate vs. TIR (IRR)' : 'Comparison: Cash-on-Cash vs. Cap Rate vs. IRR'}
+          </h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left text-slate-600 border-collapse">
               <thead className="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <th scope="col" className="px-4 py-3 font-semibold">{isZh ? '财务指标' : 'Metric'}</th>
-                  <th scope="col" className="px-4 py-3 font-semibold">{isZh ? '核心意义' : 'What It Measures'}</th>
-                  <th scope="col" className="px-4 py-3 font-semibold">{isZh ? '是否包含债务' : 'Includes Debt?'}</th>
-                  <th scope="col" className="px-4 py-3 font-semibold">{isZh ? '是否包含升值' : 'Includes Appreciation?'}</th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    {isZh ? '财务指标' : isEs || isPt ? 'Métrica' : 'Metric'}
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    {isZh ? '核心意义' : isEs ? 'Qué Mide' : isPt ? 'O Que Mede' : 'What It Measures'}
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    {isZh ? '是否包含债务' : isEs ? '¿Incluye Deuda?' : isPt ? 'Inclui Dívida?' : 'Includes Debt?'}
+                  </th>
+                  <th scope="col" className="px-4 py-3 font-semibold">
+                    {isZh ? '是否包含升值' : isEs ? '¿Incluye Plusvalía?' : isPt ? 'Inclui Valorização?' : 'Includes Appreciation?'}
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 <tr className="hover:bg-slate-50/50">
                   <td className="px-4 py-3 font-bold text-slate-900">Cap Rate</td>
-                  <td className="px-4 py-3">{isZh ? '物业本身的无杠杆当前收益率' : 'Unleveraged property-level yield based on purchase price'}</td>
-                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : 'No'}</td>
-                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : 'No'}</td>
+                  <td className="px-4 py-3">
+                    {isZh
+                      ? '物业本身的无杠杆当前收益率'
+                      : isEs
+                      ? 'Rendimiento a nivel de propiedad sin apalancamiento basado en el precio de compra'
+                      : isPt
+                      ? 'Rendimento a nível de imóvel sem alavancagem com base no preço de compra'
+                      : 'Unleveraged property-level yield based on purchase price'}
+                  </td>
+                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : isEs || isPt ? 'No' : 'No'}</td>
+                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : isEs || isPt ? 'No' : 'No'}</td>
                 </tr>
                 <tr className="hover:bg-slate-50/50 bg-emerald-50/30">
                   <td className="px-4 py-3 font-bold text-emerald-800">Cash-on-Cash</td>
-                  <td className="px-4 py-3 text-emerald-900">{isZh ? '股权现金投入的单期杠杆现金回报' : 'Leveraged year-one cash yield on actual equity invested'}</td>
-                  <td className="px-4 py-3 text-emerald-600 font-medium">{isZh ? '是 (Yes)' : 'Yes'}</td>
-                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : 'No'}</td>
+                  <td className="px-4 py-3 text-emerald-900">
+                    {isZh
+                      ? '股权现金投入的单期杠杆现金回报'
+                      : isEs
+                      ? 'Rendimiento de caja apalancado en el primer año sobre el capital real invertido'
+                      : isPt
+                      ? 'Rendimento de caixa alavancado no primeiro ano sobre o capital real investido'
+                      : 'Leveraged year-one cash yield on actual equity invested'}
+                  </td>
+                  <td className="px-4 py-3 text-emerald-600 font-medium">{isZh ? '是 (Yes)' : isEs ? 'Sí' : isPt ? 'Sim' : 'Yes'}</td>
+                  <td className="px-4 py-3 text-rose-600">{isZh ? '否 (No)' : isEs || isPt ? 'No' : 'No'}</td>
                 </tr>
                 <tr className="hover:bg-slate-50/50">
                   <td className="px-4 py-3 font-bold text-slate-900">IRR</td>
-                  <td className="px-4 py-3">{isZh ? '考虑持有期内所有现金流与最终退出升值的时间加权总回报' : 'Time-weighted total return across the entire holding period'}</td>
-                  <td className="px-4 py-3 text-emerald-600 font-medium">{isZh ? '是 (Yes)' : 'Yes'}</td>
-                  <td className="px-4 py-3 text-emerald-600 font-medium">{isZh ? '是 (Yes)' : 'Yes'}</td>
+                  <td className="px-4 py-3">
+                    {isZh
+                      ? '考虑持有期内所有现金流与最终退出升值的时间加权总回报'
+                      : isEs
+                      ? 'Rendimiento total ponderado en el tiempo a lo largo de todo el período de tenencia'
+                      : isPt
+                      ? 'Retorno total ponderado no tempo ao longo de todo o período de posse'
+                      : 'Time-weighted total return across the entire holding period'}
+                  </td>
+                  <td className="px-4 py-3 text-emerald-600 font-medium">{isZh ? '是 (Yes)' : isEs ? 'Sí' : isPt ? 'Sim' : 'Yes'}</td>
+                  <td className="px-4 py-3 text-emerald-600 font-medium">{isZh ? '是 (Yes)' : isEs ? 'Sí' : isPt ? 'Sim' : 'Yes'}</td>
                 </tr>
               </tbody>
             </table>
@@ -209,17 +360,31 @@ export default async function CashOnCashPage({ params }: PageProps) {
         <section className="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 md:p-8 space-y-3">
           <h2 className="text-lg font-bold text-amber-950 flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-amber-600" />
-            {isZh ? 'Cash-on-Cash 的常见误区与正负杠杆效应' : 'Cash-on-Cash Pitfalls & Positive/Negative Leverage'}
+            {isZh
+              ? 'Cash-on-Cash 的常见误区与正负杠杆效应'
+              : isEs
+              ? 'Limitaciones de Cash-on-Cash y Efecto de Apalancamiento Positivo/Negativo'
+              : isPt
+              ? 'Limitações do Cash-on-Cash e Efeito de Alavancagem Positiva/Negativa'
+              : 'Cash-on-Cash Pitfalls & Positive/Negative Leverage'}
           </h2>
           <div className="space-y-2 text-xs sm:text-sm text-amber-900 leading-relaxed">
             <p>
               {isZh
                 ? '1. 警惕负杠杆 (Negative Leverage)：当商业贷款常数 (Loan Constant) 高于物业 Cap Rate 时，借钱反而会拉低你的现金回报率。'
+                : isEs
+                ? '1. Trampa del Apalancamiento Negativo: Si la constante del préstamo supera el Cap Rate del inmueble, endeudarse reduce su Rendimiento Cash-on-Cash por debajo del Cap Rate sin deuda.'
+                : isPt
+                ? '1. Armadilha da Alavancagem Negativa: Se a constante do financiamento superar o Cap Rate do imóvel, o endividamento reduz seu Retorno Cash-on-Cash abaixo do Cap Rate sem dívida.'
                 : '1. Negative Leverage Trap: If the borrowing loan constant exceeds the property Cap Rate, adding debt actually decreases your Cash-on-Cash Return below the unleveraged Cap Rate.'}
             </p>
             <p>
               {isZh
                 ? '2. 不反映本金偿还与资产增值：Cash-on-Cash 仅反映第 1 年税前真实现金流，不包含每月的本金积累、折旧抵税 (Cost Segregation) 及远期出售升值。'
+                : isEs
+                ? '2. Ignora la Amortización del Principal y la Plusvalía: El rendimiento CoC solo mide el efectivo en mano del primer año. No refleja la acumulación de capital por amortización, escudos fiscales por depreciación ni la plusvalía en la venta futura.'
+                : isPt
+                ? '2. Ignora a Amortização do Principal e a Valorização: O retorno CoC mede apenas o fluxo de caixa no bolso no primeiro ano. Não reflete a criação de patrimônio por amortização, benefícios fiscais de depreciação nem a valorização futura na saída.'
                 : '2. Ignores Principal Paydown & Appreciation: CoC return only measures year-one cash-in-pocket. It ignores equity buildup from loan amortization, depreciation tax shields, and exit appreciation.'}
             </p>
           </div>
@@ -246,20 +411,32 @@ export default async function CashOnCashPage({ params }: PageProps) {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-                {locale === 'zh' ? '综合分析工具' : 'Full Underwriting Tool'}
+                {isZh ? '综合分析工具' : isEs ? 'Herramienta Integral de Evaluación' : isPt ? 'Ferramenta Completa de Avaliação' : 'Full Underwriting Tool'}
               </span>
               <h3 className="text-xl font-bold text-white">
-                {locale === 'zh' ? '想同时计算 Cap Rate、NOI、DSCR 和 Cash-on-Cash？' : 'Need Cap Rate, NOI, DSCR, and Cash-on-Cash all together?'}
+                {isZh
+                  ? '想同时计算 Cap Rate、NOI、DSCR 和 Cash-on-Cash？'
+                  : isEs
+                  ? '¿Desea calcular Cap Rate, NOI, DSCR y Cash-on-Cash a la vez?'
+                  : isPt
+                  ? 'Deseja calcular Cap Rate, NOI, DSCR e Cash-on-Cash juntos?'
+                  : 'Need Cap Rate, NOI, DSCR, and Cash-on-Cash all together?'}
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                {locale === 'zh' ? '使用 Deal Analyzer 综合尽调工具，一次输入算出全部核心指标，支持压力测试与 PDF 导出。' : 'Use the Deal Analyzer tool to run all core CRE metrics from a single set of inputs with stress testing.'}
+                {isZh
+                  ? '使用 Deal Analyzer 综合尽调工具，一次输入算出全部核心指标，支持压力测试与 PDF 导出。'
+                  : isEs
+                  ? 'Utilice Deal Analyzer para calcular todas las métricas inmobiliarias esenciales con una sola entrada y pruebas de estrés.'
+                  : isPt
+                  ? 'Utilize o Deal Analyzer para calcular todas as principais métricas imobiliárias com uma única entrada e testes de estresse.'
+                  : 'Use the Deal Analyzer tool to run all core CRE metrics from a single set of inputs with stress testing.'}
               </p>
             </div>
             <Link
               href={`/${locale}/tools/deal-analyzer/`}
               className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
             >
-              <span>{locale === 'zh' ? '打开 Deal Analyzer' : 'Launch Deal Analyzer'}</span>
+              <span>{isZh ? '打开 Deal Analyzer' : isEs ? 'Abrir Deal Analyzer' : isPt ? 'Abrir Deal Analyzer' : 'Launch Deal Analyzer'}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

@@ -33,6 +33,12 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
   const resolvedParams = await params;
   const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).capRateBenchmarksGuide;
+  const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
+
+  const homeLabel = isZh ? '首页' : isEs ? 'Inicio' : isPt ? 'Início' : 'Home';
+  const guidesLabel = isZh ? '实操指南' : isEs ? 'Guías' : isPt ? 'Guias' : 'Guides';
 
   const jsonLdData = getArticleJsonLd(
     content.h1,
@@ -48,9 +54,9 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
       {/* Breadcrumb & Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
-          <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
+          <Link href={`/${locale}/`} className="hover:text-emerald-600">{homeLabel}</Link>
           <span>/</span>
-          <span className="text-slate-500">Guides</span>
+          <Link href={`/${locale}/guides/`} className="hover:text-emerald-600">{guidesLabel}</Link>
           <span>/</span>
           <span className="text-slate-900 font-semibold">{content.h1}</span>
         </nav>
@@ -68,7 +74,13 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div className="space-y-1">
             <h3 className="text-sm font-bold text-amber-900">
-              {locale === 'zh' ? '重要说明与免责声明' : 'Market Data Disclaimer'}
+              {isZh
+                ? '重要说明与免责声明'
+                : isEs
+                ? 'Aviso de Datos de Mercado y Descargo de Responsabilidad'
+                : isPt
+                ? 'Aviso sobre Dados de Mercado e Isenção de Responsabilidade'
+                : 'Market Data Disclaimer'}
             </h3>
             <p className="text-xs sm:text-sm text-amber-800 leading-relaxed font-medium">
               {content.disclaimer}
@@ -85,7 +97,13 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
             {content.propertyTypeTitle}
           </h2>
           <p className="text-xs text-slate-500">
-            {locale === 'zh' ? '说明：以下数据为教学测算参考示意区间（主要参考 Newmark 2026 年初市场调研与常规估值逻辑，非官方逐项交易报价发布）' : 'Note: Directional underwriting benchmark ranges for educational reference (informed by Newmark 2026 market survey and valuation conventions; not official transaction quotes)'}
+            {isZh
+              ? '说明：以下数据为教学测算参考示意区间（主要参考 Newmark 2026 年初市场调研与常规估值逻辑，非官方逐项交易报价发布）'
+              : isEs
+              ? 'Nota: Rangos de referencia orientativos con fines educativos (basados en sondeos de mercado de Newmark 2026 y convenciones de valuación; no constituyen cotizaciones oficiales).'
+              : isPt
+              ? 'Nota: Faixas de referência para fins educativos (baseadas em pesquisas de mercado da Newmark 2026 e convenções de avaliação; não constituem cotações oficiais).'
+              : 'Note: Directional underwriting benchmark ranges for educational reference (informed by Newmark 2026 market survey and valuation conventions; not official transaction quotes)'}
           </p>
         </div>
 
@@ -150,11 +168,21 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
         <div className="space-y-1">
           <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <Building2 className="w-5 h-5 text-emerald-600" />
-            {locale === 'zh' ? '重点城市商业地产 Cap Rate 专项指南' : 'Key Metro Cap Rate Benchmark Deep Dives'}
+            {isZh
+              ? '重点城市商业地产 Cap Rate 专项指南'
+              : isEs
+              ? 'Guías Especializadas de Cap Rate por Ciudad'
+              : isPt
+              ? 'Guias Especializados de Cap Rate por Cidade'
+              : 'Key Metro Cap Rate Benchmark Deep Dives'}
           </h2>
           <p className="text-xs text-slate-600 leading-relaxed">
-            {locale === 'zh'
+            {isZh
               ? '深入各大热门都会区，探索本地经济驱动因素、细分物业利差与承销测算案例：'
+              : isEs
+              ? 'Explore en detalle los motores económicos locales, diferenciales por tipo de activo y ejemplos de evaluación para los principales mercados de inversión:'
+              : isPt
+              ? 'Explore em detalhes os motores econômicos locais, diferenciais por tipo de ativo e exemplos de avaliação para os principais mercados de investimento:'
               : 'Explore detailed local economic drivers, asset-class spreads, and underwriting examples for high-volume investment markets:'}
           </p>
         </div>
@@ -166,7 +194,9 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
           >
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Tier 2 Tech Metro</span>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                  {isZh ? 'Tier 2 科技都会区' : isEs ? 'Metrópoli Tecnológica Tier 2' : isPt ? 'Metrópole Tecnológica Tier 2' : 'Tier 2 Tech Metro'}
+                </span>
                 <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Austin, TX</h3>
                 <p className="text-xs text-slate-500 mt-1">Multifamily 5.25% - 6.00% · Industrial 5.50% - 6.25%</p>
               </div>
@@ -179,7 +209,9 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
           >
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Gateway Growth Metro</span>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                  {isZh ? '门户枢纽与高增长都会区' : isEs ? 'Metrópoli Gateway de Alto Crecimiento' : isPt ? 'Metrópole Gateway de Alto Crescimento' : 'Gateway Growth Metro'}
+                </span>
                 <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Miami, FL</h3>
                 <p className="text-xs text-slate-500 mt-1">Multifamily 5.00% - 5.75% · Industrial 5.25% - 6.00%</p>
               </div>
@@ -192,7 +224,9 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
           >
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Logistics & Corporate Mega Hub</span>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                  {isZh ? '全美物流与企业总部超级枢纽' : isEs ? 'Megacentro Logístico y Corporativo' : isPt ? 'Megacentro Logístico e Corporativo' : 'Logistics & Corporate Mega Hub'}
+                </span>
                 <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Dallas - Fort Worth, TX</h3>
                 <p className="text-xs text-slate-500 mt-1">Multifamily 5.50% - 6.25% · Industrial 5.60% - 6.30%</p>
               </div>
@@ -205,7 +239,9 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
           >
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Semiconductor & Sunbelt Inflow</span>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                  {isZh ? '半导体制造与阳光带人口净流入' : isEs ? 'Semiconductores y Atracción del Sunbelt' : isPt ? 'Semicondutores e Atração do Sunbelt' : 'Semiconductor & Sunbelt Inflow'}
+                </span>
                 <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Phoenix, AZ</h3>
                 <p className="text-xs text-slate-500 mt-1">Multifamily 5.40% - 6.15% · Industrial 5.50% - 6.25%</p>
               </div>

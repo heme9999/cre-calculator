@@ -36,6 +36,11 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
   const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).breakEvenRatio;
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
+
+  const homeLabel = isZh ? '首页' : isEs ? 'Inicio' : isPt ? 'Início' : 'Home';
+
   const jsonLdData = getCalculatorJsonLd(
     content.h1,
     content.metaDescription,
@@ -51,7 +56,7 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
       {/* Page Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
-          <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
+          <Link href={`/${locale}/`} className="hover:text-emerald-600">{homeLabel}</Link>
           <span>/</span>
           <span className="text-slate-900 font-semibold">{content.h1}</span>
         </nav>
@@ -99,27 +104,129 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
 
         {/* Worked Example */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">{isZh ? '商业地产分析案例 (Illustrative Example)' : 'Worked Commercial Property Example'}</h2>
+          <h2 className="text-xl font-bold text-slate-900">
+            {isZh ? '商业地产分析案例 (Illustrative Example)' : isEs ? 'Ejemplo Práctico en Propiedad Comercial' : isPt ? 'Exemplo Prático em Imóvel Comercial' : 'Worked Commercial Property Example'}
+          </h2>
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-3">
             <p>
-              {isZh ? '回顾我们贯穿始终的 24 单元多户住宅案例（24-unit multifamily）。' : 'Returning to our ongoing 24-unit multifamily example.'}
+              {isZh
+                ? '回顾我们贯穿始终的 24 单元多户住宅案例（24-unit multifamily）。'
+                : isEs
+                ? 'Retomando nuestro ejemplo continuo de propiedad multifamiliar de 24 unidades.'
+                : isPt
+                ? 'Retomando nosso exemplo contínuo de imóvel multifamiliar de 24 unidades.'
+                : 'Returning to our ongoing 24-unit multifamily example.'}
             </p>
             <ul className="list-disc pl-5 space-y-1">
-              <li>{isZh ? '运营费用 (OpEx): $92,000' : 'Operating Expenses (OpEx): $92,000'}</li>
-              <li>{isZh ? '年还本付息额 (Annual Debt Service): $170,152（详见 ' : 'Annual Debt Service: $170,152 (see the '}
-                <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">{isZh ? '商业贷款计算' : 'loan payment calculation'}</Link>
-                {isZh ? '）' : ')'}
+              <li>
+                {isZh
+                  ? '运营费用 (OpEx): $92,000'
+                  : isEs
+                  ? 'Gastos operativos (OpEx): $92,000'
+                  : isPt
+                  ? 'Despesas operacionais (OpEx): $92.000'
+                  : 'Operating Expenses (OpEx): $92,000'}
               </li>
-              <li>{isZh ? '有效毛收入 (Effective Gross Income): $319,200 (基于 $336k GPI 和 5% 空置率)' : 'Effective Gross Income (EGI): $319,200 (based on $336k GPI and 5% vacancy)'}</li>
+              <li>
+                {isZh ? (
+                  <>
+                    年还本付息额 (Annual Debt Service): $170,152（详见{' '}
+                    <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">
+                      商业贷款计算
+                    </Link>
+                    ）
+                  </>
+                ) : isEs ? (
+                  <>
+                    Servicio anual de deuda: $170,152 (consulte el{' '}
+                    <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">
+                      cálculo del préstamo comercial
+                    </Link>
+                    )
+                  </>
+                ) : isPt ? (
+                  <>
+                    Serviço anual da dívida: $170.152 (veja o{' '}
+                    <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">
+                      cálculo do financiamento comercial
+                    </Link>
+                    )
+                  </>
+                ) : (
+                  <>
+                    Annual Debt Service: $170,152 (see the{' '}
+                    <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">
+                      loan payment calculation
+                    </Link>
+                    )
+                  </>
+                )}
+              </li>
+              <li>
+                {isZh
+                  ? '有效毛收入 (Effective Gross Income): $319,200 (基于 $336k GPI 和 5% 空置率)'
+                  : isEs
+                  ? 'Ingreso bruto efectivo (EGI): $319,200 (basado en $336k GPI y 5% de desocupación)'
+                  : isPt
+                  ? 'Receita bruta efetiva (EGI): $319.200 (com base em $336k GPI e 5% de vacância)'
+                  : 'Effective Gross Income (EGI): $319,200 (based on $336k GPI and 5% vacancy)'}
+              </li>
             </ul>
             <p className="font-semibold text-slate-900 mt-2 whitespace-pre-line">
-              {isZh ? '计算 Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%\n计算 Break-Even Occupancy = ($92,000 + $170,152) / $336,000 = 78.02%' : 'Calculation: Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%\nBreak-Even Occupancy = ($92,000 + $170,152) / $336,000 = 78.02%'}
+              {isZh
+                ? '计算 Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%\n计算 Break-Even Occupancy = ($92,000 + $170,152) / $336,000 = 78.02%'
+                : isEs
+                ? 'Cálculo: Ratio de Cobertura de Gastos (BER) = ($92,000 + $170,152) / $319,200 = 82.13%\nOcupación de Equilibrio (BEO) = ($92,000 + $170,152) / $336,000 = 78.02%'
+                : isPt
+                ? 'Cálculo: Índice de Ponto de Equilíbrio (BER) = ($92.000 + $170.152) / $319.200 = 82.13%\nOcupação de Ponto de Equilíbrio (BEO) = ($92.000 + $170.152) / $336.000 = 78.02%'
+                : 'Calculation: Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%\nBreak-Even Occupancy = ($92,000 + $170,152) / $336,000 = 78.02%'}
             </p>
             <p className="mt-2">
-              {isZh ? '这意味着该物业的 BEO 为 78.02%，即至少需要维持约 78% 的入住率才能刚好覆盖所有开销和房贷。而 BER 为 82.13%，满足本站示例设定的 ≤85% 测算参考规则（注意：这并非全行业通用的贷方审批门槛，实际要求取决于贷款机构与产品）。想在一个页面上同时测试入住率、利率和 ' : 'This means the BEO is 78.02%, so the property needs to maintain at least 78% occupancy just to pay its bills. The BER is 82.13%, satisfying this tool\'s illustrative ≤85% reference rule (note that this is not a universal lender threshold; actual requirements vary by lender and debt program). To test how changes in occupancy, rates, and '}
-              <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Cash-on-Cash 收益率' : 'Cash-on-Cash Return'}</Link>
-              {isZh ? ' 之间的联动关系吗？请使用 ' : ' interact together on one page, try our comprehensive '}
-              <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">{isZh ? 'Deal Analyzer 综合尽调工具' : 'Deal Analyzer tool'}</Link>.
+              {isZh ? (
+                <>
+                  这意味着该物业的 BEO 为 78.02%，即至少需要维持约 78% 的入住率才能刚好覆盖所有开销和房贷。而 BER 为 82.13%，满足本站示例设定的 ≤85% 测算参考规则（注意：这并非全行业通用的贷方审批门槛，实际要求取决于贷款机构与产品）。想在一个页面上同时测试入住率、利率和{' '}
+                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
+                    Cash-on-Cash 收益率
+                  </Link>
+                  {' '}之间的联动关系吗？请使用{' '}
+                  <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">
+                    Deal Analyzer 综合尽调工具
+                  </Link>。
+                </>
+              ) : isEs ? (
+                <>
+                  Esto significa que el BEO es del 78.02%, por lo que la propiedad necesita mantener al menos un 78% de ocupación solo para cubrir sus costos y la hipoteca. El BER es del 82.13%, cumpliendo con la regla de referencia ilustrativa de ≤85% de este sitio (tenga en cuenta que no es un umbral bancario universal; los requisitos reales varían según el prestamista). Para comprobar cómo interactúan en una sola página la ocupación, las tasas y el{' '}
+                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
+                    rendimiento Cash-on-Cash
+                  </Link>
+                  , pruebe nuestra herramienta integral{' '}
+                  <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">
+                    Deal Analyzer
+                  </Link>.
+                </>
+              ) : isPt ? (
+                <>
+                  Isso significa que o BEO é de 78.02%, portanto o imóvel precisa manter pelo menos cerca de 78% de ocupação apenas para pagar as despesas e o financiamento. O BER é de 82.13%, atendendo à regra de referência ilustrativa de ≤85% deste site (note que isso não é um limite bancário universal; as exigências reais variam por credor). Para testar como interagem em uma única página a ocupação, os juros e o{' '}
+                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
+                    retorno Cash-on-Cash
+                  </Link>
+                  , utilize nossa ferramenta completa{' '}
+                  <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">
+                    Deal Analyzer
+                  </Link>.
+                </>
+              ) : (
+                <>
+                  This means the BEO is 78.02%, so the property needs to maintain at least 78% occupancy just to pay its bills. The BER is 82.13%, satisfying this tool&apos;s illustrative ≤85% reference rule (note that this is not a universal lender threshold; actual requirements vary by lender and debt program). To test how changes in occupancy, rates, and{' '}
+                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
+                    Cash-on-Cash Return
+                  </Link>
+                  {' '}interact together on one page, try our comprehensive{' '}
+                  <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">
+                    Deal Analyzer tool
+                  </Link>.
+                </>
+              )}
             </p>
           </div>
         </section>
@@ -145,20 +252,32 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-                {locale === 'zh' ? '综合分析工具' : 'Full Underwriting Tool'}
+                {isZh ? '综合分析工具' : isEs ? 'Herramienta Integral de Evaluación' : isPt ? 'Ferramenta Completa de Avaliação' : 'Full Underwriting Tool'}
               </span>
               <h3 className="text-xl font-bold text-white">
-                {locale === 'zh' ? '用 Deal Analyzer 测算 Break-Even Ratio 与全套尽调指标' : 'Evaluate Break-Even Ratio & Full Metrics in Deal Analyzer'}
+                {isZh
+                  ? '用 Deal Analyzer 测算 Break-Even Ratio 与全套尽调指标'
+                  : isEs
+                  ? 'Evalúe el Break-Even Ratio y Todas las Métricas en Deal Analyzer'
+                  : isPt
+                  ? 'Avalie o Break-Even Ratio e Todas as Métricas no Deal Analyzer'
+                  : 'Evaluate Break-Even Ratio & Full Metrics in Deal Analyzer'}
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                {locale === 'zh' ? '一次输入同步算出 Cap Rate、Cash-on-Cash、DSCR、Break-Even Ratio，支持压力测试与 PDF 导出。' : 'Calculate Cap Rate, Cash-on-Cash, DSCR, and BER simultaneously with stress testing.'}
+                {isZh
+                  ? '一次输入同步算出 Cap Rate、Cash-on-Cash、DSCR、Break-Even Ratio，支持压力测试与 PDF 导出。'
+                  : isEs
+                  ? 'Calcule Cap Rate, Cash-on-Cash, DSCR y Break-Even Ratio simultáneamente con pruebas de estrés.'
+                  : isPt
+                  ? 'Calcule Cap Rate, Cash-on-Cash, DSCR e Break-Even Ratio simultaneamente com testes de estresse.'
+                  : 'Calculate Cap Rate, Cash-on-Cash, DSCR, and BER simultaneously with stress testing.'}
               </p>
             </div>
             <Link
               href={`/${locale}/tools/deal-analyzer/`}
               className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
             >
-              <span>{locale === 'zh' ? '打开 Deal Analyzer' : 'Launch Deal Analyzer'}</span>
+              <span>{isZh ? '打开 Deal Analyzer' : isEs ? 'Abrir Deal Analyzer' : isPt ? 'Abrir Deal Analyzer' : 'Launch Deal Analyzer'}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

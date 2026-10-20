@@ -35,6 +35,12 @@ export default async function Exchange1031Page({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).exchange1031;
+  const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
+
+  const homeLabel = isZh ? '首页' : isEs ? 'Inicio' : isPt ? 'Início' : 'Home';
+
   const jsonLdData = getCalculatorJsonLd(
     content.h1,
     content.metaDescription,
@@ -49,7 +55,7 @@ export default async function Exchange1031Page({ params }: PageProps) {
       {/* Page Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
-          <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
+          <Link href={`/${locale}/`} className="hover:text-emerald-600">{homeLabel}</Link>
           <span>/</span>
           <span className="text-slate-900 font-semibold">{content.h1}</span>
         </nav>
@@ -124,11 +130,21 @@ export default async function Exchange1031Page({ params }: PageProps) {
           <div className="space-y-1">
             <h3 className="text-base font-bold text-emerald-950 flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-emerald-600" />
-              {locale === 'zh' ? '1031 Exchange 完整操作流程指南' : 'The Complete 1031 Exchange Process Guide'}
+              {isZh
+                ? '1031 Exchange 完整操作流程指南'
+                : isEs
+                ? 'Guía Completa del Proceso de Intercambio 1031'
+                : isPt
+                ? 'Guia Completo do Processo de Troca 1031'
+                : 'The Complete 1031 Exchange Process Guide'}
             </h3>
             <p className="text-xs text-emerald-800 leading-relaxed">
-              {locale === 'zh'
+              {isZh
                 ? '一步步讲解如何寻找合格中介(QI)，以及45天确认期和180天交割期的硬性规定。'
+                : isEs
+                ? 'Paso a paso sobre selección de intermediario calificado (QI), identificación a 45 días y reglas de cierre a 180 días.'
+                : isPt
+                ? 'Passo a passo sobre seleção de intermediário qualificado (QI), prazo de identificação de 45 dias e fechamento em 180 dias.'
                 : 'Step-by-step walkthrough on QI selection, 45-day identification, and 180-day closing rules.'}
             </p>
           </div>
@@ -136,7 +152,15 @@ export default async function Exchange1031Page({ params }: PageProps) {
             href={`/${locale}/guides/1031-exchange-process/`}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
           >
-            <span>{locale === 'zh' ? '阅读流程指南' : 'Read Guide'}</span>
+            <span>
+              {isZh
+                ? '阅读流程指南'
+                : isEs
+                ? 'Leer Guía del Proceso'
+                : isPt
+                ? 'Ler Guia do Processo'
+                : 'Read Guide'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </section>

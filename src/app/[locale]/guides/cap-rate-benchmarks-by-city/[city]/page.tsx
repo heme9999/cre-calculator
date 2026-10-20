@@ -45,6 +45,8 @@ export default async function CityCapRatePage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolveLocale(resolvedParams.locale);
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
   const citySlug = resolvedParams.city as CitySlug;
   const cityMap = cityCapRatesContent[locale] || cityCapRatesContent.en;
   const item = cityMap[citySlug];
@@ -55,10 +57,14 @@ export default async function CityCapRatePage({ params }: PageProps) {
 
   const currentUrl = `${SITE_URL}/${locale}/guides/cap-rate-benchmarks-by-city/${item.slug}/`;
 
+  const homeLabel = isZh ? '首页' : isEs ? 'Inicio' : isPt ? 'Início' : 'Home';
+  const guidesLabel = isZh ? '指南' : isEs ? 'Guías' : isPt ? 'Guias' : 'Guides';
+  const benchmarksLabel = isZh ? '全美 Cap Rate 基准' : isEs ? 'Puntos de Referencia de Cap Rate' : isPt ? 'Referências de Cap Rate' : 'Cap Rate Benchmarks';
+
   const breadcrumbSchema = getBreadcrumbJsonLd([
-    { name: isZh ? '首页' : 'Home', url: `${SITE_URL}/${locale}/` },
-    { name: isZh ? '指南' : 'Guides', url: `${SITE_URL}/${locale}/guides/` },
-    { name: isZh ? '全美 Cap Rate 基准' : 'Cap Rate Benchmarks', url: `${SITE_URL}/${locale}/guides/cap-rate-benchmarks-by-city/` },
+    { name: homeLabel, url: `${SITE_URL}/${locale}/` },
+    { name: guidesLabel, url: `${SITE_URL}/${locale}/guides/` },
+    { name: benchmarksLabel, url: `${SITE_URL}/${locale}/guides/cap-rate-benchmarks-by-city/` },
     { name: item.cityName, url: currentUrl },
   ]);
 
@@ -73,14 +79,14 @@ export default async function CityCapRatePage({ params }: PageProps) {
       {/* Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2 flex-wrap">
-          <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
+          <Link href={`/${locale}/`} className="hover:text-emerald-600">{homeLabel}</Link>
           <span>/</span>
           <Link href={`/${locale}/guides/`} className="hover:text-emerald-600">
-            {isZh ? '指南' : 'Guides'}
+            {guidesLabel}
           </Link>
           <span>/</span>
           <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/`} className="hover:text-emerald-600">
-            {isZh ? '全美 Cap Rate 基准' : 'Benchmarks'}
+            {benchmarksLabel}
           </Link>
           <span>/</span>
           <span className="text-slate-900 font-semibold">{item.cityName}</span>
@@ -149,11 +155,11 @@ export default async function CityCapRatePage({ params }: PageProps) {
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="border-b-2 border-slate-200 bg-slate-50 text-slate-800 font-bold">
-                <th className="py-3 px-3">{isZh ? '商业物业类型' : 'Property Type'}</th>
-                <th className="py-3 px-3">{isZh ? 'Class A (核心优质)' : 'Class A (Prime)'}</th>
-                <th className="py-3 px-3">{isZh ? 'Class B (增值稳定)' : 'Class B (Value-Add)'}</th>
-                <th className="py-3 px-3">{isZh ? '市场趋势' : 'Trend'}</th>
-                <th className="py-3 px-3">{isZh ? '承销洞察' : 'Market Notes'}</th>
+                <th className="py-3 px-3">{isZh ? '商业物业类型' : isEs ? 'Tipo de Propiedad' : isPt ? 'Tipo de Imóvel' : 'Property Type'}</th>
+                <th className="py-3 px-3">{isZh ? 'Class A (核心优质)' : isEs ? 'Clase A (Prime)' : isPt ? 'Classe A (Prime)' : 'Class A (Prime)'}</th>
+                <th className="py-3 px-3">{isZh ? 'Class B (增值稳定)' : isEs ? 'Clase B (Value-Add)' : isPt ? 'Classe B (Value-Add)' : 'Class B (Value-Add)'}</th>
+                <th className="py-3 px-3">{isZh ? '市场趋势' : isEs ? 'Tendencia' : isPt ? 'Tendência' : 'Trend'}</th>
+                <th className="py-3 px-3">{isZh ? '承销洞察' : isEs ? 'Notas de Mercado' : isPt ? 'Notas de Mercado' : 'Market Notes'}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -208,14 +214,18 @@ export default async function CityCapRatePage({ params }: PageProps) {
       <section className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-md border border-slate-700">
         <div className="space-y-2 max-w-xl">
           <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-            {isZh ? '本地化尽调测算' : 'Local Property Underwriting'}
+            {isZh ? '本地化尽调测算' : isEs ? 'Evaluación Local' : isPt ? 'Avaliação Local' : 'Local Property Underwriting'}
           </span>
           <h3 className="text-xl font-bold text-white">
-            {isZh ? `准备好测算 ${item.cityName} 的具体商业项目了吗？` : `Ready to Underwrite a Deal in ${item.cityName}?`}
+            {isZh ? `准备好测算 ${item.cityName} 的具体商业项目了吗？` : isEs ? `¿Listo para evaluar una inversión en ${item.cityName}?` : isPt ? `Pronto para avaliar um imóvel em ${item.cityName}?` : `Ready to Underwrite a Deal in ${item.cityName}?`}
           </h3>
           <p className="text-xs text-slate-300 leading-relaxed">
             {isZh
               ? '使用我们的 Cap Rate 计算器与 Deal Analyzer，输入本地 NOI 与买价，对比基准利差并进行压力测试。'
+              : isEs
+              ? 'Compare el NOI de su propiedad con los puntos de referencia locales y realice pruebas de estrés con nuestras herramientas gratuitas.'
+              : isPt
+              ? 'Compare o NOI do seu imóvel com as referências locais e realize testes de estresse com nossas ferramentas gratuitas.'
               : 'Test your property’s NOI against local benchmarks and run mortgage stress tests with our free tools.'}
           </p>
         </div>
@@ -225,7 +235,7 @@ export default async function CityCapRatePage({ params }: PageProps) {
             className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-bold text-xs text-white transition-all shadow-xs"
           >
             <Calculator className="w-3.5 h-3.5" />
-            <span>{isZh ? 'Cap Rate 计算器' : 'Cap Rate Calculator'}</span>
+            <span>{isZh ? 'Cap Rate 计算器' : isEs || isPt ? 'Calculadora de Cap Rate' : 'Cap Rate Calculator'}</span>
           </Link>
           <Link
             href={`/${locale}/tools/deal-analyzer/`}
@@ -241,7 +251,7 @@ export default async function CityCapRatePage({ params }: PageProps) {
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
         <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
           <HelpCircle className="w-5 h-5 text-emerald-600" />
-          {isZh ? `${item.cityName} 商业地产投资常见问题 (FAQs)` : `${item.cityName} Commercial Real Estate FAQs`}
+          {isZh ? `${item.cityName} 商业地产投资常见问题 (FAQs)` : isEs ? `Preguntas Frecuentes sobre Inversión Comercial en ${item.cityName}` : isPt ? `Perguntas Frequentes sobre Imóveis Comerciais em ${item.cityName}` : `${item.cityName} Commercial Real Estate FAQs`}
         </h2>
         <div className="space-y-6 divide-y divide-slate-100">
           {item.faqs.map((faq, idx) => (
@@ -256,7 +266,7 @@ export default async function CityCapRatePage({ params }: PageProps) {
       {/* Other City Benchmark Guides */}
       <section className="bg-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4">
         <h2 className="text-lg font-bold text-white">
-          {isZh ? '查看其他重点都市圈 Cap Rate 基准' : 'Explore Other Metro Cap Rate Benchmarks'}
+          {isZh ? '查看其他重点都市圈 Cap Rate 基准' : isEs ? 'Explorar Referencias de Cap Rate en Otras Ciudades' : isPt ? 'Explorar Referências de Cap Rate em Outras Cidades' : 'Explore Other Metro Cap Rate Benchmarks'}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {otherCities.map((slug) => {
@@ -277,7 +287,7 @@ export default async function CityCapRatePage({ params }: PageProps) {
                   </div>
                 </div>
                 <div className="text-xs font-semibold text-emerald-400 mt-3 inline-flex items-center gap-1">
-                  <span>{isZh ? '查看基准' : 'View Benchmarks'}</span>
+                  <span>{isZh ? '查看基准' : isEs ? 'Ver Referencias' : isPt ? 'Ver Referências' : 'View Benchmarks'}</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </div>
               </Link>

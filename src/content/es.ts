@@ -85,7 +85,7 @@ export const esContent: LocaleContent = {
       },
       {
         title: 'Fórmulas Matemáticas Transparentes',
-        desc: 'Cada cálculo desglosa los pasos exactos, variables y estándares institucionales de suscripción.',
+        desc: 'Cada cálculo desglosa los pasos exactos, variables y estándares institucionales de evaluación y análisis.',
       },
       {
         title: 'Exportación en PDF con Certificación',
@@ -93,7 +93,7 @@ export const esContent: LocaleContent = {
       },
     ],
     underwritingHub: {
-      title: 'Centro de Suscripción y Modelado Financiero',
+      title: 'Centro de Análisis y Modelado Financiero',
       subtitle: 'Desde el cálculo de una métrica individual hasta la debida diligencia completa de adquisiciones comerciales.',
       label: 'Suite Institucional',
       calculators: [
@@ -108,7 +108,7 @@ export const esContent: LocaleContent = {
       guides: [
         { key: 'cap-rate-benchmarks-by-city', label: 'Puntos de Referencia', title: 'Guía de Cap Rates por Ciudad en EE.UU. (2026)', desc: 'Rangos de rendimiento por tipo de propiedad en mercados primarios y secundarios.' },
         { key: 'how-to-estimate-noi', label: 'Metodología', title: 'Cómo Estimar el Ingreso Operativo Neto (NOI)', desc: 'Paso a paso para auditar el T12 y evitar trampas en folletos de venta.' },
-        { key: 'how-to-underwrite-a-deal', label: 'Suscripción', title: 'Guía Completa de Debida Diligencia Comercial', desc: 'Cómo modelar una inversión inmobiliaria desde la oferta hasta el cierre.' },
+        { key: 'how-to-underwrite-a-deal', label: 'Evaluación', title: 'Guía Completa de Debida Diligencia Comercial', desc: 'Cómo modelar una inversión inmobiliaria desde la oferta hasta el cierre.' },
       ],
     },
   },
@@ -173,31 +173,134 @@ export const esContent: LocaleContent = {
     ],
   },
   noi: {
-    ...enContent.noi,
     metaTitle: 'Calculadora de NOI | Ingreso Operativo Neto Comercial',
     metaDescription: 'Calcule el Ingreso Operativo Neto (NOI) para inversiones comerciales. Desglose ingresos potenciales, vacancia y gastos operativos.',
     h1: 'Calculadora de NOI (Ingreso Operativo Neto)',
     subtitle: 'Calcule el flujo de caja operativo de su propiedad comercial antes de deuda e impuestos con total precisión.',
+    whatIsTitle: '¿Qué es el NOI y por qué es fundamental?',
+    whatIsContent: 'El NOI (Ingreso Operativo Neto) es la métrica fundacional en bienes raíces comerciales. Casi cualquier otro cálculo fundamental — Cap Rate, Cash-on-Cash, amortización de préstamos y DSCR — se construye a partir del NOI. Representa el flujo de caja operativo real que genera una propiedad inmobiliaria antes de considerar los pagos hipotecarios y los impuestos sobre la renta. Prestamistas, tasadores e inversionistas analizan primero el NOI porque aísla el rendimiento operativo del activo de la estructura de capital elegida por el propietario.',
+    formulaTitle: 'La Fórmula del NOI',
+    formulaCode: 'NOI = Ingreso Bruto Efectivo (EGI) − Gastos Operativos (OpEx)\nEGI = Ingresos Potenciales Brutos − Pérdidas por Vacancia y Morosidad',
+    formulaVariables: [
+      { label: 'Ingreso Bruto Efectivo (EGI)', desc: 'Ingreso potencial por rentas menos la vacancia estimada y pérdidas por impagos' },
+      { label: 'Gastos Operativos (OpEx)', desc: 'Impuestos sobre la propiedad, seguros, mantenimiento ordinario, tarifas de administración y servicios públicos pagados por el propietario. Excluye el servicio de la deuda, mejoras de capital (CapEx) e impuestos sobre la renta.' },
+    ],
+    exampleTitle: 'Caso Práctico Ilustrativo',
+    exampleContent: 'Un edificio residencial multifamiliar de 12 unidades genera $312,000 anuales en renta bruta potencial. Se proyecta una vacancia del 5% ($15,600) y los gastos operativos anuales ascienden a $94,000 (impuestos, seguros, reparaciones, gestión).\n\nEGI = $312,000 − $15,600 = $296,400\nNOI = $296,400 − $94,000 = $202,400 al año (aproximadamente $16,867/mes)\n\n*Nota: Este es un caso práctico hipotético con fines estrictamente ilustrativos, no representa una oferta real ni asesoramiento de inversión.*',
+    faqTitle: 'Preguntas Frecuentes sobre el NOI',
+    faqs: [
+      {
+        question: '¿El NOI incluye los pagos de la hipoteca?',
+        answer: 'No. El NOI se calcula estrictamente antes del servicio de la deuda. La cuota del préstamo hipotecario se descuenta posteriormente para determinar el flujo de caja neto (Cash Flow), no el NOI.',
+      },
+      {
+        question: '¿Qué partidas se consideran gastos operativos (OpEx)?',
+        answer: 'Impuestos sobre bienes inmuebles, seguros, contratos de mantenimiento y reparaciones rutinarias, honorarios de administración de propiedades, servicios públicos a cargo del arrendador y reservas de reposición ordinarias. Las mejoras de capital estructurales (como cambiar un tejado completo) y el pago de hipotecas quedan excluidos.',
+      },
+      {
+        question: '¿Por qué las entidades bancarias y prestamistas exigen conocer el NOI?',
+        answer: 'Los prestamistas utilizan el NOI para calcular el Ratio de Cobertura del Servicio de la Deuda (DSCR) y determinar si la propiedad genera suficiente margen operativo para pagar el crédito cómodamente.',
+      },
+      {
+        question: '¿En qué se diferencia el NOI del Flujo de Caja (Cash Flow)?',
+        answer: 'El NOI es previo al servicio de la deuda; el Cash Flow es posterior. Flujo de Caja = NOI − Servicio Anual de la Deuda (y deduciendo reservas de capital cuando proceda).',
+      },
+    ],
+    relatedTitle: 'Calculadoras Financieras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+      { title: 'Calculadora de DSCR', slug: 'dscr' },
+      { title: 'Calculadora de Punto de Equilibrio (BER)', slug: 'break-even-ratio' },
+      { title: 'Calculadora de Intercambio 1031', slug: '1031-exchange' },
+    ],
   },
   cashOnCash: {
-    ...enContent.cashOnCash,
     metaTitle: 'Calculadora de Cash-on-Cash Return | Rendimiento de Capital',
     metaDescription: 'Calcule el retorno de efectivo sobre efectivo (Cash-on-Cash Return) para evaluar el apalancamiento financiero de su inversión inmobiliaria.',
     h1: 'Calculadora de Cash-on-Cash Return',
     subtitle: 'Mida la rentabilidad anual neta generada por cada dólar de capital efectivamente invertido de su bolsillo.',
+    whatIsTitle: '¿Qué es el Cash-on-Cash Return?',
+    whatIsContent: 'El retorno de efectivo sobre efectivo (Cash-on-Cash Return) mide el flujo de caja neto antes de impuestos del primer año en relación con el capital total en efectivo que usted desembolsó. A diferencia del Cap Rate, que analiza la propiedad sin deuda, el Cash-on-Cash refleja directamente el impacto de su estructura de financiamiento.\n\nEl "Capital Total Invertido" debe incluir el pago inicial (entrada), costos de cierre, tarifas de originación del préstamo y reparaciones iniciales inmediatas. El "Flujo de Caja Anual Antes de Impuestos" es el NOI menos el servicio anual de la deuda. Tenga en cuenta que esta métrica evalúa el rendimiento del capital en el bolsillo durante el primer año; no equivale a la TIR (IRR) ni contabiliza la revalorización futura o amortización del capital del préstamo.',
+    formulaTitle: 'La Fórmula del Cash-on-Cash',
+    formulaCode: 'Cash-on-Cash Return = (Flujo de Caja Anual Antes de Impuestos / Capital Total Invertido) × 100%',
+    formulaVariables: [
+      { label: 'Flujo de Caja Anual', desc: 'NOI menos el servicio anual de la deuda (pagos de hipoteca)' },
+      { label: 'Capital Total Invertido', desc: 'Pago inicial + costos de cierre + mejoras de capital inmediatas — no el precio total de compra' },
+    ],
+    exampleTitle: 'Caso Práctico Ilustrativo',
+    exampleContent: 'Usted compra un inmueble comercial por $1,200,000 con un pago inicial del 25% ($300,000) más $30,000 en costos de cierre y adecuaciones inmediatas, para un capital total invertido de $330,000. El NOI anual es de $84,000 y el servicio anual de la deuda es de $54,000.\n\nFlujo de Caja Anual = $84,000 − $54,000 = $30,000\nCash-on-Cash Return = $30,000 / $330,000 = 9.09%\n\nEn comparación con el Cap Rate de la propiedad ($84,000 / $1,200,000 = 7.00%), el apalancamiento financiero está impulsando el rendimiento del capital propio por encima del rendimiento no apalancado del inmueble, debido a que el costo de la deuda es inferior al rendimiento del activo (apalancamiento positivo).\n\n*Nota: Este es un caso práctico hipotético con fines estrictamente ilustrativos, no representa una oferta real ni asesoramiento de inversión.*',
+    faqTitle: 'Preguntas Frecuentes sobre Cash-on-Cash',
+    faqs: [
+      {
+        question: '¿Por qué el Cash-on-Cash suele ser diferente al Cap Rate?',
+        answer: 'El Cap Rate asume una compra 100% en efectivo sin deuda. El Cash-on-Cash refleja el apalancamiento hipotecario. Si la tasa de interés del préstamo es inferior al Cap Rate, el apalancamiento eleva el rendimiento del capital invertido (apalancamiento positivo). Si la tasa de interés es superior, produce un efecto adverso (apalancamiento negativo).',
+      },
+      {
+        question: '¿Qué se incluye exactamente en el "Capital Total Invertido"?',
+        answer: 'El pago inicial de la compra, costos de cierre y honorarios de título, comisiones de apertura de préstamo y cualquier reforma o mejora de capital inmediata previa a la puesta en alquiler. No incluye la parte financiada del precio.',
+      },
+      {
+        question: '¿Un Cash-on-Cash más alto siempre significa una mejor inversión?',
+        answer: 'No necesariamente. Un Cash-on-Cash muy alto puede ser fruto de un apalancamiento extremo (un préstamo muy grande con una entrada muy pequeña), lo cual eleva el riesgo de liquidez y deja un margen de seguridad más estrecho ante caídas de ocupación.',
+      },
+    ],
+    relatedTitle: 'Calculadoras Financieras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+      { title: 'Calculadora de Punto de Equilibrio (BER)', slug: 'break-even-ratio' },
+      { title: 'Calculadora de Intercambio 1031', slug: '1031-exchange' },
+      { title: 'Calculadora de DSCR', slug: 'dscr' },
+    ],
   },
   loanPayment: {
-    ...enContent.loanPayment,
     metaTitle: 'Calculadora de Préstamos Comerciales | Amortización y Pagos',
     metaDescription: 'Calcule pagos mensuales de préstamos hipotecarios comerciales, amortización e intereses totales para bienes raíces.',
     h1: 'Calculadora de Pagos de Préstamos Comerciales',
     subtitle: 'Modele pagos de principal e interés, calendarios de amortización y pagos globales (balloon payments).',
+    whatIsTitle: 'Modalidades de Amortización en Préstamos Comerciales y Pagos Balloon',
+    whatIsContent: 'Las hipotecas comerciales presentan plazos de vencimiento más cortos (por ejemplo, 5, 7 o 10 años) combinados con períodos de amortización más largos (como 25 o 30 años). Al llegar el vencimiento, el saldo de capital restante debe liquidarse o refinanciarse mediante un pago global (balloon payment).\n\nExisten dos métodos principales de amortización:\n1. Cuota Constante (Método Francés / Equal Installment): La cuota mensual combinada de capital e intereses permanece fija. En los primeros años predomina el pago de intereses, por lo que el saldo restante balloon al vencimiento es mayor.\n2. Capital Constante (Método Alemán / Equal Principal): Se amortiza una cantidad fija de principal cada mes, mientras que los intereses disminuyen progresivamente. Las primeras cuotas son más altas, pero el capital se amortiza más rápido, lo que reduce sustancialmente el pago balloon final.',
+    formulaTitle: 'Fórmulas de Amortización',
+    formulaCode: '【Cuota Constante (Fixed Monthly Payment)】\nM = P × [ r(1 + r)^n ] / [ (1 + r)^n − 1 ]\n\n【Capital Constante (Declining Monthly Payment)】\nPago en el Mes m (M_m) = (P / n) + [ P − (m − 1) × (P / n) ] × r\nAmortización Fija de Capital = P / n',
+    formulaVariables: [
+      { label: 'P', desc: 'Monto del Préstamo Comercial ($)' },
+      { label: 'r', desc: 'Tasa de Interés Mensual (Tasa Anual / 12)' },
+      { label: 'n', desc: 'Total de Cuotas de Amortización (Años de Amortización × 12)' },
+      { label: 'm', desc: 'Número del Mes de Pago (1 hasta n)' },
+    ],
+    exampleTitle: 'Comparativa en un Préstamo de $1.3M (Tasa 6.5%, Amortización 25 Años, Vencimiento 10 Años)',
+    exampleContent: 'Suponga un financiamiento comercial de $1,300,000 al 6.5% de interés:\n- Cuota Constante: Cuota fija de $8,778/mes. Saldo balloon al año 10: $1,007,025.\n- Capital Constante: Cuota inicial de $11,375/mes, que desciende gradualmente. Saldo balloon al año 10: $780,000.\n\n*Nota: Este es un caso práctico hipotético con fines estrictamente ilustrativos, no representa una oferta real ni asesoramiento de inversión.*',
+    faqTitle: 'Preguntas Frecuentes sobre Préstamos Comerciales',
+    faqs: [
+      {
+        question: '¿Cuál es la principal diferencia entre Cuota Constante y Capital Constante?',
+        answer: 'La Cuota Constante ofrece pagos mensuales fijos que facilitan la presupuestación, pero la reducción de deuda es más lenta. El Capital Constante liquida una porción idéntica de deuda cada mes; aunque las primeras cuotas son más altas, el interés total abonado es mucho menor y el saldo final balloon se reduce considerablemente.',
+      },
+      {
+        question: '¿Qué es un pago global (balloon payment) en bienes raíces comerciales?',
+        answer: 'Es el pago único del saldo de capital que vence al finalizar el plazo del préstamo (por ejemplo, en el año 10) cuando la amortización se calculó a un plazo mayor (como 25 años). La mayoría de los inversionistas refinancian o venden antes de esa fecha.',
+      },
+      {
+        question: '¿Cuáles son los plazos habituales de amortización en préstamos comerciales?',
+        answer: 'La norma en el mercado comercial estadounidense es una amortización a 25 años con vencimientos de préstamo a 5, 7 o 10 años. Activos institucionales de primera categoría pueden obtener amortización a 30 años.',
+      },
+      {
+        question: '¿Cómo elegir entre las dos modalidades de pago?',
+        answer: 'Elija Cuota Constante si el flujo de caja inicial es ajustado y prefiere estabilidad mensual. Elija Capital Constante si el NOI del inmueble es holgado y busca minimizar el gasto en intereses reduciendo el riesgo de refinanciamiento al vencimiento.',
+      },
+    ],
+    relatedTitle: 'Calculadoras Financieras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora Alquilar vs Comprar', slug: 'lease-vs-buy' },
+      { title: 'Calculadora de DSCR', slug: 'dscr' },
+      { title: 'Calculadora de NOI', slug: 'noi' },
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+    ],
   },
   dscr: {
     metaTitle: 'Calculadora de DSCR | Cobertura de Servicio de Deuda',
     metaDescription: 'Calcule el ratio de cobertura de deuda (DSCR) para préstamos comerciales y evalúe la aprobación bancaria de su operación.',
     h1: 'Calculadora de DSCR (Debt Service Coverage Ratio)',
-    subtitle: 'Verifique si los ingresos operativos netos de su inmueble satisfacen los criterios de suscripción de los bancos comerciales.',
+    subtitle: 'Verifique si los ingresos operativos netos de su inmueble satisfacen los criterios de crédito y evaluación de los bancos comerciales.',
     whatIsTitle: '¿Qué es el DSCR y por qué es fundamental?',
     whatIsContent: 'El Ratio de Cobertura del Servicio de la Deuda (DSCR, por sus siglas en inglés) es la métrica de riesgo más importante utilizada por prestamistas de bienes raíces comerciales para evaluar solicitudes de hipotecas. Mide el Ingreso Operativo Neto (NOI) anual de una propiedad frente al servicio total de la deuda anual (pagos combinados de capital e intereses), reflejando el margen de seguridad entre el flujo de caja operativo y las obligaciones financieras.\n\nLos bancos comerciales y prestamistas institucionales suelen exigir un DSCR mínimo de entre 1.20x y 1.25x. Este colchón garantiza que el inmueble genere suficiente excedente para absorber aumentos imprevistos de vacancia, concesiones de alquiler o gastos operativos crecientes sin caer en impago del préstamo.',
     formulaTitle: 'Fórmula del DSCR',
@@ -236,35 +339,366 @@ export const esContent: LocaleContent = {
     ],
   },
   exchange1031: {
-    ...enContent.exchange1031,
     metaTitle: 'Calculadora de Intercambio 1031 | Diferimiento Fiscal',
     metaDescription: 'Calcule el diferimiento de impuestos sobre ganancias de capital en intercambios de bienes raíces bajo la regla 1031.',
     h1: 'Calculadora de Intercambio 1031 (Diferimiento de Ganancias)',
+    subtitle: 'Estime los impuestos sobre ganancias de capital diferidos y las reglas de compra de propiedades de reemplazo en transacciones comerciales.',
+    whatIsTitle: '¿Qué es un Intercambio 1031 y por qué es tan valioso?',
+    whatIsContent: 'Bajo la Sección 1031 del Código de Rentas Internas de EE.UU. (IRC Section 1031), los propietarios de inmuebles comerciales o de inversión pueden diferir el pago de impuestos sobre ganancias de capital y la recuperación de depreciación al vender una propiedad, siempre que reinviertan los fondos en otra propiedad de reemplazo de "naturaleza similar" (like-kind) de igual o mayor valor.\n\nEs una de las herramientas de creación patrimonial más potentes en bienes raíces comerciales, permitiendo que el 100% de la plusvalía continúe generando rentabilidad en lugar de liquidarse en impuestos. Para diferir el 100% de los impuestos aplican dos reglas esenciales:\n1. El precio de la propiedad de reemplazo debe ser igual o superior al precio neto de venta de la propiedad cedida.\n2. Todo el capital neto en efectivo generado en la venta debe reinvertirse en la nueva propiedad.',
+    formulaTitle: 'Fórmulas del Intercambio 1031',
+    formulaCode: 'Ganancia de Capital Realizada = Precio de Venta − Gastos de Venta − Base de Costo Original\nImpuesto Estimado Diferido = Ganancia Realizada × Tasa Impositiva Combinada',
+    formulaVariables: [
+      { label: 'Precio de Venta', desc: 'Precio contractual bruto de venta de la propiedad cedida' },
+      { label: 'Gastos de Venta', desc: 'Comisiones de corredores, gastos notariales, títulos y fideicomiso (escrow)' },
+      { label: 'Base de Costo Original', desc: 'Precio de adquisición original más mejoras de capital acumuladas (antes de deducciones por depreciación)' },
+      { label: 'Tasa Impositiva Combinada', desc: 'Tasa impositiva acumulada que incluye Ganancias de Capital Federales (15-20%), Impuesto Estatal, Recuperación de Depreciación (25%) e impuesto NIIT (3.8%)' },
+    ],
+    exampleTitle: 'Ejemplo Práctico de Intercambio 1031 (Venta de $2.5M)',
+    exampleContent: 'Suponga que compró un inmueble comercial hace 8 años por $1,200,000 y hoy lo vende en $2,500,000 con $150,000 en costos de cierre. Su tasa impositiva combinada estimada es del 25%.\n\nIngreso Neto de la Venta = $2,500,000 − $150,000 = $2,350,000\nGanancia de Capital Realizada = $2,350,000 − $1,200,000 = $1,150,000\nImpuesto sin 1031 = $1,150,000 × 25% = $287,500\n\n【Resultado del Intercambio 1031】: Al tramitar la operación a través de un Intermediario Calificado (QI), usted difiere íntegramente la carga fiscal de $287,500. Dispone de 45 días para identificar propiedades de reemplazo y 180 días para cerrar la compra de un inmueble valorado en $2,350,000 o más, manteniendo todo su capital trabajando.\n\n*Nota: Este es un caso práctico hipotético con fines estrictamente ilustrativos, no representa una oferta real ni asesoramiento de inversión.*',
+    faqTitle: 'Preguntas Frecuentes sobre el Intercambio 1031',
+    faqs: [
+      {
+        question: '¿Cómo funcionan los plazos de 45 y 180 días en un Intercambio 1031?',
+        answer: 'Ambos plazos inician el día en que se cierra la venta de la propiedad cedida. Tiene exactamente 45 días naturales para identificar por escrito ante su Intermediario Calificado (QI) hasta 3 propiedades de reemplazo candidatas, y 180 días naturales (o hasta la fecha límite de su declaración de impuestos) para escriturar la adquisición. Estos plazos son estrictos y no admiten prórrogas ordinarias.',
+      },
+      {
+        question: '¿Qué es un Intermediario Calificado (Qualified Intermediary - QI)?',
+        answer: 'La normativa del IRS prohíbe taxativamente que el vendedor reciba o controle directamente los fondos de la venta. Un Intermediario Calificado (QI) es una entidad independiente que retiene los fondos en una cuenta de depósito fiduciario y los transfiere directamente al agente de cierre de la propiedad de reemplazo.',
+      },
+      {
+        question: '¿Qué ocurre si adquiero una propiedad de reemplazo de menor valor?',
+        answer: 'Si la nueva propiedad cuesta menos que el precio neto de venta de la anterior, o si retiene parte del efectivo, la diferencia se denomina "boot" (beneficio imponible en efectivo). El boot tributa hasta el límite de la ganancia realizada.',
+      },
+      {
+        question: '¿Se puede utilizar el Intercambio 1031 para una residencia principal?',
+        answer: 'No. La Sección 1031 aplica exclusivamente a inmuebles comerciales o mantenidos con fines de inversión o negocio. Las viviendas familiares principales se rigen por la Sección 121 del IRC.',
+      },
+    ],
+    relatedTitle: 'Calculadoras Financieras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+      { title: 'Calculadora de NOI', slug: 'noi' },
+      { title: 'Calculadora de Cash-on-Cash', slug: 'cash-on-cash' },
+    ],
   },
   leaseVsBuy: {
-    ...enContent.leaseVsBuy,
     metaTitle: 'Calculadora Alquilar vs Comprar Inmuebles Comerciales',
     metaDescription: 'Compare los costos a largo plazo y la creación de patrimonio entre alquilar y comprar un inmueble comercial para su empresa.',
     h1: 'Calculadora de Alquilar vs Comprar Comercial',
+    subtitle: 'Evalúe los costos del ciclo de vida completo, desembolsos de efectivo y apreciación patrimonial entre rentar y comprar.',
+    whatIsTitle: '¿En qué consiste el análisis de Alquilar vs Comprar?',
+    whatIsContent: 'El análisis de Alquilar vs Comprar es el marco financiero indispensable para empresas y propietarios que deciden si arrendar o adquirir oficinas, naves industriales o locales comerciales.\n\nEl alquiler requiere menos desembolso inicial de capital y aporta flexibilidad para cambiar de ubicación, pero el 100% de las rentas pagadas constituye un gasto irrecuperable sin acumulación patrimonial. La compra exige un pago inicial y el pago de cuotas hipotecarias mensuales, pero amortiza deuda como un mecanismo de ahorro forzoso a la vez que genera patrimonio mediante la revalorización del activo a largo plazo.',
+    formulaTitle: 'Fórmulas Financieras',
+    formulaCode: 'Desembolso Total en Alquiler = Sumatoria de [ Renta Anual × (1 + Tasa de Incremento)^Año ]\nCosto Neto de Compra = Pago Inicial + Hipoteca Acumulada Pagada − Fondos Netos al Vender\nFondos Netos al Vender = Precio de Venta Proyectado × (1 − Costos de Venta) − Saldo Hipotecario Pendiente',
+    formulaVariables: [
+      { label: 'Renta e Incrementos', desc: 'Renta mensual inicial y tasa de incremento anual pactada en contrato (típicamente 2.5% - 3.5%)' },
+      { label: 'Compra y Pago Inicial', desc: 'Precio de adquisición del inmueble y capital inicial aportado (los préstamos SBA 504 permiten entradas desde el 10%; convencionales 25%)' },
+      { label: 'Apreciación y Costos de Salida', desc: 'Tasa estimada de crecimiento anual del valor del inmueble y comisiones/gastos de cierre en la venta futura (5% - 6%)' },
+    ],
+    exampleTitle: 'Caso Práctico a 10 Años (Compra de $1.8M vs Renta de $10,000/mes)',
+    exampleContent: 'Suponga que una empresa necesita un espacio comercial por 10 años:\n- Opción A (Alquilar): Renta inicial de $10,000/mes con incremento anual del 3.0%. Renta total pagada en 10 años = $1,375,666.\n- Opción B (Comprar): Precio de compra de $1,800,000 con 25% de entrada ($450,000) y préstamo de $1,350,000 (interés 6.5%, amortización 25 años). Apreciación anual del 3.0% y 5% de costos de venta en el año 10.\n  - Servicio total de hipoteca abonado en 10 años = $1,093,836\n  - El inmueble se revaloriza a $2,419,049 en el año 10. Ingreso neto tras liquidar deuda pendiente ($1,046,403) y costos de venta = $1,251,694\n  - Costo Neto de Compra = $450,000 + $1,093,836 − $1,251,694 = $292,142\n\n【Resultado】: Comprar genera un ahorro neto de aproximadamente $1,083,524 en 10 años en comparación con el arrendamiento.\n\n*Nota: Este es un caso práctico hipotético con fines estrictamente ilustrativos, no representa una oferta real ni asesoramiento de inversión.*',
+    faqTitle: 'Preguntas Frecuentes sobre Alquilar vs Comprar',
+    faqs: [
+      {
+        question: '¿Cuándo conviene más a una empresa alquilar que comprar?',
+        answer: 'Empresas en fase de expansión acelerada, aquellas que requieren preservar liquidez para su negocio principal o negocios con necesidades de espacio inciertas en los próximos 3 a 5 años deben optar por alquilar para conservar agilidad de capital.',
+      },
+      {
+        question: '¿Qué alternativas de crédito existen para propietarios ocupantes en EE.UU.?',
+        answer: 'En EE.UU., las empresas que ocupan más del 51% del espacio pueden acogerse a los programas SBA 504 o SBA 7(a), que financian compras con pagos iniciales desde solo el 10% y tasas fijas a 25 años.',
+      },
+      {
+        question: '¿Cómo se calcula el "Costo Neto" en la opción de compra?',
+        answer: 'El Costo Neto descuenta la recuperación de capital en la venta: Costo Neto = (Entrada + Total de Hipoteca Abonada) menos (Efectivo Neto Obtenido al Vender el Inmueble). Dado que el capital acumulado y la revalorización se recuperan al vender, el costo neto de comprar suele ser muy inferior al gasto acumulado de alquiler.',
+      },
+    ],
+    relatedTitle: 'Calculadoras Financieras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de Préstamos Comerciales', slug: 'loan-payment' },
+      { title: 'Calculadora de DSCR', slug: 'dscr' },
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+    ],
   },
   breakEvenRatio: {
-    ...enContent.breakEvenRatio,
     metaTitle: 'Calculadora de Punto de Equilibrio (BER y BEO) Comercial',
     metaDescription: 'Calcule el Break-Even Ratio y la ocupación de equilibrio para medir la resiliencia de su propiedad comercial ante vacancia.',
     h1: 'Calculadora de Break-Even Ratio (BER) y Ocupación de Equilibrio',
+    subtitle: 'Evalúe el ratio de carga fija de su inmueble y estime la ocupación de equilibrio para cubrir gastos operativos y servicio de deuda.',
+    whatIsTitle: '¿Qué es el Break-Even Ratio y por qué es crucial?',
+    whatIsContent: 'El Ratio de Punto de Equilibrio (Break-Even Ratio - BER) es una métrica esencial de evaluación de solvencia en bienes raíces comerciales para determinar la vulnerabilidad de un activo ante caídas de ocupación o pérdidas de flujo de caja.\n\nEl Break-Even Ratio (BER) mide los gastos operativos sumados al servicio anual de la hipoteca como porcentaje del Ingreso Bruto Efectivo (EGI) del inmueble. Es un ratio de carga financiera, no un porcentaje de ocupación física. Un BER más bajo refleja un mayor margen de seguridad ante pérdidas de rentas. Los criterios de los bancos comerciales varían según el producto hipotecario; esta herramienta utiliza como referencia analítica ilustrativa un umbral de ≤85%, si bien no constituye una norma universal de crédito.\n\nLa Ocupación de Equilibrio (Break-Even Occupancy - BEO) es una estimación simplificada independiente calculada sobre el Ingreso Bruto Potencial (GPI). Proyecta la tasa de ocupación física mínima necesaria para cubrir gastos y deuda, asumiendo un comportamiento proporcional de ingresos sin modelar variaciones individuales de rentas o gastos variables.',
+    formulaTitle: 'Fórmulas Financieras',
+    formulaCode: 'Break-Even Ratio (%) = (Gastos Operativos + Servicio Anual de la Deuda) / Ingreso Bruto Efectivo (EGI) × 100%\nOcupación de Equilibrio (%) = (Gastos Operativos + Servicio Anual de la Deuda) / Ingreso Potencial Bruto (GPI) × 100%',
+    formulaVariables: [
+      { label: 'Gastos Operativos (OpEx)', desc: 'Costos anuales para operar la propiedad (impuestos sobre bienes raíces, seguros, administración, mantenimiento)' },
+      { label: 'Servicio Anual de la Deuda', desc: 'Total anual de pagos de capital e intereses hipotecarios (12 × Cuota Mensual)' },
+      { label: 'Ingreso Bruto Efectivo (EGI)', desc: 'Rentas potenciales menos pérdidas proyectadas por vacancia y morosidad' },
+    ],
+    exampleTitle: 'Ejemplo Práctico en Edificio Multifamiliar de 24 Unidades',
+    exampleContent: 'Suponga que evalúa un edificio residencial multifamiliar de 24 unidades con $336,000 de Ingreso Potencial Bruto (GPI). Con un 5% de vacancia, el Ingreso Bruto Efectivo (EGI) es de $319,200. Los gastos operativos anuales son de $92,000 y el servicio anual de deuda es de $170,152:\n\nCarga Fija Total = $92,000 + $170,152 = $262,152\nBreak-Even Ratio (BER) = ($262,152 / $319,200) × 100% = 82.13%\nOcupación de Equilibrio (BEO) = ($262,152 / $336,000) × 100% = 78.02%\n\n【Diagnóstico】: El BER es de 82.13%, cumpliendo la referencia ilustrativa de ≤85% del simulador (tenga en cuenta que no es una norma universal de todos los bancos). El BEO indica que la propiedad debe mantener al menos un 78.02% de ocupación para pagar sus costos y deuda.\n\n*Nota: Este es un caso práctico hipotético con fines estrictamente ilustrativos, no representa una oferta real ni asesoramiento de inversión.*',
+    faqTitle: 'Preguntas Frecuentes sobre el Break-Even Ratio',
+    faqs: [
+      {
+        question: '¿Existe un estándar universal de Break-Even Ratio exigido por los bancos?',
+        answer: 'No existe una normativa o límite regulatorio universal. La exigencia de BER varía ampliamente según el tipo de inmueble, el perfil del prestatario y el programa de préstamo (banca comercial, CMBS, préstamos de balance o financiación puente). Aunque las directrices habituales buscan ratios por debajo del 80% al 85%, la referencia de ≤85% es una pauta analítica y no una regla crediticia obligatoria.',
+      },
+      {
+        question: '¿En qué se diferencian el Break-Even Ratio, la Ocupación de Equilibrio y el DSCR?',
+        answer: 'El DSCR compara el NOI con el servicio de la deuda (NOI / Deuda). El BER mide las obligaciones fijas totales (OpEx + Deuda) frente al Ingreso Bruto Efectivo (EGI), indicando qué porcentaje de los ingresos reales se consume en costos obligatorios. La Ocupación de Equilibrio (BEO) divide las obligaciones fijas entre el GPI para estimar la tasa mínima de ocupación necesaria para no generar pérdidas. Son tres métricas distintas y complementarias.',
+      },
+      {
+        question: '¿Cómo puede un inversionista reducir el Break-Even Ratio de una propiedad?',
+        answer: 'Se puede disminuir reduciendo el servicio de la deuda (aportando mayor pago inicial o negociando menores tasas de interés), auditando y optimizando gastos operativos, o aumentando los ingresos efectivos mediante mejoras en rentas o servicios adicionales.',
+      },
+    ],
+    relatedTitle: 'Calculadoras Financieras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de DSCR', slug: 'dscr' },
+      { title: 'Calculadora de NOI', slug: 'noi' },
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+    ],
   },
   capRateBenchmarksGuide: {
-    ...enContent.capRateBenchmarksGuide,
-    metaTitle: 'Guía de Cap Rates de Bienes Raíces en EE.UU. (2026)',
-    metaDescription: 'Puntos de referencia de tasas de capitalización en Estados Unidos para propiedades multifamiliares, industriales, comerciales y oficinas.',
-    h1: 'Guía de Tasas de Capitalización (Cap Rate) en EE.UU. (2026)',
+    metaTitle: 'Guía de Cap Rates de Bienes Raíces en EE.UU. por Mercado y Activo (2026)',
+    metaDescription: 'Guía exhaustiva de tasas de capitalización en mercados primarios, secundarios y terciarios de EE.UU. por tipo de propiedad comercial.',
+    h1: 'Puntos de Referencia de Cap Rate en EE.UU. por Mercado y Tipo de Activo',
+    subtitle: 'Rangos referenciales de tasas de capitalización en clases de activos principales y niveles de mercados metropolitanos para modelado y evaluación.',
+    disclaimer: 'Las tasas de capitalización varían continuamente según las condiciones del mercado de capitales. Estos rangos son puntos de referencia educativos desarrollados para modelado y fundamentados en convenciones de valoración de bienes raíces comerciales y observaciones cualitativas del informe Newmark 2026 Valuation & Advisory North American Market Survey — no constituyen cotizaciones directas ni cotizaciones de operaciones en vivo. Siempre verifique los precios locales actuales y los Cap Rates reales con corredores locales activos y ventas comparables recientes antes de tomar decisiones de inversión.',
+    propertyTypeTitle: 'Puntos de Referencia de Cap Rate en EE.UU. por Clase de Activo (Referencia Educativa)',
+    propertyTypeTableHeader: {
+      type: 'Tipo de Propiedad / Subtipo de Activo',
+      range: 'Rango de Referencia Ilustrativo',
+      notes: 'Dinámica de Mercado y Consideraciones de Evaluación',
+    },
+    propertyTypes: [
+      { propertyType: 'Multifamiliar – Clase A (Mercados Principales)', range: '4.50% – 5.25% (Ilustrativo)', notes: 'El sector más cotizado de todos los activos; el capital institucional prioriza este segmento' },
+      { propertyType: 'Multifamiliar – Clase B (Mercados Secundarios)', range: '5.50% – 7.00% (Ilustrativo)', notes: 'El rango más habitual para operaciones típicas de valor agregado (value-add)' },
+      { propertyType: 'Multifamiliar – Clase C (Mercados Terciarios)', range: '7.00% – 9.00%+ (Ilustrativo)', notes: 'Mayor rendimiento nominal, compensando mayor riesgo operativo y de desocupación' },
+      { propertyType: 'Industrial – Clase A / Gran Distribución Logística', range: '5.00% – 6.50% (Ilustrativo)', notes: 'Uno de los sectores más resilientes tras el ciclo de alzas de tasas de 2022' },
+      { propertyType: 'Industrial – Contrato Neto Monoinquilino (NNN)', range: '5.00% – 5.75% (Ilustrativo)', notes: 'El subtipo industrial más cotizado, respaldado por la solvencia crediticia del arrendatario' },
+      { propertyType: 'Industrial Flex / Almacenamiento Exterior (IOS)', range: '6.50% – 9.00% (Ilustrativo)', notes: 'Rango amplio que refleja la variabilidad de arrendatarios y plazos de contrato' },
+      { propertyType: 'Oficinas – Clase A', range: '7.00% – 8.50% (Ilustrativo)', notes: 'Niveles elevados post-pandemia; amplia dispersión entre edificios trofeo en distritos financieros y activos convencionales' },
+      { propertyType: 'Oficinas – Clase B', range: '8.00% – 9.50%+ (Ilustrativo)', notes: 'Mayor diferencial de rentabilidad ante la preferencia por calidad y exigencias elevadas de gasto de capital (CapEx)' },
+      { propertyType: 'Oficinas – Clase C', range: '9.00%+ (Ilustrativo)', notes: 'Precios de oportunidad y activos en dificultades comunes en mercados secundarios y terciarios' },
+      { propertyType: 'Comercial / Retail – Centros Anclados por Supermercado', range: '5.75% – 6.50% (Ilustrativo)', notes: 'El subtipo comercial minorista con mayor demanda en la actualidad' },
+      { propertyType: 'Comercial / Retail – Strip Centers sin Ancla', range: '7.00% – 9.00% (Ilustrativo)', notes: 'Amplio rango según la combinación de inquilinos y condiciones de los contratos' },
+      { propertyType: 'Arrendamiento Neto – Inquilino con Calificación Crediticia Institucional', range: '5.00% – 6.00% (Ilustrativo)', notes: 'Valorado de forma similar a un bono corporativo; la calificación crediticia del inquilino determina el precio' },
+      { propertyType: 'Hotelería – Lujo / Servicio Completo', range: '6.50% – 7.50% (Ilustrativo)', notes: 'Valoraciones sólidas impulsadas por la demanda de ocio y viajes premium' },
+      { propertyType: 'Hotelería – Suburbano / Servicio Selecto', range: '7.50% – 8.75% (Ilustrativo)', notes: 'Perfil de rentabilidad equilibrado para operadores hoteleros regionales' },
+      { propertyType: 'Hotelería – Económico / Servicio Limitado', range: '8.25% – 9.50%+ (Ilustrativo)', notes: 'Mayores rendimientos en efectivo para compensar la intensidad operativa y reservas de capital constantes' },
+      { propertyType: 'Autoalmacenamiento (Self-Storage) – Clase A (Mercados Principales)', range: '5.00% – 6.00% (Ilustrativo)', notes: 'Comprimido cerca de niveles multifamiliares para instalaciones de alta calidad' },
+      { propertyType: 'Autoalmacenamiento – Clase B (Mercados Secundarios)', range: '6.00% – 7.00% (Ilustrativo)', notes: 'Flujo de caja estable con potencial de optimización operativa' },
+      { propertyType: 'Autoalmacenamiento – Clase C (Mercados Terciarios)', range: '7.00% – 7.50%+ (Ilustrativo)', notes: 'Rendimientos más altos para compensar áreas demográficas de menor densidad' },
+      { propertyType: 'Consultorios y Oficinas Médicas (Medical Office)', range: '6.00% – 7.50% (Ilustrativo)', notes: 'Contratos de largo plazo y solvencia del sector salud respaldan las valoraciones' },
+      { propertyType: 'Centros de Datos (Data Centers)', range: '4.00% – 5.00% (Ilustrativo)', notes: 'Comprimidos intensamente por la demanda de infraestructura de IA y nube; entre los Cap Rates más bajos del sector' },
+    ],
+    marketTierTitle: 'Variaciones del Cap Rate según el Nivel de Mercado Metropolitano',
+    marketTierIntro: 'Los estándares de la industria describen las diferencias de rentabilidad entre áreas metropolitanas mediante Niveles de Mercado (Market Tiers) en lugar de fijar valores estáticos por ciudad. Los mercados principales tienen Cap Rates más comprimidos (75–150 puntos básicos menos), mientras que los mercados terciarios cotizan más altos para compensar menor liquidez.',
+    marketTierTableHeader: {
+      tier: 'Nivel de Mercado',
+      metros: 'Áreas Metropolitanas Representativas',
+      pricing: 'Precio Típico vs. Promedio Nacional',
+    },
+    marketTiers: [
+      {
+        tier: 'Nivel 1 – Mercados Principales (Gateway)',
+        metros: 'Nueva York, Los Ángeles, Área de la Bahía de San Francisco, Boston, Washington D.C., Chicago, Seattle, San Diego, Miami',
+        pricing: '75–150 pb más comprimido (menor Cap Rate) que mercados terciarios; mayor liquidez institucional, altas barreras de entrada',
+      },
+      {
+        tier: 'Nivel 2 – Mercados Secundarios Principales',
+        metros: 'Austin, Dallas–Fort Worth, Houston, Atlanta, Denver, Phoenix, Nashville, Charlotte, Minneapolis, Filadelfia, Portland (OR)',
+        pricing: 'Alineado o ligeramente superior al promedio nacional; fuerte liquidez, los mercados del Sunbelt continúan recibiendo capital institucional',
+      },
+      {
+        tier: 'Nivel 3 – Mercados Secundarios Emergentes y de Crecimiento',
+        metros: 'Raleigh–Durham, Orlando, Tampa, Salt Lake City, San Antonio, Sacramento, Las Vegas, Columbus, Indianápolis, Kansas City',
+        pricing: 'Ligeramente más amplio que el Nivel 2, típicamente 25–75 pb sobre el promedio nacional',
+      },
+      {
+        tier: 'Nivel 4 – Mercados Terciarios',
+        metros: 'Áreas metropolitanas más pequeñas (por ejemplo, Memphis, Louisville, Oklahoma City, Fresno, Albuquerque)',
+        pricing: 'Típicamente 150–250+ pb más amplio que los mercados gateway; menor profundidad de compradores y plazos de comercialización más prolongados',
+      },
+    ],
+    faqTitle: 'Preguntas Frecuentes sobre Cap Rates',
+    faqs: [
+      {
+        question: '¿Por qué no se indica un Cap Rate exacto para una ciudad específica?',
+        answer: 'Los datos precisos de Cap Rate a nivel de calle o código postal son propiedad de plataformas de pago especializadas (como CoStar o RCA) o forman parte de la base de comparables de corredores locales. Las encuestas públicas de instituciones del sector informan a nivel de agregados metropolitanos. Esta guía proporciona un rango inicial realista para que un corredor local le ayude a calibrarlo con transacciones comparables cerradas recientemente.',
+      },
+      {
+        question: '¿Con qué frecuencia fluctúan estos datos?',
+        answer: 'Los Cap Rates varían con las tasas de interés de los bonos del Tesoro, los diferenciales de crédito bancario y la liquidez de capital. Las principales encuestas del sector comercial se publican semestralmente. Esta guía se actualiza periódicamente para fines formativos. Al evaluar operaciones en curso, siempre solicite Opiniones de Valor de Corredores (BOV) y transacciones comparables de los últimos 3 a 6 meses.',
+      },
+      {
+        question: '¿Por qué el sector de oficinas tiene Cap Rates más elevados que otros tipos de activos?',
+        answer: 'El segmento de oficinas ha experimentado la mayor disrupción a raíz de las tendencias de trabajo remoto e híbrido, con un aumento de la desocupación en muchos distritos y una brecha considerable entre edificios trofeo modernos (que conservan valor) y activos antiguos sin diferenciar.',
+      },
+    ],
+    dataSourcesTitle: 'Fuentes de Datos y Referencias',
+    methodologyTitle: 'Metodología y Alcance de los Datos',
+    methodologyContent: 'Los rangos de tasas de capitalización presentados arriba son puntos de referencia pedagógicos orientados a la práctica de modelos de inversión y evaluación de riesgos. Están respaldados en observaciones macroeconómicas del informe Newmark 2026 Valuation & Advisory North American Market Survey combinadas con principios de valoración inmobiliaria comercial. Representan generalizaciones didácticas. Al analizar propiedades específicas, los inversionistas deben realizar una debida diligencia local independiente.',
+    dataSources: [
+      { org: 'Newmark', reportName: '2026 Valuation & Advisory North American Market Survey', date: '2026-02-18', url: 'https://www.nmrk.com/insights/market-report/2026-valuation-advisory-north-american-market-survey', accessed: '2026-09-29' },
+      'Contexto general de referencia: Tendencias históricas y metodologías generales observadas en publicaciones de CBRE, Nareit, Marcus & Millichap y Green Street. Datos exclusivamente ilustrativos.',
+    ],
+    relatedTitle: 'Calculadoras y Herramientas Financieras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+      { title: 'Calculadora de Ingreso Operativo Neto (NOI)', slug: 'noi' },
+      { title: 'Calculadora de Cash-on-Cash Return', slug: 'cash-on-cash' },
+    ],
   },
-  howToEstimateNoiGuide: enContent.howToEstimateNoiGuide,
-  exchange1031ProcessGuide: enContent.exchange1031ProcessGuide,
-  howToUnderwriteDealGuide: enContent.howToUnderwriteDealGuide,
+  howToEstimateNoiGuide: {
+    metaTitle: 'Cómo Estimar el NOI sin Cuentas Históricas — Guía CRE',
+    metaDescription: 'Aprenda a estimar el Ingreso Operativo Neto (NOI) de una propiedad comercial cuando el vendedor no proporciona balances o al evaluar obras nuevas u operaciones fuera de mercado.',
+    h1: 'Cómo Estimar el NOI (Incluso sin Estados Financieros Históricos)',
+    subtitle: 'Un marco práctico para reconstruir el ingreso operativo neto cuando las cifras del vendedor son incompletas, infladas o inexistentes.',
+    sections: [
+      {
+        title: 'Por qué no se debe confiar ciegamente en el NOI proporcionado por el vendedor',
+        content: 'Los vendedores tienen todos los incentivos para presentar el NOI más alto posible. Entre las tácticas habituales de optimización se incluyen: ajustes por partidas que no sobrevivirán al cambio de propiedad (gestión directa por el dueño sin honorarios de administración), mantenimiento diferido que aún no se refleja en gastos, o un T-12 que abarca un período atípicamente favorable. Además, muchas operaciones —inmuebles fuera de mercado, obra nueva o ventas en liquidación— carecen de historial financiero verificable. En ambos casos, es necesario reconstruir una estimación propia y fundamentada de NOI desde cero.',
+      },
+      {
+        title: 'Método 1: Reconstrucción a partir de datos de mercado (sin información contable)',
+        content: 'Cuando no se dispone de cifras del vendedor, construya una cuenta de resultados pro-forma basada en el mercado:\n\n1. Estime los ingresos brutos potenciales: Recopile rentas comparables de contratos recientes en propiedades similares del entorno (información de corredores locales o bases públicas de alquileres). Multiplique por el número de unidades o superficie alquilable.\n2. Aplique una tasa de vacancia y morosidad de mercado: Utilice la vacancia reportada para el submercado en informes sectoriales en lugar de asumir 0% o una cifra irrealmente baja.\n3. Aplique un ratio de gastos operativos estándar: El porcentaje de gastos operativos sobre el ingreso bruto efectivo varía según la tipología: el multifamiliar suele situarse entre el 35% y el 45% del EGI, mientras que activos industriales o comerciales bajo contrato neto (NNN) pueden oscilar entre el 10% y el 20%, al asumir el inquilino gran parte de los costos. Aplique el ratio adecuado al tipo de activo y estructura de contrato.\n4. Reste para obtener el NOI: EGI menos los gastos operativos estimados.\n\nEste método no será milimétrico, pero proporciona un rango defendible para el análisis de inversión con cifras propias e independientes.',
+      },
+      {
+        title: 'Método 2: Reconstrucción a partir del T-12 o desglose de rentas (Rent Roll)',
+        content: 'Cuando se disponga de documentación contable, audite el NOI línea por línea:\n\n- Cruce el Rent Roll con los cobros reales del T-12: ¿Coinciden las rentas cobradas con lo estipulado en los contratos? Las discrepancias suelen indicar concesiones, morosidad o unidades desocupadas por más tiempo del declarado.\n- Normalice los honorarios de administración: Si el vendedor autogestiona el inmueble, compute una tarifa de mercado (habitualmente entre el 3% y el 8% de los ingresos cobrados según el activo), ya que el nuevo propietario requerirá gestión profesional.\n- Examine los ajustes de gastos: Es legítimo normalizar gastos extraordinarios no recurrentes (una reparación excepcional o un acuerdo judicial único). Sin embargo, calificar costos recurrentes como "extraordinarios" es una señal de alerta.\n- Evalúe el gasto en mantenimiento: Cifras sospechosamente bajas en reparaciones para la antigüedad y estado del activo suelen esconder mantenimiento diferido que impactará su presupuesto poco después del cierre.',
+      },
+      {
+        title: 'Caso Práctico Ilustrativo',
+        content: 'Evaluación de un edificio de apartamentos de 20 unidades. El T-12 del vendedor indica un NOI de $185,000. Tras la auditoría:\n\n- El vendedor autogestiona sin registrar honorarios — se añade un 5% de gestión de mercado sobre $340,000 de ingresos cobrados: −$17,000\n- Dos unidades han estado vacías más de 4 meses (no reflejado como vacancia continua en el T-12, que solo muestra ingresos efectivamente percibidos): se aplica una vacancia normalizada del 5% en adelante: −$8,000\n- Se identifica una reparación de tejado puntual de $12,000 en la partida de gastos: se ajusta como gasto extraordinario legítimo: +$12,000\n\nNOI Ajustado ≈ $185,000 − $17,000 − $8,000 + $12,000 = $172,000 — un 7% inferior a la cifra presentada por el vendedor. Calcule el Cap Rate, DSCR y Cash-on-Cash sobre esta cifra normalizada, no sobre el NOI del folleto de venta.',
+      },
+    ],
+    faqTitle: 'Preguntas Frecuentes',
+    faqs: [
+      {
+        question: '¿Qué ratio de gastos operativos se debe utilizar si no se dispone de comparables?',
+        answer: 'Como referencia inicial: residencial multifamiliar 35–45% del EGI, comercial minorista 15–35% (según sea neto o bruto), oficinas 30–45%, e industrial con contrato neto de inquilino único 10–25%. La estructura del contrato de arrendamiento (quién paga qué gastos) es determinante.',
+      },
+      {
+        question: '¿Cómo estimar la vacancia si el vendedor afirma tener un 0% de desocupación?',
+        answer: 'Desconfíe de balances que muestren 0% de vacancia durante períodos prolongados. Consulte la vacancia media del submercado en informes sectoriales y adóptela como supuesto base en su análisis.',
+      },
+      {
+        question: '¿Se deben utilizar rentas actuales o rentas de mercado para estimar los ingresos?',
+        answer: 'Utilice las rentas contractuales vigentes para su análisis base, ya que es el flujo real que adquiere. Las rentas de mercado son útiles para modelar escenarios alcistas o estrategias de valor agregado, pero no deben emplearse para justificar el precio de entrada.',
+      },
+    ],
+    relatedTitle: 'Herramientas y Calculadoras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de Ingreso Operativo Neto (NOI)', slug: 'noi' },
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+      { title: 'Calculadora de DSCR', slug: 'dscr' },
+    ],
+  },
+  exchange1031ProcessGuide: {
+    metaTitle: 'Proceso de Intercambio 1031: Guía Paso a Paso de las Reglas de 45 y 180 Días',
+    metaDescription: 'Guía detallada del proceso de intercambio 1031: estructuración de la venta, contratación del intermediario calificado y cumplimiento de los plazos de 45 y 180 días.',
+    h1: 'El Proceso Completo de Intercambio 1031, Paso a Paso',
+    subtitle: 'Cómo estructurar un intercambio 1031 correctamente: desde la contratación del intermediario calificado hasta los plazos de 45 y 180 días.',
+    sections: [
+      {
+        title: 'El proceso en 6 pasos',
+        content: '1. Contrate un Intermediario Calificado (QI) antes del cierre de la venta. Este es el paso más crítico en cuanto a plazos: la estructura de intercambio debe formalizarse antes de escriturar la venta de la propiedad cedida. Si se cierra la venta previamente, la operación tributará de forma ordinaria.\n2. Venda la propiedad cedida. El Intermediario Calificado recibe directamente los fondos de la venta en el momento del cierre. El vendedor no debe tener posesión material ni ficticia de los fondos bajo ninguna circunstancia.\n3. Identifique la propiedad de reemplazo por escrito en un plazo máximo de 45 días naturales. El cómputo inicia el día del cierre de la venta. La designación debe entregarse firmada al QI.\n4. Escriture la propiedad de reemplazo en un plazo máximo de 180 días naturales. Este plazo corre de forma simultánea con el período de 45 días desde la misma fecha inicial. Si la fecha límite de presentación del impuesto sobre la renta del ejercicio ocurre antes del día 180 (sin prórroga concedida), rige dicha fecha anterior.\n5. El QI transfiere los fondos depositados para completar la compra de reemplazo. La adquisición debe realizarse bajo la misma entidad o persona titular de la propiedad cedida (regla del mismo contribuyente).\n6. Declare la operación en su declaración de impuestos (Formulario IRS 8824) aportando las liquidaciones notariales de ambas transacciones.',
+      },
+      {
+        title: 'Reglas de identificación en el plazo de 45 días',
+        content: 'El IRS contempla tres modalidades para designar propiedades de reemplazo:\n\n- Regla de las 3 propiedades: Identificar hasta tres propiedades candidatas, sin límite en su valor conjunto.\n- Regla del 200%: Identificar más de tres propiedades, siempre que su valor de mercado total no exceda el 200% del valor de la propiedad vendida.\n- Regla del 95%: Identificar cualquier número de inmuebles de cualquier valor, siempre que se adquiera al menos el 95% del valor total identificado.\n\nLa mayoría de los inversionistas opta por la regla de las 3 propiedades, fijando una opción principal y una o dos de respaldo.',
+      },
+      {
+        title: 'Criterios para seleccionar un Intermediario Calificado',
+        content: 'El QI custodiará los fondos durante todo el proceso. Aspectos esenciales a verificar:\n\n- Incompatibilidades legales: Su abogado, contador público (CPA), agente o corredor inmobiliario de los dos últimos años, familiares directos o entidades donde posea más del 10% de control no pueden actuar como su QI.\n- Custodia de los fondos: Compruebe que los fondos se depositen en cuentas fiduciarias independientes y segregadas (qualified escrow accounts), evitando cuentas operativas generales de la compañía intermediaria.\n- Pólizas de fidelidad y seguros de errores y omisiones (E&O): Las firmas reconocidas disponen de ambas coberturas; solicite los certificados correspondientes.',
+      },
+      {
+        title: 'Errores comunes que invalidan el intercambio',
+        content: '- Designar al intermediario después de formalizar la venta — el error más común y sin posibilidad de subsanación.\n- Disponer o recibir los fondos de la venta, aunque sea temporalmente (invalida el diferimiento por posesión de fondos).\n- Asumir que los plazos de 45 o 180 días son prorrogables — son fechas perentorias fijadas por ley.\n- Iniciar la búsqueda del inmueble de reemplazo tras el cierre de la venta — el plazo de 45 días es breve en mercados dinámicos; la búsqueda debe desarrollarse en paralelo a la venta.\n- Designar una sola propiedad sin alternativas de respaldo ante posibles eventualidades en la debida diligencia.',
+      },
+    ],
+    faqTitle: 'Preguntas Frecuentes',
+    faqs: [
+      {
+        question: '¿Se puede aplicar el intercambio 1031 a propiedades fuera de EE.UU.?',
+        answer: 'No. La normativa del Código de Rentas Internas estipula que los bienes inmuebles situados en EE.UU. solo se consideran de la misma naturaleza respecto a otros inmuebles localizados en territorio estadounidense.',
+      },
+      {
+        question: '¿Qué sucede si no se adquiere la propiedad de reemplazo en plazo?',
+        answer: 'Si vence el plazo sin adquirir el inmueble de reemplazo, la operación se liquida como una venta imponible ordinaria. El QI restituye los fondos y se devenga el impuesto sobre ganancias de capital correspondiente.',
+      },
+      {
+        question: '¿Se puede adquirir una propiedad de reemplazo de menor valor?',
+        answer: 'Sí, pero para diferir el 100% de la carga tributaria la nueva propiedad debe tener un valor igual o superior al precio neto de venta, reinvirtiendo la totalidad del capital neto y manteniendo o sustituyendo el nivel de deuda. Adquirir por menor valor genera una tributación parcial (denominada boot).',
+      },
+    ],
+    relatedTitle: 'Herramientas y Calculadoras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de Intercambio 1031', slug: '1031-exchange' },
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+      { title: 'Calculadora de Cash-on-Cash Return', slug: 'cash-on-cash' },
+    ],
+  },
+  howToUnderwriteDealGuide: {
+    metaTitle: 'Cómo Evaluar una Inversión Inmobiliaria Comercial, Paso a Paso',
+    metaDescription: 'Guía práctica para evaluar una operación inmobiliaria comercial: análisis financiero, ratios fundamentales, financiación, pruebas de estrés y debida diligencia.',
+    h1: 'Cómo Evaluar una Inversión Inmobiliaria Comercial, Paso a Paso',
+    subtitle: 'Un marco riguroso para pasar de la información inicial de venta a una oferta justificada o rechazar la operación a tiempo.',
+    sections: [
+      {
+        title: 'Paso 1: Filtro inicial (5 minutos para descartar operaciones no viables)',
+        content: 'Antes de solicitar documentación detallada o realizar visitas técnicas, efectúe una comprobación preliminar con los datos del anuncio:\n\n- Precio por unidad o por metro cuadrado: ¿Cómo se sitúa frente a operaciones comparables recientes (comps) en la misma zona? Precios sustancialmente superiores exigen justificaciones sólidas (potencial de valor agregado, ubicación privilegiada); precios llamativamente bajos suelen encubrir problemas legales, deterioro estructural o urgencia de venta.\n- Cap Rate implícito según el precio solicitado: Si el anuncio facilita el NOI, ¿resulta coherente el Cap Rate resultante para esa tipología y mercado? (Consulte nuestra Guía de Puntos de Referencia de Cap Rate).\n\nSi la operación supera este primer examen, continúe el análisis; en caso contrario, evite destinar tiempo a operaciones desalineadas de mercado.',
+      },
+      {
+        title: 'Paso 2: Solicitar y reconstruir los estados financieros',
+        content: 'Solicite al vendedor o corredor el histórico detallado de los últimos 12 meses (T-12), el desglose contractual de inquilinos y rentas (rent roll) y los balances operativos de los 2-3 últimos ejercicios. Proceda a reconstruir el NOI de forma independiente siguiendo las pautas de nuestra guía Cómo Estimar el NOI, normalizando gastos de gestión, costes autogestionados y posibles diferencias entre rentas facturadas y cobros reales.',
+      },
+      {
+        title: 'Paso 3: Calcular las métricas financieras clave',
+        content: 'Con un NOI validado, calcule los indicadores determinantes para la toma de decisiones:\n\n- Cap Rate: ¿El rendimiento de entrada resulta competitivo para este activo y mercado?\n- Cash-on-Cash Return: ¿Cuál es el rendimiento efectivo sobre el capital desembolsado según las condiciones de financiación realistas?\n- DSCR: ¿Alcanza el ratio de cobertura de deuda el umbral bancario mínimo (habitualmente 1.20–1.25) con el préstamo proyectado?\n- Break-Even Ratio: ¿Qué margen de seguridad existe antes de que un aumento de vacancia o de costes sitúe el flujo de caja en terreno negativo?\n\nSi los márgenes resultan ajustados, identifique con precisión en qué variable se concentra el riesgo (precio de compra, condiciones crediticias o margen de mejora en la gestión).',
+      },
+      {
+        title: 'Paso 4: Someter los números a pruebas de estrés',
+        content: 'Modele un escenario adverso: incremente la tasa de vacancia entre 3 y 5 puntos porcentuales respecto al caso base, asuma un incremento moderado en gastos operativos y una subida de 50 a 100 puntos básicos (pbs) en el tipo de interés. Si la operación mantiene indicadores de solvencia razonables bajo condiciones de estrés, la solidez del activo queda demostrada frente a operaciones que solo funcionan en escenarios ideales.',
+      },
+      {
+        title: 'Paso 5: Debida diligencia física, urbanística y jurídica',
+        content: 'La solidez numérica debe complementarse con la verificación física y legal del activo:\n\n- Inspección técnica del edificio: Evaluación profesional de cubiertas, instalaciones de climatización (HVAC), cimentación e instalaciones principales, presupuestando elementos próximos al final de su vida útil.\n- Auditoría registral y de cargas: Verificación de titularidad, servidumbres, gravámenes o afecciones que pudieran entorpecer la transmisión.\n- Evaluación medioambiental (Fase I ESA): Especialmente relevante en naves industriales o inmuebles con historial de almacenamiento de combustibles o actividades de manufactura.\n- Conformidad urbanística y licencias: Confirmación de que el uso actual está amparado por el planeamiento municipal vigente y que cualquier reforma proyectada resulta viable.\n- Análisis pormenorizado de los contratos de arrendamiento: Examen directo de los contratos firmados, verificando cláusulas de resolución anticipada, opciones de prórroga a precios fuera de mercado o compromisos de exclusividad.',
+      },
+      {
+        title: 'Paso 6: Concretar la estructura de financiamiento',
+        content: 'Obtenga una hoja de condiciones formal (term sheet) de una entidad bancaria antes de avanzar en la negociación definitiva. Los requisitos específicos de cobertura de deuda (DSCR), porcentaje de financiación sobre valor (LTV) y plazos de amortización inciden directamente sobre la rentabilidad final del capital aportado.',
+      },
+      {
+        title: 'Paso 7: Decisión de inversión y formulación de la oferta',
+        content: 'Integre todos los hallazgos: ¿El retorno ajustado al riesgo justifica la valoración requerida a la luz de las conclusiones de la debida diligencia y las condiciones financieras alcanzables? Si surgen contingencias significativas no contempladas inicialmente, renegocie el precio de adquisición o desestime la compra con rigor técnico.',
+      },
+    ],
+    faqTitle: 'Preguntas Frecuentes',
+    faqs: [
+      {
+        question: '¿Cuánto tiempo suele requerir la evaluación de una operación comercial?',
+        answer: 'Para un activo estabilizado convencional, el análisis cuantitativo inicial (pasos 1 a 3) puede realizarse en pocas horas una vez recopilada la información contable. La debida diligencia integral física y jurídica (pasos 5 y 6) requiere habitualmente entre 30 y 45 días, plazo habitual estipulado en los contratos de arras o promesa de compraventa.',
+      },
+      {
+        question: '¿Cómo proceder si el vendedor no facilita documentación completa antes de la oferta?',
+        answer: 'Es una situación habitual en operaciones competitivas. Frecuentemente se formula una oferta sujeta a condición suspensiva de verificación documental durante el período de debida diligencia, calculando el precio inicial mediante reconstrucción de mercado (Método 1 de nuestra guía de NOI).',
+      },
+      {
+        question: '¿Se debe evaluar la operación sobre el NOI actual o sobre proyecciones de valor agregado?',
+        answer: 'La oferta base debe fundamentarse sobre el NOI real verificado. El potencial de valor agregado (rentas por debajo de mercado o eficiencias operativas) debe considerarse como rentabilidad adicional futura y no como valor devengado a retribuir al vendedor desde el primer día.',
+      },
+    ],
+    relatedTitle: 'Herramientas y Calculadoras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
+      { title: 'Calculadora de DSCR', slug: 'dscr' },
+      { title: 'Calculadora de Punto de Equilibrio (BER)', slug: 'break-even-ratio' },
+    ],
+  },
   guidesHub: {
     metaTitle: 'Guías de Inversión y Debida Diligencia Comercial | CRE Tools',
-    metaDescription: 'Aprenda metodologías profesionales de suscripción, puntos de referencia de Cap Rate y optimización de préstamos comerciales.',
+    metaDescription: 'Aprenda metodologías profesionales de análisis de inversiones, puntos de referencia de Cap Rate y optimización de préstamos comerciales.',
     h1: 'Guías Prácticas de Inversión en Bienes Raíces Comerciales',
     subtitle: 'Marcos de análisis prácticos y detallados para inversionistas, corredores y analistas de bienes raíces comerciales.',
     guides: [

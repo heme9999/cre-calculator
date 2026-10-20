@@ -36,6 +36,12 @@ export default async function LoanPaymentPage({ params }: PageProps) {
   const resolvedParams = await params;
   const locale = resolveLocale(resolvedParams.locale);
   const content = getContent(locale).loanPayment;
+  const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
+
+  const homeLabel = isZh ? '首页' : isEs ? 'Inicio' : isPt ? 'Início' : 'Home';
+
   const jsonLdData = getCalculatorJsonLd(
     content.h1,
     content.metaDescription,
@@ -50,7 +56,7 @@ export default async function LoanPaymentPage({ params }: PageProps) {
       {/* Page Header */}
       <header className="space-y-3 border-b border-slate-200 pb-6">
         <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
-          <Link href={`/${locale}/`} className="hover:text-emerald-600">Home</Link>
+          <Link href={`/${locale}/`} className="hover:text-emerald-600">{homeLabel}</Link>
           <span>/</span>
           <span className="text-slate-900 font-semibold">{content.h1}</span>
         </nav>
@@ -102,17 +108,55 @@ export default async function LoanPaymentPage({ params }: PageProps) {
           <LoanScenarioComparison locale={locale} />
           <div className="pt-4 mt-4 border-t border-slate-100 text-sm text-slate-700">
             <p>
-              {locale === 'zh' 
-                ? '上述 $2,100,000 贷款对应我们贯穿全站的 24 单元多户住宅案例（购买价 280 万，首付 25%）。计算出您的年还贷额后，请在 '
-                : 'This $2,100,000 loan matches our ongoing 24-unit multifamily example ($2.8M purchase price, 25% down). Once you have your annual debt service, combine it with your property\'s NOI to '}
-              <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">
-                {locale === 'zh' ? 'DSCR 计算器' : 'calculate your DSCR'}
-              </Link>
-              {locale === 'zh' ? ' 中将其与 NOI 结合评估抗风险能力，或在 ' : ' to evaluate loan safety, or use the '}
-              <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
-                {locale === 'zh' ? 'Cash-on-Cash 计算器' : 'Cash-on-Cash Return calculator'}
-              </Link>
-              {locale === 'zh' ? ' 中测算扣除房贷后的现金回报。' : ' to determine your leveraged cash yield.'}
+              {isZh ? (
+                <>
+                  上述 $2,100,000 贷款对应我们贯穿全站的 24 单元多户住宅案例（购买价 280 万，首付 25%）。计算出您的年还贷额后，请在{' '}
+                  <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">
+                    DSCR 计算器
+                  </Link>
+                  {' '}中将其与 NOI 结合评估抗风险能力，或在{' '}
+                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
+                    Cash-on-Cash 计算器
+                  </Link>
+                  {' '}中测算扣除房贷后的现金回报。
+                </>
+              ) : isEs ? (
+                <>
+                  Este préstamo de $2,100,000 corresponde a nuestro ejemplo continuo de propiedad multifamiliar de 24 unidades (precio de compra de $2.8M, anticipo del 25%). Una vez obtenido el servicio anual de la deuda, combínelo con el NOI de su propiedad en la{' '}
+                  <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">
+                    calculadora de DSCR
+                  </Link>
+                  {' '}para evaluar la seguridad del financiamiento, o utilice la{' '}
+                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
+                    calculadora de Cash-on-Cash
+                  </Link>
+                  {' '}para determinar su rendimiento de efectivo apalancado.
+                </>
+              ) : isPt ? (
+                <>
+                  Este financiamento de $2.100.000 corresponde ao nosso exemplo contínuo de imóvel multifamiliar de 24 unidades (preço de compra de $2,8M, 25% de entrada). Uma vez calculado o serviço anual da dívida, combine-o com o NOI do imóvel na{' '}
+                  <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">
+                    calculadora de DSCR
+                  </Link>
+                  {' '}para avaliar a segurança do endividamento, ou utilize a{' '}
+                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
+                    calculadora de Cash-on-Cash
+                  </Link>
+                  {' '}para determinar seu rendimento de caixa alavancado.
+                </>
+              ) : (
+                <>
+                  This $2,100,000 loan matches our ongoing 24-unit multifamily example ($2.8M purchase price, 25% down). Once you have your annual debt service, combine it with your property&apos;s NOI to{' '}
+                  <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">
+                    calculate your DSCR
+                  </Link>
+                  {' '}to evaluate loan safety, or use the{' '}
+                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
+                    Cash-on-Cash Return calculator
+                  </Link>
+                  {' '}to determine your leveraged cash yield.
+                </>
+              )}
             </p>
           </div>
         </section>

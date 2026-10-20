@@ -139,7 +139,7 @@ export default async function CapRatePage({ params }: PageProps) {
     es: {
       title: 'Errores Comunes y Limitaciones del Cap Rate',
       item1: '1. Ignora la Estructura de Deuda: El Cap Rate es una métrica no apalancada. No refleja las tasas de interés hipotecarias, la amortización ni los retornos apalancados. Evalúelo siempre junto con el Cash-on-Cash Return y el DSCR.',
-      item2: '2. Confusión entre Pro-Forma y T12 Histórico: Los folletos de venta frecuentemente presentan supuestos optimistas a futuro. Suscriba y evalúe siempre basándose en los estados financieros auditados de los últimos 12 meses (T12).',
+      item2: '2. Confusión entre Pro-Forma y T12 Histórico: Los folletos de venta frecuentemente presentan supuestos optimistas a futuro. Analice y evalúe siempre basándose en los estados financieros auditados de los últimos 12 meses (T12).',
     },
     pt: {
       title: 'Erros Comuns e Limitações do Cap Rate',

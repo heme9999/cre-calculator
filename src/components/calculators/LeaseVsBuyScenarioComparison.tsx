@@ -10,6 +10,8 @@ interface Props {
 
 export function LeaseVsBuyScenarioComparison({ locale }: Props) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
 
   // Benchmark fixed parameters
   const purchasePrice = 1800000;
@@ -54,6 +56,10 @@ export function LeaseVsBuyScenarioComparison({ locale }: Props) {
       <p className="font-medium">
         {isZh
           ? `假设一家商业企业计划使用一处办公空间 10 年（基准场景：买价 $1,800,000，首付 25%，贷款 $1,350,000，利率 6.5%，25 年摊销；租金 $10,000/月，年递增 3%；年均升值 3%，卖出成本 5%）：`
+          : isEs
+          ? `Suponga que una empresa necesita un espacio comercial u oficina durante 10 años (Escenario Base: precio de compra de $1.8M, 25% de anticipo, préstamo de $1.35M al 6.5% con amortización a 25 años; alquiler de $10,000/mes con escalamiento del 3%; plusvalía del 3% anual y costos de venta del 5%):`
+          : isPt
+          ? `Suponha que uma empresa precise de um espaço comercial ou escritório durante 10 anos (Cenário Base: preço de compra de $1,8M, 25% de entrada, financiamento de $1,35M a 6,5% com amortização em 25 anos; aluguel de $10.000/mês com reajuste de 3%; valorização de 3% ao ano e custos de venda de 5%):`
           : `Suppose a company requires an office space for 10 years (Benchmark Scenario: $1.8M Purchase Price, 25% Down, $1.35M Loan at 6.5% Rate & 25-Yr Amortization; $10k/mo Initial Rent with 3% Escalation; 3% Appreciation & 5% Exit Selling Costs):`}
       </p>
 
@@ -61,22 +67,24 @@ export function LeaseVsBuyScenarioComparison({ locale }: Props) {
         {/* Lease Option Breakdown */}
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2">
           <div className="font-bold text-amber-700 border-b border-slate-100 pb-1.5 flex justify-between items-center">
-            <span>{isZh ? '方案 A：租赁 10 年' : 'Option A: Lease 10 Years'}</span>
+            <span>
+              {isZh ? '方案 A：租赁 10 年' : isEs ? 'Opción A: Alquilar 10 Años' : isPt ? 'Opção A: Alugar 10 Anos' : 'Option A: Lease 10 Years'}
+            </span>
             <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-md font-semibold">
-              {isZh ? '纯开支开销' : 'Pure Expense'}
+              {isZh ? '纯开支开销' : isEs ? 'Gasto Operativo Puro' : isPt ? 'Despesa Operacional Pura' : 'Pure Expense'}
             </span>
           </div>
           <div className="space-y-1 text-xs">
             <div className="flex justify-between text-slate-600">
-              <span>{isZh ? '首年月租金:' : 'Initial Monthly Rent:'}</span>
+              <span>{isZh ? '首年月租金:' : isEs ? 'Alquiler mensual inicial:' : isPt ? 'Aluguel mensal inicial:' : 'Initial Monthly Rent:'}</span>
               <span className="font-semibold text-slate-900">{formatCurrency(monthlyRent)}</span>
             </div>
             <div className="flex justify-between text-slate-600">
-              <span>{isZh ? '年租金递增率:' : 'Annual Escalation:'}</span>
+              <span>{isZh ? '年租金递增率:' : isEs ? 'Escalamiento anual de renta:' : isPt ? 'Reajuste anual de aluguel:' : 'Annual Escalation:'}</span>
               <span className="font-semibold text-slate-900">{annualRentEscalation}%</span>
             </div>
             <div className="flex justify-between text-amber-900 font-bold border-t border-slate-100 pt-2 text-sm">
-              <span>{isZh ? '10年累计租金开支:' : '10-Yr Total Rent Outlay:'}</span>
+              <span>{isZh ? '10年累计租金开支:' : isEs ? 'Gasto total en alquiler (10 años):' : isPt ? 'Custo total de aluguel (10 anos):' : '10-Yr Total Rent Outlay:'}</span>
               <span>{formatCurrency(Math.round(totalLeaseCost))}</span>
             </div>
           </div>
@@ -85,30 +93,32 @@ export function LeaseVsBuyScenarioComparison({ locale }: Props) {
         {/* Buy Option Breakdown */}
         <div className="bg-white p-4 rounded-xl border border-emerald-100 shadow-xs space-y-2">
           <div className="font-bold text-emerald-800 border-b border-slate-100 pb-1.5 flex justify-between items-center">
-            <span>{isZh ? '方案 B：购买自用 10 年' : 'Option B: Buy 10 Years'}</span>
+            <span>
+              {isZh ? '方案 B：购买自用 10 年' : isEs ? 'Opción B: Comprar 10 Años' : isPt ? 'Opção B: Comprar 10 Anos' : 'Option B: Buy 10 Years'}
+            </span>
             <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-semibold">
-              {isZh ? '资产权益积累' : 'Equity Building'}
+              {isZh ? '资产权益积累' : isEs ? 'Construcción de Patrimonio' : isPt ? 'Criação de Patrimônio' : 'Equity Building'}
             </span>
           </div>
           <div className="space-y-1 text-xs">
             <div className="flex justify-between text-slate-600">
-              <span>{isZh ? '首付款 (25%):' : 'Down Payment (25%):'}</span>
+              <span>{isZh ? '首付款 (25%):' : isEs ? 'Anticipo inicial (25%):' : isPt ? 'Entrada inicial (25%):' : 'Down Payment (25%):'}</span>
               <span className="font-semibold text-slate-900">{formatCurrency(Math.round(downPayment))}</span>
             </div>
             <div className="flex justify-between text-slate-600">
-              <span>{isZh ? '10年累计还贷本息:' : '10-Yr Total Mortgage Paid:'}</span>
+              <span>{isZh ? '10年累计还贷本息:' : isEs ? 'Servicio de deuda total pagado (10 años):' : isPt ? 'Serviço total da dívida pago (10 anos):' : '10-Yr Total Mortgage Paid:'}</span>
               <span className="font-semibold text-slate-900">{formatCurrency(Math.round(cumulativeDebtService))}</span>
             </div>
             <div className="flex justify-between text-slate-600">
-              <span>{isZh ? '10年后物业市场估值:' : '10-Yr Future Market Value:'}</span>
+              <span>{isZh ? '10年后物业市场估值:' : isEs ? 'Valor de mercado estimado en año 10:' : isPt ? 'Valor de mercado estimado no 10º ano:' : '10-Yr Future Market Value:'}</span>
               <span className="font-semibold text-slate-900">{formatCurrency(Math.round(futurePropertyValue))}</span>
             </div>
             <div className="flex justify-between text-slate-600">
-              <span>{isZh ? '10年后卖出净变现所得:' : 'Net Sale Proceeds at Sale:'}</span>
+              <span>{isZh ? '10年后卖出净变现所得:' : isEs ? 'Producto neto al liquidar inmueble:' : isPt ? 'Receita líquida na venda do imóvel:' : 'Net Sale Proceeds at Sale:'}</span>
               <span className="font-semibold text-emerald-700">{formatCurrency(Math.round(netProceedsAtExit))}</span>
             </div>
             <div className="flex justify-between text-emerald-900 font-bold border-t border-slate-100 pt-2 text-sm">
-              <span>{isZh ? '10年购买实际净成本:' : '10-Yr Net Buy Cost:'}</span>
+              <span>{isZh ? '10年购买实际净成本:' : isEs ? 'Costo neto real de comprar (10 años):' : isPt ? 'Custo líquido real de compra (10 anos):' : '10-Yr Net Buy Cost:'}</span>
               <span>{formatCurrency(Math.round(netBuyCost))}</span>
             </div>
           </div>
@@ -119,6 +129,10 @@ export function LeaseVsBuyScenarioComparison({ locale }: Props) {
         <span>
           {isZh
             ? `【对比结论】：在 10 年持有期内，购买自用方案相比租赁方案可节省净财务成本约：`
+            : isEs
+            ? `【Conclusión】: En un horizonte de 10 años, comprar ahorra un desembolso financiero neto respecto al alquiler de:`
+            : isPt
+            ? `【Conclusão】: Em um horizonte de 10 anos, comprar economiza um desembolso financeiro líquido em relação ao aluguel de:`
             : `【Conclusion】: Over the 10-year holding period, buying saves net financial outlay compared to leasing by:`}
         </span>
         <span className="text-base font-black text-emerald-700 sm:text-right">

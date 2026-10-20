@@ -147,7 +147,7 @@ export default async function DscrPage({ params }: PageProps) {
       item2: '2. 租金违约与单一租户集中度：单租户商业物业若发生租约到期或租客破产，NOI 归零将导致 DSCR 瞬间崩塌，必须审查租客信用与租期剩余年限 (WALT)。',
     },
     es: {
-      title: 'Riesgos en la Suscripción del DSCR y Pruebas de Estrés',
+      title: 'Riesgos en la Evaluación del DSCR y Pruebas de Estrés',
       item1: '1. Exposición a Tasa Flotante y Reajuste de Intereses: Un aumento de 100 a 200 bps al reiniciar o reajustar el préstamo puede erosionar rápidamente un DSCR saludable de 1.25x llevándolo a zona de impago (< 1.0x).',
       item2: '2. Concentración de Inquilinos y Vencimiento de Arrendamientos: Las propiedades monoinquilino enfrentan caídas catastróficas del DSCR si el arrendatario entra en quiebra. Realice siempre pruebas de estrés frente a aumentos localizados de vacancia.',
     },
