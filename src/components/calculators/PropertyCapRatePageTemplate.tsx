@@ -68,12 +68,12 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
           </span>
           <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
             {isZh
-              ? '2026 参考区间: '
+              ? '教学示例承销区间: '
               : isEs
-              ? 'Rango Objetivo 2026: '
+              ? 'Rango Ilustrativo de Modelado: '
               : isPt
-              ? 'Faixa Alvo 2026: '
-              : '2026 Target Range: '}
+              ? 'Faixa Ilustrativa de Modelagem: '
+              : 'Illustrative Modeling Range: '}
             {content.benchmarkRange}
           </span>
         </div>
@@ -88,7 +88,11 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
 
       {/* Interactive Calculator Tool */}
       <section id="tool">
-        <CapRateCalculator locale={locale} />
+        <CapRateCalculator
+          locale={locale}
+          defaultPrice={content.defaultPrice}
+          defaultNoi={content.defaultNoi}
+        />
       </section>
 
       {/* Content Body Section */}
@@ -229,23 +233,23 @@ export function PropertyCapRatePageTemplate({ content, locale }: Props) {
           <div className="space-y-1">
             <h3 className="text-base font-bold text-emerald-950 flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-emerald-600" />
-              {isZh ? '全美 Cap Rate 基准数据指南' : isEs ? 'Guía de Puntos de Referencia Cap Rate en EE.UU. (2026)' : isPt ? 'Guia de Benchmarks de Cap Rate nos EUA (2026)' : 'US Cap Rate Benchmarks Guide (2026)'}
+              {isZh ? '商业地产 Cap Rate 承销参考指南' : isEs ? 'Guía de Escenarios Ilustrativos de Cap Rate' : isPt ? 'Guia de Cenários Ilustrativos de Cap Rate' : 'Cap Rate Underwriting Reference Guide'}
             </h3>
             <p className="text-xs text-emerald-800 leading-relaxed">
               {isZh
-                ? '查看全美主要都市圈（一二三四级城市）与各类商业物业的典型 Cap Rate 收益率区间。'
+                ? '查看不同都市圈层级与资产类别的教学承销区间、费用结构与敏感度测算框架。'
                 : isEs
-                ? 'Explore los rangos de tasas de capitalización por tipo de activo y nivel metropolitano en el mercado estadounidense.'
+                ? 'Explore los rangos ilustrativos de modelado financiero por tipo de activo y nivel de mercado metropolitano.'
                 : isPt
-                ? 'Explore as faixas de taxa de capitalização por classe de imóvel e nível metropolitano no mercado norte-americano.'
-                : 'Explore national capitalization rate ranges across property types and metropolitan market tiers.'}
+                ? 'Explore as faixas ilustrativas de modelagem financeira por classe de imóvel e nível de mercado metropolitano.'
+                : 'Explore illustrative underwriting ranges, expense structures, and sensitivity frameworks across property types and market tiers.'}
             </p>
           </div>
           <Link
             href={`/${locale}/guides/cap-rate-benchmarks-by-city/`}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
           >
-            <span>{isZh ? '查看基准数据指南' : isEs ? 'Ver Guía de Referencias' : isPt ? 'Ver Guia de Benchmarks' : 'View Benchmark Guide'}</span>
+            <span>{isZh ? '查看承销参考指南' : isEs ? 'Ver Guía de Referencia' : isPt ? 'Ver Guia de Referência' : 'View Reference Guide'}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </section>

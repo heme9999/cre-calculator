@@ -508,6 +508,33 @@ async function runVerification() {
       routeErrors++;
     }
 
+    // Strict Check 9: Market Data Claim & ES/PT Localization Integrity
+    if (
+      evaluated.bodyText.includes('Current 2026') ||
+      evaluated.bodyText.includes('2026 Calibrated') ||
+      evaluated.bodyText.includes('2026 最新校准') ||
+      evaluated.title.includes('Current 2026')
+    ) {
+      console.error(`❌ [${route}] Overclaiming market benchmark phrase found in title or body!`);
+      routeErrors++;
+    }
+
+    if (isEs || isPt) {
+      const forbiddenEnglishHeadings = [
+        'Privacy Policy | CRE Calculators',
+        'Terms of Use & Financial Disclaimer',
+        'Underwriting Standards & Calculation Formulas',
+        'Commercial Real Estate Overview',
+        'Core Regional Economic Drivers',
+      ];
+      for (const phrase of forbiddenEnglishHeadings) {
+        if (evaluated.bodyText.includes(phrase) || evaluated.title.includes(phrase)) {
+          console.error(`❌ [${route}] Unlocalized English fallback phrase "${phrase}" detected on ${isEs ? 'ES' : 'PT'} page!`);
+          routeErrors++;
+        }
+      }
+    }
+
     if (routeErrors === 0) {
       verifiedCount++;
     } else {

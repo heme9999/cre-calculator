@@ -114,6 +114,28 @@ export function Header({ locale }: HeaderProps) {
 
   const glossaryLabel = isZh ? '词汇表' : isEs ? 'Glosario' : isPt ? 'Glossário' : 'Glossary';
   const guidesLabel = isZh ? '指南' : isEs ? 'Guías' : isPt ? 'Guias' : 'Guides';
+  const selectLanguageAria = isZh
+    ? `切换语言 (${currentLang.label})`
+    : isEs
+    ? `Seleccionar idioma (${currentLang.label})`
+    : isPt
+    ? `Selecionar idioma (${currentLang.label})`
+    : `Select Language (${currentLang.label})`;
+  const toggleMenuAria = isZh
+    ? mobileMenuOpen
+      ? '关闭导航菜单'
+      : '打开导航菜单'
+    : isEs
+    ? mobileMenuOpen
+      ? 'Cerrar menú de navegación'
+      : 'Abrir menú de navegación'
+    : isPt
+    ? mobileMenuOpen
+      ? 'Fechar menu de navegação'
+      : 'Abrir menu de navegação'
+    : mobileMenuOpen
+    ? 'Close Navigation Menu'
+    : 'Open Navigation Menu';
 
   const navLinks = [
     { href: `/${locale}/tools/deal-analyzer/`, label: nav.dealAnalyzer, key: 'deal-analyzer', isPrimary: true },
@@ -131,10 +153,10 @@ export function Header({ locale }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-xl border-b border-slate-800/80 text-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.3)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
         {/* Brand Logo */}
-        <Link href={`/${locale}/`} className="active-press flex items-center gap-2 md:gap-2.5 font-bold text-base md:text-lg text-white hover:text-emerald-400 transition-colors shrink min-w-0">
-          <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_2px_8px_rgba(16,185,129,0.3)] shrink-0">
+        <Link href={`/${locale}/`} className="active-press flex items-center gap-1.5 sm:gap-2 md:gap-2.5 font-bold text-sm sm:text-base md:text-lg text-white hover:text-emerald-400 transition-colors shrink-0">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_2px_8px_rgba(16,185,129,0.3)] shrink-0">
             <Building2 className="w-4 h-4 md:w-5 md:h-5 text-white" />
           </div>
           <span className="tracking-tight whitespace-nowrap">{nav.brandName}</span>
@@ -210,12 +232,13 @@ export function Header({ locale }: HeaderProps) {
               onClick={() => setLangMenuOpen((prev) => !prev)}
               aria-expanded={langMenuOpen}
               aria-controls="languages-navigation"
-              aria-label="Select Language"
-              className="active-press flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/50 text-xs font-semibold text-emerald-300 hover:text-emerald-200 transition-all shadow-xs"
+              aria-label={selectLanguageAria}
+              className="active-press flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/50 text-xs font-semibold text-emerald-300 hover:text-emerald-200 transition-all shadow-xs"
             >
-              <Globe className="w-3.5 h-3.5 text-emerald-400" />
-              <span>{currentLang.label}</span>
-              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${langMenuOpen ? 'rotate-180 text-emerald-400' : ''}`} />
+              <Globe className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span className="hidden sm:inline">{currentLang.label}</span>
+              <span className="sm:hidden">{currentLang.short}</span>
+              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200 ${langMenuOpen ? 'rotate-180 text-emerald-400' : ''}`} />
             </button>
 
             <div
@@ -253,7 +276,7 @@ export function Header({ locale }: HeaderProps) {
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation"
             className="active-press lg:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors"
-            aria-label="Toggle Navigation Menu"
+            aria-label={toggleMenuAria}
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>

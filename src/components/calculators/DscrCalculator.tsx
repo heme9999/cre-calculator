@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { formatCurrency } from '@/lib/utils';
-import { Calculator, ShieldCheck, AlertTriangle, ShieldAlert, CheckCircle2, Info, Share2, Check, ArrowRight, Building, Mail, DollarSign } from 'lucide-react';
+import { Calculator, ShieldCheck, AlertTriangle, ShieldAlert, CheckCircle2, Info, Share2, Check, ArrowRight } from 'lucide-react';
 import { DscrCoverageTierVisualizer } from './visuals/DscrCoverageTierVisualizer';
 import { getUiTranslations } from '@/lib/translations';
 
@@ -24,12 +25,6 @@ export function DscrCalculator({ locale }: Props) {
 
   // Share link state
   const [copied, setCopied] = useState<boolean>(false);
-
-  // Lead Magnet form state
-  const [leadPropertyType, setLeadPropertyType] = useState<string>('multifamily');
-  const [leadEmail, setLeadEmail] = useState<string>('');
-  const [leadLoanAmount, setLeadLoanAmount] = useState<string>('1500000');
-  const [leadSubmitted, setLeadSubmitted] = useState<boolean>(false);
 
   // Derived calculations
   const effectiveDebtService = isMonthlyInput ? monthlyPayment * 12 : annualDebtService;
@@ -79,14 +74,8 @@ export function DscrCalculator({ locale }: Props) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
-      window.location.hash = params.toString();
+      setCopied(false);
     }
-  };
-
-  const handleLeadSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!leadEmail || !leadEmail.includes('@')) return;
-    setLeadSubmitted(true);
   };
 
   // Status Tier based on user specification
@@ -125,49 +114,19 @@ export function DscrCalculator({ locale }: Props) {
     StatusIcon = AlertTriangle;
   }
 
-  const propertyTypeOptions = {
-    en: [
-      { value: 'multifamily', label: 'Multifamily (5+ Units)' },
-      { value: 'industrial', label: 'Industrial / Warehouse' },
-      { value: 'self-storage', label: 'Self-Storage Facility' },
-      { value: 'nnn', label: 'NNN Net Lease Retail' },
-      { value: 'mixed-use', label: 'Mixed-Use Commercial' },
-    ],
-    zh: [
-      { value: 'multifamily', label: '多户住宅公寓 (5+ Units)' },
-      { value: 'industrial', label: '工业 / 仓储物流' },
-      { value: 'self-storage', label: '自助仓储 (Self-Storage)' },
-      { value: 'nnn', label: 'NNN 单租户商业零售' },
-      { value: 'mixed-use', label: '商住混合 (Mixed-Use)' },
-    ],
-    es: [
-      { value: 'multifamily', label: 'Multifamiliar (5+ Unidades)' },
-      { value: 'industrial', label: 'Industrial / Bodega' },
-      { value: 'self-storage', label: 'Almacenamiento (Self-Storage)' },
-      { value: 'nnn', label: 'Comercial con Contrato NNN' },
-      { value: 'mixed-use', label: 'Comercial de Uso Mixto' },
-    ],
-    pt: [
-      { value: 'multifamily', label: 'Multifamiliar (5+ Unidades)' },
-      { value: 'industrial', label: 'Industrial / Galpão' },
-      { value: 'self-storage', label: 'Armazenamento (Self-Storage)' },
-      { value: 'nnn', label: 'Varejo com Contrato NNN' },
-      { value: 'mixed-use', label: 'Uso Misto Comercial' },
-    ],
-  }[locale as 'en' | 'zh' | 'es' | 'pt'] || [
-    { value: 'multifamily', label: 'Multifamily (5+ Units)' },
-    { value: 'industrial', label: 'Industrial / Warehouse' },
-    { value: 'self-storage', label: 'Self-Storage Facility' },
-    { value: 'nnn', label: 'NNN Net Lease Retail' },
-    { value: 'mixed-use', label: 'Mixed-Use Commercial' },
-  ];
+  const serviceUnavailableNote = {
+    en: 'Service & Privacy Notice: Commercial lender quote matching is not yet open while partner integrations and data processing authorizations are not active. All DSCR calculations run 100% locally in your browser; no email addresses or deal parameters are collected or transmitted.',
+    zh: '服务与隐私说明：商业地产贷款询价与合作机构匹配服务当前暂未开放（合作方接入与数据处理授权尚未启用）。本站所有 DSCR 测算完全在浏览器本地运行，不收集、存储或向外发送任何邮箱或交易参数。',
+    es: 'Aviso de Servicio y Privacidad: El servicio de cotizaciones con prestamistas comerciales aún no está abierto mientras la integración de socios y las autorizaciones de datos no están activas. Todos los cálculos de DSCR se ejecutan 100% localmente en su navegador sin recopilar ni enviar datos.',
+    pt: 'Aviso de Serviço e Privacidade: O serviço de cotações com credores comerciais ainda não está aberto enquanto a integração de parceiros e as autorizações de dados não estão ativas. Todos os cálculos de DSCR rodam 100% localmente no seu navegador sem coletar nem transmitir dados.',
+  }[locale as 'en' | 'zh' | 'es' | 'pt'] || 'Service & Privacy Notice: Commercial lender quote matching is not yet open while partner integrations and data processing authorizations are not active. All DSCR calculations run 100% locally in your browser; no email addresses or deal parameters are collected or transmitted.';
 
-  const privacyNote = {
-    en: 'Data Transparency: Your deal parameters are shared exclusively with vetted institutional commercial lenders solely to prepare formal term sheets upon your explicit submission. Standard browser calculations remain 100% client-side and unrecorded.',
-    zh: '数据去向说明：您的交易参数仅在您主动提交申请时，定向加密发送给合规机构贷方以获取正式条款清单；其余常规计算全程在浏览器本地运行，不留存任何数据。',
-    es: 'Transparencia de Datos: Los parámetros de su operación se comparten exclusivamente con entidades crediticias comerciales certificadas con el fin de cotizar términos formales tras su envío voluntario. Los cálculos del sitio permanecen 100% locales en su navegador.',
-    pt: 'Transparência de Dados: Os parâmetros do seu negócio são compartilhados exclusivamente com instituições financeiras certificadas para envio de propostas formais após sua solicitação ativa. Todas as simulações permanecem 100% locais no seu navegador.',
-  }[locale as 'en' | 'zh' | 'es' | 'pt'] || 'Data Transparency: Your deal parameters are shared exclusively with vetted institutional commercial lenders solely to prepare formal term sheets upon your explicit submission. Standard browser calculations remain 100% client-side and unrecorded.';
+  const dealAnalyzerCtaLabel = {
+    en: 'Model Loan Terms Locally in Deal Analyzer',
+    zh: '前往 Deal Analyzer 本地测算完整贷款方案',
+    es: 'Simular Financiamiento Localmente en Deal Analyzer',
+    pt: 'Simular Financiamento Localmente no Deal Analyzer',
+  }[locale as 'en' | 'zh' | 'es' | 'pt'] || 'Model Loan Terms Locally in Deal Analyzer';
 
   return (
     <div className="space-y-8 mb-12">
@@ -194,12 +153,13 @@ export function DscrCalculator({ locale }: Props) {
           <div className="lg:col-span-7 space-y-6">
             {/* Annual NOI */}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label htmlFor="dscr-noi-input" className="block text-sm font-semibold text-slate-700 mb-2">
                 {t.dscrCalc.noiLabel}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                 <input
+                  id="dscr-noi-input"
                   type="number"
                   value={noi || ''}
                   onChange={(e) => setNoi(parseFloat(e.target.value) || 0)}
@@ -224,7 +184,10 @@ export function DscrCalculator({ locale }: Props) {
             {/* Input Mode Toggle */}
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
               <div className="flex items-center justify-between mb-3">
-                <label className="text-sm font-semibold text-slate-700">
+                <label
+                  htmlFor={!isMonthlyInput ? 'dscr-annual-debt-input' : 'dscr-monthly-payment-input'}
+                  className="text-sm font-semibold text-slate-700"
+                >
                   {t.dscrCalc.debtModeLabel}
                 </label>
                 <div className="flex bg-slate-200 p-0.5 rounded-lg text-xs font-semibold">
@@ -254,6 +217,7 @@ export function DscrCalculator({ locale }: Props) {
                   <div className="relative rounded-xl border border-slate-300 bg-white focus-ring overflow-hidden">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                     <input
+                      id="dscr-annual-debt-input"
                       type="number"
                       value={annualDebtService || ''}
                       onChange={(e) => setAnnualDebtService(parseFloat(e.target.value) || 0)}
@@ -270,6 +234,7 @@ export function DscrCalculator({ locale }: Props) {
                   <div className="relative rounded-xl border border-slate-300 bg-white focus-ring overflow-hidden">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                     <input
+                      id="dscr-monthly-payment-input"
                       type="number"
                       value={monthlyPayment || ''}
                       onChange={(e) => setMonthlyPayment(parseFloat(e.target.value) || 0)}
@@ -380,100 +345,47 @@ export function DscrCalculator({ locale }: Props) {
         </div>
       </div>
 
-      {/* Lead Magnet Card: Connect with Top-Rated DSCR Lenders */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-6 md:p-8 text-white border border-slate-700 shadow-md">
+      {/* Deactivated Lender Quote Matching Service Notice */}
+      <section
+        data-testid="dscr-lender-service-disabled"
+        className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-6 md:p-8 text-white border border-slate-700 shadow-md"
+      >
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-3 border border-emerald-500/30">
-            <ShieldCheck className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold mb-3 border border-amber-500/30">
+            <Info className="w-3.5 h-3.5" />
             <span>{t.dscrCalc.leadBadge}</span>
           </div>
           <h3 className="text-xl md:text-2xl font-black text-white">
             {t.dscrCalc.leadHeading}
           </h3>
-          <p className="text-slate-300 text-xs md:text-sm mt-1 leading-relaxed">
+          <p className="text-slate-300 text-xs md:text-sm mt-2 leading-relaxed">
             {t.dscrCalc.leadSubtitle(dscr.toFixed(2))}
           </p>
 
-          {leadSubmitted ? (
-            <div className="mt-6 p-4 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-200 text-sm flex items-center gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-              <div>
-                <p className="font-bold">{t.dscrCalc.leadSuccessTitle}</p>
-                <p className="text-xs text-emerald-300/90 mt-0.5">
-                  {t.dscrCalc.leadSuccessSubtitle}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <form onSubmit={handleLeadSubmit} className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  {t.dscrCalc.leadLoanAmountLabel}
-                </label>
-                <div className="relative rounded-xl border border-slate-600 bg-slate-800/90 overflow-hidden focus-within:border-emerald-500">
-                  <DollarSign className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    type="text"
-                    required
-                    value={leadLoanAmount}
-                    onChange={(e) => setLeadLoanAmount(e.target.value)}
-                    className="w-full pl-8 pr-3 py-2.5 text-xs text-white font-medium bg-transparent focus:outline-none"
-                    placeholder="1,500,000"
-                  />
-                </div>
-              </div>
+          <div className="mt-5 p-4 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-slate-300 leading-relaxed">
+            {serviceUnavailableNote}
+          </div>
 
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  {t.dscrCalc.leadPropertyTypeLabel}
-                </label>
-                <div className="relative rounded-xl border border-slate-600 bg-slate-800/90 overflow-hidden focus-within:border-emerald-500">
-                  <Building className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <select
-                    value={leadPropertyType}
-                    onChange={(e) => setLeadPropertyType(e.target.value)}
-                    className="w-full pl-8 pr-3 py-2.5 text-xs text-white font-medium bg-transparent focus:outline-none appearance-none"
-                  >
-                    {propertyTypeOptions.map((opt) => (
-                      <option key={opt.value} value={opt.value} className="bg-slate-900 text-white">
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  {t.dscrCalc.leadEmailLabel}
-                </label>
-                <div className="relative rounded-xl border border-slate-600 bg-slate-800/90 overflow-hidden focus-within:border-emerald-500">
-                  <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    type="email"
-                    required
-                    value={leadEmail}
-                    onChange={(e) => setLeadEmail(e.target.value)}
-                    className="w-full pl-8 pr-3 py-2.5 text-xs text-white font-medium bg-transparent focus:outline-none"
-                    placeholder="investor@domain.com"
-                  />
-                </div>
-              </div>
-
-              <div className="sm:col-span-3 flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-                <p className="text-[11px] text-slate-400 leading-relaxed text-left max-w-xl">
-                  {privacyNote}
-                </p>
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs transition-all shadow-sm shrink-0"
-                >
-                  <span>{t.dscrCalc.leadSubmitBtn}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </form>
-          )}
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-700/70 text-slate-400 font-bold text-xs border border-slate-600 cursor-not-allowed"
+            >
+              <span>{t.dscrCalc.leadSubmitBtn}</span>
+            </button>
+            <Link
+              href={`/${locale}/tools/deal-analyzer/`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs transition-all shadow-sm"
+            >
+              <span>{dealAnalyzerCtaLabel}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <p className="mt-3 text-[11px] text-slate-400">
+            {t.dscrCalc.leadTrustNotes}
+          </p>
         </div>
       </section>
     </div>

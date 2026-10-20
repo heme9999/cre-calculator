@@ -114,7 +114,13 @@ export default async function CityCapRatePage({ params }: PageProps) {
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
         <div className="space-y-3">
           <h2 className="text-xl font-bold text-slate-900">
-            {isZh ? `${item.cityName} 商业地产市场概况` : `${item.cityName} Commercial Real Estate Overview`}
+            {isZh
+              ? `${item.cityName} 商业地产市场概况`
+              : isEs
+              ? `Panorama Inmobiliario Comercial de ${item.cityName}`
+              : isPt
+              ? `Panorama Imobiliário Comercial de ${item.cityName}`
+              : `${item.cityName} Commercial Real Estate Overview`}
           </h2>
           <p className="text-sm text-slate-700 leading-relaxed">
             {item.overview}
@@ -123,7 +129,13 @@ export default async function CityCapRatePage({ params }: PageProps) {
 
         <div className="space-y-3 pt-2">
           <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-            {isZh ? '核心经济驱动引擎' : 'Core Regional Economic Drivers'}
+            {isZh
+              ? '核心经济驱动引擎'
+              : isEs
+              ? 'Motores Económicos Regionales'
+              : isPt
+              ? 'Motores Econômicos Regionais'
+              : 'Core Regional Economic Drivers'}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {item.economicDrivers.map((driver, idx) => (
@@ -139,17 +151,39 @@ export default async function CityCapRatePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* 2026 Cap Rate Benchmarks Table */}
+      {/* Illustrative Cap Rate Scenarios Table */}
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-emerald-600" />
-            {isZh ? `${item.cityName} 各业态 2026 Cap Rate 收益率基准` : `${item.cityName} 2026 Yield Benchmarks by Asset Class`}
+            {isZh
+              ? `${item.cityName} 各业态 Cap Rate 教学测算示意区间`
+              : isEs
+              ? `Rangos Ilustrativos de Cap Rate por Clase de Activo en ${item.cityName}`
+              : isPt
+              ? `Faixas Ilustrativas de Cap Rate por Classe de Ativo em ${item.cityName}`
+              : `${item.cityName} Illustrative Cap Rate Modeling Ranges by Asset Class`}
           </h2>
-          <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-            {isZh ? '2026 最新校准' : '2026 Calibrated'}
+          <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+            {isZh
+              ? '教学测算假设 · 非实时行情'
+              : isEs
+              ? 'Supuestos Educativos · No Cotizaciones Reales'
+              : isPt
+              ? 'Premissas Educativas · Não Cotações Reais'
+              : 'Illustrative Assumptions · Not Live Quotes'}
           </span>
         </div>
+
+        <p className="text-xs text-slate-500 leading-relaxed">
+          {isZh
+            ? '重要说明：下表区间仅为演示不同资产等级（Class A vs. Class B）定价利差与敏感度而设定的教学测算假设，不代表公开或付费市场调研报告的真实交易统计。'
+            : isEs
+            ? 'Nota importante: Los rangos de la tabla son supuestos pedagógicos para ilustrar diferenciales entre activos Clase A y Clase B en modelos financieros; no constituyen estadísticas de transacciones reales.'
+            : isPt
+            ? 'Nota importante: As faixas da tabela são premissas pedagógicas para ilustrar diferenciais entre ativos Classe A e Classe B em modelos financeiros; não constituem estatísticas de transações reais.'
+            : 'Important Note: The ranges below are educational modeling assumptions designed to illustrate relative spread dynamics between Class A and Class B assets; they do not represent published survey statistics or live transaction quotes.'}
+        </p>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
@@ -201,7 +235,13 @@ export default async function CityCapRatePage({ params }: PageProps) {
       <section className="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 md:p-8 space-y-3">
         <h2 className="text-lg font-bold text-amber-950 flex items-center gap-2">
           <AlertTriangle className="w-5 h-5 text-amber-600" />
-          {isZh ? `${item.cityName} 商业地产尽调与风控提示` : `${item.cityName} Underwriting Risks & Due Diligence Considerations`}
+          {isZh
+            ? `${item.cityName} 商业地产尽调与风控提示`
+            : isEs
+            ? `Riesgos de Evaluación y Consideraciones de Debida Diligencia en ${item.cityName}`
+            : isPt
+            ? `Riscos de Avaliação e Considerações de Due Diligence em ${item.cityName}`
+            : `${item.cityName} Underwriting Risks & Due Diligence Considerations`}
         </h2>
         <ul className="space-y-2 text-xs sm:text-sm text-amber-900 pl-5 list-disc leading-relaxed">
           {item.localRisks.map((risk, idx) => (

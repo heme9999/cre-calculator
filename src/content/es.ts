@@ -1,5 +1,4 @@
 import { LocaleContent } from './types';
-import { enContent } from './en';
 
 export const esContent: LocaleContent = {
   nav: {
@@ -458,10 +457,10 @@ export const esContent: LocaleContent = {
     ],
   },
   capRateBenchmarksGuide: {
-    metaTitle: 'Guía de Cap Rates de Bienes Raíces en EE.UU. por Mercado y Activo (2026)',
-    metaDescription: 'Guía exhaustiva de tasas de capitalización en mercados primarios, secundarios y terciarios de EE.UU. por tipo de propiedad comercial.',
+    metaTitle: 'Guía de Cap Rates en EE.UU. por Mercado y Activo (Referencia Ilustrativa)',
+    metaDescription: 'Guía educativa de rangos ilustrativos de tasas de capitalización en mercados primarios, secundarios y terciarios de EE.UU. por tipo de propiedad comercial.',
     h1: 'Puntos de Referencia de Cap Rate en EE.UU. por Mercado y Tipo de Activo',
-    subtitle: 'Rangos referenciales de tasas de capitalización en clases de activos principales y niveles de mercados metropolitanos para modelado y evaluación.',
+    subtitle: 'Rangos ilustrativos de tasas de capitalización en clases de activos principales y niveles de mercados metropolitanos para modelado y evaluación.',
     disclaimer: 'Las tasas de capitalización varían continuamente según las condiciones del mercado de capitales. Estos rangos son puntos de referencia educativos desarrollados para modelado y fundamentados en convenciones de valoración de bienes raíces comerciales y observaciones cualitativas del informe Newmark 2026 Valuation & Advisory North American Market Survey — no constituyen cotizaciones directas ni cotizaciones de operaciones en vivo. Siempre verifique los precios locales actuales y los Cap Rates reales con corredores locales activos y ventas comparables recientes antes de tomar decisiones de inversión.',
     propertyTypeTitle: 'Puntos de Referencia de Cap Rate en EE.UU. por Clase de Activo (Referencia Educativa)',
     propertyTypeTableHeader: {
@@ -705,8 +704,8 @@ export const esContent: LocaleContent = {
       {
         slug: 'cap-rate-benchmarks-by-city',
         title: 'Puntos de Referencia de Cap Rate en EE.UU. por Mercado y Tipo de Activo',
-        description: 'Rangos de tasas de capitalización agregados por tipo de propiedad y categoría de mercado metropolitano según informes de 2026.',
-        badge: 'Datos de Mercado',
+        description: 'Rangos ilustrativos de tasas de capitalización por tipo de propiedad y categoría de mercado metropolitano para modelado educativo.',
+        badge: 'Referencia de Modelado',
         readTime: '8 min de lectura',
       },
       {

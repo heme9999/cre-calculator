@@ -9,21 +9,45 @@ import { getUiTranslations } from '@/lib/translations';
 
 interface Props {
   locale: string;
+  defaultPrice?: number;
+  defaultNoi?: number;
 }
 
-export function CapRateCalculator({ locale }: Props) {
+export function CapRateCalculator({ locale, defaultPrice, defaultNoi }: Props) {
   const t = getUiTranslations(locale);
+  const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
   const [mode, setMode] = useState<'forward' | 'reverse'>('forward');
 
+  const initialPrice = defaultPrice ?? 1500000;
+  const initialNoi = defaultNoi ?? 112500;
+
   // Forward Mode state: Purchase Price + NOI -> Cap Rate
-  const [purchasePrice, setPurchasePrice] = useState<number>(2400000);
-  const [noi, setNoi] = useState<number>(168000);
+  const [purchasePrice, setPurchasePrice] = useState<number>(initialPrice);
+  const [noi, setNoi] = useState<number>(initialNoi);
 
   // Reverse Mode state: NOI + Target Cap Rate -> Max Purchase Price
   const [targetCapRate, setTargetCapRate] = useState<number>(7.5);
 
   // Share link state
   const [copied, setCopied] = useState<boolean>(false);
+
+  const loadExampleLabel = isZh
+    ? `加载本页示例 (${formatCurrency(initialPrice)} / ${formatCurrency(initialNoi)} NOI)`
+    : isEs
+    ? `Cargar ejemplo de esta página (${formatCurrency(initialPrice)} / ${formatCurrency(initialNoi)} NOI)`
+    : isPt
+    ? `Carregar exemplo desta página (${formatCurrency(initialPrice)} / ${formatCurrency(initialNoi)} NOI)`
+    : `Load Page Example (${formatCurrency(initialPrice)} / ${formatCurrency(initialNoi)} NOI)`;
+
+  const universalFormulaNote = isZh
+    ? '公式说明：本计算器采用通用 Cap Rate = 年 NOI ÷ 购买价格 公式，不内置特定资产类别的自动费用扣除模型。'
+    : isEs
+    ? 'Nota de fórmula: Esta calculadora aplica la fórmula universal Cap Rate = NOI Anual ÷ Precio de Compra; no aplica deducciones automáticas de gastos por tipo de activo.'
+    : isPt
+    ? 'Nota de fórmula: Esta calculadora aplica a fórmula universal Cap Rate = NOI Anual ÷ Preço de Compra; não aplica deduções automáticas de despesas por classe de ativo.'
+    : 'Formula Note: This calculator applies the universal Cap Rate = Annual NOI ÷ Purchase Price formula and does not apply separate built-in asset expense models.';
 
   // Parse URL hash on mount if present
   useEffect(() => {
@@ -35,12 +59,12 @@ export function CapRateCalculator({ locale }: Props) {
       const p = params.get('price') || params.get('p');
       const n = params.get('noi') || params.get('n');
       const m = params.get('mode') || params.get('m');
-      const t = params.get('target') || params.get('t');
+      const tParam = params.get('target') || params.get('t');
 
       if (p && !isNaN(Number(p))) setPurchasePrice(Number(p));
       if (n && !isNaN(Number(n))) setNoi(Number(n));
       if (m === 'reverse' || m === 'forward') setMode(m);
-      if (t && !isNaN(Number(t))) setTargetCapRate(Number(t));
+      if (tParam && !isNaN(Number(tParam))) setTargetCapRate(Number(tParam));
     };
 
     const timer = setTimeout(applyHashParams, 0);
@@ -69,8 +93,7 @@ export function CapRateCalculator({ locale }: Props) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
-      // Fallback
-      window.location.hash = params.toString();
+      setCopied(false);
     }
   };
 
@@ -129,6 +152,21 @@ export function CapRateCalculator({ locale }: Props) {
       <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Form Controls */}
         <div className="lg:col-span-7 space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5">
+            <span className="text-xs text-slate-600">{universalFormulaNote}</span>
+            <button
+              type="button"
+              data-testid="load-page-example-btn"
+              onClick={() => {
+                setMode('forward');
+                setPurchasePrice(initialPrice);
+                setNoi(initialNoi);
+              }}
+              className="text-xs font-semibold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg transition-colors shrink-0"
+            >
+              {loadExampleLabel}
+            </button>
+          </div>
           {mode === 'forward' ? (
             <>
               {/* Purchase Price Input */}
@@ -327,7 +365,7 @@ export function CapRateCalculator({ locale }: Props) {
                   <span className="text-sm font-medium text-slate-600">
                     {t.capRateCalc.capRateResultLabel}
                   </span>
-                  <div className="text-4xl md:text-5xl font-black text-emerald-600 mt-1 tabular-nums">
+                  <div data-testid="cap-rate-result" className="text-4xl md:text-5xl font-black text-emerald-600 mt-1 tabular-nums">
                     {formatPercent(calculatedCapRate)}
                   </div>
                 </div>

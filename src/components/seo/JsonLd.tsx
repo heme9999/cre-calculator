@@ -14,6 +14,13 @@ export function JsonLd({ data }: JsonLdProps) {
   );
 }
 
+function resolveSchemaLanguage(locale: string): string {
+  if (locale === 'zh') return 'zh-Hans';
+  if (locale === 'es') return 'es';
+  if (locale === 'pt') return 'pt-BR';
+  return 'en-US';
+}
+
 export function getCalculatorJsonLd(
   name: string,
   description: string,
@@ -28,7 +35,7 @@ export function getCalculatorJsonLd(
     url,
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'All',
-    inLanguage: locale === 'zh' ? 'zh-Hans' : 'en-US',
+    inLanguage: resolveSchemaLanguage(locale),
     offers: {
       '@type': 'Offer',
       price: '0',
@@ -81,21 +88,33 @@ export function getWebSiteJsonLd(
     name,
     url,
     description,
-    inLanguage: locale === 'zh' ? 'zh-Hans' : 'en-US',
+    inLanguage: resolveSchemaLanguage(locale),
   };
 }
 
 export function getGuidesHubJsonLd(url: string, locale: string) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
   return {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: isZh ? '商业地产投资与承销实战指南 | CRE Guides' : 'Commercial Real Estate Underwriting Guides | CRE Guides',
+    name: isZh
+      ? '商业地产投资与承销实战指南 | CRE Guides'
+      : isEs
+      ? 'Guías de Inversión y Evaluación Comercial | CRE Guides'
+      : isPt
+      ? 'Guias de Investimento e Análise Comercial | CRE Guides'
+      : 'Commercial Real Estate Underwriting Guides | CRE Guides',
     description: isZh
-      ? '系统掌握净营业收入 NOI 重构、全美主流城市 Cap Rate 基准、DSCR 审贷流程与 6 步标准尽调方法论。'
-      : 'Practical frameworks for NOI estimation, city cap rate benchmarks, DSCR financing standards, and deal underwriting due diligence.',
+      ? '系统掌握净营业收入 NOI 重构、全美主流城市 Cap Rate 示意区间、DSCR 审贷流程与 6 步标准尽调方法论。'
+      : isEs
+      ? 'Marcos prácticos para estimar NOI, rangos ilustrativos de Cap Rate, financiación DSCR y debida diligencia inmobiliaria comercial.'
+      : isPt
+      ? 'Diretrizes práticas para estimar NOI, faixas ilustrativas de Cap Rate, financiamento DSCR e due diligence imobiliária comercial.'
+      : 'Practical frameworks for NOI estimation, illustrative cap rate ranges, DSCR financing standards, and deal underwriting due diligence.',
     url,
-    inLanguage: isZh ? 'zh-Hans' : 'en-US',
+    inLanguage: resolveSchemaLanguage(locale),
     isPartOf: {
       '@type': 'WebSite',
       name: 'CRE Calculators',
@@ -137,7 +156,7 @@ export function getArticleJsonLd(
     image: [
       `${SITE_URL}/og/cre-guides${isZh ? '-zh' : ''}.png`,
     ],
-    inLanguage: isZh ? 'zh-Hans' : 'en-US',
+    inLanguage: resolveSchemaLanguage(locale),
   };
 
   if (dateModified) {
@@ -149,15 +168,27 @@ export function getArticleJsonLd(
 
 export function getEditorialWebPageJsonLd(url: string, locale: string) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
   return {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: isZh ? '计算公式与方法论假设 | CRE Methodologies' : 'Calculation Methodology & Underwriting Standards | CRE Methodologies',
+    name: isZh
+      ? '计算公式与方法论假设 | CRE Methodologies'
+      : isEs
+      ? 'Metodología de Cálculo y Estándares de Evaluación | CRE Methodologies'
+      : isPt
+      ? 'Metodologia de Cálculo e Padrões de Avaliação | CRE Methodologies'
+      : 'Calculation Methodology & Underwriting Standards | CRE Methodologies',
     description: isZh
-      ? '详细了解 CRE Calculators 的计算公式推导逻辑、假设定义、数据更新频率与全美主要机构数据来源。'
-      : 'Explore our transparent underwriting formulas, variable definitions, market benchmark sources, and audit dates.',
+      ? '详细了解 CRE Calculators 的计算公式推导逻辑、假设定义与公开研究参考来源。'
+      : isEs
+      ? 'Conozca nuestras fórmulas transparentes de evaluación inmobiliaria comercial, definiciones de variables y fuentes de referencia.'
+      : isPt
+      ? 'Conheça nossas fórmulas transparentes de análise imobiliária comercial, definições de variáveis e fontes de referência.'
+      : 'Explore our transparent underwriting formulas, variable definitions, and educational reference sources.',
     url,
-    inLanguage: isZh ? 'zh-Hans' : 'en-US',
+    inLanguage: resolveSchemaLanguage(locale),
     isPartOf: {
       '@type': 'WebSite',
       name: 'CRE Calculators',
@@ -169,6 +200,20 @@ export function getEditorialWebPageJsonLd(url: string, locale: string) {
           '资本化率 Cap Rate',
           '净营业收入 NOI',
           '偿债备付率 DSCR',
+        ]
+      : isEs
+      ? [
+          'Evaluación inmobiliaria comercial',
+          'Tasa de capitalización (Cap Rate)',
+          'Ingreso operativo neto (NOI)',
+          'Ratio de cobertura del servicio de la deuda (DSCR)',
+        ]
+      : isPt
+      ? [
+          'Avaliação imobiliária comercial',
+          'Taxa de capitalização (Cap Rate)',
+          'Receita operacional líquida (NOI)',
+          'Índice de cobertura do serviço da dívida (DSCR)',
         ]
       : [
           'Commercial real estate underwriting',

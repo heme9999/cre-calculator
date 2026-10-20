@@ -198,7 +198,15 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
                   {isZh ? 'Tier 2 科技都会区' : isEs ? 'Metrópoli Tecnológica Tier 2' : isPt ? 'Metrópole Tecnológica Tier 2' : 'Tier 2 Tech Metro'}
                 </span>
                 <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Austin, TX</h3>
-                <p className="text-xs text-slate-500 mt-1">Multifamily 5.25% - 6.00% · Industrial 5.50% - 6.25%</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  {isZh
+                    ? '教学示意区间：多户 5.25% - 6.00% · 工业 5.50% - 6.25%'
+                    : isEs
+                    ? ' Ejemplo ilustrativo: Multifamiliar 5.25% - 6.00% · Industrial 5.50% - 6.25%'
+                    : isPt
+                    ? 'Exemplo ilustrativo: Multifamiliar 5.25% - 6.00% · Industrial 5.50% - 6.25%'
+                    : 'Illustrative example: Multifamily 5.25% - 6.00% · Industrial 5.50% - 6.25%'}
+                </p>
               </div>
               <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
             </div>
@@ -213,7 +221,15 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
                   {isZh ? '门户枢纽与高增长都会区' : isEs ? 'Metrópoli Gateway de Alto Crecimiento' : isPt ? 'Metrópole Gateway de Alto Crescimento' : 'Gateway Growth Metro'}
                 </span>
                 <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Miami, FL</h3>
-                <p className="text-xs text-slate-500 mt-1">Multifamily 5.00% - 5.75% · Industrial 5.25% - 6.00%</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  {isZh
+                    ? '教学示意区间：多户 5.00% - 5.75% · 工业 5.25% - 6.00%'
+                    : isEs
+                    ? 'Ejemplo ilustrativo: Multifamiliar 5.00% - 5.75% · Industrial 5.25% - 6.00%'
+                    : isPt
+                    ? 'Exemplo ilustrativo: Multifamiliar 5.00% - 5.75% · Industrial 5.25% - 6.00%'
+                    : 'Illustrative example: Multifamily 5.00% - 5.75% · Industrial 5.25% - 6.00%'}
+                </p>
               </div>
               <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
             </div>
@@ -228,7 +244,15 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
                   {isZh ? '全美物流与企业总部超级枢纽' : isEs ? 'Megacentro Logístico y Corporativo' : isPt ? 'Megacentro Logístico e Corporativo' : 'Logistics & Corporate Mega Hub'}
                 </span>
                 <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Dallas - Fort Worth, TX</h3>
-                <p className="text-xs text-slate-500 mt-1">Multifamily 5.50% - 6.25% · Industrial 5.60% - 6.30%</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  {isZh
+                    ? '教学示意区间：多户 5.50% - 6.25% · 工业 5.60% - 6.30%'
+                    : isEs
+                    ? 'Ejemplo ilustrativo: Multifamiliar 5.50% - 6.25% · Industrial 5.60% - 6.30%'
+                    : isPt
+                    ? 'Exemplo ilustrativo: Multifamiliar 5.50% - 6.25% · Industrial 5.60% - 6.30%'
+                    : 'Illustrative example: Multifamily 5.50% - 6.25% · Industrial 5.60% - 6.30%'}
+                </p>
               </div>
               <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
             </div>
@@ -243,7 +267,15 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
                   {isZh ? '半导体制造与阳光带人口净流入' : isEs ? 'Semiconductores y Atracción del Sunbelt' : isPt ? 'Semicondutores e Atração do Sunbelt' : 'Semiconductor & Sunbelt Inflow'}
                 </span>
                 <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 mt-2 text-base">Phoenix, AZ</h3>
-                <p className="text-xs text-slate-500 mt-1">Multifamily 5.40% - 6.15% · Industrial 5.50% - 6.25%</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  {isZh
+                    ? '教学示意区间：多户 5.40% - 6.15% · 工业 5.50% - 6.25%'
+                    : isEs
+                    ? 'Ejemplo ilustrativo: Multifamiliar 5.40% - 6.15% · Industrial 5.50% - 6.25%'
+                    : isPt
+                    ? 'Exemplo ilustrativo: Multifamiliar 5.40% - 6.15% · Industrial 5.50% - 6.25%'
+                    : 'Illustrative example: Multifamily 5.40% - 6.15% · Industrial 5.50% - 6.25%'}
+                </p>
               </div>
               <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
             </div>
@@ -303,7 +335,15 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
                   <a href={source.url} target="_blank" rel="noopener noreferrer" className="font-bold text-emerald-600 hover:underline">
                     {source.org} - {source.reportName}
                   </a>
-                  <span className="text-slate-400">Published: {source.date} · Accessed: {source.accessed}</span>
+                  <span className="text-slate-400">
+                    {isZh
+                      ? `发布日期: ${source.date} · 查阅日期: ${source.accessed}`
+                      : isEs
+                      ? `Publicado: ${source.date} · Consultado: ${source.accessed}`
+                      : isPt
+                      ? `Publicado: ${source.date} · Consultado: ${source.accessed}`
+                      : `Published: ${source.date} · Accessed: ${source.accessed}`}
+                  </span>
                 </div>
               )}
             </li>

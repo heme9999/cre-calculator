@@ -77,8 +77,15 @@ async function runSmokeTests() {
 
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: CHROME_PATH
+    executablePath: CHROME_PATH,
+    args: ['--no-sandbox']
   });
+  const context = browser.defaultBrowserContext();
+  await context.overridePermissions('http://localhost:3460', [
+    'clipboard-read',
+    'clipboard-write',
+    'clipboard-sanitized-write'
+  ]);
   const page = await browser.newPage();
   const blocker = await setupAnalyticsBlocker(page, { silent: false });
 
@@ -592,20 +599,287 @@ async function runSmokeTests() {
     await verifyCapRateGuideAndHealth();
 
 
-    // Test Viewports: 320, 375, 1440
-    const viewports = [320, 375, 1440];
+    // Test Viewports: 320, 375, 390, 1440 across all 4 locales (including bounding-box non-overlap)
+    console.log('\n--- 9. Testing Viewports (320, 375, 390, 1440) & Header Non-Overlap Across All 4 Locales ---');
+    const viewports = [320, 375, 390, 1440];
+    const locales = ['en', 'zh', 'es', 'pt'];
     for (const vp of viewports) {
-      await page.setViewport({ width: vp, height: Math.max(812, vp) });
-      await page.goto('http://localhost:3460/en/', { waitUntil: 'networkidle0' });
-      const dims = await page.evaluate(() => {
+      await page.setViewport({ width: vp, height: 812 });
+      for (const loc of locales) {
+        await page.goto(`http://localhost:3460/${loc}/`, { waitUntil: 'networkidle0' });
+        const navMetrics = await page.evaluate(() => {
+          const brandLink = document.querySelector('header a');
+          const langBtn = document.querySelector('header button[aria-controls="languages-navigation"]');
+          const menuBtn = document.querySelector('header button[aria-controls="mobile-navigation"]');
+          const brandRect = brandLink?.getBoundingClientRect();
+          const langRect = langBtn?.getBoundingClientRect();
+          const overlapPx = brandRect && langRect ? Math.max(0, brandRect.right - langRect.left) : 0;
+          return {
+            scrollWidth: document.documentElement.scrollWidth,
+            viewportWidth: window.innerWidth,
+            overlapPx,
+            langAria: langBtn?.getAttribute('aria-label') || '',
+            menuAria: menuBtn?.getAttribute('aria-label') || '',
+          };
+        });
+        if (navMetrics.scrollWidth > navMetrics.viewportWidth) {
+          throw new Error(`Horizontal overflow at ${vp}px on /${loc}/: scrollWidth=${navMetrics.scrollWidth}`);
+        }
+        if (navMetrics.overlapPx > 0) {
+          throw new Error(`Brand and language button overlap (${navMetrics.overlapPx}px) at ${vp}px on /${loc}/`);
+        }
+        if (!navMetrics.langAria || !navMetrics.menuAria) {
+          throw new Error(`Missing aria-label on header buttons on /${loc}/`);
+        }
+      }
+      console.log(`✅ Viewport ${vp}px passed across en, zh, es, pt with 0px header overlap.`);
+    }
+
+    console.log('\n--- 10. Testing P1/P2 Remediations (DSCR Disabled Form, Share Hash Round-Trip, Load Example, ES/PT Localization) ---');
+    await page.setViewport({ width: 1280, height: 900 });
+
+    // 10a. DSCR disabled form & input labels
+    await page.goto('http://localhost:3460/en/calculators/dscr/', { waitUntil: 'networkidle0' });
+    const dscrCheck = await page.evaluate(() => {
+      const disabledNotice = document.querySelector('[data-testid="dscr-lender-service-disabled"]');
+      const emailInputs = document.querySelectorAll('input[type="email"]');
+      const noiInput = document.getElementById('dscr-noi-input');
+      const noiLabel = document.querySelector('label[for="dscr-noi-input"]');
+      return {
+        hasDisabledNotice: !!disabledNotice,
+        emailCount: emailInputs.length,
+        hasExplicitLabel: !!noiInput && !!noiLabel,
+      };
+    });
+    if (!dscrCheck.hasDisabledNotice || dscrCheck.emailCount > 0 || !dscrCheck.hasExplicitLabel) {
+      throw new Error(`DSCR remediation check failed: ${JSON.stringify(dscrCheck)}`);
+    }
+    console.log('✅ DSCR calculator shows disabled lender notice, 0 email inputs, and explicit input labels.');
+
+    // 10b. Deal Analyzer Real User Flow: Modify form -> Click share button -> Read copied URL from clipboard -> Open in isolated context -> Assert inputs & Base/Stress match
+    await page.goto('http://localhost:3460/en/tools/deal-analyzer/', { waitUntil: 'networkidle0' });
+    await new Promise(r => setTimeout(r, 200));
+
+    // Clear and set custom form parameters (throws if element not found)
+    await page.evaluate(() => {
+      const setInput = (id, val) => {
+        const el = document.getElementById(id);
+        if (!el) {
+          throw new Error(`setInput failed: element with id "${id}" not found`);
+        }
+        const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+        if (setter) {
+          setter.call(el, val);
+        } else {
+          el.value = val;
+        }
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+      setInput('purchase-price-input', '4000000');
+      setInput('gpi-input', '500000');
+      setInput('vacancy-input', '6');
+      setInput('opex-input', '170000');
+      setInput('downpayment-input', '30');
+      setInput('rate-input', '6.25');
+    });
+    await new Promise(r => setTimeout(r, 300));
+
+    // Explicitly assert original page now has down payment 30% and interest rate 6.25%
+    const origDp = await page.$eval('#downpayment-input', el => el.value);
+    const origRate = await page.$eval('#rate-input', el => el.value);
+    if (origDp !== '30' || origRate !== '6.25') {
+      throw new Error(`Original page inputs not updated: downpayment=${origDp} (expected 30), rate=${origRate} (expected 6.25)`);
+    }
+
+    // Helper to toggle stress test panel
+    const toggleStressPanel = async (targetPage) => {
+      await targetPage.evaluate(() => {
+        const btns = Array.from(document.querySelectorAll('button'));
+        const stressBtn = btns.find(b =>
+          b.innerText.includes('Stress Test') ||
+          b.innerText.includes('压力测试') ||
+          b.innerText.includes('Prueba de Estrés') ||
+          b.innerText.includes('Teste de Estresse')
+        );
+        if (stressBtn) stressBtn.click();
+      });
+      await new Promise(r => setTimeout(r, 200));
+    };
+
+    // Toggle stress test panel on so stress metrics are mounted in DOM
+    await toggleStressPanel(page);
+
+    // Read on-screen calculated values
+    const origBaseNoi = await page.$eval('[data-testid="tool-base-noi"]', el => el.textContent.trim());
+    const origBaseCap = await page.$eval('[data-testid="tool-base-cap-rate"]', el => el.textContent.trim());
+    const origStressDscr = await page.$eval('[data-testid="tool-stress-dscr"]', el => el.textContent.trim());
+
+    // Click the share button to copy to clipboard
+    await page.click('[data-testid="share-deal-btn"]');
+    await new Promise(r => setTimeout(r, 200));
+
+    // Read the copied URL directly from the real system clipboard
+    const copiedUrl = await page.evaluate(() => navigator.clipboard.readText());
+    if (
+      !copiedUrl ||
+      !copiedUrl.includes('#v=1') ||
+      !copiedUrl.includes('pp=4000000') ||
+      !copiedUrl.includes('gpi=500000') ||
+      !copiedUrl.includes('dp=30') ||
+      !copiedUrl.includes('ir=6.25')
+    ) {
+      throw new Error(`Clipboard share link does not contain serialized parameters: "${copiedUrl}"`);
+    }
+
+    // Open in a completely isolated browser context (createBrowserContext)
+    const isolatedContext = await browser.createBrowserContext();
+    const sharedNewPage = await isolatedContext.newPage();
+    await setupAnalyticsBlocker(sharedNewPage, { silent: true });
+    await sharedNewPage.goto(copiedUrl, { waitUntil: 'networkidle0' });
+    await new Promise(r => setTimeout(r, 300));
+
+    // Assert inputs in the new page were restored accurately
+    const restoredPp = await sharedNewPage.$eval('#purchase-price-input', el => el.value);
+    const restoredGpi = await sharedNewPage.$eval('#gpi-input', el => el.value);
+    const restoredVac = await sharedNewPage.$eval('#vacancy-input', el => el.value);
+    const restoredOpex = await sharedNewPage.$eval('#opex-input', el => el.value);
+    const restoredDp = await sharedNewPage.$eval('#downpayment-input', el => el.value);
+    const restoredRate = await sharedNewPage.$eval('#rate-input', el => el.value);
+
+    if (
+      restoredPp !== '4000000' ||
+      restoredGpi !== '500000' ||
+      restoredVac !== '6' ||
+      restoredOpex !== '170000' ||
+      restoredDp !== '30' ||
+      restoredRate !== '6.25'
+    ) {
+      throw new Error(`Restored inputs did not match: PP=${restoredPp}, GPI=${restoredGpi}, VAC=${restoredVac}, OPEX=${restoredOpex}, DP=${restoredDp}, RATE=${restoredRate}`);
+    }
+
+    // Toggle stress test panel on the shared new page as well
+    await toggleStressPanel(sharedNewPage);
+
+    // Assert Base & Stress metrics in the new page match the original modified state
+    const newBaseNoi = await sharedNewPage.$eval('[data-testid="tool-base-noi"]', el => el.textContent.trim());
+    const newBaseCap = await sharedNewPage.$eval('[data-testid="tool-base-cap-rate"]', el => el.textContent.trim());
+    const newStressDscr = await sharedNewPage.$eval('[data-testid="tool-stress-dscr"]', el => el.textContent.trim());
+
+    if (newBaseNoi !== origBaseNoi || newBaseCap !== origBaseCap || newStressDscr !== origStressDscr) {
+      throw new Error(`Restored metrics did not match: NOI (${newBaseNoi} vs ${origBaseNoi}), Cap (${newBaseCap} vs ${origBaseCap}), Stress DSCR (${newStressDscr} vs ${origStressDscr})`);
+    }
+    await sharedNewPage.close();
+    await isolatedContext.close();
+    console.log(`✅ Deal Analyzer end-to-end share flow passed: form edited -> copied to clipboard -> reopened in isolated context -> inputs & Base/Stress verified (${newBaseNoi}, ${newBaseCap}, ${newStressDscr}).`);
+
+    // Malformed hash fallback
+    await page.goto('http://localhost:3460/en/tools/deal-analyzer/#v=1&pp=-500&vac=999&ir=NaN', { waitUntil: 'networkidle0' });
+    await new Promise(r => setTimeout(r, 300));
+    const fallbackNoi = await page.$eval('[data-testid="tool-base-noi"]', el => el.textContent.trim());
+    if (fallbackNoi !== '$227,200') {
+      throw new Error(`Malformed hash did not safely fall back to default NOI ($227,200), got ${fallbackNoi}`);
+    }
+    console.log('✅ Deal Analyzer malformed hash safely fell back to default inputs.');
+
+    // 10c. Cap Rate entry links & Load Page Example button (modify inputs first -> click load example -> assert inputs and result card update)
+    await page.goto('http://localhost:3460/en/calculators/cap-rate/', { waitUntil: 'networkidle0' });
+    const hasPropLinks = await page.$('[data-testid="property-type-cap-rate-links"]');
+    if (!hasPropLinks) {
+      throw new Error('Missing property-type-cap-rate-links on /en/calculators/cap-rate/');
+    }
+
+    await page.goto('http://localhost:3460/en/calculators/multifamily-cap-rate/', { waitUntil: 'networkidle0' });
+    await new Promise(r => setTimeout(r, 200));
+
+    // First intentionally alter the inputs to different values
+    await page.evaluate(() => {
+      const setInput = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) {
+          const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+          if (setter) {
+            setter.call(el, val);
+          } else {
+            el.value = val;
+          }
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      };
+      setInput('caprate-price-input', '1000000');
+      setInput('caprate-noi-input', '100000');
+    });
+    await new Promise(r => setTimeout(r, 200));
+
+    const intermediateCap = await page.$eval('[data-testid="cap-rate-result"]', el => el.textContent.trim());
+    if (intermediateCap !== '10.00%') {
+      throw new Error(`Expected intermediate Cap Rate 10.00%, got ${intermediateCap}`);
+    }
+
+    // Now click the "Load Page Example" button
+    await page.click('[data-testid="load-page-example-btn"]');
+    await new Promise(r => setTimeout(r, 200));
+
+    // Verify input fields updated to the Multifamily example values ($3,500,000 / $218,750)
+    const loadedPrice = await page.$eval('#caprate-price-input', el => el.value);
+    const loadedNoi = await page.$eval('#caprate-noi-input', el => el.value);
+    const loadedCap = await page.$eval('[data-testid="cap-rate-result"]', el => el.textContent.trim());
+
+    if (loadedPrice !== '3500000' || loadedNoi !== '218750' || loadedCap !== '6.25%') {
+      throw new Error(`Load Page Example failed to update inputs/result: Price=${loadedPrice} (expected 3500000), NOI=${loadedNoi} (expected 218750), Cap=${loadedCap} (expected 6.25%)`);
+    }
+    console.log('✅ Cap Rate property-type entry cards and Load Page Example button verified with input & result card assertions ($3,500,000 / $218,750 -> 6.25%).');
+
+    // 10d. Deal Analyzer PDF Printable Card & Link URL in All 4 Locales (No clipping, proper href)
+    for (const loc of ['en', 'zh', 'es', 'pt']) {
+      await page.goto(`http://localhost:3460/${loc}/tools/deal-analyzer/`, { waitUntil: 'networkidle0' });
+      const pdfLinkInfo = await page.evaluate(() => {
+        const link = document.querySelector('#pdf-footer-tool-link');
+        const card = link ? (link.closest('#deal-analyzer-pdf-template') || link.closest('[data-testid="deal-analyzer-pdf-template"]') || link.closest('[style*="800px"]')) : null;
         return {
-          scrollWidth: document.documentElement.scrollWidth,
-          viewportWidth: window.innerWidth,
-          brandVisible: document.querySelector('header span.tracking-tight')?.textContent === 'CRE Calculators'
+          hasLink: !!link,
+          href: link ? link.getAttribute('href') : null,
+          cardWidth: card ? card.offsetWidth : 0,
         };
       });
-      console.log(`Viewport ${vp}px - Overflow: ${dims.scrollWidth > dims.viewportWidth}, Brand Full Visible: ${dims.brandVisible}`);
+      if (!pdfLinkInfo.hasLink) {
+        throw new Error(`Missing #pdf-footer-tool-link in PDF template on /${loc}/tools/deal-analyzer/`);
+      }
+      const expectedHref = `https://crecalculators.com/${loc}/tools/deal-analyzer/`;
+      if (pdfLinkInfo.href !== expectedHref) {
+        throw new Error(`PDF footer link href mismatch on /${loc}/: expected "${expectedHref}", got "${pdfLinkInfo.href}"`);
+      }
+      if (pdfLinkInfo.cardWidth !== 800) {
+        throw new Error(`PDF template card width on /${loc}/ is ${pdfLinkInfo.cardWidth} (expected 800)`);
+      }
     }
+    console.log('✅ Deal Analyzer PDF template card & localized links verified across all 4 locales (en/zh/es/pt).');
+
+    // 10e. ES/PT Localization Check on previously English-fallback pages
+    const esPtChecks = [
+      { url: 'http://localhost:3460/es/calculators/multifamily-cap-rate/', mustContain: 'Calculadora de Cap Rate Multifamiliar', mustNotContain: 'How to Underwrite' },
+      { url: 'http://localhost:3460/pt/calculators/multifamily-cap-rate/', mustContain: 'Calculadora de Cap Rate Multifamiliar', mustNotContain: 'How to Underwrite' },
+      { url: 'http://localhost:3460/es/guides/cap-rate-benchmarks-by-city/austin-tx-cap-rates/', mustContain: 'Motores Económicos Regionales', mustNotContain: 'Core Regional Economic Drivers' },
+      { url: 'http://localhost:3460/pt/guides/cap-rate-benchmarks-by-city/austin-tx-cap-rates/', mustContain: 'Motores Econômicos Regionais', mustNotContain: 'Core Regional Economic Drivers' },
+      { url: 'http://localhost:3460/es/privacy/', mustContain: 'Política de Privacidad', mustNotContain: 'Core Commitment: 100% Client-Side' },
+      { url: 'http://localhost:3460/pt/privacy/', mustContain: 'Política de Privacidade', mustNotContain: 'Core Commitment: 100% Client-Side' },
+      { url: 'http://localhost:3460/es/terms/', mustContain: 'Términos de Uso', mustNotContain: 'Important Financial & Legal Disclaimer' },
+      { url: 'http://localhost:3460/pt/terms/', mustContain: 'Termos de Uso', mustNotContain: 'Important Financial & Legal Disclaimer' },
+      { url: 'http://localhost:3460/es/editorial/', mustContain: 'Estándares de Evaluación y Fórmulas de Cálculo', mustNotContain: 'Core Formulas & Financial Definitions' },
+      { url: 'http://localhost:3460/pt/editorial/', mustContain: 'Padrões de Avaliação e Fórmulas de Cálculo', mustNotContain: 'Core Formulas & Financial Definitions' },
+    ];
+    for (const checkItem of esPtChecks) {
+      await page.goto(checkItem.url, { waitUntil: 'networkidle0' });
+      const bodyTxt = await page.evaluate(() => document.body.textContent || '');
+      if (!bodyTxt.includes(checkItem.mustContain)) {
+        throw new Error(`Missing localized string "${checkItem.mustContain}" on ${checkItem.url}`);
+      }
+      if (bodyTxt.includes(checkItem.mustNotContain)) {
+        throw new Error(`Found unlocalized English fallback "${checkItem.mustNotContain}" on ${checkItem.url}`);
+      }
+    }
+    console.log('✅ All ES/PT property cap rate, city cap rate, privacy, terms, and editorial pages verified localized.');
 
     if (accumulatedErrors.length > 0) {
       console.error(`\n❌ Smoke tests finished with ${accumulatedErrors.length} real error(s):`);

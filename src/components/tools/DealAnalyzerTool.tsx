@@ -8,6 +8,9 @@ import {
   calculateDealAnalysis,
   DealAnalyzerInput,
   DEFAULT_DEAL_INPUT,
+  encodeDealAnalyzerHash,
+  decodeDealAnalyzerHash,
+  generateDealAnalyzerCsv,
 } from '@/lib/dealAnalyzerCalculations';
 import { getContent } from '@/content';
 import { getDealAnalyzerTranslations } from '@/lib/dealAnalyzerTranslations';
@@ -81,8 +84,28 @@ export function DealAnalyzerTool({ locale }: Props) {
   }, [moreMenuOpen]);
 
   React.useEffect(() => {
+    const applyHashInputs = () => {
+      if (typeof window === 'undefined') return;
+      const hash = window.location.hash;
+      if (hash && hash.replace(/^#/, '').trim() !== '') {
+        const restored = decodeDealAnalyzerHash(hash, DEFAULT_DEAL_INPUT);
+        setPurchasePrice(restored.purchasePrice);
+        setClosingCostsPercent(restored.closingCostsPercent);
+        setGrossPotentialIncome(restored.grossPotentialIncome);
+        setVacancyRate(restored.vacancyRate);
+        setOperatingExpenses(restored.operatingExpenses);
+        setDownPaymentPercent(restored.downPaymentPercent);
+        setInterestRate(restored.interestRate);
+        setAmortizationYears(restored.amortizationYears);
+        setPaymentType(restored.paymentType);
+        setHasBalloon(restored.hasBalloon);
+        setBalloonYears(restored.balloonYears);
+      }
+    };
+
     setTimeout(() => {
       setIsClient(true);
+      applyHashInputs();
       try {
         const stored = localStorage.getItem('cre_saved_deals');
         if (stored) {
@@ -92,6 +115,11 @@ export function DealAnalyzerTool({ locale }: Props) {
         // ignore
       }
     }, 0);
+
+    window.addEventListener('hashchange', applyHashInputs);
+    return () => {
+      window.removeEventListener('hashchange', applyHashInputs);
+    };
   }, []);
 
   const pdfTemplateRef = useRef<HTMLDivElement>(null);
@@ -113,28 +141,21 @@ export function DealAnalyzerTool({ locale }: Props) {
   const { base, stress } = calculateDealAnalysis(input, locale);
 
   // Action handlers
-  const handleCopyLink = () => {
-    if (typeof window !== 'undefined') {
-      navigator.clipboard.writeText(window.location.href);
+  const handleCopyLink = async () => {
+    if (typeof window === 'undefined') return;
+    const encodedHash = encodeDealAnalyzerHash(input);
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${encodedHash}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
       setCopiedLink(true);
       setTimeout(() => setCopiedLink(false), 2500);
+    } catch {
+      setCopiedLink(false);
     }
   };
 
   const handleExportCsv = () => {
-    const csvRows = [
-      ['Metric', 'Base Case Value', 'Stress Test Value'],
-      ['Purchase Price', `$${purchasePrice.toLocaleString()}`, `$${purchasePrice.toLocaleString()}`],
-      ['Annual NOI', `$${base.noi.toLocaleString()}`, `$${stress.noi.toLocaleString()}`],
-      ['Cap Rate', `${base.capRate.toFixed(2)}%`, `${stress.capRate.toFixed(2)}%`],
-      ['DSCR', `${base.dscr.toFixed(2)}x`, `${stress.dscr.toFixed(2)}x`],
-      ['Cash-on-Cash Return', `${base.cashOnCashReturn.toFixed(2)}%`, `${stress.cashOnCashReturn.toFixed(2)}%`],
-      ['Break-Even Ratio', `${base.breakEvenRatio.toFixed(2)}%`, `${stress.breakEvenRatio.toFixed(2)}%`],
-      ['Break-Even Occupancy', `${base.breakEvenOccupancy.toFixed(2)}%`, `${stress.breakEvenOccupancy.toFixed(2)}%`],
-      ['Net Annual Cash Flow', `$${(base.noi - base.annualDebtService).toLocaleString()}`, `$${(stress.noi - stress.annualDebtService).toLocaleString()}`],
-    ];
-
-    const csvContent = csvRows.map(r => r.join(',')).join('\n');
+    const csvContent = generateDealAnalyzerCsv(input, base, stress);
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -216,6 +237,31 @@ export function DealAnalyzerTool({ locale }: Props) {
         pdf.addPage();
         pdf.addImage(imgData, 'PNG', margin, positionY, renderWidth, renderHeight);
         heightLeft -= pageContentHeight;
+      }
+
+      // Add interactive PDF /Link annotation for the localized deal-analyzer tool URL
+      const linkEl = element.querySelector('#pdf-footer-tool-link') as HTMLElement | null;
+      if (linkEl) {
+        const elemRect = element.getBoundingClientRect();
+        const linkRect = linkEl.getBoundingClientRect();
+        const scaleMm = renderWidth / (elemRect.width || 800);
+        const relX = linkRect.left - elemRect.left;
+        const relY = linkRect.top - elemRect.top;
+
+        const linkX = margin + relX * scaleMm;
+        const linkW = Math.max(linkRect.width * scaleMm, 25);
+        const linkH = Math.max(linkRect.height * scaleMm, 5);
+        const linkTotalY = margin + relY * scaleMm;
+
+        const targetPage = Math.floor((linkTotalY - margin) / pageContentHeight) + 1;
+        const pageY = margin + ((linkTotalY - margin) % pageContentHeight);
+
+        if (targetPage <= pdf.getNumberOfPages()) {
+          pdf.setPage(targetPage);
+          pdf.link(linkX, pageY, linkW, linkH, {
+            url: `https://crecalculators.com/${locale}/tools/deal-analyzer/`,
+          });
+        }
       }
 
       pdf.save(`deal-analyzer-underwriting-summary-${locale}.pdf`);
@@ -312,6 +358,7 @@ export function DealAnalyzerTool({ locale }: Props) {
 
               <button
                 type="button"
+                data-testid="share-deal-btn"
                 onClick={handleCopyLink}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
               >
@@ -369,7 +416,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                     <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { setShowSavedModal(true); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-emerald-300 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">📂 {t.savedCount(savedDeals.length)}</button>
                   )}
                   <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportCsv(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">📊 {t.csvExport}</button>
-                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleCopyLink(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">🔗 {copiedLink ? t.linkCopied : t.shareLink}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} data-testid="share-deal-btn-mobile" onClick={() => { handleCopyLink(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">🔗 {copiedLink ? t.linkCopied : t.shareLink}</button>
                   <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportPdf(); setMoreMenuOpen(false); }} disabled={isExportingPdf} className="flex items-center gap-1.5 w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg disabled:opacity-50 focus:bg-slate-700 outline-none transition-colors duration-100">
                     <FileDown className="w-3 h-3" /> {isExportingPdf ? t.generating : t.exportPdf}
                   </button>
@@ -952,6 +999,8 @@ export function DealAnalyzerTool({ locale }: Props) {
       <div className="absolute left-[-9999px] top-[-9999px]" style={{ width: '800px' }}>
         <div
           ref={pdfTemplateRef}
+          id="deal-analyzer-pdf-template"
+          data-testid="deal-analyzer-pdf-template"
           style={{
             width: '800px',
             minWidth: '800px',
@@ -1070,22 +1119,20 @@ export function DealAnalyzerTool({ locale }: Props) {
             </table>
           </div>
 
-          {/* Footer Branding & Virality Seal */}
+          {/* Footer Branding */}
           <div className="pt-4 border-t-2 border-slate-300 flex items-center justify-between text-slate-600">
-            <div className="flex items-center gap-3">
-              {/* QR Code representation in pure SVG so html2canvas renders it sharp */}
-              <div style={{ width: '42px', height: '42px', padding: '3px', backgroundColor: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '6px' }}>
-                <svg viewBox="0 0 29 29" width="36" height="36" fill="#0f172a">
-                  <path d="M0,0h7v7h-7zM2,2v3h3v-3zM22,0h7v7h-7zM24,2v3h3v-3zM0,22h7v7h-7zM2,24v3h3v-3zM9,1h1v1h-1zM11,1h3v1h-3zM16,1h2v1h-2zM9,3h2v2h-2zM13,3h1v1h-1zM16,3h1v2h-1zM19,3h1v1h-1zM9,6h3v1h-3zM14,6h2v1h-2zM18,6h1v1h-1zM20,6h1v1h-1zM1,9h1v1h-1zM3,9h3v1h-3zM8,9h1v2h-1zM11,9h2v1h-2zM15,9h3v1h-3zM20,9h2v2h-2zM24,9h1v1h-1zM26,9h2v1h-2zM1,12h2v1h-2zM4,12h1v2h-1zM7,12h3v1h-3zM12,12h1v1h-1zM14,12h1v2h-1zM17,12h2v1h-2zM21,12h2v1h-2zM25,12h3v1h-3zM1,15h3v1h-3zM6,15h1v1h-1zM9,15h2v2h-2zM13,15h1v1h-1zM16,15h1v1h-1zM19,15h1v1h-1zM22,15h1v1h-1zM25,15h2v1h-2zM28,15h1v1h-1zM9,19h1v2h-1zM12,19h2v1h-2zM16,19h2v1h-2zM20,19h3v1h-3zM25,19h1v2h-1zM27,19h2v1h-2zM9,23h2v1h-2zM13,23h1v1h-1zM16,23h1v2h-1zM19,23h2v1h-2zM23,23h1v1h-1zM26,23h2v1h-2zM10,26h2v1h-2zM14,26h3v1h-3zM19,26h1v1h-1zM22,26h2v1h-2zM26,26h1v1h-1z"/>
-                </svg>
+            <div>
+              <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#0f172a' }}>
+                {t.pdfFooterTagline}
               </div>
-              <div>
-                <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#0f172a' }}>
-                  {t.pdfFooterTagline}
-                </div>
-                <div style={{ fontSize: '9px', color: '#64748b', marginTop: '2px' }}>
+              <div style={{ fontSize: '9px', color: '#64748b', marginTop: '2px' }}>
+                <a
+                  id="pdf-footer-tool-link"
+                  href={`https://crecalculators.com/${locale}/tools/deal-analyzer/`}
+                  style={{ color: '#047857', textDecoration: 'underline' }}
+                >
                   {t.pdfFooterSub}
-                </div>
+                </a>
               </div>
             </div>
             <div style={{ textAlign: 'right', fontSize: '9px', color: '#64748b' }}>

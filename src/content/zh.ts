@@ -529,10 +529,10 @@ export const zhContent: LocaleContent = {
     ],
   },
   capRateBenchmarksGuide: {
-    metaTitle: '全美 Cap Rate 基准数据指南 — 市场层级与物业类型 (2026)',
-    metaDescription: '权威整理全美一二三四级市场层级及多户住宅、工业、办公、零售、酒店、自存仓等商业地产的 Cap Rate 收益率参考区间与定价规律。',
-    h1: 'Cap Rate 基准数据指南：市场层级 × 物业类型 (2026)',
-    subtitle: '基于商业地产估值逻辑与机构调研资料，整理主要商业资产与市场层级的 Cap Rate 收益率参考区间。',
+    metaTitle: '全美 Cap Rate 示意区间指南 — 市场层级与物业类型 (教学参考)',
+    metaDescription: '教学参考：全美一二三四级市场层级及多户住宅、工业、办公、零售、酒店、自存仓等商业地产的 Cap Rate 收益率示意区间与定价逻辑。',
+    h1: 'Cap Rate 示意区间指南：市场层级 × 物业类型',
+    subtitle: '基于商业地产估值逻辑与机构定性框架，整理主要商业资产与市场层级的 Cap Rate 教学测算示意区间。',
     disclaimer: 'Cap Rate 会随资本市场行情与利率环境波动。这里的区间是结合商业地产常规估值经验与 Newmark 2026 年北美市场调查报告的宏观定性观察整理的方向性教育基准，不代表报告原表数字摘抄或具体物业的成交报价——做投资决策前，请务必找当地经纪人核实最新的可比成交数据。',
     propertyTypeTitle: '按物业类型的全美 Cap Rate 参考区间（教学测算示意）',
     propertyTypeTableHeader: {
@@ -835,9 +835,9 @@ export const zhContent: LocaleContent = {
     guides: [
       {
         slug: 'cap-rate-benchmarks-by-city',
-        title: 'Cap Rate 基准数据指南：市场层级 × 全部物业类型',
-        description: '基于 2026 年最新商业地产机构调研数据，整理全美各类商业资产与市场层级的 Cap Rate 收益率基准区间。',
-        badge: '市场数据',
+        title: 'Cap Rate 示意区间指南：市场层级 × 全部物业类型',
+        description: '结合商业地产估值框架与市场层级规律，整理全美各类商业资产与都市圈层级的 Cap Rate 教学测算示意区间。',
+        badge: '测算参考',
         readTime: '8 分钟阅读',
       },
       {

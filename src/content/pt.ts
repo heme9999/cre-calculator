@@ -1,5 +1,4 @@
 import { LocaleContent } from './types';
-import { enContent } from './en';
 
 export const ptContent: LocaleContent = {
   nav: {
@@ -458,10 +457,10 @@ export const ptContent: LocaleContent = {
     ],
   },
   capRateBenchmarksGuide: {
-    metaTitle: 'Guia de Cap Rates nos EUA por Mercado e Tipo de Imóvel (2026)',
-    metaDescription: 'Guia abrangente de taxas de capitalização em mercados primários, secundários e terciários dos EUA por tipo de imóvel comercial.',
+    metaTitle: 'Guia de Cap Rates nos EUA por Mercado e Tipo de Imóvel (Referência Ilustrativa)',
+    metaDescription: 'Guia educacional de faixas ilustrativas de taxas de capitalização em mercados primários, secundários e terciários dos EUA por tipo de imóvel comercial.',
     h1: 'Padrões de Cap Rate nos EUA por Região Metropolitana e Tipo de Imóvel',
-    subtitle: 'Faixas referenciais de taxas de capitalização nas principais classes de ativos e níveis de mercados metropolitanos para modelagem e análise.',
+    subtitle: 'Faixas ilustrativas de taxas de capitalização nas principais classes de ativos e níveis de mercados metropolitanos para modelagem e análise.',
     disclaimer: 'As taxas de capitalização oscilam continuamente em função do mercado de capitais e dos ciclos de juros. Estas faixas são parâmetros pedagógicos desenvolvidos para exercícios de modelagem e fundamentados em convenções de valuation imobiliário comercial e observações qualitativas do relatório Newmark 2026 Valuation & Advisory North American Market Survey — não constituem dados estatísticos literais ou cotações de negócios reais. Sempre consulte corretores locais atuantes e transações comparáveis recentes antes de tomar decisões de investimento.',
     propertyTypeTitle: 'Padrões de Cap Rate nos EUA por Classe de Imóvel (Referência Educacional)',
     propertyTypeTableHeader: {
@@ -705,8 +704,8 @@ export const ptContent: LocaleContent = {
       {
         slug: 'cap-rate-benchmarks-by-city',
         title: 'Padrões de Cap Rate nos EUA por Região Metropolitana e Tipo de Imóvel',
-        description: 'Faixas de taxas de capitalização consolidadas por classes de ativos e níveis de mercado metropolitano com base em pesquisas de 2026.',
-        badge: 'Dados de Mercado',
+        description: 'Faixas ilustrativas de taxas de capitalização por classes de ativos e níveis de mercado metropolitano para modelagem educacional.',
+        badge: 'Referência de Modelagem',
         readTime: '8 min de leitura',
       },
       {

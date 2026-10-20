@@ -529,10 +529,10 @@ export const enContent: LocaleContent = {
     ],
   },
   capRateBenchmarksGuide: {
-    metaTitle: 'US Cap Rate Benchmarks by Market Tier & Property Type (2026)',
-    metaDescription: 'Comprehensive guide to commercial real estate capitalization rates across US gateway, secondary, and tertiary markets by property type.',
+    metaTitle: 'US Cap Rate Benchmarks by Market Tier & Property Type (Illustrative Guide)',
+    metaDescription: 'Educational guide to illustrative commercial real estate capitalization rate ranges across US gateway, secondary, and tertiary markets by property type.',
     h1: 'US Cap Rate Benchmarks by Market Tier & Property Type',
-    subtitle: 'Directional capitalization rate ranges across primary asset classes and metropolitan market tiers for educational underwriting reference.',
+    subtitle: 'Illustrative capitalization rate ranges across primary asset classes and metropolitan market tiers for educational underwriting reference.',
     disclaimer: 'Cap rates shift continuously with capital market conditions. These ranges are educational benchmarks developed for instructional modeling and informed by commercial real estate valuation conventions alongside high-level qualitative observations in Newmark\'s 2026 Valuation & Advisory North American Market Survey — they do not represent direct statistical citations or actual trading quotes. Always verify current local pricing and actual trading cap rates with active local brokers and recent comparable sales before making investment decisions.',
     propertyTypeTitle: 'US Cap Rate Benchmarks by Asset Class (Educational Reference)',
     propertyTypeTableHeader: {
@@ -776,8 +776,8 @@ export const enContent: LocaleContent = {
       {
         slug: "cap-rate-benchmarks-by-city",
         title: "US Cap Rate Benchmarks by Metro Market & Property Type",
-        description: "Aggregated capitalization rate ranges across primary asset classes and metropolitan market tiers based on 2026 industry surveys.",
-        badge: "Market Data",
+        description: "Illustrative capitalization rate ranges across primary asset classes and metropolitan market tiers for educational underwriting practice.",
+        badge: "Modeling Reference",
         readTime: "8 min read",
       },
       {

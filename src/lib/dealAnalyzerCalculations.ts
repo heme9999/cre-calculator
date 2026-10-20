@@ -193,3 +193,259 @@ export function calculateDealAnalysis(input: DealAnalyzerInput, locale: string):
 
   return { base, stress };
 }
+
+export const DEAL_SHARE_SCHEMA_VERSION = '1';
+
+function parseBoundedNumber(
+  raw: string | null,
+  min: number,
+  max: number,
+  fallback: number,
+  allowZero: boolean = true
+): number {
+  if (raw === null || raw.trim() === '') return fallback;
+  const num = Number(raw);
+  if (!Number.isFinite(num)) return fallback;
+  if (!allowZero && num <= 0) return fallback;
+  if (num < min || num > max) return fallback;
+  return num;
+}
+
+export function sanitizeDealAnalyzerInput(
+  candidate: Partial<DealAnalyzerInput>,
+  fallback: DealAnalyzerInput = DEFAULT_DEAL_INPUT
+): DealAnalyzerInput {
+  const purchasePrice =
+    typeof candidate.purchasePrice === 'number' &&
+    Number.isFinite(candidate.purchasePrice) &&
+    candidate.purchasePrice > 0 &&
+    candidate.purchasePrice <= 1_000_000_000
+      ? candidate.purchasePrice
+      : fallback.purchasePrice;
+
+  const closingCostsPercent =
+    typeof candidate.closingCostsPercent === 'number' &&
+    Number.isFinite(candidate.closingCostsPercent) &&
+    candidate.closingCostsPercent >= 0 &&
+    candidate.closingCostsPercent <= 50
+      ? candidate.closingCostsPercent
+      : fallback.closingCostsPercent;
+
+  const grossPotentialIncome =
+    typeof candidate.grossPotentialIncome === 'number' &&
+    Number.isFinite(candidate.grossPotentialIncome) &&
+    candidate.grossPotentialIncome >= 0 &&
+    candidate.grossPotentialIncome <= 500_000_000
+      ? candidate.grossPotentialIncome
+      : fallback.grossPotentialIncome;
+
+  const vacancyRate =
+    typeof candidate.vacancyRate === 'number' &&
+    Number.isFinite(candidate.vacancyRate) &&
+    candidate.vacancyRate >= 0 &&
+    candidate.vacancyRate <= 100
+      ? candidate.vacancyRate
+      : fallback.vacancyRate;
+
+  const operatingExpenses =
+    typeof candidate.operatingExpenses === 'number' &&
+    Number.isFinite(candidate.operatingExpenses) &&
+    candidate.operatingExpenses >= 0 &&
+    candidate.operatingExpenses <= 500_000_000
+      ? candidate.operatingExpenses
+      : fallback.operatingExpenses;
+
+  const downPaymentPercent =
+    typeof candidate.downPaymentPercent === 'number' &&
+    Number.isFinite(candidate.downPaymentPercent) &&
+    candidate.downPaymentPercent >= 0 &&
+    candidate.downPaymentPercent <= 100
+      ? candidate.downPaymentPercent
+      : fallback.downPaymentPercent;
+
+  const interestRate =
+    typeof candidate.interestRate === 'number' &&
+    Number.isFinite(candidate.interestRate) &&
+    candidate.interestRate >= 0 &&
+    candidate.interestRate <= 50
+      ? candidate.interestRate
+      : fallback.interestRate;
+
+  const amortizationYears =
+    typeof candidate.amortizationYears === 'number' &&
+    Number.isFinite(candidate.amortizationYears) &&
+    candidate.amortizationYears >= 1 &&
+    candidate.amortizationYears <= 50
+      ? Math.round(candidate.amortizationYears)
+      : fallback.amortizationYears;
+
+  const paymentType: PaymentType =
+    candidate.paymentType === 'installment' || candidate.paymentType === 'principal'
+      ? candidate.paymentType
+      : fallback.paymentType;
+
+  const hasBalloon =
+    typeof candidate.hasBalloon === 'boolean' ? candidate.hasBalloon : fallback.hasBalloon;
+
+  const rawBalloonYears =
+    typeof candidate.balloonYears === 'number' &&
+    Number.isFinite(candidate.balloonYears) &&
+    candidate.balloonYears >= 1 &&
+    candidate.balloonYears <= 50
+      ? Math.round(candidate.balloonYears)
+      : fallback.balloonYears;
+  const balloonYears = hasBalloon ? Math.min(rawBalloonYears, amortizationYears) : rawBalloonYears;
+
+  return {
+    purchasePrice,
+    closingCostsPercent,
+    grossPotentialIncome,
+    vacancyRate,
+    operatingExpenses,
+    downPaymentPercent,
+    interestRate,
+    amortizationYears,
+    paymentType,
+    hasBalloon,
+    balloonYears,
+  };
+}
+
+/**
+ * Encodes strictly whitelisted DealAnalyzerInput fields into a versioned URL hash string.
+ * Never includes emails, audit flags, or non-underwriting fields.
+ */
+export function encodeDealAnalyzerHash(input: DealAnalyzerInput): string {
+  const safe = sanitizeDealAnalyzerInput(input, DEFAULT_DEAL_INPUT);
+  const params = new URLSearchParams();
+  params.set('v', DEAL_SHARE_SCHEMA_VERSION);
+  params.set('pp', String(safe.purchasePrice));
+  params.set('cc', String(safe.closingCostsPercent));
+  params.set('gpi', String(safe.grossPotentialIncome));
+  params.set('vac', String(safe.vacancyRate));
+  params.set('opex', String(safe.operatingExpenses));
+  params.set('dp', String(safe.downPaymentPercent));
+  params.set('ir', String(safe.interestRate));
+  params.set('ay', String(safe.amortizationYears));
+  params.set('pt', safe.paymentType);
+  params.set('hb', safe.hasBalloon ? '1' : '0');
+  params.set('by', String(safe.balloonYears));
+  return params.toString();
+}
+
+/**
+ * Decodes a URL hash or query string into a validated DealAnalyzerInput.
+ * Unknown keys (e.g. email, audit, utm) are ignored. Invalid/out-of-range values
+ * safely fall back to `fallback` (DEFAULT_DEAL_INPUT).
+ */
+export function decodeDealAnalyzerHash(
+  rawHash: string,
+  fallback: DealAnalyzerInput = DEFAULT_DEAL_INPUT
+): DealAnalyzerInput {
+  if (!rawHash || typeof rawHash !== 'string') {
+    return { ...fallback };
+  }
+  const cleaned = rawHash.replace(/^[#?]+/, '').trim();
+  if (!cleaned) {
+    return { ...fallback };
+  }
+
+  let params: URLSearchParams;
+  try {
+    params = new URLSearchParams(cleaned);
+  } catch {
+    return { ...fallback };
+  }
+
+  const version = params.get('v');
+  if (version !== null && version !== DEAL_SHARE_SCHEMA_VERSION) {
+    return { ...fallback };
+  }
+
+  const ptRaw = params.get('pt');
+  const paymentType: PaymentType =
+    ptRaw === 'installment' || ptRaw === 'principal' ? ptRaw : fallback.paymentType;
+
+  const hbRaw = params.get('hb');
+  const hasBalloon =
+    hbRaw === '1' || hbRaw === 'true'
+      ? true
+      : hbRaw === '0' || hbRaw === 'false'
+      ? false
+      : fallback.hasBalloon;
+
+  const amortizationYears = Math.round(
+    parseBoundedNumber(params.get('ay'), 1, 50, fallback.amortizationYears, false)
+  );
+  const rawBalloonYears = Math.round(
+    parseBoundedNumber(params.get('by'), 1, 50, fallback.balloonYears, false)
+  );
+  const balloonYears = hasBalloon ? Math.min(rawBalloonYears, amortizationYears) : rawBalloonYears;
+
+  return {
+    purchasePrice: parseBoundedNumber(params.get('pp'), 1, 1_000_000_000, fallback.purchasePrice, false),
+    closingCostsPercent: parseBoundedNumber(params.get('cc'), 0, 50, fallback.closingCostsPercent, true),
+    grossPotentialIncome: parseBoundedNumber(params.get('gpi'), 0, 500_000_000, fallback.grossPotentialIncome, true),
+    vacancyRate: parseBoundedNumber(params.get('vac'), 0, 100, fallback.vacancyRate, true),
+    operatingExpenses: parseBoundedNumber(params.get('opex'), 0, 500_000_000, fallback.operatingExpenses, true),
+    downPaymentPercent: parseBoundedNumber(params.get('dp'), 0, 100, fallback.downPaymentPercent, true),
+    interestRate: parseBoundedNumber(params.get('ir'), 0, 50, fallback.interestRate, true),
+    amortizationYears,
+    paymentType,
+    hasBalloon,
+    balloonYears,
+  };
+}
+
+/**
+ * Escapes a single cell value according to RFC 4180 CSV specifications.
+ * Wraps values containing commas, double quotes, or newlines in double quotes,
+ * and escapes existing double quotes by doubling them ("").
+ */
+export function escapeCsvCell(val: string | number): string {
+  const str = String(val ?? '');
+  if (str.includes('"') || str.includes(',') || str.includes('\n') || str.includes('\r')) {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+  return str;
+}
+
+/**
+ * Generates an RFC 4180 compliant CSV string for Deal Analyzer results with a UTF-8 BOM.
+ * Ensures strictly 3 columns (Metric, Base Case Value, Stress Test Value) per row.
+ */
+export function generateDealAnalyzerCsv(
+  input: DealAnalyzerInput,
+  base: SingleScenarioResult,
+  stress: SingleScenarioResult
+): string {
+  const formatMoney = (val: number): string => {
+    if (isNaN(val) || !isFinite(val)) return '$0';
+    const rounded = Math.round(val);
+    const formatted = Math.abs(rounded).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return rounded < 0 ? `-$${formatted}` : `$${formatted}`;
+  };
+
+  const formatPct = (val: number): string => {
+    if (isNaN(val) || !isFinite(val)) return '0.00%';
+    return `${val.toFixed(2)}%`;
+  };
+
+  const rows: string[][] = [
+    ['Metric', 'Base Case Value', 'Stress Test Value'],
+    ['Purchase Price', formatMoney(input.purchasePrice), formatMoney(input.purchasePrice)],
+    ['Annual NOI', formatMoney(base.noi), formatMoney(stress.noi)],
+    ['Cap Rate', formatPct(base.capRate), formatPct(stress.capRate)],
+    ['DSCR', `${base.dscr.toFixed(2)}x`, `${stress.dscr.toFixed(2)}x`],
+    ['Cash-on-Cash Return', formatPct(base.cashOnCashReturn), formatPct(stress.cashOnCashReturn)],
+    ['Break-Even Ratio', formatPct(base.breakEvenRatio), formatPct(stress.breakEvenRatio)],
+    ['Break-Even Occupancy', formatPct(base.breakEvenOccupancy), formatPct(stress.breakEvenOccupancy)],
+    [
+      'Net Annual Cash Flow',
+      formatMoney(base.noi - base.annualDebtService),
+      formatMoney(stress.noi - stress.annualDebtService),
+    ],
+  ];
+
+  return '\uFEFF' + rows.map((r) => r.map(escapeCsvCell).join(',')).join('\r\n');
+}

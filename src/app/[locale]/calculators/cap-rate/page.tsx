@@ -159,49 +159,89 @@ export default async function CapRatePage({ params }: PageProps) {
 
   const bannersByLocale = {
     zh: {
-      guideTitle: '全美 Cap Rate 基准数据指南',
-      guideDesc: '查看全美主要都市圈（一二三四级城市）与各大商业物业类型的典型 Cap Rate 收益率参考区间。',
-      guideBtn: '查看基准数据指南',
+      guideTitle: '商业地产 Cap Rate 承销参考指南',
+      guideDesc: '查看不同都市圈层级与资产类别的教学承销区间、费用结构与敏感度测算框架。',
+      guideBtn: '查看承销参考指南',
       daBadge: '综合分析工具',
       daTitle: '想同时计算 Cap Rate、NOI、DSCR 和 Cash-on-Cash？',
       daDesc: '使用 Deal Analyzer 综合尽调工具，一次输入算出全部核心指标，支持压力测试与 PDF 导出。',
       daBtn: '打开 Deal Analyzer',
+      assetTitle: '按物业资产类型查看 Cap Rate 专项承销指南',
+      assetDesc: '不同商业地产类别的费用率、空置假设与资本性支出结构差异显著。选择具体物业类型查看对应的教学承销案例：',
+      assets: [
+        { slug: 'multifamily-cap-rate', title: 'Multifamily 多户住宅公寓 Cap Rate', sub: '5+ 单元公寓 · 换手翻新与管理费承销' },
+        { slug: 'industrial-cap-rate', title: 'Industrial 工业与仓储物流 Cap Rate', sub: '物流仓库与轻工业 · NNN 费用回收与屋顶储备' },
+        { slug: 'self-storage-cap-rate', title: 'Self-Storage 自助仓储 Cap Rate', sub: '自助仓设施 · 经济入住率与动态租金建模' },
+        { slug: 'nnn-lease-cap-rate', title: 'NNN 单租户三净租赁 Cap Rate', sub: '绝对三净零售 · 租户信用利差与剩余租期分析' },
+      ],
     },
     es: {
-      guideTitle: 'Guía de Puntos de Referencia de Cap Rate en EE.UU. (2026)',
-      guideDesc: 'Consulte los rangos de tasas de capitalización por tipo de activo y categoría de mercado metropolitano en Estados Unidos.',
+      guideTitle: 'Guía de Escenarios Ilustrativos de Cap Rate',
+      guideDesc: 'Consulte los rangos ilustrativos de modelado financiero por tipo de activo y nivel de mercado metropolitano.',
       guideBtn: 'Ver Guía de Referencia',
       daBadge: 'Herramienta Integral de Análisis',
       daTitle: '¿Necesita calcular Cap Rate, NOI, DSCR y Cash-on-Cash juntos?',
       daDesc: 'Utilice Deal Analyzer para calcular todas las métricas clave a partir de un conjunto unificado de variables, con pruebas de estrés y exportación en PDF.',
       daBtn: 'Abrir Deal Analyzer',
+      assetTitle: 'Calculadoras y Escenarios de Cap Rate por Tipo de Propiedad',
+      assetDesc: 'Las estructuras de gastos operativos, vacancia y reservas de capital varían según el tipo de inmueble. Explore escenarios específicos por clase de activo:',
+      assets: [
+        { slug: 'multifamily-cap-rate', title: 'Cap Rate Multifamiliar (5+ Unidades)', sub: 'Apartamentos · Rotación, impuestos y reservas por unidad' },
+        { slug: 'industrial-cap-rate', title: 'Cap Rate Industrial y Logística', sub: 'Bodegas y distribución · Contratos NNN y reservas estructurales' },
+        { slug: 'self-storage-cap-rate', title: 'Cap Rate Autoalmacenamiento (Self-Storage)', sub: 'Instalaciones de almacenaje · Ocupación económica vs. física' },
+        { slug: 'nnn-lease-cap-rate', title: 'Cap Rate Contratos Net Lease (NNN)', sub: 'Inquilino único · Solvencia crediticia y plazo remanente' },
+      ],
     },
     pt: {
-      guideTitle: 'Guia de Padrões de Cap Rate nos EUA (2026)',
-      guideDesc: 'Consulte as faixas de taxa de capitalização consolidadas por classe de imóvel e nível de mercado metropolitano nos EUA.',
-      guideBtn: 'Ver Guia de Padrões',
+      guideTitle: 'Guia de Cenários Ilustrativos de Cap Rate',
+      guideDesc: 'Consulte as faixas ilustrativas de modelagem financeira por classe de imóvel e nível de mercado metropolitano.',
+      guideBtn: 'Ver Guia de Referência',
       daBadge: 'Ferramenta Completa de Análise',
       daTitle: 'Precisa calcular Cap Rate, NOI, DSCR e Cash-on-Cash juntos?',
       daDesc: 'Use o Deal Analyzer para calcular todas as métricas essenciais a partir de um conjunto unificado de dados, com testes de estresse e exportação em PDF.',
       daBtn: 'Abrir Deal Analyzer',
+      assetTitle: 'Calculadoras e Cenários de Cap Rate por Tipo de Imóvel',
+      assetDesc: 'As estruturas de despesas operacionais, vacância e reservas de capital variam conforme a classe do ativo. Explore cenários específicos por tipo de propriedade:',
+      assets: [
+        { slug: 'multifamily-cap-rate', title: 'Cap Rate Multifamiliar (5+ Unidades)', sub: 'Prédios residenciais · Rotatividade, impostos e reservas por unidade' },
+        { slug: 'industrial-cap-rate', title: 'Cap Rate Industrial e Galpões Logísticos', sub: 'Galpões e distribuição · Contratos NNN e reservas estruturais' },
+        { slug: 'self-storage-cap-rate', title: 'Cap Rate Autoarmazenamento (Self-Storage)', sub: 'Unidades de armazenamento · Ocupação econômica vs. física' },
+        { slug: 'nnn-lease-cap-rate', title: 'Cap Rate Contratos Net Lease (NNN)', sub: 'Inquilino único · Risco de crédito corporativo e prazo de locação' },
+      ],
     },
     en: {
-      guideTitle: 'US Cap Rate Benchmarks Guide (2026)',
-      guideDesc: 'Explore national capitalization rate ranges across property types and metropolitan market tiers.',
-      guideBtn: 'View Benchmark Guide',
+      guideTitle: 'Cap Rate Underwriting Reference Guide',
+      guideDesc: 'Explore illustrative capitalization rate modeling ranges across property types and metropolitan market tiers.',
+      guideBtn: 'View Reference Guide',
       daBadge: 'Full Underwriting Tool',
       daTitle: 'Need Cap Rate, NOI, DSCR, and Cash-on-Cash all together?',
       daDesc: 'Use the Deal Analyzer tool to run all core CRE metrics from a single set of inputs with stress testing.',
       daBtn: 'Launch Deal Analyzer',
+      assetTitle: 'Property-Type Cap Rate Calculators & Underwriting Scenarios',
+      assetDesc: 'Operating expense ratios, vacancy assumptions, and capital reserve requirements vary significantly across commercial sectors. Explore specialized asset-class scenarios:',
+      assets: [
+        { slug: 'multifamily-cap-rate', title: 'Multifamily Cap Rate Calculator', sub: '5+ Unit Apartments · Turnover, OpEx ratio & per-unit reserves' },
+        { slug: 'industrial-cap-rate', title: 'Industrial & Warehouse Cap Rate Calculator', sub: 'Distribution & Flex · NNN recoveries & structural CapEx' },
+        { slug: 'self-storage-cap-rate', title: 'Self-Storage Cap Rate Calculator', sub: 'Storage Facilities · Economic occupancy & street-rate modeling' },
+        { slug: 'nnn-lease-cap-rate', title: 'NNN Lease Cap Rate Calculator', sub: 'Single-Tenant Net Lease · Credit spreads & lease term risk' },
+      ],
     },
   }[locale as 'en' | 'zh' | 'es' | 'pt'] || {
-    guideTitle: 'US Cap Rate Benchmarks Guide (2026)',
-    guideDesc: 'Explore national capitalization rate ranges across property types and metropolitan market tiers.',
-    guideBtn: 'View Benchmark Guide',
+    guideTitle: 'Cap Rate Underwriting Reference Guide',
+    guideDesc: 'Explore illustrative capitalization rate modeling ranges across property types and metropolitan market tiers.',
+    guideBtn: 'View Reference Guide',
     daBadge: 'Full Underwriting Tool',
     daTitle: 'Need Cap Rate, NOI, DSCR, and Cash-on-Cash all together?',
     daDesc: 'Use the Deal Analyzer tool to run all core CRE metrics from a single set of inputs with stress testing.',
     daBtn: 'Launch Deal Analyzer',
+    assetTitle: 'Property-Type Cap Rate Calculators & Underwriting Scenarios',
+    assetDesc: 'Operating expense ratios, vacancy assumptions, and capital reserve requirements vary significantly across commercial sectors. Explore specialized asset-class scenarios:',
+    assets: [
+      { slug: 'multifamily-cap-rate', title: 'Multifamily Cap Rate Calculator', sub: '5+ Unit Apartments · Turnover, OpEx ratio & per-unit reserves' },
+      { slug: 'industrial-cap-rate', title: 'Industrial & Warehouse Cap Rate Calculator', sub: 'Distribution & Flex · NNN recoveries & structural CapEx' },
+      { slug: 'self-storage-cap-rate', title: 'Self-Storage Cap Rate Calculator', sub: 'Storage Facilities · Economic occupancy & street-rate modeling' },
+      { slug: 'nnn-lease-cap-rate', title: 'NNN Lease Cap Rate Calculator', sub: 'Single-Tenant Net Lease · Credit spreads & lease term risk' },
+    ],
   };
 
   return (
@@ -225,7 +265,7 @@ export default async function CapRatePage({ params }: PageProps) {
 
       {/* Interactive Calculator Tool */}
       <section id="tool">
-        <CapRateCalculator locale={locale} />
+        <CapRateCalculator locale={locale} defaultPrice={2800000} defaultNoi={227200} />
       </section>
 
       {/* Content Body Section */}
@@ -322,6 +362,36 @@ export default async function CapRatePage({ params }: PageProps) {
                 <h3 className="text-base font-bold text-slate-900 mb-2">{faq.question}</h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
               </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Property-Type Cap Rate Entry Cards */}
+        <section
+          data-testid="property-type-cap-rate-links"
+          className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4"
+        >
+          <div className="space-y-1">
+            <h2 className="text-xl font-bold text-slate-900">{bannersByLocale.assetTitle}</h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              {bannersByLocale.assetDesc}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            {bannersByLocale.assets.map((asset) => (
+              <Link
+                key={asset.slug}
+                href={`/${locale}/calculators/${asset.slug}/`}
+                className="p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all flex items-center justify-between gap-3 group"
+              >
+                <div>
+                  <div className="text-sm font-bold text-slate-900 group-hover:text-emerald-700">
+                    {asset.title}
+                  </div>
+                  <div className="text-xs text-slate-500 mt-1">{asset.sub}</div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all shrink-0" />
+              </Link>
             ))}
           </div>
         </section>
