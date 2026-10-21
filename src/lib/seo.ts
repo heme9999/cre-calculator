@@ -146,6 +146,9 @@ export function buildSeoMetadata({
     verification: {
       google: 'wMz2VDeMwD8R6yiCgJIqFD_wM2wSzrSEauzvCtzKHyw',
     },
+    other: {
+      'google-adsense-account': 'ca-pub-5365178989588106',
+    },
   };
 
   if (noindex) {
