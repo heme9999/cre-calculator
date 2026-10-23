@@ -229,12 +229,12 @@ export default async function CashOnCashPage({ params }: PageProps) {
               </strong>
               <p className="mt-1">
                 {isZh
-                  ? '将您的 $57,048 税前现金流除以 $756,000 的初始现金投入，您的首年杠杆现金回报率为 7.55%。因为贷款成本 (6.5%) 低于物业的自然收益率 (8.11% Cap Rate)，这被称为正杠杆 (Positive Leverage)。'
+                  ? '将您的 $57,048 年税前现金流除以 $756,000 的初始现金投入，首年杠杆现金回报率为 7.55%（计算公式：CoC = (NOI - 年度还贷总额) / (首付 + 过户费用 + 即时 CapEx)）。请注意：尽管贷款名义利率为 6.5%（低于 8.11% 的 Cap Rate，即 NOI / 购买价格），但首年现金回报率却低于 8.11%。这是因为不可仅凭名义利率判断现金收益：每年 $170,152 的还贷总额中包含了本金摊销，减少了首年现金流分子；同时 $56,000 的前期过户费用增加了现金投入分母。虽然本金偿还形成的权益积累将在持有期或退出时体现，但它与首年到手现金收益不是同一指标。在第一年真实现金到账口径下，回报率为 7.55%。'
                   : isEs
-                  ? 'Al dividir el flujo de caja de $57,048 entre los $756,000 de capital inicialmente invertido, se obtiene un Rendimiento Cash-on-Cash apalancado del 7.55%. Dado que el costo de la deuda (6.5%) es inferior al rendimiento natural de la propiedad (Cap Rate del 8.11%), esto representa Apalancamiento Positivo.'
+                  ? 'Al dividir el flujo de caja anual antes de impuestos de $57,048 entre los $756,000 de capital total invertido, se obtiene un Rendimiento Cash-on-Cash del 7.55% (fórmula: CoC = (NOI - Servicio Anual de Deuda) / (Pago Inicial + Costos de Cierre + Mejoras Iniciales)). Observe que este rendimiento en efectivo resulta inferior al Cap Rate no apalancado del 8.11% (NOI / Precio de Compra), a pesar de que la tasa de interés nominal es del 6.5%. No se puede juzgar si el CoC supera al Cap Rate basándose únicamente en la tasa nominal: el servicio anual de deuda de $170,152 incluye amortización de principal, lo que reduce el numerador de flujo de caja, mientras que los $56,000 en costos iniciales de cierre aumentan el denominador de capital invertido. Aunque la amortización incrementa el patrimonio neto con el tiempo, la acumulación de capital y el dinero en efectivo recibido en el año 1 no son el mismo indicador.'
                   : isPt
-                  ? 'Ao dividir o fluxo de caixa de $57.048 pelo capital inicial investido de $756.000, obtém-se um Retorno Cash-on-Cash alavancado de 7,55%. Como o custo da dívida (6,5%) é inferior ao rendimento natural do imóvel (Cap Rate de 8,11%), isso representa Alavancagem Positiva.'
-                  : 'Dividing your $57,048 cash flow by your $756,000 initial cash invested yields a leveraged Cash-on-Cash Return of 7.55%. Because the debt cost (6.5%) is lower than the property\'s natural yield (8.11% Cap Rate), this represents Positive Leverage.'}
+                  ? 'Ao dividir o fluxo de caixa anual antes dos impostos de $57.048 pelo capital total investido de $756.000, obtém-se um Retorno Cash-on-Cash no primeiro ano de 7,55% (fórmula: CoC = (NOI - Serviço Anual da Dívida) / (Entrada + Custos de Fechamento + Reformas Iniciais)). Observe que esse retorno em dinheiro fica abaixo do Cap Rate sem dívida de 8,11% (NOI / Preço de Compra), mesmo com taxa de juros nominal em 6,5%. Não se pode avaliar se o CoC supera o Cap Rate apenas pela taxa nominal: o serviço anual da dívida de $170.152 inclui amortização de principal, reduzindo o numerador do fluxo de caixa, enquanto $56.000 em custos iniciais aumentam o denominador do capital investido. Embora a amortização acumule patrimônio ao longo do tempo, o acúmulo de patrimônio e o dinheiro em mãos no primeiro ano não constituem o mesmo indicador.'
+                  : 'Dividing your $57,048 annual pre-tax cash flow by your $756,000 total cash invested yields a first-year Cash-on-Cash Return of 7.55% (formula: CoC = (NOI - Annual Debt Service) / (Down Payment + Closing Costs + Upfront Capex)). Notice this is lower than the unleveraged 8.11% Cap Rate (NOI / Purchase Price), even though the loan\'s nominal interest rate is 6.5%. One cannot judge whether CoC exceeds Cap Rate based solely on nominal interest rate: the $170,152 debt service includes principal amortization, reducing the cash flow numerator, while $56,000 in upfront closing costs increases the cash invested denominator. While debt amortization builds principal equity over time, equity accumulation and year-one cash-in-pocket are not the same metric; on a pure year-one cash received basis, the yield is 7.55%.'}
               </p>
             </div>
 
@@ -341,15 +341,19 @@ export default async function CashOnCashPage({ params }: PageProps) {
                   <td className="px-4 py-3 font-bold text-slate-900">IRR</td>
                   <td className="px-4 py-3">
                     {isZh
-                      ? '考虑持有期内所有现金流与最终退出升值的时间加权总回报'
+                      ? '资金加权年化内部收益率，即使全周期各期净现金流与期末退出价值折现后净现值 (NPV) 为零的折现率'
                       : isEs
-                      ? 'Rendimiento total ponderado en el tiempo a lo largo de todo el período de tenencia'
+                      ? 'Tasa Interna de Retorno (anualizada y ponderada por dinero) que descuenta los flujos de caja y el valor de salida a VAN cero'
                       : isPt
-                      ? 'Retorno total ponderado no tempo ao longo de todo o período de posse'
-                      : 'Time-weighted total return across the entire holding period'}
+                      ? 'Taxa Interna de Retorno (anualizada e ponderada pelo dinheiro) que desconta os fluxos de caixa e o valor de saída a VPL zero'
+                      : 'Money-weighted annualized rate of return (Internal Rate of Return) discounting periodic cash flows and terminal value to zero NPV'}
                   </td>
-                  <td className="px-4 py-3 text-emerald-600 font-medium">{isZh ? '是 (Yes)' : isEs ? 'Sí' : isPt ? 'Sim' : 'Yes'}</td>
-                  <td className="px-4 py-3 text-emerald-600 font-medium">{isZh ? '是 (Yes)' : isEs ? 'Sí' : isPt ? 'Sim' : 'Yes'}</td>
+                  <td className="px-4 py-3 text-slate-700 font-medium">
+                    {isZh ? '取决于模型 (杠杆/无杠杆)' : isEs ? 'Depende del modelo' : isPt ? 'Depende do modelo' : 'Depends on model'}
+                  </td>
+                  <td className="px-4 py-3 text-slate-700 font-medium">
+                    {isZh ? '取决于模型 (若含退出价值)' : isEs ? 'Depende del modelo' : isPt ? 'Depende do modelo' : 'Depends on model'}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -361,22 +365,22 @@ export default async function CashOnCashPage({ params }: PageProps) {
           <h2 className="text-lg font-bold text-amber-950 flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-amber-600" />
             {isZh
-              ? 'Cash-on-Cash 的常见误区与正负杠杆效应'
+              ? 'Cash-on-Cash 的常见误区与杠杆效应分析'
               : isEs
-              ? 'Limitaciones de Cash-on-Cash y Efecto de Apalancamiento Positivo/Negativo'
+              ? 'Limitaciones de Cash-on-Cash y Análisis de Apalancamiento'
               : isPt
-              ? 'Limitações do Cash-on-Cash e Efeito de Alavancagem Positiva/Negativa'
-              : 'Cash-on-Cash Pitfalls & Positive/Negative Leverage'}
+              ? 'Limitações do Cash-on-Cash e Análise de Alavancagem'
+              : 'Cash-on-Cash Pitfalls & Leverage Analysis'}
           </h2>
           <div className="space-y-2 text-xs sm:text-sm text-amber-900 leading-relaxed">
             <p>
               {isZh
-                ? '1. 警惕负杠杆 (Negative Leverage)：当商业贷款常数 (Loan Constant) 高于物业 Cap Rate 时，借钱反而会拉低你的现金回报率。'
+                ? '1. 区分首年现金收益与全周期回报：不可仅凭名义利率与 Cap Rate 对比来判断回报高低。根据计算公式 CoC = (NOI - 年度还贷总额) / (首付 + 过户费用 + 即时 CapEx)，年度还贷总额中的本金摊销会减少现金流分子，而前期费用与改造支出会增加投入分母，两者均会拉低首年现金回报。本金偿还积累的权益以及物业远期升值需结合全周期内部收益率 (IRR) 进行综合评估，它们与首年现金到账收益不是同一指标。'
                 : isEs
-                ? '1. Trampa del Apalancamiento Negativo: Si la constante del préstamo supera el Cap Rate del inmueble, endeudarse reduce su Rendimiento Cash-on-Cash por debajo del Cap Rate sin deuda.'
+                ? '1. Distinga el rendimiento de caja del primer año del retorno total a largo plazo: No se debe juzgar si los rendimientos mejoran comparando únicamente la tasa de interés nominal con el Cap Rate. Según la fórmula CoC = (NOI - Servicio Anual de Deuda) / (Pago Inicial + Costos de Cierre + Mejoras Iniciales), la amortización del principal en el servicio de deuda reduce el numerador del flujo de caja, mientras que los costos iniciales aumentan el denominador de capital invertido. La acumulación de capital por amortización y la plusvalía futura deben analizarse mediante la TIR (IRR), que no equivale al efectivo recibido en mano en el año 1.'
                 : isPt
-                ? '1. Armadilha da Alavancagem Negativa: Se a constante do financiamento superar o Cap Rate do imóvel, o endividamento reduz seu Retorno Cash-on-Cash abaixo do Cap Rate sem dívida.'
-                : '1. Negative Leverage Trap: If the borrowing loan constant exceeds the property Cap Rate, adding debt actually decreases your Cash-on-Cash Return below the unleveraged Cap Rate.'}
+                ? '1. Diferencie o retorno em caixa do primeiro ano do retorno total plurianual: Não se deve avaliar se o retorno é superior comparando unicamente a taxa nominal de juros com o Cap Rate. Pela fórmula CoC = (NOI - Serviço Anual da Dívida) / (Entrada + Custos de Fechamento + Reformas Iniciais), a amortização de principal no serviço da dívida reduz o numerador do fluxo de caixa, enquanto custos iniciais e despesas de fechamento elevam o denominador do capital investido. O acúmulo de patrimônio via amortização e a valorização futura devem ser mensurados pela TIR (IRR), que não é o mesmo indicador que o dinheiro em mãos no primeiro ano.'
+                : '1. Distinguish Year-One Cash Yield from Total Multi-Year Return: Do not judge whether returns improve simply by comparing the nominal loan interest rate to Cap Rate. Based on the formula CoC = (NOI - Annual Debt Service) / (Down Payment + Closing Costs + Upfront Capex), principal amortization within debt service reduces the cash flow numerator, while upfront fees and capital expenditures expand the cash invested denominator. Both factors compress first-year cash return. Equity buildup from principal paydown and long-term appreciation must be evaluated via whole-life metrics like IRR, which are distinct from first-year cash received.'}
             </p>
             <p>
               {isZh

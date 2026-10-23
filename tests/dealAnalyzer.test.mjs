@@ -4,7 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
+import { assertCocResults } from '../scripts/lib/coc-assertion.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cre-deal-test-'));
@@ -566,6 +567,115 @@ try {
         assert.ok(pdfOutput.includes('/Link'), `PDF for ${loc} must contain /Link object`);
         assert.ok(pdfOutput.includes('/URI'), `PDF for ${loc} must contain /URI annotation`);
         assert.ok(pdfOutput.includes(url), `PDF for ${loc} must contain correct URL ${url}`);
+      }
+    });
+
+    await t.test('Cash-on-Cash Calculator financial explanation, neutral leverage, and IRR definitions', () => {
+      const cocPageContent = fs.readFileSync(path.join(__dirname, '../src/app/[locale]/calculators/cash-on-cash/page.tsx'), 'utf8');
+      const cocCalcContent = fs.readFileSync(path.join(__dirname, '../src/components/calculators/CashOnCashCalculator.tsx'), 'utf8');
+      const enContent = fs.readFileSync(path.join(__dirname, '../src/content/en.ts'), 'utf8');
+      const zhContent = fs.readFileSync(path.join(__dirname, '../src/content/zh.ts'), 'utf8');
+      const esContent = fs.readFileSync(path.join(__dirname, '../src/content/es.ts'), 'utf8');
+      const ptContent = fs.readFileSync(path.join(__dirname, '../src/content/pt.ts'), 'utf8');
+
+      // 1. A11y: 6 inputs must have linked htmlFor and id
+      const expectedIds = [
+        'coc-purchase-price',
+        'coc-down-payment-percent',
+        'coc-closing-costs',
+        'coc-upfront-capex',
+        'coc-annual-noi',
+        'coc-annual-debt-service'
+      ];
+      for (const id of expectedIds) {
+        assert.ok(cocCalcContent.includes(`id="${id}"`), `CashOnCashCalculator must include input id="${id}"`);
+        assert.ok(cocCalcContent.includes(`htmlFor="${id}"`), `CashOnCashCalculator must include label htmlFor="${id}"`);
+      }
+
+      // 2. 3-State comparison and data-testids in calculator component
+      assert.ok(!cocCalcContent.includes('isPositiveLeverage'), 'Calculator should not use binary isPositiveLeverage');
+      assert.ok(!cocCalcContent.includes('Positive Leverage:'), 'Calculator should not label positive leverage directly from CoC vs Cap Rate');
+      assert.ok(!cocCalcContent.includes('Negative Leverage:'), 'Calculator should not label negative leverage directly from CoC vs Cap Rate');
+      assert.ok(cocCalcContent.includes('comparisonState'), 'Calculator should use 3-state comparisonState');
+      assert.ok(cocCalcContent.includes("'higher'"), 'Calculator must support higher state');
+      assert.ok(cocCalcContent.includes("'lower'"), 'Calculator must support lower state');
+      assert.ok(cocCalcContent.includes("'equal'"), 'Calculator must support equal state');
+      assert.ok(cocCalcContent.includes('data-testid="coc-result-return"'), 'Calculator must include coc-result-return data-testid');
+      assert.ok(cocCalcContent.includes('data-testid="coc-result-comparison"'), 'Calculator must include coc-result-comparison data-testid');
+      assert.ok(cocCalcContent.includes('data-testid="coc-result-total-invested"'), 'Calculator must include coc-result-total-invested data-testid');
+      assert.ok(cocCalcContent.includes('data-testid="coc-result-cash-flow"'), 'Calculator must include coc-result-cash-flow data-testid');
+      assert.ok(cocCalcContent.includes('data-testid="coc-result-cap-rate"'), 'Calculator must include coc-result-cap-rate data-testid');
+
+      // 3. Worked example text in page.tsx must reconcile the $2.8M case study and formulas
+      assert.ok(cocPageContent.includes('$57,048'), 'page.tsx must have annual cash flow $57,048');
+      assert.ok(cocPageContent.includes('$756,000'), 'page.tsx must have total cash invested $756,000');
+      assert.ok(cocPageContent.includes('7.55%'), 'page.tsx must have CoC return 7.55%');
+      assert.ok(cocPageContent.includes('8.11%'), 'page.tsx must have Cap Rate 8.11%');
+      assert.ok(cocPageContent.includes('CoC = (NOI - 年度还贷总额) / (首付 + 过户费用 + 即时 CapEx)'), 'page.tsx must state exact CoC formula in ZH');
+      assert.ok(cocPageContent.includes('CoC = (NOI - Annual Debt Service) / (Down Payment + Closing Costs + Upfront Capex)'), 'page.tsx must state exact CoC formula in EN');
+      assert.ok(!cocPageContent.includes('this represents Positive Leverage'), 'page.tsx should NOT call 7.55% vs 8.11% positive leverage');
+      assert.ok(!cocPageContent.includes('这被称为正杠杆 (Positive Leverage)'), 'page.tsx zh should NOT call 7.55% vs 8.11% positive leverage');
+
+      // 4. IRR definition must be money-weighted, not time-weighted
+      assert.ok(!cocPageContent.includes('Time-weighted total return'), 'IRR must not be described as time-weighted');
+      assert.ok(!cocPageContent.includes('时间加权总回报'), 'IRR zh must not be described as time-weighted');
+      assert.ok(cocPageContent.includes('Money-weighted annualized rate of return'), 'IRR must be described as money-weighted in EN');
+      assert.ok(cocPageContent.includes('资金加权年化内部收益率'), 'IRR must be described as money-weighted in ZH');
+
+      // 5. FAQ across all 4 locales must explain formulas, amortization and fees without mixing % and amount
+      assert.ok(enContent.includes('CoC = (NOI - Annual Debt Service) / (Down Payment + Closing Costs + Upfront Capex)'), 'en.ts FAQ must state exact CoC formula');
+      assert.ok(zhContent.includes('CoC = (NOI - 年度还贷总额) / (首付 + 过户费用 + 即时 CapEx)'), 'zh.ts FAQ must state exact CoC formula');
+      assert.ok(esContent.includes('CoC = (NOI - Servicio Anual de Deuda) / (Pago Inicial + Costos de Cierre + Mejoras Iniciales)'), 'es.ts FAQ must state exact CoC formula');
+      assert.ok(ptContent.includes('CoC = (NOI - Serviço Anual da Dívida) / (Entrada + Custos de Fechamento + Reformas Iniciais)'), 'pt.ts FAQ must state exact CoC formula');
+
+      assert.ok(!zhContent.includes('贷款常数加上前期费用高于 Cap Rate'), 'zh.ts must not mix loan constant percentage with dollar fees');
+      assert.ok(!zhContent.includes('这两者均会使首年现金回报率低于名义利率'), 'zh.ts must not state CoC will inevitably be lower than nominal interest');
+      assert.ok(zhContent.includes('但其是否低于 Cap Rate，须按上述公式结合具体输入计算，不能仅凭贷款名义利率判断'), 'zh.ts must state conditional calculation requirement');
+      assert.ok(!enContent.includes('debt constant and costs exceed the cap rate'), 'en.ts must not mix debt constant percentage with dollar fees');
+      assert.ok(!esContent.includes('constante de deuda y los costos superan el Cap Rate'), 'es.ts must not mix debt constant with dollar fees');
+      assert.ok(!ptContent.includes('constante da dívida e despesas superem o Cap Rate'), 'pt.ts must not mix debt constant with dollar expenses');
+
+      // 6. Component default parameters verification (closingCosts=15000, purchasePrice=1200000 -> 9.09% CoC)
+      assert.ok(cocCalcContent.includes('useState<number>(15000)'), 'CashOnCashCalculator closing costs default must be 15000');
+      assert.ok(cocCalcContent.includes('useState<number>(1200000)'), 'CashOnCashCalculator purchase price default must be 1200000');
+      const defEquity = 1200000 * 0.25 + 15000 + 15000; // 330,000
+      const defCashFlow = 84000 - 54000; // 30,000
+      const defCocPercent = (defCashFlow / defEquity) * 100;
+      assert.strictEqual(defCocPercent.toFixed(2), '9.09', 'Default parameters must produce 9.09% CoC');
+
+      // 7. Reusable assertion function verification on valid data
+      const validSample = {
+        cocReturn: '9.09%',
+        capRate: '7.00%',
+        totalInvested: '$330,000',
+        cashFlow: '$30,000',
+        comparison: 'Year-1 cash yield is higher than unleveraged Cap Rate (7.00%)',
+      };
+      assertCocResults(validSample, {
+        cocReturn: '9.09%',
+        capRate: '7.00%',
+        totalInvested: '$330,000',
+        cashFlow: '$30,000',
+        comparisonContains: 'higher than unleveraged Cap Rate (7.00%)',
+      });
+
+      // 8. Isolated negative fixtures verification via child process (exit code !== 0)
+      const negativeCases = [
+        { mode: 'coc-mismatch', expectedErrSnippet: 'CoC Return mismatch' },
+        { mode: 'cash-flow-mismatch', expectedErrSnippet: 'Cash Flow mismatch' },
+        { mode: 'missing-result', expectedErrSnippet: 'required result [totalInvested] is missing' },
+      ];
+      for (const nCase of negativeCases) {
+        const child = spawnSync(
+          process.execPath,
+          [path.join(__dirname, '../scripts/fixtures/test-coc-negative-fixture.mjs'), nCase.mode],
+          { encoding: 'utf8' }
+        );
+        assert.strictEqual(child.status !== 0, true, `Negative fixture [${nCase.mode}] must exit with non-zero status`);
+        assert.ok(
+          child.stderr.includes(nCase.expectedErrSnippet),
+          `Negative fixture [${nCase.mode}] stderr must contain "${nCase.expectedErrSnippet}". Got: ${child.stderr}`
+        );
       }
     });
   });

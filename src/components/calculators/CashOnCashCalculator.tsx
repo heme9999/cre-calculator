@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { formatCurrency, formatPercent } from '@/lib/utils';
-import { Calculator, DollarSign, Zap, TrendingUp, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Calculator, DollarSign, Zap, TrendingUp, CheckCircle2 } from 'lucide-react';
 
 interface Props {
   locale: string;
@@ -30,7 +30,16 @@ export function CashOnCashCalculator({ locale }: Props) {
   const cashOnCashReturn = totalCashInvested > 0 ? (annualCashFlow / totalCashInvested) * 100 : 0;
   const capRate = purchasePrice > 0 ? (annualNoi / purchasePrice) * 100 : 0;
   
-  const isPositiveLeverage = cashOnCashReturn > capRate;
+  const formattedCoc = formatPercent(cashOnCashReturn);
+  const formattedCap = formatPercent(capRate);
+
+  type ComparisonState = 'higher' | 'lower' | 'equal';
+  const comparisonState: ComparisonState =
+    formattedCoc === formattedCap || Math.abs(cashOnCashReturn - capRate) < 0.005
+      ? 'equal'
+      : cashOnCashReturn > capRate
+      ? 'higher'
+      : 'lower';
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-12">
@@ -69,12 +78,14 @@ export function CashOnCashCalculator({ locale }: Props) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
+                <label htmlFor="coc-purchase-price" className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '物业购买价格 ($)' : isEs ? 'Precio de Compra ($)' : isPt ? 'Preço de Compra ($)' : 'Purchase Price ($)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
+                    id="coc-purchase-price"
+                    name="purchasePrice"
                     type="number"
                     value={purchasePrice || ''}
                     onChange={(e) => setPurchasePrice(parseFloat(e.target.value) || 0)}
@@ -85,11 +96,13 @@ export function CashOnCashCalculator({ locale }: Props) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
+                <label htmlFor="coc-down-payment-percent" className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '首付比例 (%)' : isEs ? 'Pago Inicial / Entrada (%)' : isPt ? 'Entrada (%)' : 'Down Payment (%)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <input
+                    id="coc-down-payment-percent"
+                    name="downPaymentPercent"
                     type="number"
                     value={downPaymentPercent || ''}
                     onChange={(e) => setDownPaymentPercent(parseFloat(e.target.value) || 0)}
@@ -110,12 +123,14 @@ export function CashOnCashCalculator({ locale }: Props) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
+                <label htmlFor="coc-closing-costs" className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '过户与贷款手续费 ($)' : isEs ? 'Costos de Cierre y Financiamiento ($)' : isPt ? 'Custos de Fechamento e Financiamento ($)' : 'Closing & Financing Costs ($)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
+                    id="coc-closing-costs"
+                    name="closingCosts"
                     type="number"
                     value={closingCosts || ''}
                     onChange={(e) => setClosingCosts(parseFloat(e.target.value) || 0)}
@@ -126,12 +141,14 @@ export function CashOnCashCalculator({ locale }: Props) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
+                <label htmlFor="coc-upfront-capex" className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '前期即时维修/改造 ($)' : isEs ? 'Reparaciones y Mejoras Iniciales ($)' : isPt ? 'Reformas e Benfeitorias Iniciais ($)' : 'Upfront Repairs & Capex ($)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
+                    id="coc-upfront-capex"
+                    name="upfrontCapex"
                     type="number"
                     value={upfrontCapex || ''}
                     onChange={(e) => setUpfrontCapex(parseFloat(e.target.value) || 0)}
@@ -152,12 +169,14 @@ export function CashOnCashCalculator({ locale }: Props) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
+                <label htmlFor="coc-annual-noi" className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '年净营业收入 (Annual NOI)' : isEs ? 'NOI Anual ($)' : isPt ? 'NOI Anual ($)' : 'Annual NOI ($)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
+                    id="coc-annual-noi"
+                    name="annualNoi"
                     type="number"
                     value={annualNoi || ''}
                     onChange={(e) => setAnnualNoi(parseFloat(e.target.value) || 0)}
@@ -168,12 +187,14 @@ export function CashOnCashCalculator({ locale }: Props) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
+                <label htmlFor="coc-annual-debt-service" className="block text-xs font-semibold text-slate-600 mb-1">
                   {isZh ? '年度贷款还款总额 (Annual Debt Service)' : isEs ? 'Servicio Anual de Deuda (P&I) ($)' : isPt ? 'Serviço Anual da Dívida (P&I) ($)' : 'Annual Debt Service (P&I) ($)'}
                 </label>
                 <div className="relative rounded-lg border border-slate-300 focus-ring overflow-hidden bg-white">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
+                    id="coc-annual-debt-service"
+                    name="annualDebtService"
                     type="number"
                     value={annualDebtService || ''}
                     onChange={(e) => setAnnualDebtService(parseFloat(e.target.value) || 0)}
@@ -198,31 +219,41 @@ export function CashOnCashCalculator({ locale }: Props) {
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 {isZh ? 'Cash-on-Cash Return (年化现金回报率)' : isEs ? 'Retorno Cash-on-Cash (CoC)' : isPt ? 'Retorno Cash-on-Cash (CoC)' : 'Cash-on-Cash Return'}
               </span>
-              <div className="text-4xl md:text-5xl font-black text-emerald-600 mt-1">
-                {formatPercent(cashOnCashReturn)}
+              <div data-testid="coc-result-return" className="text-4xl md:text-5xl font-black text-emerald-600 mt-1">
+                {formattedCoc}
               </div>
-              <p className="text-xs text-slate-500 mt-2 flex items-center gap-1.5">
-                {isPositiveLeverage ? (
+              <p data-testid="coc-result-comparison" className="text-xs text-slate-500 mt-2 flex items-center gap-1.5">
+                {comparisonState === 'higher' ? (
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                ) : comparisonState === 'lower' ? (
+                  <TrendingUp className="w-4 h-4 text-slate-500 shrink-0" />
                 ) : (
-                  <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-slate-500 shrink-0" />
                 )}
                 <span>
-                  {isPositiveLeverage
+                  {comparisonState === 'higher'
                     ? (isZh
-                        ? `正向杠杆：回报率高于 Cap Rate (${formatPercent(capRate)})`
+                        ? `首年现金回报率高于无杠杆 Cap Rate (${formattedCap})`
                         : isEs
-                        ? `Apalancamiento Positivo: El retorno supera el Cap Rate (${formatPercent(capRate)})`
+                        ? `El rendimiento en efectivo del año 1 supera el Cap Rate sin deuda (${formattedCap})`
                         : isPt
-                        ? `Alavancagem Positiva: Retorno supera o Cap Rate (${formatPercent(capRate)})`
-                        : `Positive Leverage: Return exceeds Cap Rate (${formatPercent(capRate)})`)
+                        ? `O retorno em caixa do ano 1 supera o Cap Rate sem dívida (${formattedCap})`
+                        : `Year-1 cash yield is higher than unleveraged Cap Rate (${formattedCap})`)
+                    : comparisonState === 'lower'
+                    ? (isZh
+                        ? `首年现金回报率低于无杠杆 Cap Rate (${formattedCap})（受还本贷款常数与前期费用摊薄影响）`
+                        : isEs
+                        ? `El rendimiento en efectivo del año 1 es inferior al Cap Rate sin deuda (${formattedCap}) (por constante de deuda y costos iniciales)`
+                        : isPt
+                        ? `O retorno em caixa do ano 1 é inferior ao Cap Rate sem dívida (${formattedCap}) (por constante da dívida e custos iniciais)`
+                        : `Year-1 cash yield is lower than unleveraged Cap Rate (${formattedCap}) (reflecting debt constant/amortization and upfront costs)`)
                     : (isZh
-                        ? `负向杠杆：贷款成本偏高，低于 Cap Rate (${formatPercent(capRate)})`
+                        ? `首年现金回报率与无杠杆 Cap Rate 相等/基本持平 (${formattedCap})`
                         : isEs
-                        ? `Apalancamiento Negativo: El costo de deuda reduce el retorno por debajo del Cap Rate (${formatPercent(capRate)})`
+                        ? `El rendimiento en efectivo del año 1 es igual o equivalente al Cap Rate sin deuda (${formattedCap})`
                         : isPt
-                        ? `Alavancagem Negativa: Custo da dívida reduz o retorno abaixo do Cap Rate (${formatPercent(capRate)})`
-                        : `Negative Leverage: Return below Cap Rate (${formatPercent(capRate)})`)}
+                        ? `O retorno em caixa do ano 1 é igual ou equivalente ao Cap Rate sem dívida (${formattedCap})`
+                        : `Year-1 cash yield is equal to / approximately equal to unleveraged Cap Rate (${formattedCap})`)}
                 </span>
               </p>
             </div>
@@ -233,20 +264,20 @@ export function CashOnCashCalculator({ locale }: Props) {
                 <span className="text-slate-600">
                   {isZh ? '实际投入现金总额:' : isEs ? 'Capital Total Invertido:' : isPt ? 'Capital Total Investido:' : 'Total Cash Invested:'}
                 </span>
-                <span className="font-semibold">{formatCurrency(totalCashInvested)}</span>
+                <span data-testid="coc-result-total-invested" className="font-semibold">{formatCurrency(totalCashInvested)}</span>
               </div>
               <div className="text-xs text-slate-500 pl-3 space-y-1">
                 <div className="flex justify-between">
                   <span>└ {isZh ? '首付款 (Down Payment):' : isEs ? 'Pago Inicial:' : isPt ? 'Entrada:' : 'Down Payment:'}</span>
-                  <span>{formatCurrency(downPaymentAmount)}</span>
+                  <span data-testid="coc-result-down-payment">{formatCurrency(downPaymentAmount)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>└ {isZh ? '过户/手续费:' : isEs ? 'Costos de Cierre:' : isPt ? 'Custos de Fechamento:' : 'Closing Costs:'}</span>
-                  <span>{formatCurrency(closingCosts)}</span>
+                  <span data-testid="coc-result-closing-costs">{formatCurrency(closingCosts)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>└ {isZh ? '前期维修:' : isEs ? 'Mejoras/Capex:' : isPt ? 'Reformas/Capex:' : 'Repairs/Capex:'}</span>
-                  <span>{formatCurrency(upfrontCapex)}</span>
+                  <span data-testid="coc-result-upfront-capex">{formatCurrency(upfrontCapex)}</span>
                 </div>
               </div>
 
@@ -254,13 +285,13 @@ export function CashOnCashCalculator({ locale }: Props) {
                 <span className="text-slate-800">
                   {isZh ? '年税前净现金流:' : isEs ? 'Flujo de Caja Anual Antes de Impuestos:' : isPt ? 'Fluxo de Caixa Anual Antes de Impostos:' : 'Annual Pre-Tax Cash Flow:'}
                 </span>
-                <span className="text-slate-900">{formatCurrency(annualCashFlow)}</span>
+                <span data-testid="coc-result-cash-flow" className="text-slate-900">{formatCurrency(annualCashFlow)}</span>
               </div>
               <div className="flex justify-between text-xs text-slate-500">
                 <span>
                   {isZh ? '无杠杆 Cap Rate 基准:' : isEs ? 'Cap Rate No Apalancado:' : isPt ? 'Cap Rate Sem Alavancagem:' : 'Unleveraged Cap Rate:'}
                 </span>
-                <span className="font-semibold">{formatPercent(capRate)}</span>
+                <span data-testid="coc-result-cap-rate" className="font-semibold">{formattedCap}</span>
               </div>
             </div>
           </div>

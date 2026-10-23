@@ -2,6 +2,8 @@ import puppeteer from 'puppeteer-core';
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
+import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import {
   isBadBerOccupancy,
@@ -11,6 +13,9 @@ import {
 import {
   setupAnalyticsBlocker
 } from './lib/puppeteer-analytics-blocker.mjs';
+import {
+  assertCocResults
+} from './lib/coc-assertion.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -209,6 +214,334 @@ async function runSmokeTests() {
     const noiHtml = await page.content();
     console.log('EGI = $331,200 found:', noiHtml.includes('331,200'));
     console.log('NOI = $232,200 found:', noiHtml.includes('232,200'));
+
+
+    console.log('\n--- 3b. Testing Cash-on-Cash Calculator A11y, Dynamic Scenarios (A/B/C/D), & 4-Locale JSON-LD/FAQ ---');
+    await page.goto('http://localhost:3460/en/calculators/cash-on-cash/', { waitUntil: 'networkidle0' });
+
+    // Helper to fill Cash-on-Cash form fields
+    const fillCocForm = async (vals) => {
+      await page.evaluate((v) => {
+        const setReactValue = (input, value) => {
+          if (!input) throw new Error('Missing input element for value: ' + value);
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+          nativeInputValueSetter.call(input, value);
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        };
+        if (v.purchasePrice !== undefined) setReactValue(document.getElementById('coc-purchase-price'), String(v.purchasePrice));
+        if (v.downPaymentPercent !== undefined) setReactValue(document.getElementById('coc-down-payment-percent'), String(v.downPaymentPercent));
+        if (v.closingCosts !== undefined) setReactValue(document.getElementById('coc-closing-costs'), String(v.closingCosts));
+        if (v.upfrontCapex !== undefined) setReactValue(document.getElementById('coc-upfront-capex'), String(v.upfrontCapex));
+        if (v.annualNoi !== undefined) setReactValue(document.getElementById('coc-annual-noi'), String(v.annualNoi));
+        if (v.annualDebtService !== undefined) setReactValue(document.getElementById('coc-annual-debt-service'), String(v.annualDebtService));
+      }, vals);
+      await new Promise(r => setTimeout(r, 400));
+    };
+
+    // Helper to read results from stable data-testid elements
+    const getCocResults = async () => {
+      return await page.evaluate(() => {
+        const returnEl = document.querySelector('[data-testid="coc-result-return"]');
+        const compEl = document.querySelector('[data-testid="coc-result-comparison"]');
+        const totalInvestedEl = document.querySelector('[data-testid="coc-result-total-invested"]');
+        const cashFlowEl = document.querySelector('[data-testid="coc-result-cash-flow"]');
+        const capRateEl = document.querySelector('[data-testid="coc-result-cap-rate"]');
+        if (!returnEl) throw new Error('Missing [data-testid="coc-result-return"]');
+        if (!compEl) throw new Error('Missing [data-testid="coc-result-comparison"]');
+        if (!totalInvestedEl) throw new Error('Missing [data-testid="coc-result-total-invested"]');
+        if (!cashFlowEl) throw new Error('Missing [data-testid="coc-result-cash-flow"]');
+        if (!capRateEl) throw new Error('Missing [data-testid="coc-result-cap-rate"]');
+        return {
+          cocReturn: returnEl.innerText.trim(),
+          comparison: compEl.innerText.trim(),
+          totalInvested: totalInvestedEl.innerText.trim(),
+          cashFlow: cashFlowEl.innerText.trim(),
+          capRate: capRateEl.innerText.trim(),
+        };
+      });
+    };
+
+    // 1. Accessibility Tree Check for 6 inputs in EN
+    const cocSnapshot = await page.accessibility.snapshot();
+    let cocSpinbuttons = 0;
+    const cocNamedSpinbuttons = [];
+    const findCocSpinbuttons = (node) => {
+      if (node.role === 'spinbutton') {
+        cocSpinbuttons++;
+        if (node.name) cocNamedSpinbuttons.push(node.name);
+      }
+      if (node.children) {
+        for (let child of node.children) findCocSpinbuttons(child);
+      }
+    };
+    findCocSpinbuttons(cocSnapshot);
+    console.log(`Cash-on-Cash Form: Found ${cocSpinbuttons} spinbuttons, named:`, cocNamedSpinbuttons);
+    if (cocSpinbuttons !== 6 || cocNamedSpinbuttons.length !== 6) {
+      throw new Error(`Expected strictly 6 named spinbuttons in Cash-on-Cash calculator, found ${cocSpinbuttons} (named: ${cocNamedSpinbuttons.length})`);
+    }
+
+    // 2. Scenario 0 / Real Default State: Verify unedited form default values and 9.09% CoC return
+    const defaultInputValues = await page.evaluate(() => ({
+      purchasePrice: document.getElementById('coc-purchase-price')?.value,
+      downPaymentPercent: document.getElementById('coc-down-payment-percent')?.value,
+      closingCosts: document.getElementById('coc-closing-costs')?.value,
+      upfrontCapex: document.getElementById('coc-upfront-capex')?.value,
+      annualNoi: document.getElementById('coc-annual-noi')?.value,
+      annualDebtService: document.getElementById('coc-annual-debt-service')?.value,
+    }));
+    if (defaultInputValues.purchasePrice !== '1200000') throw new Error(`Default purchase price expected 1200000, got ${defaultInputValues.purchasePrice}`);
+    if (defaultInputValues.downPaymentPercent !== '25') throw new Error(`Default down payment expected 25, got ${defaultInputValues.downPaymentPercent}`);
+    if (defaultInputValues.closingCosts !== '15000') throw new Error(`Default closing costs expected 15000, got ${defaultInputValues.closingCosts}`);
+    if (defaultInputValues.upfrontCapex !== '15000') throw new Error(`Default upfront capex expected 15000, got ${defaultInputValues.upfrontCapex}`);
+    if (defaultInputValues.annualNoi !== '84000') throw new Error(`Default annual NOI expected 84000, got ${defaultInputValues.annualNoi}`);
+    if (defaultInputValues.annualDebtService !== '54000') throw new Error(`Default debt service expected 54000, got ${defaultInputValues.annualDebtService}`);
+
+    const resDefault = await getCocResults();
+    assertCocResults(resDefault, {
+      cocReturn: '9.09%',
+      capRate: '7.00%',
+      totalInvested: '$330,000',
+      cashFlow: '$30,000',
+      comparisonContains: 'higher than unleveraged Cap Rate (7.00%)',
+      comparisonMustNotContain: ['Positive Leverage', 'Negative Leverage'],
+    });
+
+    // 3. Scenario A: Exact worked example ($2.8M case study -> Lower hint)
+    await fillCocForm({
+      purchasePrice: 2800000,
+      downPaymentPercent: 25,
+      closingCosts: 56000,
+      upfrontCapex: 0,
+      annualNoi: 227200,
+      annualDebtService: 170152,
+    });
+    const resA = await getCocResults();
+    assertCocResults(resA, {
+      cocReturn: '7.55%',
+      capRate: '8.11%',
+      totalInvested: '$756,000',
+      cashFlow: '$57,048',
+      comparisonContains: 'lower than unleveraged Cap Rate (8.11%)',
+      comparisonMustNotContain: ['Positive Leverage', 'Negative Leverage'],
+    });
+
+    // 4. Scenario B: Dynamic change (Change ONLY NOI to 237200 -> Higher hint)
+    await fillCocForm({ annualNoi: 237200 });
+    const resB = await getCocResults();
+    assertCocResults(resB, {
+      cocReturn: '8.87%',
+      capRate: '8.47%',
+      totalInvested: '$756,000',
+      cashFlow: '$67,048',
+      comparisonContains: 'higher than unleveraged Cap Rate (8.47%)',
+    });
+    // Verify results dynamically changed from Scenario A
+    if (resB.cocReturn === resA.cocReturn || resB.cashFlow === resA.cashFlow) {
+      throw new Error('Scenario B: Calculation results must dynamically update upon changing NOI');
+    }
+
+    // 5. Scenario C: Equal branch ($1.2M, 100% down, 0 fees, 0 debt -> 7.00% == 7.00% -> Equal hint)
+    await fillCocForm({
+      purchasePrice: 1200000,
+      downPaymentPercent: 100,
+      closingCosts: 0,
+      upfrontCapex: 0,
+      annualNoi: 84000,
+      annualDebtService: 0,
+    });
+    const resC = await getCocResults();
+    assertCocResults(resC, {
+      cocReturn: '7.00%',
+      capRate: '7.00%',
+      totalInvested: '$1,200,000',
+      cashFlow: '$84,000',
+      comparisonContains: 'equal to / approximately equal to unleveraged Cap Rate (7.00%)',
+    });
+
+    // 6. Scenario E: Custom Input Scenario ($20,000 custom closing costs -> CoC 8.96%)
+    await fillCocForm({
+      purchasePrice: 1200000,
+      downPaymentPercent: 25,
+      closingCosts: 20000,
+      upfrontCapex: 15000,
+      annualNoi: 84000,
+      annualDebtService: 54000,
+    });
+    const resE = await getCocResults();
+    assertCocResults(resE, {
+      cocReturn: '8.96%',
+      capRate: '7.00%',
+      totalInvested: '$335,000',
+      cashFlow: '$30,000',
+      comparisonContains: 'higher than unleveraged Cap Rate (7.00%)',
+    });
+
+    // 7. Rigorous Negative Fixtures Verification (isolated child processes proving non-zero exits on errors)
+    const negativeCases = [
+      { mode: 'coc-mismatch', expectedErrSnippet: 'CoC Return mismatch' },
+      { mode: 'cash-flow-mismatch', expectedErrSnippet: 'Cash Flow mismatch' },
+      { mode: 'missing-result', expectedErrSnippet: 'required result [totalInvested] is missing' },
+    ];
+    for (const nCase of negativeCases) {
+      const child = spawnSync(
+        process.execPath,
+        [path.join(__dirname, 'fixtures', 'test-coc-negative-fixture.mjs'), nCase.mode],
+        { encoding: 'utf8' }
+      );
+      if (child.status === 0) {
+        throw new Error(`Negative fixture [${nCase.mode}] unexpectedly succeeded with exit 0! Must fail.`);
+      }
+      if (!child.stderr.includes(nCase.expectedErrSnippet)) {
+        throw new Error(
+          `Negative fixture [${nCase.mode}] failed with status ${child.status} but stderr missing "${nCase.expectedErrSnippet}". Stderr: ${child.stderr}`
+        );
+      }
+    }
+
+    // 7. Screenshot capture to configurable/temp directory without personal home paths
+    const screenshotDir = process.env.TEST_SCREENSHOT_DIR || path.join(os.tmpdir(), 'cre-calculator-smoke');
+    if (!fs.existsSync(screenshotDir)) {
+      fs.mkdirSync(screenshotDir, { recursive: true });
+    }
+    const screenshotPath = path.join(screenshotDir, `remediation_cash_on_cash_calculator_${Date.now()}.png`);
+    await page.screenshot({ path: screenshotPath, fullPage: false });
+    console.log('Saved Cash-on-Cash remediation screenshot to:', screenshotPath);
+
+    // 8. 4-Locale Accessibility & Full FAQ/JSON-LD Validation (en, zh, es, pt)
+    const localesToTest = ['en', 'zh', 'es', 'pt'];
+    for (const testLoc of localesToTest) {
+      await page.goto(`http://localhost:3460/${testLoc}/calculators/cash-on-cash/`, { waitUntil: 'networkidle0' });
+
+      // Accessibility tree: exactly 6 named spinbuttons
+      const locSnapshot = await page.accessibility.snapshot();
+      let locSpinbuttons = 0;
+      const locNamedSpinbuttons = [];
+      const collectLocSpinbuttons = (node) => {
+        if (node.role === 'spinbutton') {
+          locSpinbuttons++;
+          if (node.name) locNamedSpinbuttons.push(node.name);
+        }
+        if (node.children) {
+          for (let child of node.children) collectLocSpinbuttons(child);
+        }
+      };
+      collectLocSpinbuttons(locSnapshot);
+      if (locSpinbuttons !== 6 || locNamedSpinbuttons.length !== 6) {
+        throw new Error(`Locale ${testLoc}: Expected 6 named spinbuttons, found ${locSpinbuttons}`);
+      }
+
+      // Parse JSON-LD without empty catch - MUST throw on parse error
+      const pageJsonLdData = await page.evaluate(() => {
+        const scripts = Array.from(document.querySelectorAll('script[type="application/ld+json"]'));
+        const allSchemas = [];
+        for (const s of scripts) {
+          // JSON.parse will throw naturally if invalid
+          const parsed = JSON.parse(s.textContent || '{}');
+          if (Array.isArray(parsed)) allSchemas.push(...parsed);
+          else allSchemas.push(parsed);
+        }
+        const faqPage = allSchemas.find(x => x['@type'] === 'FAQPage');
+        if (!faqPage || !Array.isArray(faqPage.mainEntity)) {
+          throw new Error('Missing FAQPage schema in JSON-LD');
+        }
+
+        // Collect visible FAQ questions and answers
+        const faqH3s = Array.from(document.querySelectorAll('section h3'));
+        const visibleFaqs = [];
+        for (const h3 of faqH3s) {
+          const p = h3.nextElementSibling;
+          if (p && p.tagName === 'P') {
+            visibleFaqs.push({
+              question: h3.innerText.trim(),
+              answer: p.innerText.trim(),
+            });
+          }
+        }
+
+        return {
+          schemaFaqs: faqPage.mainEntity,
+          visibleFaqs,
+        };
+      });
+
+      // Assert at least 3 FAQ items
+      if (pageJsonLdData.schemaFaqs.length < 3) {
+        throw new Error(`Locale ${testLoc}: Expected at least 3 FAQ items in schema, found ${pageJsonLdData.schemaFaqs.length}`);
+      }
+
+      // Pairwise item-by-item comparison between JSON-LD and visible DOM text
+      for (let i = 0; i < pageJsonLdData.schemaFaqs.length; i++) {
+        const sFaq = pageJsonLdData.schemaFaqs[i];
+        const vFaq = pageJsonLdData.visibleFaqs[i];
+        if (!vFaq) {
+          throw new Error(`Locale ${testLoc}: Visible FAQ #${i + 1} not found in DOM`);
+        }
+        if (sFaq.name.trim() !== vFaq.question) {
+          throw new Error(`Locale ${testLoc}: FAQ #${i + 1} question mismatch between schema and DOM`);
+        }
+        if (sFaq.acceptedAnswer.text.trim() !== vFaq.answer) {
+          throw new Error(`Locale ${testLoc}: FAQ #${i + 1} answer mismatch between schema and DOM`);
+        }
+      }
+
+      // Semantic financial verification on FAQ #1
+      const faq1Text = pageJsonLdData.schemaFaqs[0].acceptedAnswer.text;
+      if (!faq1Text.includes('CoC = (NOI') && !faq1Text.includes('CoC = (NOI - ')) {
+        throw new Error(`Locale ${testLoc}: FAQ #1 must state exact CoC formula`);
+      }
+      if (!faq1Text.includes('Cap Rate = NOI')) {
+        throw new Error(`Locale ${testLoc}: FAQ #1 must state exact Cap Rate formula`);
+      }
+      if (testLoc === 'en') {
+        if (!faq1Text.includes('amortization') || !faq1Text.includes('denominator') || !faq1Text.includes('nominal')) {
+          throw new Error('EN FAQ #1 must explain amortization reducing numerator and fees expanding denominator');
+        }
+        if (faq1Text.includes('debt constant and costs exceed')) {
+          throw new Error('EN FAQ #1 must not mix percentage with dollar costs');
+        }
+      } else if (testLoc === 'zh') {
+        if (!faq1Text.includes('本金摊销') || !faq1Text.includes('前期费用') || !faq1Text.includes('名义利率')) {
+          throw new Error('ZH FAQ #1 must explain 本金摊销 reducing cash flow and 前期费用 expanding cash invested');
+        }
+        if (faq1Text.includes('贷款常数加上前期费用高于 Cap Rate')) {
+          throw new Error('ZH FAQ #1 must not mix percentage with dollar costs');
+        }
+        if (faq1Text.includes('这两者均会使首年现金回报率低于名义利率')) {
+          throw new Error('ZH FAQ #1 must not state CoC will inevitably be lower than nominal interest');
+        }
+        if (!faq1Text.includes('但其是否低于 Cap Rate，须按上述公式结合具体输入计算，不能仅凭贷款名义利率判断')) {
+          throw new Error('ZH FAQ #1 must state conditional calculation requirement');
+        }
+      } else if (testLoc === 'es') {
+        if (!faq1Text.includes('amortización') || !faq1Text.includes('denominador') || !faq1Text.includes('nominal')) {
+          throw new Error('ES FAQ #1 must explain amortización and denominador');
+        }
+      } else if (testLoc === 'pt') {
+        if (!faq1Text.includes('amortização') || !faq1Text.includes('denominador') || !faq1Text.includes('nominal')) {
+          throw new Error('PT FAQ #1 must explain amortização and denominador');
+        }
+      }
+
+      // IRR table verification in EN and ZH
+      if (testLoc === 'en') {
+        const bodyText = await page.evaluate(() => document.body.innerText);
+        if (bodyText.includes('Time-weighted total return')) {
+          throw new Error('EN table must NOT describe IRR as time-weighted total return');
+        }
+        if (!bodyText.includes('Money-weighted annualized rate of return')) {
+          throw new Error('EN table must describe IRR as money-weighted annualized rate of return');
+        }
+      } else if (testLoc === 'zh') {
+        const bodyText = await page.evaluate(() => document.body.innerText);
+        if (bodyText.includes('时间加权总回报')) {
+          throw new Error('ZH table must NOT describe IRR as 时间加权总回报');
+        }
+        if (!bodyText.includes('资金加权年化内部收益率')) {
+          throw new Error('ZH table must describe IRR as 资金加权年化内部收益率');
+        }
+      }
+    }
+    console.log('✅ Cash-on-Cash A11y, 4 scenarios (A/B/C/D), neutral 3-state comparison, IRR definition & 4-locale JSON-LD/FAQ verified.');
 
 
     console.log('\n--- 4. Testing Conversion Entry Links ---');
