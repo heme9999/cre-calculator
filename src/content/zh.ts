@@ -220,7 +220,7 @@ export const zhContent: LocaleContent = {
     faqs: [
       {
         question: '商业地产的Cap Rate多少算合理？',
-        answer: '这个高度取决于资产类型和地段。核心城市的多户住宅（Multifamily）可能在4-5%左右交易，而次级市场的单租户净租赁物业（Net-Lease）可能在7-9%左右。Cap Rate越低，通常意味着市场认为风险越低（收益也越低）；Cap Rate越高，通常意味着风险或收益更高。',
+        answer: '这个高度取决于资产类型和地段。核心城市的多户住宅可能在4-5%左右交易，而次级市场的单租户净租赁物业可能在7-9%左右。Cap Rate越低，通常意味着市场认为风险越低（收益也越低）；Cap Rate越高，通常意味着风险或收益更高。',
       },
       {
         question: 'Cap Rate 和 Cash-on-Cash Return 有什么区别？',

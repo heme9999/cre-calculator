@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { Calculator, TrendingUp, AlertCircle, Info, ArrowRight, Share2, Check } from 'lucide-react';
@@ -49,31 +49,72 @@ export function CapRateCalculator({ locale, defaultPrice, defaultNoi }: Props) {
     ? 'Nota de fórmula: Esta calculadora aplica a fórmula universal Cap Rate = NOI Anual ÷ Preço de Compra; não aplica deduções automáticas de despesas por classe de ativo.'
     : 'Formula Note: This calculator applies the universal Cap Rate = Annual NOI ÷ Purchase Price formula and does not apply separate built-in asset expense models.';
 
-  // Parse URL hash on mount if present
-  useEffect(() => {
-    const applyHashParams = () => {
-      if (typeof window === 'undefined') return;
-      const hash = window.location.hash.replace(/^#/, '');
-      if (!hash) return;
-      const params = new URLSearchParams(hash);
-      const p = params.get('price') || params.get('p');
-      const n = params.get('noi') || params.get('n');
-      const m = params.get('mode') || params.get('m');
-      const tParam = params.get('target') || params.get('t');
+  const isInitializedRef = useRef(false);
 
-      if (p && !isNaN(Number(p))) setPurchasePrice(Number(p));
-      if (n && !isNaN(Number(n))) setNoi(Number(n));
-      if (m === 'reverse' || m === 'forward') setMode(m);
-      if (tParam && !isNaN(Number(tParam))) setTargetCapRate(Number(tParam));
+  const getStorageKey = () => {
+    if (typeof window === 'undefined') return 'cre_cap_rate_inputs';
+    const subpath = window.location.pathname.replace(/^\/(en|zh|es|pt)/, '');
+    return `cre_cap_rate_inputs_${subpath}`;
+  };
+
+  // Restore from URL hash (highest priority) or sessionStorage on mount
+  useEffect(() => {
+    const applyInputs = () => {
+      if (typeof window === 'undefined') return;
+      let restoredFromHash = false;
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash) {
+        const params = new URLSearchParams(hash);
+        const p = params.get('price') || params.get('p');
+        const n = params.get('noi') || params.get('n');
+        const m = params.get('mode') || params.get('m');
+        const tParam = params.get('target') || params.get('t');
+
+        if (p && !isNaN(Number(p))) { setPurchasePrice(Number(p)); restoredFromHash = true; }
+        if (n && !isNaN(Number(n))) { setNoi(Number(n)); restoredFromHash = true; }
+        if (m === 'reverse' || m === 'forward') { setMode(m); restoredFromHash = true; }
+        if (tParam && !isNaN(Number(tParam))) { setTargetCapRate(Number(tParam)); restoredFromHash = true; }
+      }
+
+      if (!restoredFromHash) {
+        try {
+          const saved = sessionStorage.getItem(getStorageKey());
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.price !== undefined && !isNaN(Number(parsed.price))) setPurchasePrice(Number(parsed.price));
+            if (parsed.noi !== undefined && !isNaN(Number(parsed.noi))) setNoi(Number(parsed.noi));
+            if (parsed.mode === 'reverse' || parsed.mode === 'forward') setMode(parsed.mode);
+            if (parsed.target !== undefined && !isNaN(Number(parsed.target))) setTargetCapRate(Number(parsed.target));
+          }
+        } catch {
+          // ignore
+        }
+      }
+      isInitializedRef.current = true;
     };
 
-    const timer = setTimeout(applyHashParams, 0);
-    window.addEventListener('hashchange', applyHashParams);
+    const timer = setTimeout(applyInputs, 0);
+    window.addEventListener('hashchange', applyInputs);
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('hashchange', applyHashParams);
+      window.removeEventListener('hashchange', applyInputs);
     };
   }, []);
+
+  // Sync state changes to sessionStorage
+  useEffect(() => {
+    if (!isInitializedRef.current) return;
+    try {
+      sessionStorage.setItem(getStorageKey(), JSON.stringify({
+        price: purchasePrice,
+        noi: noi,
+        mode: mode,
+        target: targetCapRate,
+      }));
+    } catch {
+      // ignore
+    }
+  }, [purchasePrice, noi, mode, targetCapRate]);
 
   const handleShareDeal = async () => {
     if (typeof window === 'undefined') return;
@@ -161,6 +202,16 @@ export function CapRateCalculator({ locale, defaultPrice, defaultNoi }: Props) {
                 setMode('forward');
                 setPurchasePrice(initialPrice);
                 setNoi(initialNoi);
+                try {
+                  sessionStorage.setItem(getStorageKey(), JSON.stringify({
+                    price: initialPrice,
+                    noi: initialNoi,
+                    mode: 'forward',
+                    target: 7.5,
+                  }));
+                } catch {
+                  // ignore
+                }
               }}
               className="text-xs font-semibold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg transition-colors shrink-0"
             >

@@ -334,7 +334,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
                 title={t.saveDealTitle}
               >
-                <span>💾 {t.saveDeal}</span>
+                <span>{t.saveDeal}</span>
               </button>
 
               {savedDeals.length > 0 && (
@@ -353,7 +353,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
                 title={t.csvExportTitle}
               >
-                <span>📊 {t.csvExport}</span>
+                <span>{t.csvExport}</span>
               </button>
 
               <button
@@ -362,7 +362,7 @@ export function DealAnalyzerTool({ locale }: Props) {
                 onClick={handleCopyLink}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
               >
-                <span>{copiedLink ? `✅ ${t.linkCopied}` : `🔗 ${t.shareLink}`}</span>
+                <span>{copiedLink ? t.linkCopied : t.shareLink}</span>
               </button>
 
               <button
@@ -411,12 +411,12 @@ export function DealAnalyzerTool({ locale }: Props) {
                       : 'opacity-0 scale-95 invisible pointer-events-none'
                   }`}
                 >
-                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleSaveDeal(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">💾 {t.saveDeal}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleSaveDeal(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">{t.saveDeal}</button>
                   {savedDeals.length > 0 && (
                     <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { setShowSavedModal(true); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-emerald-300 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">📂 {t.savedCount(savedDeals.length)}</button>
                   )}
-                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportCsv(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">📊 {t.csvExport}</button>
-                  <button tabIndex={moreMenuOpen ? 0 : -1} data-testid="share-deal-btn-mobile" onClick={() => { handleCopyLink(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">🔗 {copiedLink ? t.linkCopied : t.shareLink}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportCsv(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">{t.csvExport}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} data-testid="share-deal-btn-mobile" onClick={() => { handleCopyLink(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">{copiedLink ? t.linkCopied : t.shareLink}</button>
                   <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportPdf(); setMoreMenuOpen(false); }} disabled={isExportingPdf} className="flex items-center gap-1.5 w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg disabled:opacity-50 focus:bg-slate-700 outline-none transition-colors duration-100">
                     <FileDown className="w-3 h-3" /> {isExportingPdf ? t.generating : t.exportPdf}
                   </button>

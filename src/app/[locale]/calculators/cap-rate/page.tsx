@@ -60,8 +60,8 @@ export default async function CapRatePage({ params }: PageProps) {
 
   const exampleContentByLocale = {
     zh: {
-      title: '商业地产分析案例 (Illustrative Example)',
-      intro: '假设您正在评估一处 24 单元的多户住宅物业（24-unit multifamily）。',
+      title: '商业地产分析案例',
+      intro: '假设您正在评估一处 24 单元的多户住宅物业。',
       price: '购买价格: $2,800,000',
       noiPrefix: '净营业收入 (NOI): $227,200（详见 ',
       noiLink: '计算该物业的 NOI',
