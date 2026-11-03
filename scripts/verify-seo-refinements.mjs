@@ -96,6 +96,7 @@ const APPROVED_SITEMAP_URLS = new Set([
   'https://crecalculators.com/en/calculators/noi/',
   'https://crecalculators.com/en/calculators/cash-on-cash/',
   'https://crecalculators.com/en/calculators/loan-payment/',
+  'https://crecalculators.com/en/calculators/apartment-building-mortgage/',
   'https://crecalculators.com/en/calculators/dscr/',
   'https://crecalculators.com/en/calculators/1031-exchange/',
   'https://crecalculators.com/en/calculators/lease-vs-buy/',

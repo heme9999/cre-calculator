@@ -26,6 +26,7 @@ import {
   ChevronDown,
   ChevronUp,
   ArrowRight,
+  Loader2,
 } from 'lucide-react';
 
 interface Props {
@@ -56,6 +57,7 @@ export function DealAnalyzerTool({ locale }: Props) {
   // UI state
   const [showStressTest, setShowStressTest] = useState<boolean>(false);
   const [isExportingPdf, setIsExportingPdf] = useState<boolean>(false);
+  const [pdfSuccessNotice, setPdfSuccessNotice] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [showSavedModal, setShowSavedModal] = useState<boolean>(false);
   const [savedDeals, setSavedDeals] = useState<Array<{ name: string; date: string; input: DealAnalyzerInput }>>([]);
@@ -268,7 +270,69 @@ export function DealAnalyzerTool({ locale }: Props) {
         }
       }
 
+      // Add searchable & extractable vector text layer (PDF render mode 3: invisible text)
+      pdf.setPage(1);
+      (pdf.internal as unknown as { write: (s: string) => void }).write('3 Tr');
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(9);
+
+      const baseCashFlow = base.noi - base.annualDebtService;
+      const stressCashFlow = stress.noi - stress.annualDebtService;
+      const debtYield = base.loanAmount > 0 ? (base.noi / base.loanAmount) * 100 : 0;
+
+      const textLayerLines = [
+        `Commercial Real Estate Deal Analysis Underwriting Summary - crecalculators.com`,
+        `Tool URL: https://crecalculators.com/${locale}/tools/deal-analyzer/`,
+        `Generated: ${new Date().toISOString().slice(0, 10)} | Locale: ${locale}`,
+        ``,
+        `=== ACQUISITION & FINANCING ===`,
+        `Purchase Price: ${formatCurrency(input.purchasePrice)}`,
+        `Down Payment: ${input.downPaymentPercent.toFixed(1)}% (${formatCurrency(input.purchasePrice * (input.downPaymentPercent / 100))})`,
+        `Loan Amount: ${formatCurrency(base.loanAmount)}`,
+        `Interest Rate: ${input.interestRate.toFixed(2)}%`,
+        `Amortization: ${input.amortizationYears} Years (${input.paymentType === 'installment' ? 'Equal Installment' : 'Equal Principal'})`,
+        `Closing Costs: ${input.closingCostsPercent.toFixed(1)}% (${formatCurrency(input.purchasePrice * (input.closingCostsPercent / 100))})`,
+        `Total Initial Equity: ${formatCurrency(base.totalCashInvested)}`,
+        ``,
+        `=== PROPERTY OPERATIONS & CASH FLOW ===`,
+        `Gross Potential Income (GPI): ${formatCurrency(input.grossPotentialIncome)}`,
+        `Vacancy & Credit Loss: ${input.vacancyRate.toFixed(1)}% (${formatCurrency(input.grossPotentialIncome * (input.vacancyRate / 100))})`,
+        `Effective Gross Income (EGI): ${formatCurrency(base.egi)}`,
+        `Operating Expenses (OpEx): ${formatCurrency(input.operatingExpenses)} (${((input.operatingExpenses / (base.egi || 1)) * 100).toFixed(1)}% of EGI)`,
+        `Net Operating Income (NOI): ${formatCurrency(base.noi)}`,
+        `Annual Debt Service (ADS): ${formatCurrency(base.annualDebtService)} (Monthly: ${formatCurrency(base.monthlyPayment)})`,
+        `Pre-Tax Net Cash Flow: ${formatCurrency(baseCashFlow)} (Monthly: ${formatCurrency(baseCashFlow / 12)})`,
+        ``,
+        `=== KEY UNDERWRITING METRICS ===`,
+        `Acquisition Cap Rate: ${base.capRate.toFixed(2)}%`,
+        `Cash-on-Cash Return (CoC): ${base.cashOnCashReturn.toFixed(2)}%`,
+        `Debt Service Coverage Ratio (DSCR): ${base.dscr.toFixed(2)}x`,
+        `Break-Even Ratio (BER): ${base.breakEvenRatio.toFixed(2)}%`,
+        `Break-Even Occupancy (BEO): ${base.breakEvenOccupancy.toFixed(2)}%`,
+        `Debt Yield: ${debtYield.toFixed(2)}%`,
+        ``,
+        `=== STRESS TEST (+100 bps Interest Rate to ${(input.interestRate + 1).toFixed(2)}%) ===`,
+        `Stress Annual Debt Service: ${formatCurrency(stress.annualDebtService)} (Monthly: ${formatCurrency(stress.monthlyPayment)})`,
+        `Stress DSCR: ${stress.dscr.toFixed(2)}x`,
+        `Stress Net Cash Flow: ${formatCurrency(stressCashFlow)} (Monthly: ${formatCurrency(stressCashFlow / 12)})`,
+        `Stress Cash-on-Cash Return: ${stress.cashOnCashReturn.toFixed(2)}%`,
+        `Stress Break-Even Ratio: ${stress.breakEvenRatio.toFixed(2)}%`,
+        ``,
+        `Educational commercial real estate underwriting summary. Source: https://crecalculators.com/${locale}/tools/deal-analyzer/`
+      ];
+
+      let textY = 15;
+      for (const line of textLayerLines) {
+        if (line.trim().length > 0) {
+          pdf.text(line, 15, textY);
+        }
+        textY += 6.5;
+      }
+      (pdf.internal as unknown as { write: (s: string) => void }).write('0 Tr');
+
       pdf.save(`deal-analyzer-underwriting-summary-${locale}.pdf`);
+      setPdfSuccessNotice(true);
+      setTimeout(() => setPdfSuccessNotice(false), 3500);
     } catch (err) {
       console.error('PDF export failed:', err);
     } finally {
@@ -375,8 +439,22 @@ export function DealAnalyzerTool({ locale }: Props) {
                 disabled={isExportingPdf}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press disabled:opacity-50"
               >
-                <FileDown className="w-4 h-4" />
-                <span>{isExportingPdf ? t.generating : t.exportPdf}</span>
+                {isExportingPdf ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
+                    <span>{t.generating}</span>
+                  </>
+                ) : pdfSuccessNotice ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span className="text-emerald-300">{isZh ? '已导出 PDF' : isEs ? '¡Descargado!' : isPt ? 'Baixado!' : 'Downloaded!'}</span>
+                  </>
+                ) : (
+                  <>
+                    <FileDown className="w-4 h-4" />
+                    <span>{t.exportPdf}</span>
+                  </>
+                )}
               </button>
             </div>
 
@@ -422,7 +500,19 @@ export function DealAnalyzerTool({ locale }: Props) {
                   <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportCsv(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">{t.csvExport}</button>
                   <button tabIndex={moreMenuOpen ? 0 : -1} data-testid="share-deal-btn-mobile" onClick={() => { handleCopyLink(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">{copiedLink ? t.linkCopied : t.shareLink}</button>
                   <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportPdf(); setMoreMenuOpen(false); }} disabled={isExportingPdf} className="flex items-center gap-1.5 w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg disabled:opacity-50 focus:bg-slate-700 outline-none transition-colors duration-100">
-                    <FileDown className="w-3 h-3" /> {isExportingPdf ? t.generating : t.exportPdf}
+                    {isExportingPdf ? (
+                      <>
+                        <Loader2 className="w-3 h-3 animate-spin text-emerald-400" /> {t.generating}
+                      </>
+                    ) : pdfSuccessNotice ? (
+                      <>
+                        <CheckCircle2 className="w-3 h-3 text-emerald-400" /> {isZh ? '已导出 PDF' : isEs ? '¡Descargado!' : isPt ? 'Baixado!' : 'Downloaded!'}
+                      </>
+                    ) : (
+                      <>
+                        <FileDown className="w-3 h-3" /> {t.exportPdf}
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -1008,6 +1098,16 @@ export function DealAnalyzerTool({ locale }: Props) {
         >
           <div className="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin shrink-0" />
           <span>{isZh ? '正在生成 PDF 承销报告，请稍候...' : isEs ? 'Generando informe PDF, por favor espere...' : isPt ? 'Gerando relatório PDF, aguarde...' : 'Generating PDF underwriting report, please wait...'}</span>
+        </div>
+      )}
+      {pdfSuccessNotice && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 right-6 z-50 bg-emerald-950/95 backdrop-blur-sm text-emerald-100 px-4 py-3 rounded-xl shadow-2xl border border-emerald-500/50 flex items-center gap-3 text-xs font-semibold shadow-emerald-900/30"
+        >
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>{isZh ? '✅ 承销报告已成功导出为 PDF 并开始下载' : isEs ? '✅ ¡Informe PDF exportado y descargado con éxito!' : isPt ? '✅ Relatório PDF exportado e baixado com sucesso!' : '✅ PDF underwriting summary downloaded successfully!'}</span>
         </div>
       )}
       <div className="absolute left-[-9999px] top-[-9999px]" style={{ width: '800px' }}>

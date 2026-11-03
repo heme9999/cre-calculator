@@ -295,6 +295,50 @@ export const esContent: LocaleContent = {
       { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
     ],
   },
+  apartmentBuildingMortgage: {
+    metaTitle: 'Calculadora de Hipoteca de Edificios Multifamiliares — Suscripción y Límite de Crédito',
+    metaDescription: 'Calcule préstamos comerciales para edificios de apartamentos (5+ unidades) bajo normas de Agency (Fannie/Freddie), bancos comerciales y HUD 223(f). Doble verificación por LTV y DSCR.',
+    h1: 'Calculadora de Hipoteca de Edificios de Apartamentos',
+    subtitle: 'Dimensione préstamos hipotecarios comerciales para inmuebles multifamiliares en programas de Agency (Fannie Mae / Freddie Mac), bancos y HUD 223(f). Verifique restricciones por LTV y DSCR, pagos mensuales y rentabilidad.',
+    whatIsTitle: 'Cómo se dimensiona una hipoteca comercial multifamiliar',
+    whatIsContent: 'Las hipotecas comerciales para edificios residenciales (5 o más unidades) se evalúan de manera muy distinta a los préstamos para viviendas residenciales unifamiliares. Los prestamistas no evalúan la nómina personal del prestatario, sino la capacidad operativa del inmueble a través de dos restricciones matemáticas principales:\n\n1. Restricción por LTV (Loan-to-Value): Fija un tope de endeudamiento como porcentaje del valor de tasación o precio de compra (habitualmente 70%–75% en bancos comerciales, 80% en Agency Fannie/Freddie, y hasta 85% en HUD 223(f)).\n2. Restricción por DSCR (Ratio de Cobertura de Deuda): Garantiza que el Ingreso Operativo Neto (NOI) supere el servicio anual de la deuda en un factor de seguridad mínimo (habitualmente 1.25x en bancos y Agency, 1.176x en HUD).\n\nEl importe final aprobado por la entidad crediticia será SIEMPRE el MENOR entre el límite de LTV y el límite de DSCR. En entornos de tasas de interés más elevadas, el DSCR se convierte en la restricción vinculante determinante.',
+    formulaTitle: 'Fórmulas de Suscripción Hipotecaria',
+    formulaCode: '[1. Préstamo Máximo por LTV]\nPréstamo_LTV = Precio de Compra × % LTV Máximo\n\n[2. Servicio Anual de Deuda Máximo por DSCR]\nServicio Máximo_DSCR = NOI / DSCR Mínimo Requerido\n\n[3. Préstamo Máximo por DSCR]\nPréstamo_DSCR = Servicio Máximo_DSCR / Constante de Préstamo\ndonde Constante Anual = 12 × [ r(1 + r)^n ] / [ (1 + r)^n − 1 ]\n\n[4. Préstamo Aprobado Vinculante]\nPréstamo Sancionado = min( Préstamo_LTV, Préstamo_DSCR )',
+    formulaVariables: [
+      { label: 'Precio de Compra', desc: 'Precio contractual de adquisición o valor de tasación independiente ($)' },
+      { label: 'NOI', desc: 'Ingreso Operativo Neto anual tras deducir gastos operativos' },
+      { label: 'Umbral DSCR', desc: 'Ratio mínimo exigido por la entidad (ej. 1.25x en bancos/Agency, 1.176x en HUD)' },
+      { label: 'Constante de Préstamo', desc: 'Porcentaje anualizado de pago de capital e interés por dólar prestado' },
+    ],
+    exampleTitle: 'Caso Práctico Continuo: Edificio Multifamiliar de 24 Unidades ($2.8M, NOI $227,200)',
+    exampleContent: 'Aplicando nuestro ejemplo continuo de 24 unidades residenciales ($2,800,000 de precio de compra, GPI $355,000, 5% vacancia, OpEx $110,050, Cap Rate del 8.11% y NOI de $227,200):\n\n• Préstamo de Banco Comercial (75% LTV, 1.25x DSCR, 6.50% interés, 25 años amortización):\n  - Límite por LTV (75%): $2,100,000\n  - Límite por DSCR: $2,243,243\n  - Préstamo Sancionado: $2,100,000 (Limitado por LTV)\n  - Cuota Mensual: $14,179 ($170,152 de servicio de deuda anual)\n  - DSCR Real: 1.34x (Colchón superior al 1.25x exigido)\n  - Flujo de Caja Neto antes de impuestos: $57,048 / año\n  - Retorno Cash-on-Cash: 7.55% sobre $756,000 de capital propio invertido\n\n• Préstamo Agency Fannie Mae / Freddie Mac (80% LTV, 1.25x DSCR, 6.25% interés, 30 años amortización):\n  - Límite por LTV (80%): $2,240,000\n  - Límite por DSCR: $2,460,788\n  - Préstamo Sancionado: $2,240,000 (Limitado por LTV)\n  - Cuota Mensual: $13,791 ($165,492 anuales)\n  - Flujo de Caja: $61,708 / año (11.02% Cash-on-Cash sobre $560,000 de anticipo)\n\n*Nota: Ejemplo financiero educativo estandarizado con fines comparativos.*',
+    faqTitle: 'Preguntas Frecuentes sobre Hipotecas Multifamiliares',
+    faqs: [
+      {
+        question: '¿Qué inmuebles clasifican como multifamiliar comercial para financiamiento hipotecario?',
+        answer: 'En el sector inmobiliario y financiero de EE.UU. y a nivel internacional, cualquier propiedad residencial que albergue 5 o más unidades habitacionales independientes se considera comercial multifamiliar. Las propiedades de 1 a 4 unidades se rigen por normativas hipotecarias residenciales individuales. Los préstamos comerciales se aprueban con base en el flujo de caja del inmueble (NOI) y no en la declaración de ingresos personales del inversor.',
+      },
+      {
+        question: '¿Por qué las entidades bancarias aplican simultáneamente LTV y DSCR?',
+        answer: 'El LTV protege a la entidad frente a caídas en el valor de tasación del inmueble mediante el capital propio aportado por el inversor. El DSCR protege contra el impago mensual garantizando que los alquileres cobrados cubran holgadamente la cuota de la hipoteca. La entidad siempre otorga el importe que resulte menor.',
+      },
+      {
+        question: '¿En qué se diferencian los préstamos Agency (Fannie/Freddie) de los préstamos bancarios de cartera?',
+        answer: 'Los préstamos Agency ofrecen financiamiento sin recurso (Non-recourse), amortizaciones más largas a 30 años y hasta un 80% de LTV, pero imponen penalizaciones estrictas por pago anticipado (Yield Maintenance o Defeasance). Los bancos comerciales prestan desde su propio balance, con penalizaciones escalonadas más flexibles, pero habitualmente requieren aval personal (Recourse) y limitan el LTV al 70%–75%.',
+      },
+      {
+        question: '¿Qué es el programa de financiamiento HUD / FHA 223(f)?',
+        answer: 'HUD 223(f) es un programa con garantía federal para la adquisición o refinanciación de edificios de apartamentos de 5+ unidades. Ofrece el apalancamiento más alto de la industria (hasta 85% LTV), el DSCR más bajo (1.176x) y una amortización íntegra a 35 años sin pagos balloon, a cambio de mayores costos iniciales de cierre, pago de seguro hipotecario anual (MIP) y un plazo de tramitación de 4 a 6 meses.',
+      },
+    ],
+    relatedTitle: 'Calculadoras Financieras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de Pagos de Préstamos Comerciales', slug: 'loan-payment' },
+      { title: 'Calculadora de DSCR', slug: 'dscr' },
+      { title: 'Calculadora de Cash-on-Cash Return', slug: 'cash-on-cash' },
+      { title: 'Calculadora de Cap Rate Multifamiliar', slug: 'multifamily-cap-rate' },
+    ],
+  },
   dscr: {
     metaTitle: 'Calculadora de DSCR | Cobertura de Servicio de Deuda',
     metaDescription: 'Calcule el ratio de cobertura de deuda (DSCR) para préstamos comerciales y evalúe la aprobación bancaria de su operación.',
@@ -662,7 +706,7 @@ export const esContent: LocaleContent = {
       },
       {
         title: 'Paso 5: Caso Práctico Integral (Auditoría Financiera de 24 Unidades)',
-        content: 'Para ilustrar la interconexión de todas las variables, presentamos la proyección completa del inmueble de 24 unidades analizado en nuestra Guía de Estimación del NOI:\n\n- Condiciones de adquisición: Precio de compraventa de $2,800,000 ($116,667 por unidad).\n- NOI auditado y validado: Ingreso potencial bruto de $336,000 menos vacancia del 5.0% ($16,800) resulta en un EGI de $319,200. Tras deducir gastos operativos normalizados de $92,000, el NOI de entrada queda fijado en $227,200.\n- Cap Rate de entrada: $227,200 ÷ $2,800,000 = 8.11% (alineado con la media de activos multifamiliares Clase B).\n- Estructura de deuda comercial: Financiación sénior al 75% LTV = préstamo hipotecario de $2,100,000 al 6.50% de interés y amortización a 25 años. Servicio de la deuda mensual de $13,273 ($159,276 anuales).\n- Cobertura de deuda bancaria (DSCR): $227,200 NOI ÷ $159,276 servicio anual = 1.43x, superando con holgura la exigencia bancaria del 1.25x.\n- Capital aportado y retorno Cash-on-Cash: Pago inicial del 25% ($700,000) más $50,000 de gastos de cierre y reservas iniciales = $750,000 de desembolso efectivo total. Flujo de caja neto antes de impuestos = $227,200 − $159,276 = $67,924 anuales. Retorno Cash-on-Cash = $67,924 ÷ $750,000 = 9.06%.\n- Colchón de seguridad frente a vacancia (Ratio de Equilibrio): (OpEx $92,000 + Deuda $159,276) ÷ $336,000 GPI = 74.8%. La ocupación puede descender hasta el 75% antes de comprometer el servicio del préstamo.\n- Sensibilidad ante tipos de interés (+100 pbs): Si el tipo asciende al 7.50%, el servicio anual sube a $186,228; el DSCR desciende a 1.22x; y el flujo de caja se sitúa en $40,972 (5.46% CoC). El activo conserva solvencia y distribuciones positivas en entornos restrictivos.',
+        content: 'Para ilustrar la interconexión de todas las variables, presentamos la proyección completa del inmueble de 24 unidades analizado en nuestra Guía de Estimación del NOI:\n\n- Condiciones de adquisición: Precio de compraventa de $2,800,000 ($116,667 por unidad).\n- NOI auditado y validado: Ingreso potencial bruto de $336,000 menos vacancia del 5.0% ($16,800) resulta en un EGI de $319,200. Tras deducir gastos operativos normalizados de $92,000, el NOI de entrada queda fijado en $227,200.\n- Cap Rate de entrada: $227,200 ÷ $2,800,000 = 8.11% (alineado con la media de activos multifamiliares Clase B).\n- Estructura de deuda comercial: Financiación sénior al 75% LTV = préstamo hipotecario de $2,100,000 al 6.50% de interés y amortización a 25 años. Servicio de la deuda mensual de $14,179 ($170,152 anuales).\n- Cobertura de deuda bancaria (DSCR): $227,200 NOI ÷ $170,152 servicio anual = 1.34x, superando la exigencia bancaria del 1.25x.\n- Capital aportado y retorno Cash-on-Cash: Pago inicial del 25% ($700,000) más $55,600 de gastos de cierre y reservas iniciales = $755,600 de desembolso efectivo total. Flujo de caja neto antes de impuestos = $227,200 − $170,152 = $57,048 anuales. Retorno Cash-on-Cash = $57,048 ÷ $755,600 = 7.55% (coincidente con el modelo Deal Analyzer).\n- Colchón de seguridad frente a vacancia (Ratio de Equilibrio): (OpEx $92,000 + Deuda $170,152) ÷ $319,200 EGI = 82.13% (ocupación de equilibrio del 78.0%). La ocupación puede descender hasta el 78% antes de comprometer el servicio del préstamo.\n- Sensibilidad ante tipos de interés (+100 pbs): Si el tipo asciende al 7.50%, la cuota mensual sube a $15,515 ($186,180 anuales); el DSCR se modera a 1.22x; y el flujo de caja se sitúa en $41,020 (5.43% CoC). El activo conserva solvencia y distribuciones positivas en entornos restrictivos.',
       },
       {
         title: 'Paso 6: Debida diligencia física, urbanística y jurídica',

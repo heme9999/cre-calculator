@@ -6,6 +6,7 @@ import { formatCurrency, formatPercent } from '@/lib/utils';
 import { Calculator, DollarSign, Zap, TrendingUp, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
 import { CalculatorActionBar } from './common/CalculatorActionBar';
 import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
+import { solveInterestRate } from '@/lib/dealAnalyzerCalculations';
 
 interface Props {
   locale: string;
@@ -36,25 +37,96 @@ export function CashOnCashCalculator({ locale }: Props) {
   useEffect(() => {
     const applyInputs = () => {
       if (typeof window === 'undefined') return;
-      try {
-        const saved = sessionStorage.getItem(getStorageKey());
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (parsed.purchasePrice !== undefined && !isNaN(Number(parsed.purchasePrice))) setPurchasePrice(Number(parsed.purchasePrice));
-          if (parsed.downPaymentPercent !== undefined && !isNaN(Number(parsed.downPaymentPercent))) setDownPaymentPercent(Number(parsed.downPaymentPercent));
-          if (parsed.closingCosts !== undefined && !isNaN(Number(parsed.closingCosts))) setClosingCosts(Number(parsed.closingCosts));
-          if (parsed.upfrontCapex !== undefined && !isNaN(Number(parsed.upfrontCapex))) setUpfrontCapex(Number(parsed.upfrontCapex));
-          if (parsed.annualNoi !== undefined && !isNaN(Number(parsed.annualNoi))) setAnnualNoi(Number(parsed.annualNoi));
-          if (parsed.annualDebtService !== undefined && !isNaN(Number(parsed.annualDebtService))) setAnnualDebtService(Number(parsed.annualDebtService));
+      let restoredFromHash = false;
+      const hash = window.location.hash;
+      if (hash && hash.replace(/^#/, '').trim() !== '') {
+        try {
+          const params = new URLSearchParams(hash.replace(/^#/, ''));
+          const p = params.get('price') || params.get('pp') || params.get('p');
+          const dp = params.get('downPayment') || params.get('dp');
+          const noi = params.get('annualNoi') || params.get('noi');
+          const ds = params.get('debt') || params.get('ds') || params.get('annualDebtService');
+          const cc = params.get('closingCosts') || params.get('cc');
+          const cx = params.get('upfrontCapex') || params.get('capex') || params.get('cx');
+
+          let newPrice = purchasePrice;
+          let newDp = downPaymentPercent;
+          let newNoi = annualNoi;
+          let newDs = annualDebtService;
+          let newCc = closingCosts;
+          let newCx = upfrontCapex;
+
+          if (p && !isNaN(Number(p)) && Number(p) > 0) {
+            newPrice = Number(p);
+            setPurchasePrice(newPrice);
+            restoredFromHash = true;
+          }
+          if (dp && !isNaN(Number(dp)) && Number(dp) >= 0) {
+            newDp = Number(dp);
+            setDownPaymentPercent(newDp);
+            restoredFromHash = true;
+          }
+          if (noi && !isNaN(Number(noi)) && Number(noi) >= 0) {
+            newNoi = Number(noi);
+            setAnnualNoi(newNoi);
+            restoredFromHash = true;
+          }
+          if (ds && !isNaN(Number(ds)) && Number(ds) >= 0) {
+            newDs = Number(ds);
+            setAnnualDebtService(newDs);
+            restoredFromHash = true;
+          }
+          if (cc && !isNaN(Number(cc)) && Number(cc) >= 0) {
+            newCc = Number(cc);
+            setClosingCosts(newCc);
+            restoredFromHash = true;
+          }
+          if (cx && !isNaN(Number(cx)) && Number(cx) >= 0) {
+            newCx = Number(cx);
+            setUpfrontCapex(newCx);
+            restoredFromHash = true;
+          }
+
+          if (restoredFromHash) {
+            sessionStorage.setItem(getStorageKey(), JSON.stringify({
+              purchasePrice: newPrice,
+              downPaymentPercent: newDp,
+              closingCosts: newCc,
+              upfrontCapex: newCx,
+              annualNoi: newNoi,
+              annualDebtService: newDs,
+            }));
+          }
+        } catch {
+          // ignore
         }
-      } catch {
-        // ignore
+      }
+
+      if (!restoredFromHash) {
+        try {
+          const saved = sessionStorage.getItem(getStorageKey());
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.purchasePrice !== undefined && !isNaN(Number(parsed.purchasePrice))) setPurchasePrice(Number(parsed.purchasePrice));
+            if (parsed.downPaymentPercent !== undefined && !isNaN(Number(parsed.downPaymentPercent))) setDownPaymentPercent(Number(parsed.downPaymentPercent));
+            if (parsed.closingCosts !== undefined && !isNaN(Number(parsed.closingCosts))) setClosingCosts(Number(parsed.closingCosts));
+            if (parsed.upfrontCapex !== undefined && !isNaN(Number(parsed.upfrontCapex))) setUpfrontCapex(Number(parsed.upfrontCapex));
+            if (parsed.annualNoi !== undefined && !isNaN(Number(parsed.annualNoi))) setAnnualNoi(Number(parsed.annualNoi));
+            if (parsed.annualDebtService !== undefined && !isNaN(Number(parsed.annualDebtService))) setAnnualDebtService(Number(parsed.annualDebtService));
+          }
+        } catch {
+          // ignore
+        }
       }
       isInitializedRef.current = true;
     };
 
     const timer = setTimeout(applyInputs, 0);
-    return () => clearTimeout(timer);
+    window.addEventListener('hashchange', applyInputs);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('hashchange', applyInputs);
+    };
   }, []);
 
   useEffect(() => {
@@ -97,6 +169,11 @@ export function CashOnCashCalculator({ locale }: Props) {
   const debtConstant = loanAmount > 0 ? (annualDebtService / loanAmount) * 100 : 0;
   const upfrontFriction = closingCosts + upfrontCapex;
   const upfrontFrictionPercent = purchasePrice > 0 ? (upfrontFriction / purchasePrice) * 100 : 0;
+
+  const estimatedOpex = Math.round(annualNoi * 0.40);
+  const estimatedGpi = Math.round((annualNoi + estimatedOpex) / 0.95);
+  const estimatedRate = solveInterestRate(loanAmount, annualDebtService, 25);
+  const ccPercent = purchasePrice > 0 ? (closingCosts / purchasePrice) * 100 : 2;
 
   const dynamicDiagnosisText = (() => {
     if (comparisonState === 'lower') {
@@ -479,7 +556,7 @@ export function CashOnCashCalculator({ locale }: Props) {
                   <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
                 </Link>
                 <Link
-                  href={`/${locale}/tools/deal-analyzer/#pp=${purchasePrice}&dp=${downPaymentPercent}&noi=${annualNoi}&ds=${annualDebtService}&cc=${closingCosts}&capex=${upfrontCapex}`}
+                  href={`/${locale}/tools/deal-analyzer/#pp=${purchasePrice}&dp=${downPaymentPercent}&noi=${annualNoi}&ds=${annualDebtService}&gpi=${estimatedGpi}&opex=${estimatedOpex}&vac=5&ir=${estimatedRate}&ay=25&cc=${ccPercent.toFixed(2)}`}
                   className="flex items-center justify-between p-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition text-white font-semibold"
                 >
                   <span>{isZh ? '带入 Deal Analyzer 运行 5 年综合分析与压力测试' : isEs ? 'Llevar a Deal Analyzer para Proyección a 5 Años' : isPt ? 'Llevar ao Deal Analyzer para Projeção de 5 Anos' : 'Send to Deal Analyzer for 5-Year Underwriting'}</span>

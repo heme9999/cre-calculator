@@ -182,6 +182,26 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
       icon: Building2,
     },
     {
+      slug: 'apartment-building-mortgage',
+      badge: isZh ? '多户房贷' : isEs ? 'Multifamiliar' : isPt ? 'Multifamiliar' : 'Multifamily Sizing',
+      title: isZh ? '公寓与多户住宅商业贷款测算器' : isEs ? 'Calculadora de Hipoteca de Edificios de Apartamentos' : isPt ? 'Calculadora de Financiamento de Apartamentos' : 'Apartment Building Mortgage Calculator',
+      formula: isZh
+        ? 'Agency vs 商业银行 vs HUD 223(f) 放贷额度测算'
+        : isEs
+        ? 'Dimensionamiento de Crédito Agency vs Banco vs HUD'
+        : isPt
+        ? 'Dimensionamento de Crédito Agency vs Banco vs HUD'
+        : 'Agency vs Commercial Bank vs HUD Dual-Constraint Loan Sizing',
+      desc: isZh
+        ? '多户住宅（5单元以上）商业贷款测算工具。双重检验 LTV 与 DSCR 约束，推算最高放贷金额、月供与现金回报。'
+        : isEs
+        ? 'Dimensione hipotecas comerciales para edificios multifamiliares comparando Agency, bancos y HUD 223(f) por LTV y DSCR.'
+        : isPt
+        ? 'Calcule financiamentos imobiliários comerciais para imóveis multifamiliares comparando Agency, bancos e HUD 223(f).'
+        : 'Size commercial multifamily mortgages across Agency (Fannie/Freddie), Commercial Bank, and HUD programs dual-testing LTV and DSCR.',
+      icon: Building2,
+    },
+    {
       slug: '1031-exchange',
       badge: isZh ? '税务筹划' : isEs ? 'Diferimiento Fiscal' : isPt ? 'Diferimento Fiscal' : 'Tax Strategy',
       title: isZh ? '1031 Exchange 延税计算器' : isEs ? 'Calculadora de Intercambio 1031' : isPt ? 'Calculadora de Troca 1031' : '1031 Exchange Tax Calculator',

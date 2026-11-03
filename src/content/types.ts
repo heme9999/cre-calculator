@@ -179,6 +179,7 @@ export interface LocaleContent {
   noi: CalculatorPageContent;
   cashOnCash: CalculatorPageContent;
   loanPayment: CalculatorPageContent;
+  apartmentBuildingMortgage: CalculatorPageContent;
   dscr: CalculatorPageContent;
   exchange1031: CalculatorPageContent;
   leaseVsBuy: CalculatorPageContent;

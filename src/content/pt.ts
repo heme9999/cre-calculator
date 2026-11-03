@@ -295,6 +295,50 @@ export const ptContent: LocaleContent = {
       { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
     ],
   },
+  apartmentBuildingMortgage: {
+    metaTitle: 'Calculadora de Financiamento de Edifícios Multifamiliares — Subscrição e Limite de Empréstimo',
+    metaDescription: 'Dimensione financiamentos comerciais para edifícios de apartamentos (5+ unidades) segundo as normas de Agency (Fannie/Freddie), bancos comerciais e HUD 223(f). Dupla verificação por LTV e DSCR.',
+    h1: 'Calculadora de Financiamento de Edifícios de Apartamentos',
+    subtitle: 'Calcule financiamentos imobiliários comerciais para imóveis multifamiliares nos programas Agency (Fannie Mae / Freddie Mac), bancos comerciais e HUD 223(f). Avalie restrições por LTV e DSCR, parcelas mensais e rentabilidade.',
+    whatIsTitle: 'Como é dimensionado um financiamento comercial multifamiliar',
+    whatIsContent: 'Financiamentos comerciais para edifícios residenciais (5 ou mais unidades) são avaliados com critérios totalmente diferentes dos empréstimos habitacionais de 1 a 4 unidades. Os credores não avaliam o contracheque pessoal do investidor, mas sim o desempenho operacional do imóvel através de duas restrições fundamentais:\n\n1. Restrição de LTV (Loan-to-Value): Define o teto do empréstimo como porcentagem máxima da avaliação ou preço de aquisição (habitualmente 70%–75% em bancos comerciais, 80% em Agency Fannie/Freddie e até 85% no HUD 223(f)).\n2. Restrição de DSCR (Índice de Cobertura do Serviço da Dívida): Garante que a Receita Operacional Líquida (NOI) supere as parcelas anuais de amortização e juros por um fator mínimo de segurança (normalmente 1.25x em bancos e Agency, 1.176x no HUD).\n\nO valor final aprovado pela instituição financeira será SEMPRE o MENOR entre o limite do LTV e o limite do DSCR. Em cenários de juros mais altos, o DSCR atua como gargalo vinculante.',
+    formulaTitle: 'Fórmulas de Subscrição de Crédito',
+    formulaCode: '[1. Empréstimo Máximo por LTV]\nEmpréstimo_LTV = Preço de Compra × % LTV Máximo\n\n[2. Serviço Anual Máximo da Dívida por DSCR]\nServiço Máximo_DSCR = NOI / DSCR Mínimo Exigido\n\n[3. Empréstimo Máximo por DSCR]\nEmpréstimo_DSCR = Serviço Máximo_DSCR / Constante do Empréstimo\nonde Constante Anual = 12 × [ r(1 + r)^n ] / [ (1 + r)^n − 1 ]\n\n[4. Financiamento Sancionado Final]\nFinanciamento Aprovado = min( Empréstimo_LTV, Empréstimo_DSCR )',
+    formulaVariables: [
+      { label: 'Preço de Compra', desc: 'Preço de aquisição contratual ou valor de avaliação independente ($)' },
+      { label: 'NOI', desc: 'Receita Operacional Líquida anual após dedução das despesas operacionais' },
+      { label: 'Referência DSCR', desc: 'Índice mínimo de cobertura exigido pelo credor (ex: 1.25x em bancos, 1.176x no HUD)' },
+      { label: 'Constante do Empréstimo', desc: 'Percentual anualizado de amortização e juros por dólar financiado' },
+    ],
+    exampleTitle: 'Estudo de Caso Contínuo: Imóvel Multifamiliar de 24 Unidades ($2,8M, NOI $227.200)',
+    exampleContent: 'Utilizando nosso exemplo contínuo de 24 unidades residenciais ($2.800.000 de preço de compra, GPI de $355.000, 5% de vacância, OpEx de $110.050, gerando Cap Rate de 8,11% e NOI de $227.200):\n\n• Financiamento Bancário Comercial (75% LTV, 1.25x DSCR, 6,50% de juros, amortização em 25 anos):\n  - Limite por LTV (75%): $2.100.000\n  - Limite por DSCR: $2.243.243\n  - Financiamento Sancionado: $2.100.000 (Limitado pelo LTV)\n  - Parcela Mensal: $14.179 ($170.152 de serviço anual da dívida)\n  - DSCR Efetivo: 1,34x (Margem superior à exigência mínima de 1.25x)\n  - Fluxo de Caixa Líquido antes dos impostos: $57.048 / ano\n  - Retorno Cash-on-Cash: 7,55% sobre $756.000 de capital próprio total investido\n\n• Financiamento Agency Fannie Mae / Freddie Mac (80% LTV, 1.25x DSCR, 6,25% de juros, amortização em 30 anos):\n  - Limite por LTV (80%): $2.240.000\n  - Limite por DSCR: $2.460.788\n  - Financiamento Sancionado: $2.240.000 (Limitado pelo LTV)\n  - Parcela Mensal: $13.791 ($165.492 anuais)\n  - Fluxo de Caixa: $61.708 / ano (11,02% Cash-on-Cash sobre $560.000 de entrada)\n\n*Nota: Estudo de caso financeiro educativo padronizado para fins de comparação.*',
+    faqTitle: 'Perguntas Frequentes sobre Financiamento Multifamiliar',
+    faqs: [
+      {
+        question: 'Quais imóveis são enquadrados como multifamiliar comercial?',
+        answer: 'No mercado imobiliário dos EUA e internacional, qualquer propriedade residencial com 5 ou mais unidades autônomas é classificada como imóvel comercial multifamiliar. Imóveis de 1 a 4 unidades enquadram-se nas normas residenciais individuais. O financiamento comercial baseia-se prioritariamente na receita operacional do imóvel (NOI) e não na renda pessoal do mutuário.',
+      },
+      {
+        question: 'Por que os bancos aplicam simultaneamente restrições de LTV e DSCR?',
+        answer: 'O LTV protege o banco contra desvalorização do patrimônio físico por meio do capital próprio aportado pelo mutuário. O DSCR protege contra inadimplência mensal ao assegurar que as receitas de aluguel cubram com folga os pagamentos hipotecários. O banco concede sempre o menor montante calculado.',
+      },
+      {
+        question: 'Quais são as diferenças entre empréstimos Agency (Fannie/Freddie) e de Bancos Comerciais?',
+        answer: 'Os empréstimos Agency oferecem dívida sem recurso (Non-recourse), amortizações mais longas em 30 anos e até 80% de LTV, mas têm penalidades rigorosas de pré-pagamento (Yield Maintenance ou Defeasance). Bancos comerciais operam em carteira própria com pré-pagamento escalonado mais flexível, mas normalmente exigem garantia pessoal (Recourse) e limitam o LTV a 70%–75%.',
+      },
+      {
+        question: 'O que é o programa de financiamento HUD / FHA 223(f)?',
+        answer: 'O HUD 223(f) é um financiamento com seguro do governo federal americano para aquisição ou refinanciamento de condomínios com 5+ unidades. Oferece a maior alavancagem do mercado (até 85% LTV), menor DSCR (1,176x) e amortização em 35 anos sem balão, em troca de custos iniciais mais altos, prêmio anual de seguro (MIP) e prazo de aprovação entre 4 e 6 meses.',
+      },
+    ],
+    relatedTitle: 'Calculadoras Financeiras Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de Pagamento de Empréstimo Comercial', slug: 'loan-payment' },
+      { title: 'Calculadora de DSCR', slug: 'dscr' },
+      { title: 'Calculadora de Cash-on-Cash Return', slug: 'cash-on-cash' },
+      { title: 'Calculadora de Cap Rate Multifamiliar', slug: 'multifamily-cap-rate' },
+    ],
+  },
   dscr: {
     metaTitle: 'Calculadora de DSCR | Cobertura do Serviço da Dívida',
     metaDescription: 'Calcule o índice de cobertura da dívida (DSCR) para empréstimos comerciais e avalie a aprovação bancária da sua operação.',
@@ -662,7 +706,7 @@ export const ptContent: LocaleContent = {
       },
       {
         title: 'Passo 5: Caso Prático Abrangente (Auditoria Financeira de 24 Unidades)',
-        content: 'Para compreender como todos os componentes operacionais se articulam, apresentamos a modelagem integral do edifício de 24 unidades avaliado em nosso Guia de Estimativa de NOI:\n\n- Termos de aquisição: Preço de compra de $2.800.000 ($116.667 por unidade).\n- NOI auditado e verificado: Receita potencial bruta de $336.000 deduzida de 5,0% de vacância normalizada ($16.800) resulta em $319.200 de EGI. Subtraindo despesas operacionais normalizadas de $92.000, fixa-se o NOI em $227.200.\n- Cap Rate de entrada: $227.200 ÷ $2.800.000 = 8,11% (compatível com os referenciais de ativos multifamiliares Classe B).\n- Financiamento bancário sênior: Estruturado com 75% LTV = empréstimo de $2.100.000 à taxa de 6,50% com amortização em 25 anos. Parcela mensal de $13.273 ($159.276 anuais de serviço da dívida).\n- Índice de cobertura da dívida (DSCR): $227.200 NOI ÷ $159.276 serviço anual = 1,43x, superando com segurança o patamar mínimo bancário de 1,25x.\n- Capital próprio e retorno Cash-on-Cash: Entrada de 25% ($700.000) acrescida de $50.000 em custos de fechamento e reservas operacionais = $750.000 de capital total desembolsado. Fluxo de caixa líquido antes dos impostos = $227.200 − $159.276 = $67.924 anuais. Retorno Cash-on-Cash = $67.924 ÷ $750.000 = 9,06%.\n- Margem de segurança de equilíbrio (BER): (OpEx $92.000 + Dívida $159.276) ÷ $336.000 GPI = 74,8%. A ocupação pode recuar até 75% antes que ocorra inadimplência no serviço da dívida.\n- Sensibilidade a juros (+100 bps): Com taxa a 7,50%, o serviço da dívida passa a $186.228 anuais; o DSCR reduz-se para 1,22x; e o fluxo de caixa comprime-se para $40.972 (5,46% CoC). O ativo preserva solvência e retorno em caixa positivo mesmo sob forte ciclo de alta de juros.',
+        content: 'Para compreender como todos os componentes operacionais se articulam, apresentamos a modelagem integral do edifício de 24 unidades avaliado em nosso Guia de Estimativa de NOI:\n\n- Termos de aquisição: Preço de compra de $2.800.000 ($116.667 por unidade).\n- NOI auditado e verificado: Receita potencial bruta de $336.000 deduzida de 5,0% de vacância normalizada ($16.800) resulta em $319.200 de EGI. Subtraindo despesas operacionais normalizadas de $92.000, fixa-se o NOI em $227.200.\n- Cap Rate de entrada: $227.200 ÷ $2.800.000 = 8,11% (compatível com os referenciais de ativos multifamiliares Classe B).\n- Financiamento bancário sênior: Estruturado com 75% LTV = empréstimo de $2.100.000 à taxa de 6,50% com amortização em 25 anos. Parcela mensal de $14.179 ($170.152 anuais de serviço da dívida).\n- Índice de cobertura da dívida (DSCR): $227.200 NOI ÷ $170.152 serviço anual = 1,34x, atendendo ao patamar bancário de 1,25x.\n- Capital próprio e retorno Cash-on-Cash: Entrada de 25% ($700.000) acrescida de $55.600 em custos de fechamento e reservas operacionais = $755.600 de capital total desembolsado. Fluxo de caixa líquido antes dos impostos = $227.200 − $170.152 = $57.048 anuais. Retorno Cash-on-Cash = $57.048 ÷ $755.600 = 7,55% (coincidente com o modelo do Deal Analyzer).\n- Margem de segurança de equilíbrio (BER): (OpEx $92.000 + Dívida $170.152) ÷ $319.200 EGI = 82,13% (ocupação de equilíbrio de 78,0%). A ocupação pode recuar até 78% antes que ocorra inadimplência no serviço da dívida.\n- Sensibilidade a juros (+100 bps): Com taxa a 7,50%, a parcela mensal passa a $15.515 ($186.180 anuais); o DSCR reduz-se para 1,22x; e o fluxo de caixa comprime-se para $41.020 (5,43% CoC). O ativo preserva solvência e retorno em caixa positivo mesmo sob forte ciclo de alta de juros.',
       },
       {
         title: 'Passo 6: Due diligence física, ambiental e jurídica',

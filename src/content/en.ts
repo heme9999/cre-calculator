@@ -367,6 +367,50 @@ export const enContent: LocaleContent = {
       { title: 'Cap Rate Calculator', slug: 'cap-rate' },
     ],
   },
+  apartmentBuildingMortgage: {
+    metaTitle: 'Apartment Building Mortgage Calculator — Multifamily Commercial Loan Sizing',
+    metaDescription: 'Size apartment building mortgages across Agency (Fannie Mae / Freddie Mac), Commercial Bank, and HUD 223(f) programs. Dual-test maximum loan by LTV and DSCR, monthly payments, cash flow, and debt yield.',
+    h1: 'Apartment Building Mortgage Calculator',
+    subtitle: 'Size multifamily commercial mortgages across Agency (Fannie Mae / Freddie Mac), Commercial Bank, and HUD 223(f) debt programs. Dual-test maximum loan amounts by LTV and DSCR, evaluate debt service, and project post-financing cash flow.',
+    whatIsTitle: 'How Apartment Building Commercial Mortgages Are Sized',
+    whatIsContent: 'Commercial apartment building mortgages (5+ residential units) differ fundamentally from 1–4 unit residential home loans. Rather than evaluating borrower personal W-2 income, commercial multifamily lenders underwrite the property itself through two governing mathematical constraints:\n\n1. Loan-to-Value (LTV) Constraint: Limits the loan principal as a maximum percentage of the property appraised value or purchase price (typically 75% for commercial banks, 80% for Fannie/Freddie Agency, up to 85% for HUD 223(f)).\n2. Debt Service Coverage Ratio (DSCR) Constraint: Ensures the property Net Operating Income (NOI) exceeds the required annual principal and interest debt service by a minimum safety factor (typically 1.25x for Agency and banks, 1.176x for HUD).\n\nThe actual loan proceeds sized by the lender will ALWAYS be the lower (binding) of these two constraints. In low-cap-rate or higher-interest-rate environments, DSCR almost always constrains loan sizing below the theoretical max LTV.',
+    formulaTitle: 'The Sizing Formulas',
+    formulaCode: '[1. Maximum Loan by LTV]\nMax Loan_LTV = Purchase Price × Max LTV %\n\n[2. Maximum Allowable Annual Debt Service by DSCR]\nMax ADS_DSCR = Net Operating Income (NOI) / Minimum DSCR Requirement\n\n[3. Maximum Loan by DSCR]\nMax Loan_DSCR = Max ADS_DSCR / Annual Loan Constant\nwhere Annual Loan Constant = 12 × [ r(1 + r)^n ] / [ (1 + r)^n − 1 ]\n\n[4. Governing Sized Mortgage Proceeds]\nSized Mortgage = min( Max Loan_LTV, Max Loan_DSCR )',
+    formulaVariables: [
+      { label: 'Purchase Price', desc: 'Acquisition price or independent as-is appraisal value ($)' },
+      { label: 'NOI', desc: 'Net Operating Income: Effective Gross Income minus Operating Expenses' },
+      { label: 'DSCR Benchmark', desc: 'Minimum coverage ratio (e.g., 1.25x for Agency/Banks, 1.176x for HUD)' },
+      { label: 'Loan Constant', desc: 'Annualized percentage payment of principal and interest per dollar of loan' },
+    ],
+    exampleTitle: 'Canonical 24-Unit Multifamily Property Case Study ($2.8M Valuation, $227,200 NOI)',
+    exampleContent: 'Using our canonical 24-unit apartment building example ($2,800,000 purchase price, $355,000 GPI, 5% vacancy, $110,050 OpEx, resulting in an 8.11% Cap Rate and $227,200 NOI):\n\n• Commercial Bank Program (75% LTV, 1.25x DSCR, 6.50% interest, 25-yr amort):\n  - Max Loan by LTV (75%): $2,100,000\n  - Max Allowable Debt Service for 1.25x DSCR: $227,200 / 1.25 = $181,760 / year\n  - Max Loan by DSCR: $2,243,243\n  - Sized Mortgage: $2,100,000 (Constrained by LTV)\n  - Monthly Payment: $14,179 ($170,152 annual debt service)\n  - Actual Sized DSCR: 1.34x (Cushion above 1.25x requirement)\n  - Pre-Tax Cash Flow: $57,048 / year\n  - Leveraged Cash-on-Cash Return: 7.55% on $756,000 total initial equity\n\n• Agency Fannie Mae / Freddie Mac Program (80% LTV, 1.25x DSCR, 6.25% interest, 30-yr amort):\n  - Max Loan by LTV (80%): $2,240,000\n  - Max Loan by DSCR: $2,460,788\n  - Sized Mortgage: $2,240,000 (Constrained by LTV)\n  - Monthly Payment: $13,791 ($165,492 annual debt service)\n  - Pre-Tax Cash Flow: $61,708 / year (11.02% Cash-on-Cash on $560,000 down payment)\n\n*Note: This is a standardized educational underwriting case study for illustrative comparison only.*',
+    faqTitle: 'Frequently Asked Questions About Apartment Mortgages',
+    faqs: [
+      {
+        question: 'What is considered an apartment building for commercial mortgage financing?',
+        answer: 'In commercial real estate finance, any residential property with 5 or more self-contained living units is legally classified as commercial multifamily. Properties with 1 to 4 units fall under residential consumer mortgage guidelines (Fannie Mae / Freddie Mac residential conforming loans). Commercial multifamily loans are underwritten primarily to the cash flow (NOI) of the property rather than personal debt-to-income (DTI) ratios.',
+      },
+      {
+        question: 'Why do commercial lenders test both LTV and DSCR when sizing multifamily loans?',
+        answer: 'LTV protects the lender against property market depreciation by requiring borrower equity cushion. DSCR protects against default by ensuring rental income reliably covers mortgage payments. The lower of the two limits determines the actual loan amount. When interest rates rise, DSCR almost always becomes the binding bottleneck.',
+      },
+      {
+        question: 'What are the main differences between Agency (Fannie/Freddie) and Commercial Bank apartment loans?',
+        answer: 'Agency loans (Fannie Mae DUS / Freddie Mac Optigo) offer non-recourse financing, 30-year amortization, up to 80% LTV, and competitive fixed rates for 5–12 years, but carry stricter prepayment penalties (Yield Maintenance or Defeasance). Commercial banks offer balance-sheet portfolio loans with flexible step-down prepay penalties, but typically require recourse guarantees, 20–25 year amortization, and maximum 70–75% LTV.',
+      },
+      {
+        question: 'What is HUD / FHA 223(f) multifamily financing?',
+        answer: 'HUD 223(f) is a government-insured loan program for the acquisition or refinancing of existing multifamily properties with 5+ units. It offers the industry highest leverage (up to 85% LTV), lowest DSCR (1.176x), longest fully amortizing term (up to 35 years with no balloon payment), and non-recourse terms, in exchange for higher upfront closing costs, annual MIP (Mortgage Insurance Premium), and longer closing timelines (4–6 months).',
+      },
+    ],
+    relatedTitle: 'Related Calculators',
+    relatedCalculators: [
+      { title: 'Commercial Loan Payment Calculator', slug: 'loan-payment' },
+      { title: 'DSCR Calculator', slug: 'dscr' },
+      { title: 'Cash-on-Cash Return Calculator', slug: 'cash-on-cash' },
+      { title: 'Multifamily Cap Rate Calculator', slug: 'multifamily-cap-rate' },
+    ],
+  },
   dscr: {
     metaTitle: 'Commercial Real Estate DSCR Calculator',
     metaDescription: 'Calculate commercial property DSCR from NOI and annual debt service, then compare the result with common lender coverage thresholds.',
@@ -734,7 +778,7 @@ export const enContent: LocaleContent = {
       },
       {
         title: "Step 5: End-to-End Underwriting Case Study (24-Unit Multifamily)",
-        content: "To see how all pieces link together, examine the full underwriting walkthrough for the 24-unit apartment building introduced in our NOI Estimation Guide:\n\n- Acquisition Terms: Purchase price of $2,800,000 ($116,667/unit).\n- Verified Net Operating Income: Gross potential rent of $336,000 minus 5.0% normalized vacancy ($16,800) leaves $319,200 EGI. Deducting normalized operating expenses of $92,000 gives an in-place NOI of $227,200.\n- Going-In Cap Rate: $227,200 ÷ $2,800,000 = 8.11% (well aligned with Class B multifamily benchmarks).\n- Commercial Mortgage Financing: Sized at 75% LTV = $2,100,000 senior debt at 6.50% interest with a 25-year amortization schedule. Monthly payment is $13,273 ($159,276 annual debt service).\n- Lender DSCR Compliance: $227,200 NOI ÷ $159,276 ADS = 1.43x DSCR (comfortably exceeding the lender's 1.25x minimum requirement).\n- Invested Equity & Cash-on-Cash Return: 25% down payment ($700,000) plus $50,000 in closing costs and immediate working reserves = $750,000 total cash out of pocket. Net annual pre-tax cash flow = $227,200 − $159,276 = $67,924. Cash-on-Cash Return = $67,924 ÷ $750,000 = 9.06%.\n- Break-Even Safety Cushion: (OpEx $92,000 + ADS $159,276) ÷ $336,000 GPI = 74.8% Break-Even Ratio. Occupancy can drop to 75% before debt service default occurs.\n- Stress Test (+100 bps Interest Shock): If loan rate closes at 7.50%, debt service climbs to $186,228; DSCR tightens to 1.22x; cash flow compresses to $40,972 (5.46% CoC). The asset remains self-sustaining with positive distributions even under rising rate conditions.",
+        content: "To see how all pieces link together, examine the full underwriting walkthrough for the 24-unit apartment building introduced in our NOI Estimation Guide:\n\n- Acquisition Terms: Purchase price of $2,800,000 ($116,667/unit).\n- Verified Net Operating Income: Gross potential rent of $336,000 minus 5.0% normalized vacancy ($16,800) leaves $319,200 EGI. Deducting normalized operating expenses of $92,000 gives an in-place NOI of $227,200.\n- Going-In Cap Rate: $227,200 ÷ $2,800,000 = 8.11% (well aligned with Class B multifamily benchmarks).\n- Commercial Mortgage Financing: Sized at 75% LTV = $2,100,000 senior debt at 6.50% interest with a 25-year amortization schedule. Monthly payment is $14,179 ($170,152 annual debt service).\n- Lender DSCR Compliance: $227,200 NOI ÷ $170,152 ADS = 1.34x DSCR (comfortably exceeding the lender's 1.25x minimum requirement).\n- Invested Equity & Cash-on-Cash Return: 25% down payment ($700,000) plus $55,600 in closing costs and immediate working reserves = $755,600 total cash out of pocket. Net annual pre-tax cash flow = $227,200 − $170,152 = $57,048. Cash-on-Cash Return = $57,048 ÷ $755,600 = 7.55%.\n- Break-Even Safety Cushion: (OpEx $92,000 + ADS $170,152) ÷ $319,200 EGI = 82.13% Break-Even Ratio (78.0% Break-Even Occupancy). Physical occupancy can drop from 95% down to 78% before debt service default occurs.\n- Stress Test (+100 bps Interest Shock): If loan rate closes at 7.50%, debt service climbs to $186,180 ($15,515/month); DSCR tightens to 1.22x; cash flow compresses to $41,020 (5.43% CoC). The asset remains self-sustaining with positive distributions even under rising rate conditions.",
       },
       {
         title: "Step 6: Physical and Legal Due Diligence",

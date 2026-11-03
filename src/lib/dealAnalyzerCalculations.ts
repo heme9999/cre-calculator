@@ -426,11 +426,11 @@ export function decodeDealAnalyzerHash(
     return { ...fallback };
   }
 
-  const ptRaw = params.get('pt');
+  const ptRaw = params.get('pt') || params.get('type');
   const paymentType: PaymentType =
     ptRaw === 'installment' || ptRaw === 'principal' ? ptRaw : fallback.paymentType;
 
-  const hbRaw = params.get('hb');
+  const hbRaw = params.get('hb') || params.get('hasBalloon');
   const hasBalloon =
     hbRaw === '1' || hbRaw === 'true'
       ? true
@@ -439,26 +439,124 @@ export function decodeDealAnalyzerHash(
       : fallback.hasBalloon;
 
   const amortizationYears = Math.round(
-    parseBoundedNumber(params.get('ay'), 1, 50, fallback.amortizationYears, false)
+    parseBoundedNumber(params.get('ay') || params.get('amort'), 1, 50, fallback.amortizationYears, false)
   );
   const rawBalloonYears = Math.round(
-    parseBoundedNumber(params.get('by'), 1, 50, fallback.balloonYears, false)
+    parseBoundedNumber(params.get('by') || params.get('balloon'), 1, 50, fallback.balloonYears, false)
   );
   const balloonYears = hasBalloon ? Math.min(rawBalloonYears, amortizationYears) : rawBalloonYears;
 
+  const purchasePrice = parseBoundedNumber(
+    params.get('pp') || params.get('price') || params.get('p'),
+    1,
+    1_000_000_000,
+    fallback.purchasePrice,
+    false
+  );
+
+  const downPaymentPercent = parseBoundedNumber(
+    params.get('dp') || params.get('downPayment'),
+    0,
+    100,
+    fallback.downPaymentPercent,
+    true
+  );
+
+  const closingCostsPercent = parseBoundedNumber(
+    params.get('cc') || params.get('closingCosts'),
+    0,
+    50,
+    fallback.closingCostsPercent,
+    true
+  );
+
+  const vacancyRate = parseBoundedNumber(
+    params.get('vac') || params.get('vacancy'),
+    0,
+    100,
+    fallback.vacancyRate,
+    true
+  );
+
+  let grossPotentialIncome = fallback.grossPotentialIncome;
+  let operatingExpenses = fallback.operatingExpenses;
+
+  if (params.get('gpi') !== null) {
+    grossPotentialIncome = parseBoundedNumber(params.get('gpi'), 0, 500_000_000, fallback.grossPotentialIncome, true);
+    operatingExpenses = parseBoundedNumber(params.get('opex'), 0, 500_000_000, fallback.operatingExpenses, true);
+  } else if (params.get('noi') !== null || params.get('annualNoi') !== null) {
+    const targetNoi = parseBoundedNumber(
+      params.get('noi') || params.get('annualNoi'),
+      0,
+      500_000_000,
+      fallback.grossPotentialIncome - fallback.operatingExpenses,
+      true
+    );
+    operatingExpenses = parseBoundedNumber(
+      params.get('opex'),
+      0,
+      500_000_000,
+      Math.round(targetNoi * 0.40),
+      true
+    );
+    const vacFactor = Math.max(0.01, 1 - vacancyRate / 100);
+    grossPotentialIncome = Math.round((targetNoi + operatingExpenses) / vacFactor);
+  }
+
+  let interestRate = fallback.interestRate;
+  if (params.get('ir') !== null || params.get('rate') !== null) {
+    interestRate = parseBoundedNumber(params.get('ir') || params.get('rate'), 0, 50, fallback.interestRate, true);
+  } else if (params.get('ds') !== null || params.get('debt') !== null || params.get('annualDebtService') !== null) {
+    const targetDebt = parseBoundedNumber(
+      params.get('ds') || params.get('debt') || params.get('annualDebtService'),
+      0,
+      500_000_000,
+      0,
+      true
+    );
+    const loanAmount = Math.max(0, purchasePrice * (1 - downPaymentPercent / 100));
+    if (loanAmount > 0 && targetDebt > 0) {
+      interestRate = solveInterestRate(loanAmount, targetDebt, amortizationYears);
+    }
+  }
+
   return {
-    purchasePrice: parseBoundedNumber(params.get('pp'), 1, 1_000_000_000, fallback.purchasePrice, false),
-    closingCostsPercent: parseBoundedNumber(params.get('cc'), 0, 50, fallback.closingCostsPercent, true),
-    grossPotentialIncome: parseBoundedNumber(params.get('gpi'), 0, 500_000_000, fallback.grossPotentialIncome, true),
-    vacancyRate: parseBoundedNumber(params.get('vac'), 0, 100, fallback.vacancyRate, true),
-    operatingExpenses: parseBoundedNumber(params.get('opex'), 0, 500_000_000, fallback.operatingExpenses, true),
-    downPaymentPercent: parseBoundedNumber(params.get('dp'), 0, 100, fallback.downPaymentPercent, true),
-    interestRate: parseBoundedNumber(params.get('ir'), 0, 50, fallback.interestRate, true),
+    purchasePrice,
+    closingCostsPercent,
+    grossPotentialIncome,
+    vacancyRate,
+    operatingExpenses,
+    downPaymentPercent,
+    interestRate,
     amortizationYears,
     paymentType,
     hasBalloon,
     balloonYears,
   };
+}
+
+export function solveInterestRate(
+  loanAmount: number,
+  annualDebtService: number,
+  amortYears: number = 25
+): number {
+  if (loanAmount <= 0 || annualDebtService <= 0) return 6.5;
+  const targetMonthly = annualDebtService / 12;
+  const n = amortYears * 12;
+  if (targetMonthly * n <= loanAmount) return 0.1;
+  let low = 0.001; // 0.1%
+  let high = 0.35; // 35%
+  for (let i = 0; i < 35; i++) {
+    const mid = (low + high) / 2;
+    const r = mid / 12;
+    const pmt = loanAmount * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    if (pmt < targetMonthly) {
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+  return Math.round(((low + high) / 2) * 1000000) / 10000;
 }
 
 /**
