@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { Calculator, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import { Exchange1031Timeline } from './visuals/Exchange1031Timeline';
@@ -19,6 +19,50 @@ export function Exchange1031Calculator({ locale }: Props) {
   const [originalCostBasis, setOriginalCostBasis] = useState<number>(1200000);
   const [sellingExpenses, setSellingExpenses] = useState<number>(150000);
   const [taxRate, setTaxRate] = useState<number>(25);
+
+  const isInitializedRef = useRef(false);
+
+  const getStorageKey = () => {
+    if (typeof window === 'undefined') return 'cre_1031_inputs';
+    const subpath = window.location.pathname.replace(/^\/(en|zh|es|pt)/, '');
+    return `cre_1031_inputs_${subpath}`;
+  };
+
+  useEffect(() => {
+    const applyInputs = () => {
+      if (typeof window === 'undefined') return;
+      try {
+        const saved = sessionStorage.getItem(getStorageKey());
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.salePrice !== undefined && !isNaN(Number(parsed.salePrice))) setSalePrice(Number(parsed.salePrice));
+          if (parsed.originalCostBasis !== undefined && !isNaN(Number(parsed.originalCostBasis))) setOriginalCostBasis(Number(parsed.originalCostBasis));
+          if (parsed.sellingExpenses !== undefined && !isNaN(Number(parsed.sellingExpenses))) setSellingExpenses(Number(parsed.sellingExpenses));
+          if (parsed.taxRate !== undefined && !isNaN(Number(parsed.taxRate))) setTaxRate(Number(parsed.taxRate));
+        }
+      } catch {
+        // ignore
+      }
+      isInitializedRef.current = true;
+    };
+
+    const timer = setTimeout(applyInputs, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!isInitializedRef.current) return;
+    try {
+      sessionStorage.setItem(getStorageKey(), JSON.stringify({
+        salePrice,
+        originalCostBasis,
+        sellingExpenses,
+        taxRate,
+      }));
+    } catch {
+      // ignore
+    }
+  }, [salePrice, originalCostBasis, sellingExpenses, taxRate]);
 
   // Calculations
   const netSaleProceeds = Math.max(0, salePrice - sellingExpenses);

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { calculateLoanDetails, PaymentType } from '@/lib/loanCalculations';
 import { Calculator, Calendar, Table as TableIcon, Layers } from 'lucide-react';
@@ -21,6 +21,54 @@ export function LoanPaymentCalculator({ locale }: Props) {
   const [amortizationYears, setAmortizationYears] = useState<number>(25);
   const [balloonYears, setBalloonYears] = useState<number>(10);
   const [hasBalloon, setHasBalloon] = useState<boolean>(true);
+
+  const isInitializedRef = useRef(false);
+
+  const getStorageKey = () => {
+    if (typeof window === 'undefined') return 'cre_loan_payment_inputs';
+    const subpath = window.location.pathname.replace(/^\/(en|zh|es|pt)/, '');
+    return `cre_loan_payment_inputs_${subpath}`;
+  };
+
+  useEffect(() => {
+    const applyInputs = () => {
+      if (typeof window === 'undefined') return;
+      try {
+        const saved = sessionStorage.getItem(getStorageKey());
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.paymentType === 'installment' || parsed.paymentType === 'equal-principal') setPaymentType(parsed.paymentType);
+          if (parsed.loanAmount !== undefined && !isNaN(Number(parsed.loanAmount))) setLoanAmount(Number(parsed.loanAmount));
+          if (parsed.interestRate !== undefined && !isNaN(Number(parsed.interestRate))) setInterestRate(Number(parsed.interestRate));
+          if (parsed.amortizationYears !== undefined && !isNaN(Number(parsed.amortizationYears))) setAmortizationYears(Number(parsed.amortizationYears));
+          if (parsed.balloonYears !== undefined && !isNaN(Number(parsed.balloonYears))) setBalloonYears(Number(parsed.balloonYears));
+          if (parsed.hasBalloon !== undefined) setHasBalloon(Boolean(parsed.hasBalloon));
+        }
+      } catch {
+        // ignore
+      }
+      isInitializedRef.current = true;
+    };
+
+    const timer = setTimeout(applyInputs, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!isInitializedRef.current) return;
+    try {
+      sessionStorage.setItem(getStorageKey(), JSON.stringify({
+        paymentType,
+        loanAmount,
+        interestRate,
+        amortizationYears,
+        balloonYears,
+        hasBalloon,
+      }));
+    } catch {
+      // ignore
+    }
+  }, [paymentType, loanAmount, interestRate, amortizationYears, balloonYears, hasBalloon]);
 
   // Use unified loan calculation function
   const calcResult = calculateLoanDetails({

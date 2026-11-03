@@ -33,6 +33,9 @@ interface Props {
 }
 
 export function DealAnalyzerTool({ locale }: Props) {
+  const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
   const t = getDealAnalyzerTranslations(locale);
   const whatIsContent = getContent(locale).dealAnalyzer.whatIsContent;
   const [isInfoExpanded, setIsInfoExpanded] = useState<boolean>(false);
@@ -214,11 +217,12 @@ export function DealAnalyzerTool({ locale }: Props) {
         windowWidth: 1200,
       });
 
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL('image/jpeg', 0.88);
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4',
+        compress: true,
       });
 
       const margin = 10; // 10mm page margin
@@ -229,13 +233,13 @@ export function DealAnalyzerTool({ locale }: Props) {
       let heightLeft = renderHeight;
       let positionY = margin;
 
-      pdf.addImage(imgData, 'PNG', margin, positionY, renderWidth, renderHeight);
+      pdf.addImage(imgData, 'JPEG', margin, positionY, renderWidth, renderHeight, undefined, 'FAST');
       heightLeft -= pageContentHeight;
 
       while (heightLeft > 0) {
         positionY = heightLeft - renderHeight + margin;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', margin, positionY, renderWidth, renderHeight);
+        pdf.addImage(imgData, 'JPEG', margin, positionY, renderWidth, renderHeight, undefined, 'FAST');
         heightLeft -= pageContentHeight;
       }
 
@@ -996,6 +1000,16 @@ export function DealAnalyzerTool({ locale }: Props) {
       )}
 
       {/* Hidden Printable DOM Card for html2canvas-pro Screenshot Export */}
+      {isExportingPdf && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 right-6 z-50 bg-slate-900/95 backdrop-blur-sm text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-3 text-xs font-semibold animate-pulse"
+        >
+          <div className="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin shrink-0" />
+          <span>{isZh ? '正在生成 PDF 承销报告，请稍候...' : isEs ? 'Generando informe PDF, por favor espere...' : isPt ? 'Gerando relatório PDF, aguarde...' : 'Generating PDF underwriting report, please wait...'}</span>
+        </div>
+      )}
       <div className="absolute left-[-9999px] top-[-9999px]" style={{ width: '800px' }}>
         <div
           ref={pdfTemplateRef}

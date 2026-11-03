@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { formatCurrency } from '@/lib/utils';
 import { Calculator, ShieldCheck, AlertTriangle, ShieldAlert, CheckCircle2, Info, Share2, Check, ArrowRight } from 'lucide-react';
@@ -32,31 +32,72 @@ export function DscrCalculator({ locale }: Props) {
   const cashCushion = noi - effectiveDebtService;
   const maxDebtForTarget = noi / 1.25;
 
-  // Parse URL hash on mount if present
-  useEffect(() => {
-    const applyHashParams = () => {
-      if (typeof window === 'undefined') return;
-      const hash = window.location.hash.replace(/^#/, '');
-      if (!hash) return;
-      const params = new URLSearchParams(hash);
-      const n = params.get('noi') || params.get('n');
-      const d = params.get('debt') || params.get('d');
-      const m = params.get('monthly') || params.get('m');
-      const isM = params.get('isMonthly');
+  const isInitializedRef = useRef(false);
 
-      if (n && !isNaN(Number(n))) setNoi(Number(n));
-      if (d && !isNaN(Number(d))) setAnnualDebtService(Number(d));
-      if (m && !isNaN(Number(m))) setMonthlyPayment(Number(m));
-      if (isM !== null) setIsMonthlyInput(isM === '1' || isM === 'true');
+  const getStorageKey = () => {
+    if (typeof window === 'undefined') return 'cre_dscr_inputs';
+    const subpath = window.location.pathname.replace(/^\/(en|zh|es|pt)/, '');
+    return `cre_dscr_inputs_${subpath}`;
+  };
+
+  // Parse URL hash on mount (highest priority) or restore from sessionStorage
+  useEffect(() => {
+    const applyInputs = () => {
+      if (typeof window === 'undefined') return;
+      let restoredFromHash = false;
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash) {
+        const params = new URLSearchParams(hash);
+        const n = params.get('noi') || params.get('n');
+        const d = params.get('debt') || params.get('d');
+        const m = params.get('monthly') || params.get('m');
+        const isM = params.get('isMonthly');
+
+        if (n && !isNaN(Number(n))) { setNoi(Number(n)); restoredFromHash = true; }
+        if (d && !isNaN(Number(d))) { setAnnualDebtService(Number(d)); restoredFromHash = true; }
+        if (m && !isNaN(Number(m))) { setMonthlyPayment(Number(m)); restoredFromHash = true; }
+        if (isM !== null) { setIsMonthlyInput(isM === '1' || isM === 'true'); restoredFromHash = true; }
+      }
+
+      if (!restoredFromHash) {
+        try {
+          const saved = sessionStorage.getItem(getStorageKey());
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.noi !== undefined && !isNaN(Number(parsed.noi))) setNoi(Number(parsed.noi));
+            if (parsed.annualDebtService !== undefined && !isNaN(Number(parsed.annualDebtService))) setAnnualDebtService(Number(parsed.annualDebtService));
+            if (parsed.monthlyPayment !== undefined && !isNaN(Number(parsed.monthlyPayment))) setMonthlyPayment(Number(parsed.monthlyPayment));
+            if (parsed.isMonthlyInput !== undefined) setIsMonthlyInput(Boolean(parsed.isMonthlyInput));
+          }
+        } catch {
+          // ignore
+        }
+      }
+      isInitializedRef.current = true;
     };
 
-    const timer = setTimeout(applyHashParams, 0);
-    window.addEventListener('hashchange', applyHashParams);
+    const timer = setTimeout(applyInputs, 0);
+    window.addEventListener('hashchange', applyInputs);
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('hashchange', applyHashParams);
+      window.removeEventListener('hashchange', applyInputs);
     };
   }, []);
+
+  // Sync state changes to sessionStorage
+  useEffect(() => {
+    if (!isInitializedRef.current) return;
+    try {
+      sessionStorage.setItem(getStorageKey(), JSON.stringify({
+        noi,
+        annualDebtService,
+        monthlyPayment,
+        isMonthlyInput,
+      }));
+    } catch {
+      // ignore
+    }
+  }, [noi, annualDebtService, monthlyPayment, isMonthlyInput]);
 
   const handleShareDeal = async () => {
     if (typeof window === 'undefined') return;
@@ -332,6 +373,11 @@ export function DscrCalculator({ locale }: Props) {
                   <span>{t.dscrCalc.maxDebtRow}</span>
                   <span className="font-semibold">{formatCurrency(maxDebtForTarget)}</span>
                 </div>
+                {t.dscrCalc.maxDebtNote && (
+                  <div className="text-[11px] text-slate-400 mt-1 leading-normal">
+                    {t.dscrCalc.maxDebtNote}
+                  </div>
+                )}
               </div>
             </div>
 

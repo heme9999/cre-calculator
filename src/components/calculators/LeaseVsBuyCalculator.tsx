@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { calculateLoanDetails } from '@/lib/loanCalculations';
 import { Calculator, ArrowRightLeft, Building, Key } from 'lucide-react';
@@ -26,6 +26,58 @@ export function LeaseVsBuyCalculator({ locale }: Props) {
   const [holdingYears, setHoldingYears] = useState<number>(10);
   const [annualAppreciation, setAnnualAppreciation] = useState<number>(3.0);
   const [sellingCostPercent, setSellingCostPercent] = useState<number>(5.0);
+
+  const isInitializedRef = useRef(false);
+
+  const getStorageKey = () => {
+    if (typeof window === 'undefined') return 'cre_lease_vs_buy_inputs';
+    const subpath = window.location.pathname.replace(/^\/(en|zh|es|pt)/, '');
+    return `cre_lease_vs_buy_inputs_${subpath}`;
+  };
+
+  useEffect(() => {
+    const applyInputs = () => {
+      if (typeof window === 'undefined') return;
+      try {
+        const saved = sessionStorage.getItem(getStorageKey());
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.monthlyRent !== undefined && !isNaN(Number(parsed.monthlyRent))) setMonthlyRent(Number(parsed.monthlyRent));
+          if (parsed.annualRentEscalation !== undefined && !isNaN(Number(parsed.annualRentEscalation))) setAnnualRentEscalation(Number(parsed.annualRentEscalation));
+          if (parsed.purchasePrice !== undefined && !isNaN(Number(parsed.purchasePrice))) setPurchasePrice(Number(parsed.purchasePrice));
+          if (parsed.downPaymentPercent !== undefined && !isNaN(Number(parsed.downPaymentPercent))) setDownPaymentPercent(Number(parsed.downPaymentPercent));
+          if (parsed.interestRate !== undefined && !isNaN(Number(parsed.interestRate))) setInterestRate(Number(parsed.interestRate));
+          if (parsed.holdingYears !== undefined && !isNaN(Number(parsed.holdingYears))) setHoldingYears(Number(parsed.holdingYears));
+          if (parsed.annualAppreciation !== undefined && !isNaN(Number(parsed.annualAppreciation))) setAnnualAppreciation(Number(parsed.annualAppreciation));
+          if (parsed.sellingCostPercent !== undefined && !isNaN(Number(parsed.sellingCostPercent))) setSellingCostPercent(Number(parsed.sellingCostPercent));
+        }
+      } catch {
+        // ignore
+      }
+      isInitializedRef.current = true;
+    };
+
+    const timer = setTimeout(applyInputs, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!isInitializedRef.current) return;
+    try {
+      sessionStorage.setItem(getStorageKey(), JSON.stringify({
+        monthlyRent,
+        annualRentEscalation,
+        purchasePrice,
+        downPaymentPercent,
+        interestRate,
+        holdingYears,
+        annualAppreciation,
+        sellingCostPercent,
+      }));
+    } catch {
+      // ignore
+    }
+  }, [monthlyRent, annualRentEscalation, purchasePrice, downPaymentPercent, interestRate, holdingYears, annualAppreciation, sellingCostPercent]);
 
   // --- Calculations ---
   // 1. Lease Total Cost

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { Calculator, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { DEFAULT_DEAL_INPUT } from '@/lib/dealAnalyzerCalculations';
@@ -19,6 +19,50 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
   const [annualDebtService, setAnnualDebtService] = useState<number>(170152); // Approximate ADS for default loan
   const [grossPotentialIncome, setGrossPotentialIncome] = useState<number>(DEFAULT_DEAL_INPUT.grossPotentialIncome);
   const [vacancyRate, setVacancyRate] = useState<number>(DEFAULT_DEAL_INPUT.vacancyRate);
+
+  const isInitializedRef = useRef(false);
+
+  const getStorageKey = () => {
+    if (typeof window === 'undefined') return 'cre_ber_inputs';
+    const subpath = window.location.pathname.replace(/^\/(en|zh|es|pt)/, '');
+    return `cre_ber_inputs_${subpath}`;
+  };
+
+  useEffect(() => {
+    const applyInputs = () => {
+      if (typeof window === 'undefined') return;
+      try {
+        const saved = sessionStorage.getItem(getStorageKey());
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.operatingExpenses !== undefined && !isNaN(Number(parsed.operatingExpenses))) setOperatingExpenses(Number(parsed.operatingExpenses));
+          if (parsed.annualDebtService !== undefined && !isNaN(Number(parsed.annualDebtService))) setAnnualDebtService(Number(parsed.annualDebtService));
+          if (parsed.grossPotentialIncome !== undefined && !isNaN(Number(parsed.grossPotentialIncome))) setGrossPotentialIncome(Number(parsed.grossPotentialIncome));
+          if (parsed.vacancyRate !== undefined && !isNaN(Number(parsed.vacancyRate))) setVacancyRate(Number(parsed.vacancyRate));
+        }
+      } catch {
+        // ignore
+      }
+      isInitializedRef.current = true;
+    };
+
+    const timer = setTimeout(applyInputs, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!isInitializedRef.current) return;
+    try {
+      sessionStorage.setItem(getStorageKey(), JSON.stringify({
+        operatingExpenses,
+        annualDebtService,
+        grossPotentialIncome,
+        vacancyRate,
+      }));
+    } catch {
+      // ignore
+    }
+  }, [operatingExpenses, annualDebtService, grossPotentialIncome, vacancyRate]);
 
   // Computations
   const vacancyLoss = grossPotentialIncome * (vacancyRate / 100);

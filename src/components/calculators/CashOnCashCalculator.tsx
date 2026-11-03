@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { Calculator, DollarSign, Zap, TrendingUp, CheckCircle2 } from 'lucide-react';
 
@@ -21,6 +21,54 @@ export function CashOnCashCalculator({ locale }: Props) {
   
   const [annualNoi, setAnnualNoi] = useState<number>(84000);
   const [annualDebtService, setAnnualDebtService] = useState<number>(54000);
+
+  const isInitializedRef = useRef(false);
+
+  const getStorageKey = () => {
+    if (typeof window === 'undefined') return 'cre_coc_inputs';
+    const subpath = window.location.pathname.replace(/^\/(en|zh|es|pt)/, '');
+    return `cre_coc_inputs_${subpath}`;
+  };
+
+  useEffect(() => {
+    const applyInputs = () => {
+      if (typeof window === 'undefined') return;
+      try {
+        const saved = sessionStorage.getItem(getStorageKey());
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.purchasePrice !== undefined && !isNaN(Number(parsed.purchasePrice))) setPurchasePrice(Number(parsed.purchasePrice));
+          if (parsed.downPaymentPercent !== undefined && !isNaN(Number(parsed.downPaymentPercent))) setDownPaymentPercent(Number(parsed.downPaymentPercent));
+          if (parsed.closingCosts !== undefined && !isNaN(Number(parsed.closingCosts))) setClosingCosts(Number(parsed.closingCosts));
+          if (parsed.upfrontCapex !== undefined && !isNaN(Number(parsed.upfrontCapex))) setUpfrontCapex(Number(parsed.upfrontCapex));
+          if (parsed.annualNoi !== undefined && !isNaN(Number(parsed.annualNoi))) setAnnualNoi(Number(parsed.annualNoi));
+          if (parsed.annualDebtService !== undefined && !isNaN(Number(parsed.annualDebtService))) setAnnualDebtService(Number(parsed.annualDebtService));
+        }
+      } catch {
+        // ignore
+      }
+      isInitializedRef.current = true;
+    };
+
+    const timer = setTimeout(applyInputs, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!isInitializedRef.current) return;
+    try {
+      sessionStorage.setItem(getStorageKey(), JSON.stringify({
+        purchasePrice,
+        downPaymentPercent,
+        closingCosts,
+        upfrontCapex,
+        annualNoi,
+        annualDebtService,
+      }));
+    } catch {
+      // ignore
+    }
+  }, [purchasePrice, downPaymentPercent, closingCosts, upfrontCapex, annualNoi, annualDebtService]);
 
   // Derived Values
   const downPaymentAmount = (purchasePrice * downPaymentPercent) / 100;

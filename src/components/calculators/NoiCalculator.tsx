@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { Calculator, PieChart, Info, Layers, ArrowRight } from 'lucide-react';
@@ -24,6 +24,56 @@ export function NoiCalculator({ locale }: Props) {
   const [maintenance, setMaintenance] = useState<number>(24000);
   const [managementFee, setManagementFee] = useState<number>(15000);
   const [utilities, setUtilities] = useState<number>(8000);
+
+  const isInitializedRef = useRef(false);
+
+  const getStorageKey = () => {
+    if (typeof window === 'undefined') return 'cre_noi_inputs';
+    const subpath = window.location.pathname.replace(/^\/(en|zh|es|pt)/, '');
+    return `cre_noi_inputs_${subpath}`;
+  };
+
+  useEffect(() => {
+    const applyInputs = () => {
+      if (typeof window === 'undefined') return;
+      try {
+        const saved = sessionStorage.getItem(getStorageKey());
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.grossIncome !== undefined && !isNaN(Number(parsed.grossIncome))) setGrossIncome(Number(parsed.grossIncome));
+          if (parsed.vacancyRate !== undefined && !isNaN(Number(parsed.vacancyRate))) setVacancyRate(Number(parsed.vacancyRate));
+          if (parsed.propertyTax !== undefined && !isNaN(Number(parsed.propertyTax))) setPropertyTax(Number(parsed.propertyTax));
+          if (parsed.insurance !== undefined && !isNaN(Number(parsed.insurance))) setInsurance(Number(parsed.insurance));
+          if (parsed.maintenance !== undefined && !isNaN(Number(parsed.maintenance))) setMaintenance(Number(parsed.maintenance));
+          if (parsed.managementFee !== undefined && !isNaN(Number(parsed.managementFee))) setManagementFee(Number(parsed.managementFee));
+          if (parsed.utilities !== undefined && !isNaN(Number(parsed.utilities))) setUtilities(Number(parsed.utilities));
+        }
+      } catch {
+        // ignore
+      }
+      isInitializedRef.current = true;
+    };
+
+    const timer = setTimeout(applyInputs, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!isInitializedRef.current) return;
+    try {
+      sessionStorage.setItem(getStorageKey(), JSON.stringify({
+        grossIncome,
+        vacancyRate,
+        propertyTax,
+        insurance,
+        maintenance,
+        managementFee,
+        utilities,
+      }));
+    } catch {
+      // ignore
+    }
+  }, [grossIncome, vacancyRate, propertyTax, insurance, maintenance, managementFee, utilities]);
 
   // Calculations
   const vacancyLoss = (grossIncome * vacancyRate) / 100;

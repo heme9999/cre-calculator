@@ -10,6 +10,8 @@ interface FooterProps {
 
 export function Footer({ locale }: FooterProps) {
   const isZh = locale === 'zh';
+  const isEs = locale === 'es';
+  const isPt = locale === 'pt';
   const content = getContent(locale);
   const nav = content.nav;
   const t = getUiTranslations(locale);
@@ -172,7 +174,7 @@ export function Footer({ locale }: FooterProps) {
 
         {/* Copyright */}
         <div className="border-t border-slate-800 pt-6 text-center text-xs text-slate-500">
-          © {year} {nav.brandName}. All rights reserved.
+          © {year} {nav.brandName}{isZh ? '，版权所有。' : isEs ? '. Todos los derechos reservados.' : isPt ? '. Todos os direitos reservados.' : '. All rights reserved.'}
         </div>
       </div>
     </footer>

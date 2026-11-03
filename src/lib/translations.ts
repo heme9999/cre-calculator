@@ -119,6 +119,7 @@ export interface UiTranslations {
     annualDebtRow: string;
     cashCushionRow: string;
     maxDebtRow: string;
+    maxDebtNote: string;
     tipText: string;
     leadBadge: string;
     leadHeading: string;
@@ -252,7 +253,8 @@ export const uiTranslations: Record<Locale, UiTranslations> = {
       annualNoiRow: 'Annual NOI:',
       annualDebtRow: 'Annual Debt Service:',
       cashCushionRow: 'Annual Pre-Tax Cushion:',
-      maxDebtRow: 'Max Allowable Debt for 1.25x:',
+      maxDebtRow: 'Max Annual Debt Service for 1.25x:',
+      maxDebtNote: 'This is the maximum annual debt service, not a loan amount. A loan principal needs rate, term and property value.',
       tipText: 'Tip: Higher DSCR reflects a larger income cushion against tenant vacancy or rate increases.',
       leadBadge: 'Lender Matching Service Status',
       leadHeading: 'Commercial Lender Quote Matching (Service Not Yet Open)',
@@ -335,8 +337,8 @@ export const uiTranslations: Record<Locale, UiTranslations> = {
       modeGroupAria: '计算模式切换',
       modeForward: '正算 Cap Rate',
       modeReverse: '反算购买价',
-      priceLabel: '物业购买价格 (Purchase Price)',
-      noiLabel: '年净营业收入 (Annual NOI)',
+      priceLabel: '物业购买价格',
+      noiLabel: '年净营业收入',
       noiHelp: 'NOI = 有效毛收入 (EGI) − 日常运营支出（地税、保险、维修、物业管理费等），不扣除房贷月供与所得税。',
       noiHelpLink: '不知道如何计算 NOI？用 NOI 计算器分步算出',
       targetCapRateLabel: '目标 Cap Rate (%)',
@@ -366,7 +368,7 @@ export const uiTranslations: Record<Locale, UiTranslations> = {
       toolBadge: '偿债覆盖率计算',
       title: 'DSCR (偿债覆盖率) 实时计算器',
       subtitle: '对照商业银行审核标准，评估物业净收入对债务本息的覆盖安全度',
-      noiLabel: '年净营业收入 (Annual NOI)',
+      noiLabel: '年净营业收入',
       debtModeLabel: '还贷计算方式',
       annualMode: '按年输入',
       monthlyMode: '按月输入',
@@ -385,6 +387,7 @@ export const uiTranslations: Record<Locale, UiTranslations> = {
       annualDebtRow: '年度还贷总额:',
       cashCushionRow: '年税前现金缓冲 (Cash Cushion):',
       maxDebtRow: '按 1.25x 标准推算最高允许年还贷:',
+      maxDebtNote: '此项为最高年度还贷总额，非贷款本金总额；推算贷款本金还需结合利率、还款期限及物业估值。',
       tipText: '提示：DSCR 越高，表明物业抵御租客空置和利息上升的能力越强，银行给予的利率优惠也通常更大。',
       leadBadge: '商业贷款询价服务状态',
       leadHeading: '商业地产 DSCR 贷款询价匹配（服务暂未开放）',
@@ -516,7 +519,8 @@ export const uiTranslations: Record<Locale, UiTranslations> = {
       annualNoiRow: 'NOI Anual:',
       annualDebtRow: 'Servicio Anual de la Deuda:',
       cashCushionRow: 'Colchón de Flujo Libre Antes de Impuestos:',
-      maxDebtRow: 'Deuda Máxima Permitida para 1.25x:',
+      maxDebtRow: 'Servicio Anual Máximo de la Deuda para 1.25x:',
+      maxDebtNote: 'Este es el servicio anual máximo de la deuda, no el monto del préstamo. El capital requiere tasa, plazo y valor del inmueble.',
       tipText: 'Consejo: Un DSCR más alto refleja un mayor colchón de ingresos frente a desocupación o aumentos en tasas de interés.',
       leadBadge: 'Estado del Servicio de Financiamiento',
       leadHeading: 'Cotizaciones con Prestamistas DSCR (Servicio Aún No Disponible)',
@@ -648,7 +652,8 @@ export const uiTranslations: Record<Locale, UiTranslations> = {
       annualNoiRow: 'NOI Anual:',
       annualDebtRow: 'Serviço Anual da Dívida:',
       cashCushionRow: 'Margem de Fluxo de Caixa Antes dos Impostos:',
-      maxDebtRow: 'Dívida Máxima Permitida para 1.25x:',
+      maxDebtRow: 'Serviço Anual Máximo da Dívida para 1.25x:',
+      maxDebtNote: 'Este é o serviço anual máximo da dívida, não o valor do empréstimo. O principal exige taxa, prazo e valor do imóvel.',
       tipText: 'Dica: Um DSCR mais alto reflete uma maior margem de segurança contra vacância de inquilinos ou aumentos na taxa de juros.',
       leadBadge: 'Status do Serviço de Financiamento',
       leadHeading: 'Cotações com Credores DSCR (Serviço Ainda Não Disponível)',
