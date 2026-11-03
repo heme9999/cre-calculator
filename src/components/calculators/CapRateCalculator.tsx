@@ -3,9 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
-import { Calculator, TrendingUp, AlertCircle, Info, ArrowRight, Share2, Check } from 'lucide-react';
+import { Calculator, TrendingUp, AlertCircle, Info, ArrowRight } from 'lucide-react';
 import { CapRateVisualGauge } from './visuals/CapRateVisualGauge';
 import { getUiTranslations } from '@/lib/translations';
+import { CalculatorActionBar } from './common/CalculatorActionBar';
+import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
 
 interface Props {
   locale: string;
@@ -29,9 +31,6 @@ export function CapRateCalculator({ locale, defaultPrice, defaultNoi }: Props) {
 
   // Reverse Mode state: NOI + Target Cap Rate -> Max Purchase Price
   const [targetCapRate, setTargetCapRate] = useState<number>(7.5);
-
-  // Share link state
-  const [copied, setCopied] = useState<boolean>(false);
 
   const loadExampleLabel = isZh
     ? `加载本页示例 (${formatCurrency(initialPrice)} / ${formatCurrency(initialNoi)} NOI)`
@@ -131,11 +130,40 @@ export function CapRateCalculator({ locale, defaultPrice, defaultNoi }: Props) {
     const shareUrl = `${window.location.origin}${window.location.pathname}#${params.toString()}`;
     try {
       await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
     } catch {
-      setCopied(false);
+      // ignore
     }
+  };
+
+  const handleExportCsv = () => {
+    const rows = mode === 'forward' ? [
+      { metric: 'Mode', value: 'Forward (Calculate Cap Rate)' },
+      { metric: 'Purchase Price', value: purchasePrice },
+      { metric: 'Annual NOI', value: noi },
+      { metric: 'Cap Rate', value: formatPercent(calculatedCapRate) },
+    ] : [
+      { metric: 'Mode', value: 'Reverse (Calculate Max Purchase Price)' },
+      { metric: 'Annual NOI', value: noi },
+      { metric: 'Target Cap Rate', value: `${targetCapRate}%` },
+      { metric: 'Max Allowable Purchase Price', value: calculatedMaxPrice },
+      { metric: 'Underlying Asking Price', value: purchasePrice },
+      { metric: 'Difference', value: priceDifference },
+    ];
+    const csv = generateCalculatorCsv('Cap Rate Calculator', rows, locale);
+    downloadCsv(`cap-rate-${new Date().toISOString().slice(0, 10)}.csv`, csv);
+  };
+
+  const handleSaveDeal = () => {
+    const summary = mode === 'forward'
+      ? `Cap Rate: ${formatPercent(calculatedCapRate)} (Price: ${formatCurrency(purchasePrice)}, NOI: ${formatCurrency(noi)})`
+      : `Max Price: ${formatCurrency(calculatedMaxPrice)} (Target Cap: ${targetCapRate}%, NOI: ${formatCurrency(noi)})`;
+    saveCalculationToLocal('cap_rate', 'Cap Rate Calculator', summary, {
+      mode,
+      purchasePrice,
+      noi,
+      targetCapRate,
+      result: mode === 'forward' ? calculatedCapRate : calculatedMaxPrice,
+    });
   };
 
   // Calculations
@@ -386,28 +414,16 @@ export function CapRateCalculator({ locale, defaultPrice, defaultNoi }: Props) {
         {/* Results Panel */}
         <div className="lg:col-span-5 bg-slate-50 border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 {t.capRateCalc.summaryTitle}
               </h3>
-              <button
-                type="button"
-                onClick={handleShareDeal}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:text-emerald-700 hover:border-emerald-300 active:scale-95 transition-all shadow-2xs"
-                title={t.capRateCalc.copyTitle}
-              >
-                {copied ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-emerald-600" />
-                    <span className="text-emerald-600 font-semibold">{t.capRateCalc.copied}</span>
-                  </>
-                ) : (
-                  <>
-                    <Share2 className="w-3.5 h-3.5 text-slate-500" />
-                    <span>{t.capRateCalc.shareDeal}</span>
-                  </>
-                )}
-              </button>
+              <CalculatorActionBar
+                locale={locale}
+                onExportCsv={handleExportCsv}
+                onSave={handleSaveDeal}
+                onShare={handleShareDeal}
+              />
             </div>
 
             {mode === 'forward' ? (

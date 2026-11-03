@@ -88,6 +88,13 @@ export function ArticleGuideView({ content, locale, guideSlug }: Props) {
                 <span>{isZh ? '打开 Deal Analyzer' : isEs ? 'Abrir Deal Analyzer' : isPt ? 'Abrir Deal Analyzer' : 'Launch Deal Analyzer'}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
+              <a
+                href="/assets/commercial-real-estate-underwriting-checklist.pdf"
+                download="commercial-real-estate-underwriting-checklist.pdf"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-bold text-xs shrink-0 transition-colors shadow-xs"
+              >
+                <span>{isZh ? '📥 打印/下载 1 页尽调清单 (PDF)' : isEs ? '📥 Descargar Checklist (PDF)' : isPt ? '📥 Baixar Checklist (PDF)' : '📥 Download 1-Page Checklist (PDF)'}</span>
+              </a>
               <Link
                 href={`/${locale}/calculators/cash-on-cash/`}
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-bold text-xs shrink-0 transition-colors shadow-xs"

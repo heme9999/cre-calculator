@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { Calculator, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { DEFAULT_DEAL_INPUT } from '@/lib/dealAnalyzerCalculations';
+import { CalculatorActionBar } from './common/CalculatorActionBar';
+import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
 
 interface Props {
   locale: string;
@@ -124,6 +126,49 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
       : `Break-even ratio is ${formatPercent(breakEvenRatio)}, approaching standard commercial lender maximum limits. Cushion is tight.`;
   }
 
+  const handleShareDeal = async () => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams();
+    params.set('gpi', grossPotentialIncome.toString());
+    params.set('vac', vacancyRate.toString());
+    params.set('opex', operatingExpenses.toString());
+    params.set('ads', annualDebtService.toString());
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${params.toString()}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleExportCsv = () => {
+    const rows = [
+      { metric: 'Gross Potential Income (GPI)', value: grossPotentialIncome },
+      { metric: 'Vacancy Rate', value: `${vacancyRate}%` },
+      { metric: 'Effective Gross Income (EGI)', value: Math.round(effectiveGrossIncome) },
+      { metric: 'Operating Expenses (OpEx)', value: operatingExpenses },
+      { metric: 'Annual Debt Service (ADS)', value: annualDebtService },
+      { metric: 'Total Required Cash Outflow (OpEx + Debt)', value: totalOutlay },
+      { metric: 'Break-Even Ratio (BER)', value: formatPercent(breakEvenRatio) },
+      { metric: 'Break-Even Occupancy (BEO)', value: formatPercent(breakEvenOccupancy) },
+      { metric: 'Risk Status', value: statusTitle },
+    ];
+    const csv = generateCalculatorCsv('Break-Even Ratio Calculator', rows, locale);
+    downloadCsv(`break-even-ratio-${new Date().toISOString().slice(0, 10)}.csv`, csv);
+  };
+
+  const handleSaveDeal = () => {
+    const summary = `BER: ${formatPercent(breakEvenRatio)}, BEO: ${formatPercent(breakEvenOccupancy)} (EGI: ${formatCurrency(Math.round(effectiveGrossIncome))}, Outflow: ${formatCurrency(totalOutlay)})`;
+    saveCalculationToLocal('break_even_ratio', 'Break-Even Ratio Calculator', summary, {
+      grossPotentialIncome,
+      vacancyRate,
+      operatingExpenses,
+      annualDebtService,
+      breakEvenRatio,
+      breakEvenOccupancy,
+    });
+  };
+
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-12">
       {/* Header */}
@@ -240,9 +285,17 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
         {/* Output Results Column */}
         <div className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
           <div className="space-y-6">
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              {isZh ? '收支平衡分析结果' : isEs ? 'Resultados del Análisis de Equilibrio' : isPt ? 'Resultados da Análise de Equilíbrio' : 'Break-Even Analysis'}
-            </h3>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                {isZh ? '收支平衡分析结果' : isEs ? 'Resultados del Análisis de Equilibrio' : isPt ? 'Resultados da Análise de Equilíbrio' : 'Break-Even Analysis'}
+              </h3>
+              <CalculatorActionBar
+                locale={locale}
+                onExportCsv={handleExportCsv}
+                onSave={handleSaveDeal}
+                onShare={handleShareDeal}
+              />
+            </div>
 
             {/* Primary KPI Card */}
             <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">

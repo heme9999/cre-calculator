@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { Calculator, PieChart, Info, Layers, ArrowRight } from 'lucide-react';
+import { CalculatorActionBar } from './common/CalculatorActionBar';
+import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
 
 interface Props {
   locale: string;
@@ -82,6 +84,54 @@ export function NoiCalculator({ locale }: Props) {
   const noi = egi - totalExpenses;
   const monthlyNoi = noi / 12;
   const expenseRatio = egi > 0 ? (totalExpenses / egi) * 100 : 0;
+
+  const handleShareDeal = async () => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams();
+    params.set('gi', grossIncome.toString());
+    params.set('vac', vacancyRate.toString());
+    params.set('tax', propertyTax.toString());
+    params.set('ins', insurance.toString());
+    params.set('maint', maintenance.toString());
+    params.set('mgmt', managementFee.toString());
+    params.set('util', utilities.toString());
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${params.toString()}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleExportCsv = () => {
+    const rows = [
+      { metric: 'Gross Potential Income (GPI)', value: grossIncome },
+      { metric: 'Vacancy Rate', value: `${vacancyRate}%` },
+      { metric: 'Vacancy Loss', value: vacancyLoss },
+      { metric: 'Effective Gross Income (EGI)', value: egi },
+      { metric: 'Property Tax', value: propertyTax },
+      { metric: 'Insurance', value: insurance },
+      { metric: 'Maintenance & Repairs', value: maintenance },
+      { metric: 'Property Management Fee', value: managementFee },
+      { metric: 'Utilities & Other', value: utilities },
+      { metric: 'Total Operating Expenses (OpEx)', value: totalExpenses },
+      { metric: 'Annual Net Operating Income (NOI)', value: noi },
+      { metric: 'Monthly NOI', value: monthlyNoi },
+      { metric: 'Operating Expense Ratio', value: `${expenseRatio.toFixed(2)}%` },
+    ];
+    const csv = generateCalculatorCsv('Net Operating Income (NOI) Calculator', rows, locale);
+    downloadCsv(`noi-calculation-${new Date().toISOString().slice(0, 10)}.csv`, csv);
+  };
+
+  const handleSaveDeal = () => {
+    const summary = `Annual NOI: ${formatCurrency(noi)} (EGI: ${formatCurrency(egi)}, OpEx: ${formatCurrency(totalExpenses)})`;
+    saveCalculationToLocal('noi', 'NOI Calculator', summary, {
+      grossIncome,
+      vacancyRate,
+      totalExpenses,
+      noi,
+    });
+  };
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-12">
@@ -258,9 +308,17 @@ export function NoiCalculator({ locale }: Props) {
         {/* Results Panel */}
         <div className="lg:col-span-5 bg-slate-50 border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 flex flex-col justify-between">
           <div>
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-              {isZh ? 'NOI 结果总览' : isEs ? 'Resumen Financiero de NOI' : isPt ? 'Resumo Financeiro de NOI' : 'NOI Financial Summary'}
-            </h3>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                {isZh ? 'NOI 结果总览' : isEs ? 'Resumen Financiero de NOI' : isPt ? 'Resumo Financeiro de NOI' : 'NOI Financial Summary'}
+              </h3>
+              <CalculatorActionBar
+                locale={locale}
+                onExportCsv={handleExportCsv}
+                onSave={handleSaveDeal}
+                onShare={handleShareDeal}
+              />
+            </div>
 
             {/* Major Result Card */}
             <div className="bg-white p-5 rounded-xl border border-slate-200/90 shadow-xs mb-6">
@@ -337,15 +395,23 @@ export function NoiCalculator({ locale }: Props) {
                 href={`/${locale}/calculators/cap-rate/`}
                 className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-0.5 active-press"
               >
-                <span>{isZh ? '2. 用 Cap Rate 比价格与收益' : isEs ? '2. Comparar con Cap Rate' : isPt ? '2. Comparar com Cap Rate' : '2. Compare with Cap Rate'}</span>
+                <span>{isZh ? '2. 带入 Cap Rate 比价格' : isEs ? '2. Llevar a Cap Rate' : isPt ? '2. Levar ao Cap Rate' : '2. Take to Cap Rate'}</span>
                 <ArrowRight className="w-3 h-3" aria-hidden="true" />
               </Link>
               <span className="text-emerald-400">•</span>
               <Link
-                href={`/${locale}/tools/deal-analyzer/`}
+                href={`/${locale}/calculators/dscr/#noi=${noi}`}
                 className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-0.5 active-press"
               >
-                <span>{isZh ? '3. 进入 Deal Analyzer 测融资' : isEs ? '3. Evaluar Financiamiento en Deal Analyzer' : isPt ? '3. Testar Financiamento no Deal Analyzer' : '3. Test in Deal Analyzer'}</span>
+                <span>{isZh ? '3. 测算 DSCR 贷款上限' : isEs ? '3. Medir DSCR y Deuda' : isPt ? '3. Medir DSCR e Dívida' : '3. Size Loan via DSCR'}</span>
+                <ArrowRight className="w-3 h-3" aria-hidden="true" />
+              </Link>
+              <span className="text-emerald-400">•</span>
+              <Link
+                href={`/${locale}/tools/deal-analyzer/#gpi=${grossIncome}&vac=${vacancyRate}&opex=${totalExpenses}`}
+                className="text-emerald-700 hover:text-emerald-600 font-bold underline underline-offset-2 inline-flex items-center gap-0.5 active-press"
+              >
+                <span>{isZh ? '4. Deal Analyzer 综合分析' : isEs ? '4. Deal Analyzer' : isPt ? '4. Deal Analyzer' : '4. Deal Analyzer'}</span>
                 <ArrowRight className="w-3 h-3" aria-hidden="true" />
               </Link>
             </div>

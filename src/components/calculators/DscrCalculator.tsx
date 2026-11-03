@@ -3,9 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { formatCurrency } from '@/lib/utils';
-import { Calculator, ShieldCheck, AlertTriangle, ShieldAlert, CheckCircle2, Info, Share2, Check, ArrowRight } from 'lucide-react';
+import { Calculator, ShieldCheck, AlertTriangle, ShieldAlert, CheckCircle2, Info, ArrowRight, Scale, TrendingDown, Sparkles } from 'lucide-react';
 import { DscrCoverageTierVisualizer } from './visuals/DscrCoverageTierVisualizer';
 import { getUiTranslations } from '@/lib/translations';
+import { CalculatorActionBar } from './common/CalculatorActionBar';
+import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
 
 interface Props {
   locale: string;
@@ -17,20 +19,95 @@ export function DscrCalculator({ locale }: Props) {
   const isEs = locale === 'es';
   const isPt = locale === 'pt';
 
-  // Inputs
+  // Primary DSCR Inputs
   const [noi, setNoi] = useState<number>(250000);
   const [annualDebtService, setAnnualDebtService] = useState<number>(187500);
   const [isMonthlyInput, setIsMonthlyInput] = useState<boolean>(false);
   const [monthlyPayment, setMonthlyPayment] = useState<number>(15625);
 
-  // Share link state
-  const [copied, setCopied] = useState<boolean>(false);
+  // Three-Constraint Sizing Engine Inputs (Item 5)
+  const [propertyValue, setPropertyValue] = useState<number>(3333333);
+  const [interestRate, setInterestRate] = useState<number>(6.5);
+  const [amortizationYears, setAmortizationYears] = useState<number>(30);
+  const [targetLtv, setTargetLtv] = useState<number>(75);
+  const [targetDebtYield, setTargetDebtYield] = useState<number>(10.0);
+  const [targetDscr, setTargetDscr] = useState<number>(1.25);
 
-  // Derived calculations
+  // Derived primary calculations
   const effectiveDebtService = isMonthlyInput ? monthlyPayment * 12 : annualDebtService;
   const dscr = effectiveDebtService > 0 ? noi / effectiveDebtService : 0;
   const cashCushion = noi - effectiveDebtService;
   const maxDebtForTarget = noi / 1.25;
+
+  // Three-Constraint Sizing Engine Calculations (Item 5)
+  const maxLoanLtv = propertyValue * (targetLtv / 100);
+  const maxLoanDy = targetDebtYield > 0 ? noi / (targetDebtYield / 100) : 0;
+
+  const r = (interestRate / 100) / 12;
+  const n = amortizationYears * 12;
+  const monthlyFactor =
+    r > 0 && n > 0
+      ? (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
+      : n > 0
+      ? 1 / n
+      : 0;
+  const loanConstant = monthlyFactor * 12;
+  const maxDebtForCustomDscr = targetDscr > 0 ? noi / targetDscr : 0;
+  const maxLoanDscr = loanConstant > 0 ? maxDebtForCustomDscr / loanConstant : 0;
+
+  const bindingMaxLoan = Math.min(maxLoanLtv, maxLoanDy, maxLoanDscr);
+
+  const getBindingConstraintInfo = () => {
+    if (Math.abs(bindingMaxLoan - maxLoanLtv) < 50 && Math.abs(bindingMaxLoan - maxLoanDy) < 50) {
+      return {
+        name: isZh ? 'LTV 价值比率 与 Debt Yield 债务收益率' : isEs ? 'LTV y Debt Yield' : isPt ? 'LTV e Debt Yield' : 'LTV & Debt Yield',
+        key: 'ltv_dy',
+      };
+    }
+    if (Math.abs(bindingMaxLoan - maxLoanLtv) < 50) {
+      return {
+        name: isZh ? `LTV 价值比率 (${targetLtv}%)` : isEs ? `LTV (${targetLtv}%)` : isPt ? `LTV (${targetLtv}%)` : `LTV (${targetLtv}%)`,
+        key: 'ltv',
+      };
+    }
+    if (Math.abs(bindingMaxLoan - maxLoanDy) < 50) {
+      return {
+        name: isZh ? `Debt Yield 债务收益率 (${targetDebtYield}%)` : isEs ? `Debt Yield (${targetDebtYield}%)` : isPt ? `Debt Yield (${targetDebtYield}%)` : `Debt Yield (${targetDebtYield}%)`,
+        key: 'dy',
+      };
+    }
+    return {
+      name: isZh ? `DSCR 偿债覆盖率 (${targetDscr}x)` : isEs ? `DSCR (${targetDscr}x)` : isPt ? `DSCR (${targetDscr}x)` : `DSCR (${targetDscr}x)`,
+      key: 'dscr',
+    };
+  };
+
+  const bindingInfo = getBindingConstraintInfo();
+
+  // Rate sensitivity (+100 bps) (Item 7)
+  const stressRate = interestRate + 1.0;
+  const rStress = (stressRate / 100) / 12;
+  const stressMonthlyFactor =
+    rStress > 0 && n > 0
+      ? (rStress * Math.pow(1 + rStress, n)) / (Math.pow(1 + rStress, n) - 1)
+      : n > 0
+      ? 1 / n
+      : 0;
+  const stressLoanConstant = stressMonthlyFactor * 12;
+  const stressMaxLoanDscr = stressLoanConstant > 0 ? maxDebtForCustomDscr / stressLoanConstant : 0;
+  const dscrLoanDrop = Math.max(0, maxLoanDscr - stressMaxLoanDscr);
+  const stressBindingMaxLoan = Math.min(maxLoanLtv, maxLoanDy, stressMaxLoanDscr);
+  const stressBindingName =
+    Math.abs(stressBindingMaxLoan - stressMaxLoanDscr) < 50
+      ? (isZh ? 'DSCR 偿债覆盖率' : isEs ? 'DSCR' : isPt ? 'DSCR' : 'DSCR')
+      : Math.abs(stressBindingMaxLoan - maxLoanLtv) < 50
+      ? (isZh ? 'LTV 价值比率' : isEs ? 'LTV' : isPt ? 'LTV' : 'LTV')
+      : (isZh ? 'Debt Yield 债务收益率' : isEs ? 'Debt Yield' : isPt ? 'Debt Yield' : 'Debt Yield');
+
+  // Chained parameter calculations (Item 8)
+  const impliedDownPayment = Math.max(0, propertyValue - bindingMaxLoan);
+  const impliedDownPaymentPercent = propertyValue > 0 ? Math.round((impliedDownPayment / propertyValue) * 100) : 25;
+  const impliedAnnualDebt = Math.round(bindingMaxLoan * loanConstant);
 
   const isInitializedRef = useRef(false);
 
@@ -52,11 +129,23 @@ export function DscrCalculator({ locale }: Props) {
         const d = params.get('debt') || params.get('d');
         const m = params.get('monthly') || params.get('m');
         const isM = params.get('isMonthly');
+        const pv = params.get('pv') || params.get('price');
+        const ir = params.get('ir') || params.get('rate');
+        const ay = params.get('ay') || params.get('term');
+        const ltv = params.get('ltv');
+        const dy = params.get('dy');
+        const td = params.get('targetDscr');
 
         if (n && !isNaN(Number(n))) { setNoi(Number(n)); restoredFromHash = true; }
         if (d && !isNaN(Number(d))) { setAnnualDebtService(Number(d)); restoredFromHash = true; }
         if (m && !isNaN(Number(m))) { setMonthlyPayment(Number(m)); restoredFromHash = true; }
         if (isM !== null) { setIsMonthlyInput(isM === '1' || isM === 'true'); restoredFromHash = true; }
+        if (pv && !isNaN(Number(pv))) { setPropertyValue(Number(pv)); restoredFromHash = true; }
+        if (ir && !isNaN(Number(ir))) { setInterestRate(Number(ir)); restoredFromHash = true; }
+        if (ay && !isNaN(Number(ay))) { setAmortizationYears(Number(ay)); restoredFromHash = true; }
+        if (ltv && !isNaN(Number(ltv))) { setTargetLtv(Number(ltv)); restoredFromHash = true; }
+        if (dy && !isNaN(Number(dy))) { setTargetDebtYield(Number(dy)); restoredFromHash = true; }
+        if (td && !isNaN(Number(td))) { setTargetDscr(Number(td)); restoredFromHash = true; }
       }
 
       if (!restoredFromHash) {
@@ -68,6 +157,12 @@ export function DscrCalculator({ locale }: Props) {
             if (parsed.annualDebtService !== undefined && !isNaN(Number(parsed.annualDebtService))) setAnnualDebtService(Number(parsed.annualDebtService));
             if (parsed.monthlyPayment !== undefined && !isNaN(Number(parsed.monthlyPayment))) setMonthlyPayment(Number(parsed.monthlyPayment));
             if (parsed.isMonthlyInput !== undefined) setIsMonthlyInput(Boolean(parsed.isMonthlyInput));
+            if (parsed.propertyValue !== undefined && !isNaN(Number(parsed.propertyValue))) setPropertyValue(Number(parsed.propertyValue));
+            if (parsed.interestRate !== undefined && !isNaN(Number(parsed.interestRate))) setInterestRate(Number(parsed.interestRate));
+            if (parsed.amortizationYears !== undefined && !isNaN(Number(parsed.amortizationYears))) setAmortizationYears(Number(parsed.amortizationYears));
+            if (parsed.targetLtv !== undefined && !isNaN(Number(parsed.targetLtv))) setTargetLtv(Number(parsed.targetLtv));
+            if (parsed.targetDebtYield !== undefined && !isNaN(Number(parsed.targetDebtYield))) setTargetDebtYield(Number(parsed.targetDebtYield));
+            if (parsed.targetDscr !== undefined && !isNaN(Number(parsed.targetDscr))) setTargetDscr(Number(parsed.targetDscr));
           }
         } catch {
           // ignore
@@ -93,11 +188,17 @@ export function DscrCalculator({ locale }: Props) {
         annualDebtService,
         monthlyPayment,
         isMonthlyInput,
+        propertyValue,
+        interestRate,
+        amortizationYears,
+        targetLtv,
+        targetDebtYield,
+        targetDscr,
       }));
     } catch {
       // ignore
     }
-  }, [noi, annualDebtService, monthlyPayment, isMonthlyInput]);
+  }, [noi, annualDebtService, monthlyPayment, isMonthlyInput, propertyValue, interestRate, amortizationYears, targetLtv, targetDebtYield, targetDscr]);
 
   const handleShareDeal = async () => {
     if (typeof window === 'undefined') return;
@@ -112,11 +213,40 @@ export function DscrCalculator({ locale }: Props) {
     const shareUrl = `${window.location.origin}${window.location.pathname}#${params.toString()}`;
     try {
       await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
     } catch {
-      setCopied(false);
+      // ignore
     }
+  };
+
+  const handleExportCsv = () => {
+    const rows = [
+      { metric: 'Annual NOI', value: noi },
+      { metric: 'Annual Debt Service', value: effectiveDebtService },
+      { metric: 'Debt Service Coverage Ratio (DSCR)', value: `${dscr.toFixed(2)}x` },
+      { metric: 'Annual Cash Cushion', value: cashCushion },
+      { metric: 'Max Annual Debt Service for 1.25x', value: maxDebtForTarget },
+      { metric: 'Property Valuation', value: propertyValue },
+      { metric: 'Interest Rate', value: `${interestRate}%` },
+      { metric: 'Amortization', value: `${amortizationYears} Years` },
+      { metric: 'Target LTV Limit', value: maxLoanLtv },
+      { metric: 'Target Debt Yield Limit', value: maxLoanDy },
+      { metric: 'Target DSCR Principal Limit', value: Math.round(maxLoanDscr) },
+      { metric: 'Governing Binding Loan', value: Math.round(bindingMaxLoan), note: bindingInfo.name },
+    ];
+    const csv = generateCalculatorCsv('DSCR Coverage & Sizing Calculator', rows, locale);
+    downloadCsv(`dscr-analysis-${new Date().toISOString().slice(0, 10)}.csv`, csv);
+  };
+
+  const handleSaveDeal = () => {
+    const summary = `DSCR: ${dscr.toFixed(2)}x, Max Loan: ${formatCurrency(bindingMaxLoan)} (NOI: ${formatCurrency(noi)})`;
+    saveCalculationToLocal('dscr', 'DSCR Calculator', summary, {
+      noi,
+      effectiveDebtService,
+      dscr,
+      propertyValue,
+      interestRate,
+      bindingMaxLoan,
+    });
   };
 
   // Status Tier based on user specification
@@ -307,28 +437,16 @@ export function DscrCalculator({ locale }: Props) {
           {/* Results Panel */}
           <div className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                   {t.dscrCalc.summaryTitle}
                 </h3>
-                <button
-                  type="button"
-                  onClick={handleShareDeal}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg bg-white border border-slate-200 text-slate-700 hover:text-emerald-700 hover:border-emerald-300 active:scale-95 transition-all shadow-2xs"
-                  title={t.dscrCalc.copyTitle}
-                >
-                  {copied ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-600 font-semibold">{t.dscrCalc.copied}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Share2 className="w-3.5 h-3.5 text-slate-500" />
-                      <span>{t.dscrCalc.shareDeal}</span>
-                    </>
-                  )}
-                </button>
+                <CalculatorActionBar
+                  locale={locale}
+                  onExportCsv={handleExportCsv}
+                  onSave={handleSaveDeal}
+                  onShare={handleShareDeal}
+                />
               </div>
 
               {/* Major Card */}
@@ -390,6 +508,244 @@ export function DscrCalculator({ locale }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Three-Constraint Maximum Loan Sizing Engine (Item 5, 7, 8) */}
+      <section
+        data-testid="dscr-three-constraint-sizing"
+        className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
+      >
+        <div className="bg-slate-900 text-white p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-2">
+              <Scale className="w-3.5 h-3.5" />
+              {t.dscrCalc.sizingBadge}
+            </div>
+            <h3 className="text-xl md:text-2xl font-bold">
+              {t.dscrCalc.sizingTitle}
+            </h3>
+            <p className="text-slate-400 text-sm mt-1 max-w-2xl leading-relaxed">
+              {t.dscrCalc.sizingSubtitle}
+            </p>
+          </div>
+        </div>
+
+        <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Sizing Inputs */}
+          <div className="lg:col-span-7 space-y-5">
+            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              {isZh ? '承销假设参数' : isEs ? 'Supuestos de Suscripción' : isPt ? 'Premissas de Subscrição' : 'Underwriting Inputs'}
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="dscr-property-value-input" className="block text-xs font-semibold text-slate-700 mb-1">
+                  {t.dscrCalc.propertyValueLabel}
+                </label>
+                <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden bg-white">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm">$</span>
+                  <input
+                    id="dscr-property-value-input"
+                    type="number"
+                    value={propertyValue || ''}
+                    onChange={(e) => setPropertyValue(parseFloat(e.target.value) || 0)}
+                    className="w-full pl-7 pr-3 py-2.5 text-slate-900 text-sm font-semibold focus:outline-none"
+                    placeholder="3,333,333"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="dscr-interest-rate-input" className="block text-xs font-semibold text-slate-700 mb-1">
+                  {t.dscrCalc.interestRateLabel}
+                </label>
+                <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden bg-white">
+                  <input
+                    id="dscr-interest-rate-input"
+                    type="number"
+                    step="0.05"
+                    value={interestRate || ''}
+                    onChange={(e) => setInterestRate(parseFloat(e.target.value) || 0)}
+                    className="w-full pl-3 pr-7 py-2.5 text-slate-900 text-sm font-semibold focus:outline-none"
+                    placeholder="6.5"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm">%</span>
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="dscr-amortization-input" className="block text-xs font-semibold text-slate-700 mb-1">
+                  {t.dscrCalc.amortizationYearsLabel}
+                </label>
+                <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden bg-white">
+                  <input
+                    id="dscr-amortization-input"
+                    type="number"
+                    value={amortizationYears || ''}
+                    onChange={(e) => setAmortizationYears(parseInt(e.target.value, 10) || 0)}
+                    className="w-full pl-3 pr-3 py-2.5 text-slate-900 text-sm font-semibold focus:outline-none"
+                    placeholder="30"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="dscr-target-ltv-input" className="block text-xs font-semibold text-slate-700 mb-1">
+                  {t.dscrCalc.targetLtvLabel}
+                </label>
+                <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden bg-white">
+                  <input
+                    id="dscr-target-ltv-input"
+                    type="number"
+                    value={targetLtv || ''}
+                    onChange={(e) => setTargetLtv(parseFloat(e.target.value) || 0)}
+                    className="w-full pl-3 pr-7 py-2.5 text-slate-900 text-sm font-semibold focus:outline-none"
+                    placeholder="75"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm">%</span>
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="dscr-target-dy-input" className="block text-xs font-semibold text-slate-700 mb-1">
+                  {t.dscrCalc.targetDebtYieldLabel}
+                </label>
+                <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden bg-white">
+                  <input
+                    id="dscr-target-dy-input"
+                    type="number"
+                    step="0.1"
+                    value={targetDebtYield || ''}
+                    onChange={(e) => setTargetDebtYield(parseFloat(e.target.value) || 0)}
+                    className="w-full pl-3 pr-7 py-2.5 text-slate-900 text-sm font-semibold focus:outline-none"
+                    placeholder="10.0"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm">%</span>
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="dscr-target-dscr-input" className="block text-xs font-semibold text-slate-700 mb-1">
+                  {t.dscrCalc.targetDscrLabel}
+                </label>
+                <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden bg-white">
+                  <input
+                    id="dscr-target-dscr-input"
+                    type="number"
+                    step="0.05"
+                    value={targetDscr || ''}
+                    onChange={(e) => setTargetDscr(parseFloat(e.target.value) || 0)}
+                    className="w-full pl-3 pr-7 py-2.5 text-slate-900 text-sm font-semibold focus:outline-none"
+                    placeholder="1.25"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm">x</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed">
+              {t.dscrCalc.sizingAssumption(amortizationYears, interestRate)}
+            </div>
+          </div>
+
+          {/* Sizing Outputs & Comparative Analysis */}
+          <div className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between space-y-6">
+            <div>
+              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
+                {t.dscrCalc.bindingConstraintTitle}
+              </h4>
+
+              {/* Major Binding Card */}
+              <div className="bg-white p-5 rounded-xl border border-emerald-300 shadow-sm mb-4">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    {isZh ? '最大可贷本金上限' : isEs ? 'Préstamo Máximo Autorizado' : isPt ? 'Financiamento Máximo Autorizado' : 'Maximum Allowable Loan'}
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-300 text-[11px] font-bold">
+                    <Sparkles className="w-3 h-3 text-emerald-600" />
+                    {isZh ? '限制性瓶颈' : isEs ? 'Vinculante' : isPt ? 'Limitante' : 'Binding'}
+                  </span>
+                </div>
+                <div data-testid="dscr-binding-max-loan" className="text-3xl md:text-4xl font-black text-slate-900 mt-1">
+                  {formatCurrency(bindingMaxLoan)}
+                </div>
+                <p className="text-xs text-slate-600 mt-2 font-medium leading-relaxed">
+                  {t.dscrCalc.bindingReason(bindingInfo.name, formatCurrency(bindingMaxLoan))}
+                </p>
+              </div>
+
+              {/* 3-Way Constraint Breakdown Cards */}
+              <div className="space-y-2 text-xs">
+                <div className={`p-3 rounded-xl border flex items-center justify-between transition-colors ${
+                  Math.abs(bindingMaxLoan - maxLoanLtv) < 50
+                    ? 'bg-emerald-50/70 border-emerald-300 font-bold text-emerald-950'
+                    : 'bg-white border-slate-200 text-slate-700'
+                }`}>
+                  <span>{t.dscrCalc.ltvConstraintRow} ({targetLtv}%):</span>
+                  <span className="font-mono text-sm">{formatCurrency(maxLoanLtv)}</span>
+                </div>
+
+                <div className={`p-3 rounded-xl border flex items-center justify-between transition-colors ${
+                  Math.abs(bindingMaxLoan - maxLoanDy) < 50
+                    ? 'bg-emerald-50/70 border-emerald-300 font-bold text-emerald-950'
+                    : 'bg-white border-slate-200 text-slate-700'
+                }`}>
+                  <span>{t.dscrCalc.dyConstraintRow} ({targetDebtYield}%):</span>
+                  <span className="font-mono text-sm">{formatCurrency(maxLoanDy)}</span>
+                </div>
+
+                <div className={`p-3 rounded-xl border flex items-center justify-between transition-colors ${
+                  Math.abs(bindingMaxLoan - maxLoanDscr) < 50
+                    ? 'bg-emerald-50/70 border-emerald-300 font-bold text-emerald-950'
+                    : 'bg-white border-slate-200 text-slate-700'
+                }`}>
+                  <span>{t.dscrCalc.dscrConstraintRow} ({targetDscr}x):</span>
+                  <span className="font-mono text-sm">{formatCurrency(maxLoanDscr)}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Dynamic Rate Sensitivity (+100 bps) (Item 7) */}
+            <div data-testid="dscr-rate-sensitivity" className="p-3.5 rounded-xl bg-amber-50/90 border border-amber-200 text-xs text-amber-950 space-y-1.5">
+              <div className="font-bold flex items-center gap-1.5 text-amber-900">
+                <TrendingDown className="w-3.5 h-3.5 text-amber-700" />
+                <span>{t.dscrCalc.rateSensitivityTitle}</span>
+              </div>
+              <p className="leading-relaxed text-amber-900/90">
+                {t.dscrCalc.rateSensitivityDesc(
+                  formatCurrency(maxLoanDscr),
+                  formatCurrency(stressMaxLoanDscr),
+                  formatCurrency(dscrLoanDrop),
+                  stressRate,
+                  stressBindingName
+                )}
+              </p>
+            </div>
+
+            {/* Chained Parameter Flows (Item 8) */}
+            <div className="p-4 rounded-xl bg-slate-900 text-white space-y-2 text-xs">
+              <span className="font-bold text-slate-200 block">
+                {isZh ? '承销串链流转 (下一步测算)' : isEs ? 'Flujo de Suscripción (Siguiente Paso)' : isPt ? 'Fluxo de Subscrição (Próximo Passo)' : 'Chained Underwriting Workflow'}
+              </span>
+              <div className="grid grid-cols-1 gap-2">
+                <Link
+                  href={`/${locale}/calculators/cash-on-cash/#price=${Math.round(propertyValue)}&downPayment=${impliedDownPaymentPercent}&annualNoi=${Math.round(noi)}&debt=${impliedAnnualDebt}`}
+                  className="flex items-center justify-between p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition text-slate-200 hover:text-white"
+                >
+                  <span>{t.dscrCalc.nextStepCoc}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
+                </Link>
+                <Link
+                  href={`/${locale}/tools/deal-analyzer/#pp=${Math.round(propertyValue)}&dp=${impliedDownPaymentPercent}&noi=${Math.round(noi)}&ir=${interestRate}&ay=${amortizationYears}`}
+                  className="flex items-center justify-between p-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition text-white font-semibold"
+                >
+                  <span>{t.dscrCalc.nextStepAnalyzer}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-white" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Deactivated Lender Quote Matching Service Notice */}
       <section

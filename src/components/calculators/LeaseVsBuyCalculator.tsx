@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { calculateLoanDetails } from '@/lib/loanCalculations';
 import { Calculator, ArrowRightLeft, Building, Key } from 'lucide-react';
+import { CalculatorActionBar } from './common/CalculatorActionBar';
+import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
 
 interface Props {
   locale: string;
@@ -118,6 +120,57 @@ export function LeaseVsBuyCalculator({ locale }: Props) {
 
   const costDifference = totalLeaseCost - netBuyCost;
   const buyIsCheaper = costDifference > 0;
+
+  const handleShareDeal = async () => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams();
+    params.set('rent', monthlyRent.toString());
+    params.set('esc', annualRentEscalation.toString());
+    params.set('price', purchasePrice.toString());
+    params.set('dp', downPaymentPercent.toString());
+    params.set('rate', interestRate.toString());
+    params.set('years', holdingYears.toString());
+    params.set('appr', annualAppreciation.toString());
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${params.toString()}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleExportCsv = () => {
+    const rows = [
+      { metric: 'Holding Period (Years)', value: holdingYears },
+      { metric: 'Initial Monthly Rent', value: monthlyRent },
+      { metric: 'Annual Rent Escalation', value: `${annualRentEscalation}%` },
+      { metric: 'Total Cumulative Lease Cost', value: Math.round(totalLeaseCost) },
+      { metric: 'Purchase Price', value: purchasePrice },
+      { metric: 'Down Payment %', value: `${downPaymentPercent}%` },
+      { metric: 'Down Payment Amount', value: Math.round(downPayment) },
+      { metric: 'Loan Interest Rate', value: `${interestRate}%` },
+      { metric: 'Total Debt Service Paid', value: Math.round(cumulativeDebtService) },
+      { metric: 'Projected Future Property Value', value: Math.round(futurePropertyValue) },
+      { metric: 'Projected Net Equity Realized at Exit', value: Math.round(netProceedsAtExit) },
+      { metric: 'Net Cost to Own', value: Math.round(netBuyCost) },
+      { metric: 'Recommended Strategy', value: buyIsCheaper ? 'Buy' : 'Lease' },
+      { metric: 'Net Savings', value: Math.round(Math.abs(costDifference)) },
+    ];
+    const csv = generateCalculatorCsv('Lease vs Buy Comparison Calculator', rows, locale);
+    downloadCsv(`lease-vs-buy-${new Date().toISOString().slice(0, 10)}.csv`, csv);
+  };
+
+  const handleSaveDeal = () => {
+    const summary = `${buyIsCheaper ? 'Buy preferred' : 'Lease preferred'} over ${holdingYears} yrs (Savings: ${formatCurrency(Math.round(Math.abs(costDifference)))})`;
+    saveCalculationToLocal('lease_vs_buy', 'Lease vs Buy Calculator', summary, {
+      monthlyRent,
+      purchasePrice,
+      holdingYears,
+      totalLeaseCost: Math.round(totalLeaseCost),
+      netBuyCost: Math.round(netBuyCost),
+      buyIsCheaper,
+    });
+  };
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-12">
@@ -354,6 +407,18 @@ export function LeaseVsBuyCalculator({ locale }: Props) {
                       : `Leasing Saves ${formatCurrency(Math.round(-costDifference))}`)}
               </span>
             </div>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-800/60 p-3 rounded-xl border border-slate-700/80">
+            <span className="text-xs font-semibold text-slate-300">
+              {isZh ? '导出与保存当前租买测算结果' : isEs ? 'Exportar y guardar análisis' : isPt ? 'Exportar e salvar análise' : 'Export & Save Analysis'}
+            </span>
+            <CalculatorActionBar
+              locale={locale}
+              onExportCsv={handleExportCsv}
+              onSave={handleSaveDeal}
+              onShare={handleShareDeal}
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

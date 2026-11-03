@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { calculateLoanDetails, PaymentType } from '@/lib/loanCalculations';
 import { Calculator, Calendar, Table as TableIcon, Layers } from 'lucide-react';
+import { CalculatorActionBar } from './common/CalculatorActionBar';
+import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
 
 interface Props {
   locale: string;
@@ -126,6 +128,54 @@ export function LoanPaymentCalculator({ locale }: Props) {
 
     scheduleBal = endBal;
   }
+
+  const handleShareDeal = async () => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams();
+    params.set('amt', loanAmount.toString());
+    params.set('rate', interestRate.toString());
+    params.set('amort', amortizationYears.toString());
+    params.set('balloon', balloonYears.toString());
+    params.set('hasBalloon', hasBalloon.toString());
+    params.set('type', paymentType);
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${params.toString()}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleExportCsv = () => {
+    const rows = [
+      { metric: 'Loan Amount', value: loanAmount },
+      { metric: 'Annual Interest Rate', value: `${interestRate}%` },
+      { metric: 'Amortization Term (Years)', value: amortizationYears },
+      { metric: 'Has Balloon', value: hasBalloon ? 'Yes' : 'No' },
+      { metric: 'Balloon Term (Years)', value: hasBalloon ? balloonYears : 'N/A' },
+      { metric: 'Payment Structure', value: paymentType === 'installment' ? 'Fixed Installment (Price)' : 'Equal Principal' },
+      { metric: 'Initial Monthly Payment', value: Math.round(monthlyPayment) },
+      { metric: 'Annual Debt Service', value: Math.round(monthlyPayment * 12) },
+      { metric: 'Total Paid Over Term', value: Math.round(totalPaidInTerm) },
+      { metric: 'Total Principal Paid', value: Math.round(termPrincipal) },
+      { metric: 'Total Interest Paid', value: Math.round(termInterest) },
+      { metric: 'Remaining Balloon Payoff', value: Math.round(balloonBalance) },
+    ];
+    const csv = generateCalculatorCsv('Commercial Mortgage & Loan Payment Calculator', rows, locale);
+    downloadCsv(`loan-payment-${new Date().toISOString().slice(0, 10)}.csv`, csv);
+  };
+
+  const handleSaveDeal = () => {
+    const summary = `Loan: ${formatCurrency(loanAmount)} @ ${interestRate}%, Monthly: ${formatCurrency(Math.round(monthlyPayment))}`;
+    saveCalculationToLocal('loan_payment', 'Loan Payment Calculator', summary, {
+      loanAmount,
+      interestRate,
+      amortizationYears,
+      balloonYears,
+      paymentType,
+      monthlyPayment,
+    });
+  };
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-12">
@@ -334,9 +384,17 @@ export function LoanPaymentCalculator({ locale }: Props) {
         {/* Results Panel */}
         <div className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
           <div>
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-              {isZh ? '还款结果总览' : isEs ? 'Resumen del Préstamo' : isPt ? 'Resumo do Financiamento' : 'Loan Summary'}
-            </h3>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                {isZh ? '还款结果总览' : isEs ? 'Resumen del Préstamo' : isPt ? 'Resumo do Financiamento' : 'Loan Summary'}
+              </h3>
+              <CalculatorActionBar
+                locale={locale}
+                onExportCsv={handleExportCsv}
+                onSave={handleSaveDeal}
+                onShare={handleShareDeal}
+              />
+            </div>
 
             {/* Major Card */}
             <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">

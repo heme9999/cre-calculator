@@ -1,8 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { formatCurrency, formatPercent } from '@/lib/utils';
-import { Calculator, DollarSign, Zap, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { Calculator, DollarSign, Zap, TrendingUp, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
+import { CalculatorActionBar } from './common/CalculatorActionBar';
+import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
 
 interface Props {
   locale: string;
@@ -88,6 +91,91 @@ export function CashOnCashCalculator({ locale }: Props) {
       : cashOnCashReturn > capRate
       ? 'higher'
       : 'lower';
+
+  // Dynamic financial diagnostics (Item 7)
+  const loanAmount = Math.max(0, purchasePrice - downPaymentAmount);
+  const debtConstant = loanAmount > 0 ? (annualDebtService / loanAmount) * 100 : 0;
+  const upfrontFriction = closingCosts + upfrontCapex;
+  const upfrontFrictionPercent = purchasePrice > 0 ? (upfrontFriction / purchasePrice) * 100 : 0;
+
+  const dynamicDiagnosisText = (() => {
+    if (comparisonState === 'lower') {
+      if (annualCashFlow <= 0) {
+        if (isZh) return `现金流倒挂警示：年度偿债额 (${formatCurrency(annualDebtService)}) 超过或耗尽了净营业收入 (${formatCurrency(annualNoi)})，首年现金流出现赤字，负债未能产生正向分配。`;
+        if (isEs) return `Déficit de flujo de caja: El servicio anual de la deuda (${formatCurrency(annualDebtService)}) supera el NOI (${formatCurrency(annualNoi)}), generando flujo negativo en el año 1.`;
+        if (isPt) return `Déficit de fluxo de caixa: O serviço anual da dívida (${formatCurrency(annualDebtService)}) supera o NOI (${formatCurrency(annualNoi)}), gerando fluxo negativo no ano 1.`;
+        return `Cash flow deficit: Annual debt service (${formatCurrency(annualDebtService)}) exhausts NOI (${formatCurrency(annualNoi)}), producing negative year-1 cash flow.`;
+      }
+      if (debtConstant > capRate) {
+        if (isZh) return `负杠杆效应：贷款偿债常数达到 ${debtConstant.toFixed(2)}%，高于物业资产回报率 (Cap Rate ${formattedCap})，本金摊销与利息支出分流了过多经营收入；${upfrontFriction > 0 ? `叠加前期费用与改造 (${formatCurrency(upfrontFriction)}，占买价 ${upfrontFrictionPercent.toFixed(1)}%) 增加了初始资金基数，使首年现金回报率低于资产收益率。` : '从而拉低了首年权益现金回报率。'}`;
+        if (isEs) return `Efecto de apalancamiento negativo: La constante de la deuda (${debtConstant.toFixed(2)}%) supera el Cap Rate (${formattedCap}), y el servicio de la deuda absorbe una proporción sustancial del flujo operativo${upfrontFriction > 0 ? `, junto con costos iniciales de ${formatCurrency(upfrontFriction)}` : ''}.`;
+        if (isPt) return `Efeito de alavancagem negativa: A constante da dívida (${debtConstant.toFixed(2)}%) supera o Cap Rate (${formattedCap}), e o serviço da dívida absorve parte expressiva da receita operacional${upfrontFriction > 0 ? `, somado aos custos iniciais de ${formatCurrency(upfrontFriction)}` : ''}.`;
+        return `Negative financial leverage: The annual debt constant (${debtConstant.toFixed(2)}%) exceeds the unleveraged Cap Rate (${formattedCap}), where debt service absorbs operating cash flow${upfrontFriction > 0 ? `, combined with upfront fees & capex of ${formatCurrency(upfrontFriction)} (${upfrontFrictionPercent.toFixed(1)}% of price)` : ''}, diluting year-1 cash yield below the asset yield.`;
+      }
+      if (isZh) return `前期费用摊薄：虽然借贷成本相对平稳，但首期过户费用与即时改造共计 ${formatCurrency(upfrontFriction)}（占买价 ${upfrontFrictionPercent.toFixed(1)}%）扩大了实际现金出资基数，导致首年现金回报率暂时低于无杠杆 Cap Rate。`;
+      if (isEs) return `Dilución por costos iniciales: Los gastos de cierre y mejoras (${formatCurrency(upfrontFriction)}) aumentaron la base de capital invertido, moderando temporalmente el rendimiento del primer año.`;
+      if (isPt) return `Diluição por custos iniciais: Os custos de fechamento e benfeitorias (${formatCurrency(upfrontFriction)}) elevaram a base de capital investido, moderando o rendimento do primeiro ano.`;
+      return `Upfront equity dilution: Upfront transaction costs and capex (${formatCurrency(upfrontFriction)}, ${upfrontFrictionPercent.toFixed(1)}% of price) expanded your initial cash basis, temporarily placing year-1 cash yield below the unleveraged Cap Rate.`;
+    }
+    if (comparisonState === 'higher') {
+      if (isZh) return `正向杠杆增益：年度贷款常数 (${debtConstant.toFixed(2)}%) 低于资产回报率 (Cap Rate ${formattedCap})，借贷有效放大了自备股权资本的回报率（现金回报率 ${formattedCoc} > Cap Rate ${formattedCap}）。`;
+      if (isEs) return `Apalancamiento positivo activo: La constante de deuda (${debtConstant.toFixed(2)}%) es inferior al Cap Rate (${formattedCap}), amplificando el rendimiento en efectivo sobre el capital propio (${formattedCoc} > ${formattedCap}).`;
+      if (isPt) return `Alavancagem positiva ativa: A constante da dívida (${debtConstant.toFixed(2)}%) é inferior ao Cap Rate (${formattedCap}), amplificando o retorno em caixa sobre o capital próprio (${formattedCoc} > ${formattedCap}).`;
+      return `Positive financial leverage: The annual debt constant (${debtConstant.toFixed(2)}%) is below the unleveraged Cap Rate (${formattedCap}), successfully magnifying cash return on your invested equity (${formattedCoc} > ${formattedCap}).`;
+    }
+    if (isZh) return `中性杠杆区间：借贷综合成本与资产总回报率基本匹配，首年现金回报率与资产 Cap Rate 相当。`;
+    if (isEs) return `Apalancamiento neutral: El costo del financiamiento se alinea con el rendimiento del activo, igualando aproximadamente el retorno en efectivo con el Cap Rate.`;
+    if (isPt) return `Alavancagem neutra: O custo do financiamento alinha-se ao rendimento do ativo, aproximando o retorno em caixa ao Cap Rate.`;
+    return `Neutral leverage: Financing costs closely match the asset yield, aligning year-1 cash yield with the unleveraged Cap Rate.`;
+  })();
+
+  const handleShareDeal = async () => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams();
+    params.set('pp', purchasePrice.toString());
+    params.set('dp', downPaymentPercent.toString());
+    params.set('cc', closingCosts.toString());
+    params.set('cx', upfrontCapex.toString());
+    params.set('noi', annualNoi.toString());
+    params.set('ds', annualDebtService.toString());
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${params.toString()}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleExportCsv = () => {
+    const rows = [
+      { metric: 'Purchase Price', value: purchasePrice },
+      { metric: 'Down Payment %', value: `${downPaymentPercent}%` },
+      { metric: 'Down Payment Amount', value: downPaymentAmount },
+      { metric: 'Closing Costs', value: closingCosts },
+      { metric: 'Upfront CapEx', value: upfrontCapex },
+      { metric: 'Total Initial Cash Invested', value: totalCashInvested },
+      { metric: 'Annual Net Operating Income (NOI)', value: annualNoi },
+      { metric: 'Annual Debt Service', value: annualDebtService },
+      { metric: 'Net Annual Pre-Tax Cash Flow', value: annualCashFlow },
+      { metric: 'Cash-on-Cash Return', value: formattedCoc },
+      { metric: 'Unleveraged Cap Rate', value: formattedCap },
+      { metric: 'Debt Constant', value: `${debtConstant.toFixed(2)}%` },
+    ];
+    const csv = generateCalculatorCsv('Cash-on-Cash Return Calculator', rows, locale);
+    downloadCsv(`cash-on-cash-${new Date().toISOString().slice(0, 10)}.csv`, csv);
+  };
+
+  const handleSaveDeal = () => {
+    const summary = `CoC: ${formattedCoc} (Cash Flow: ${formatCurrency(annualCashFlow)}, Invested: ${formatCurrency(totalCashInvested)})`;
+    saveCalculationToLocal('cash_on_cash', 'Cash-on-Cash Calculator', summary, {
+      purchasePrice,
+      downPaymentPercent,
+      annualNoi,
+      annualDebtService,
+      cashOnCashReturn,
+      annualCashFlow,
+    });
+  };
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-12">
@@ -258,9 +346,17 @@ export function CashOnCashCalculator({ locale }: Props) {
         {/* Results Panel */}
         <div className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
           <div>
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-              {isZh ? '现金回报率分析' : isEs ? 'Análisis de Retorno Cash-on-Cash' : isPt ? 'Análise de Retorno Cash-on-Cash' : 'Cash-on-Cash Analysis'}
-            </h3>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                {isZh ? '现金回报率分析' : isEs ? 'Análisis de Retorno Cash-on-Cash' : isPt ? 'Análise de Retorno Cash-on-Cash' : 'Cash-on-Cash Analysis'}
+              </h3>
+              <CalculatorActionBar
+                locale={locale}
+                onExportCsv={handleExportCsv}
+                onSave={handleSaveDeal}
+                onShare={handleShareDeal}
+              />
+            </div>
 
             {/* Major Card */}
             <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
@@ -342,18 +438,54 @@ export function CashOnCashCalculator({ locale }: Props) {
                 <span data-testid="coc-result-cap-rate" className="font-semibold">{formattedCap}</span>
               </div>
             </div>
+
+            {/* Dynamic Calculated Financial Diagnosis (Item 7) */}
+            <div data-testid="coc-dynamic-diagnosis" className="mt-4 p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200/90 text-xs text-emerald-950 leading-relaxed space-y-1.5">
+              <div className="font-bold flex items-center gap-1.5 text-emerald-900">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                <span>{isZh ? '财务诊断与杠杆成因剖析' : isEs ? 'Diagnóstico Financiero de Apalancamiento' : isPt ? 'Diagnóstico Financeiro de Alavancagem' : 'Calculated Leverage & Financial Diagnosis'}</span>
+              </div>
+              <p className="text-emerald-900/90">
+                {dynamicDiagnosisText}
+              </p>
+            </div>
           </div>
 
-          <div className="bg-slate-100 border border-slate-200 rounded-xl p-4 text-xs text-slate-700 mt-6 flex items-start gap-2">
-            <TrendingUp className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-            <div>
-              {isZh
-                ? '衡量关键：Cash-on-Cash Return 仅看你钱包里实际付出的现金。杠杆加得越好，资金利用效率越高。'
-                : isEs
-                ? 'Conclusión clave: El retorno Cash-on-Cash evalúa la rentabilidad específica sobre el capital real desembolsado de su propio bolsillo.'
-                : isPt
-                ? 'Ponto-chave: O retorno Cash-on-Cash avalia a rentabilidade especificamente sobre o dinheiro desembolsado do seu próprio bolso.'
-                : 'Key take-away: Cash-on-cash return evaluates efficiency specifically on out-of-pocket equity invested.'}
+          <div className="space-y-3 mt-6">
+            <div className="bg-slate-100 border border-slate-200 rounded-xl p-4 text-xs text-slate-700 flex items-start gap-2">
+              <TrendingUp className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div>
+                {isZh
+                  ? '衡量关键：Cash-on-Cash Return 仅看你钱包里实际付出的现金。杠杆加得越好，资金利用效率越高。'
+                  : isEs
+                  ? 'Conclusión clave: El retorno Cash-on-Cash evalúa la rentabilidad específica sobre el capital real desembolsado de su propio bolsillo.'
+                  : isPt
+                  ? 'Ponto-chave: O retorno Cash-on-Cash avalia a rentabilidade especificamente sobre o dinheiro desembolsado do seu próprio bolso.'
+                  : 'Key take-away: Cash-on-cash return evaluates efficiency specifically on out-of-pocket equity invested.'}
+              </div>
+            </div>
+
+            {/* Chained Parameter Links (Item 8) */}
+            <div className="p-3.5 rounded-xl bg-slate-900 text-white space-y-2 text-xs">
+              <span className="font-bold text-slate-200 block">
+                {isZh ? '承销串链流转 (下一步测算)' : isEs ? 'Siguiente Paso en Suscripción' : isPt ? 'Próximo Passo na Subscrição' : 'Chained Next Steps'}
+              </span>
+              <div className="grid grid-cols-1 gap-2">
+                <Link
+                  href={`/${locale}/calculators/dscr/#noi=${annualNoi}&debt=${annualDebtService}`}
+                  className="flex items-center justify-between p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition text-slate-200 hover:text-white"
+                >
+                  <span>{isZh ? `带入当前还贷方案 ($${formatCurrency(annualDebtService).replace('$', '')}) 测算 DSCR` : isEs ? 'Evaluar DSCR con este servicio de deuda' : isPt ? 'Avaliar DSCR com este serviço da dívida' : 'Check DSCR Coverage for this Debt'}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
+                </Link>
+                <Link
+                  href={`/${locale}/tools/deal-analyzer/#pp=${purchasePrice}&dp=${downPaymentPercent}&noi=${annualNoi}&ds=${annualDebtService}&cc=${closingCosts}&capex=${upfrontCapex}`}
+                  className="flex items-center justify-between p-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition text-white font-semibold"
+                >
+                  <span>{isZh ? '带入 Deal Analyzer 运行 5 年综合分析与压力测试' : isEs ? 'Llevar a Deal Analyzer para Proyección a 5 Años' : isPt ? 'Llevar ao Deal Analyzer para Projeção de 5 Anos' : 'Send to Deal Analyzer for 5-Year Underwriting'}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-white" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>

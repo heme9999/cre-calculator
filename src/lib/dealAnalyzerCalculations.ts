@@ -122,36 +122,100 @@ export function calculateSingleScenario(input: DealAnalyzerInput, locale: string
 
   if (dscr < 1.0 || breakEvenRatio > 90) {
     healthStatus = 'red';
-    healthTitle = isZh
-      ? '示例评估：风险预警'
-      : isEs
-      ? 'Regla Ilustrativa: Señales de Alerta'
-      : isPt
-      ? 'Regra Demonstrativa: Sinais de Alerta'
-      : 'Illustrative Rule: Warning Signs';
-    healthDesc = isZh
-      ? '触碰本站示例风险红线：DSCR < 1.0x（经营现金流不足以偿债）或收支平衡比率 > 90%（抗空置缓冲极薄）。实际贷款门槛与违约判定需结合具体借贷合同约定。'
-      : isEs
-      ? 'Activa criterios de riesgo ilustrativos: DSCR < 1.0x (déficit de flujo de caja) o Punto de Equilibrio (BER) > 90% (margen muy estrecho ante vacancia). Los términos reales dependen del contrato de préstamo.'
-      : isPt
-      ? 'Ativa critérios de risco demonstrativos: DSCR < 1.0x (déficit de fluxo de caixa) ou Ponto de Equilíbrio (BER) > 90% (margem muito estreita contra vacância). Termos reais dependem do contrato de financiamento.'
-      : 'Triggers illustrative risk criteria: DSCR < 1.0x (cash flow shortfall) or Break-Even Ratio > 90% (thin cushion against vacancy). Actual underwriting and default terms depend on specific loan contracts.';
+    if (dscr < 1.0 && breakEvenRatio > 90) {
+      healthTitle = isZh
+        ? '示例评估：双重指标触碰红线 (DSCR 与 BER 同时击穿)'
+        : isEs
+        ? 'Regla Ilustrativa: Alerta Doble (DSCR y BER Infringidos)'
+        : isPt
+        ? 'Regra Demonstrativa: Alerta Duplo (DSCR e BER Infringidos)'
+        : 'Illustrative Rule: Dual Critical Breach (DSCR & BER)';
+      healthDesc = isZh
+        ? `两项指标同时触发严重预警：① 偿债覆盖率 DSCR 降至 ${dscr.toFixed(2)}x（低于 1.0x 违约底线，净收入不足以偿付贷款本息）；② 收支平衡比率 BER 升至 ${breakEvenRatio.toFixed(1)}%（高于 90% 警戒线，出租率需达 ${breakEvenOccupancy.toFixed(1)}% 方能保本）。抗风险缓冲已被穿透。实际违约判定以借贷合同约定为准。`
+        : isEs
+        ? `Doble infracción crítica: ① DSCR cayó a ${dscr.toFixed(2)}x (< 1.0x insolvencia, flujo insuficiente para pagar deuda); ② Punto de Equilibrio BER subió a ${breakEvenRatio.toFixed(1)}% (> 90%, requiere ${breakEvenOccupancy.toFixed(1)}% de ocupación para cubrir costos). La regla ilustrativa señala alto riesgo.`
+        : isPt
+        ? `Dupla infração crítica: ① DSCR caiu para ${dscr.toFixed(2)}x (< 1.0x insolvência, receita insuficiente para pagar dívida); ② Ponto de Equilíbrio BER subiu para ${breakEvenRatio.toFixed(1)}% (> 90%, exige ${breakEvenOccupancy.toFixed(1)}% de ocupação para cobrir custos). A regra demonstrativa aponta alto risco.`
+        : `Dual critical failure triggered: ① DSCR fell to ${dscr.toFixed(2)}x (< 1.0x insolvency floor, income cannot service debt); ② Break-Even Ratio rose to ${breakEvenRatio.toFixed(1)}% (> 90% ceiling, requiring ${breakEvenOccupancy.toFixed(1)}% occupancy just to break even). Safety cushion is depleted. Actual loan default terms depend on specific covenants.`;
+    } else if (dscr < 1.0) {
+      healthTitle = isZh
+        ? '示例评估：DSCR 率先跌破底线 (现金流倒挂赤字)'
+        : isEs
+        ? 'Regla Ilustrativa: DSCR Falla Primero (Déficit de Flujo)'
+        : isPt
+        ? 'Regra Demonstrativa: DSCR Falha Primeiro (Déficit de Caixa)'
+        : 'Illustrative Rule: DSCR Breaches Floor First (Negative Cash Flow)';
+      healthDesc = isZh
+        ? `在当前测算路径下，偿债覆盖率 (DSCR) 率先击穿安全底线（降至 ${dscr.toFixed(2)}x < 1.0x），年净营业收入不足以覆盖贷款本息支出，出现现金流赤字；此时收支平衡比率 (BER) 暂处 ${breakEvenRatio.toFixed(1)}%。实际重组或追加保证金要求取决于具体贷款协议。`
+        : isEs
+        ? `Bajo este escenario, el DSCR falla primero (cayendo a ${dscr.toFixed(2)}x < 1.0x), generando déficit operativo frente al servicio de deuda; el BER se ubica en ${breakEvenRatio.toFixed(1)}%.`
+        : isPt
+        ? `Neste cenário, o DSCR falha primeiro (caindo para ${dscr.toFixed(2)}x < 1.0x), gerando déficit operacional frente ao serviço da dívida; o BER está em ${breakEvenRatio.toFixed(1)}%.`
+        : `Under this scenario, DSCR fails first (falling to ${dscr.toFixed(2)}x < 1.0x floor), meaning operating income cannot service debt; Break-Even Ratio currently sits at ${breakEvenRatio.toFixed(1)}%.`;
+    } else {
+      healthTitle = isZh
+        ? '示例评估：收支平衡比率 (BER) 率先击穿上限'
+        : isEs
+        ? 'Regla Ilustrativa: BER Supera Límite Primero'
+        : isPt
+        ? 'Regra Demonstrativa: BER Supera Limite Primeiro'
+        : 'Illustrative Rule: Break-Even Ratio Breaches Ceiling First';
+      healthDesc = isZh
+        ? `在当前测算路径下，收支平衡比率 (BER) 率先击穿上限（升至 ${breakEvenRatio.toFixed(1)}% > 90%），抗空置安全垫极薄，物业需维持 ${breakEvenOccupancy.toFixed(1)}% 以上的高出租率方能保本；此时 DSCR 仍暂维持在 ${dscr.toFixed(2)}x。`
+        : isEs
+        ? `Bajo este escenario, el BER falla primero (subiendo a ${breakEvenRatio.toFixed(1)}% > 90%), requiriendo ${breakEvenOccupancy.toFixed(1)}% de ocupación para no incurrir en pérdidas; el DSCR permanece en ${dscr.toFixed(2)}x.`
+        : isPt
+        ? `Neste cenário, o BER falha primeiro (subindo para ${breakEvenRatio.toFixed(1)}% > 90%), exigindo ${breakEvenOccupancy.toFixed(1)}% de ocupação para não ter prejuízo; o DSCR permanece em ${dscr.toFixed(2)}x.`
+        : `Under this scenario, Break-Even Ratio fails first (rising to ${breakEvenRatio.toFixed(1)}% > 90%), leaving a razor-thin vacancy cushion (${breakEvenOccupancy.toFixed(1)}% occupancy required to break even); DSCR currently stands at ${dscr.toFixed(2)}x.`;
+    }
   } else if (dscr < 1.25 || breakEvenRatio > 85) {
     healthStatus = 'yellow';
-    healthTitle = isZh
-      ? '示例评估：临界警戒'
-      : isEs
-      ? 'Regla Ilustrativa: Umbral Crítico'
-      : isPt
-      ? 'Regra Demonstrativa: Limite de Atenção'
-      : 'Illustrative Rule: Near Thresholds';
-    healthDesc = isZh
-      ? '接近本站示例警戒区间（DSCR 1.0-1.25x 或 Break-Even Ratio 85%-90%）。实际是否需要追加首付或设立偿债储备金取决于具体贷方与承销方案。'
-      : isEs
-      ? 'Se acerca al rango de precaución ilustrativo (DSCR 1.0-1.25x o BER 85%-90%). El requerimiento de capital adicional o reservas depende del prestamista.'
-      : isPt
-      ? 'Aproxima-se da faixa de cautela demonstrativa (DSCR 1.0-1.25x ou BER 85%-90%). A exigência de capital adicional ou reservas depende do credor.'
-      : 'Approaches illustrative caution range (DSCR 1.0-1.25x or BER 85%-90%). Whether additional equity or debt service reserves are required depends on specific lender guidelines.';
+    if (dscr < 1.25 && breakEvenRatio > 85) {
+      healthTitle = isZh
+        ? '示例评估：双重指标接近临界警戒线'
+        : isEs
+        ? 'Regla Ilustrativa: Umbral Crítico Doble'
+        : isPt
+        ? 'Regra Demonstrativa: Limite de Atenção Duplo'
+        : 'Illustrative Rule: Dual Near-Threshold Warning';
+      healthDesc = isZh
+        ? `DSCR (${dscr.toFixed(2)}x，银行常规标准 ≥ 1.25x) 与收支平衡比率 (${breakEvenRatio.toFixed(1)}%，警戒阈值 85%) 同时接近预警区间。实际是否需追加股权或设立储备金取决于具体贷款项目。`
+        : isEs
+        ? `Tanto el DSCR (${dscr.toFixed(2)}x frente a 1.25x) como el BER (${breakEvenRatio.toFixed(1)}% frente a 85%) se acercan a los rangos de precaución.`
+        : isPt
+        ? `Tanto o DSCR (${dscr.toFixed(2)}x vs 1.25x) quanto o BER (${breakEvenRatio.toFixed(1)}% vs 85%) aproximam-se das faixas de cautela.`
+        : `Both DSCR (${dscr.toFixed(2)}x vs standard 1.25x) and Break-Even Ratio (${breakEvenRatio.toFixed(1)}% vs 85% guideline) approach warning thresholds.`;
+    } else if (dscr < 1.25) {
+      healthTitle = isZh
+        ? '示例评估：DSCR 率先逼近借贷底线'
+        : isEs
+        ? 'Regla Ilustrativa: DSCR Cerca del Mínimo'
+        : isPt
+        ? 'Regra Demonstrativa: DSCR Próximo ao Limite'
+        : 'Illustrative Rule: DSCR Approaching Minimum';
+      healthDesc = isZh
+        ? `偿债覆盖率 (${dscr.toFixed(2)}x) 率先接近银行常见审批底线 (1.20-1.25x)，抗收入波动空间收窄；收支平衡比率仍处于较稳健的 ${breakEvenRatio.toFixed(1)}%。`
+        : isEs
+        ? `El ratio DSCR (${dscr.toFixed(2)}x) se acerca primero al umbral bancario (1.20-1.25x); el BER se mantiene en un nivel moderado de ${breakEvenRatio.toFixed(1)}%.`
+        : isPt
+        ? `O índice DSCR (${dscr.toFixed(2)}x) aproxima-se primeiro do limite bancário (1.20-1.25x); o BER mantém-se em patamar moderado de ${breakEvenRatio.toFixed(1)}%.`
+        : `DSCR (${dscr.toFixed(2)}x) approaches lender minimum guidelines (1.20-1.25x) first, compressing cushion against income drops; BER remains at ${breakEvenRatio.toFixed(1)}%.`;
+    } else {
+      healthTitle = isZh
+        ? '示例评估：收支平衡比率 (BER) 率先进入警戒区间'
+        : isEs
+        ? 'Regla Ilustrativa: BER Entra en Rango de Precaución'
+        : isPt
+        ? 'Regra Demonstrativa: BER Entra em Faixa de Atenção'
+        : 'Illustrative Rule: BER Enters Caution Zone First';
+      healthDesc = isZh
+        ? `收支平衡比率 (${breakEvenRatio.toFixed(1)}%) 率先超过 85% 警戒阈值，意味着物业需保持至少 ${breakEvenOccupancy.toFixed(1)}% 出租率方可覆盖营运及偿债；DSCR 目前为 ${dscr.toFixed(2)}x。`
+        : isEs
+        ? `El Punto de Equilibrio BER (${breakEvenRatio.toFixed(1)}%) supera primero el 85%, requiriendo ${breakEvenOccupancy.toFixed(1)}% de ocupación; el DSCR está en ${dscr.toFixed(2)}x.`
+        : isPt
+        ? `O Ponto de Equilíbrio BER (${breakEvenRatio.toFixed(1)}%) supera primeiro os 85%, exigindo ${breakEvenOccupancy.toFixed(1)}% de ocupação; o DSCR está em ${dscr.toFixed(2)}x.`
+        : `Break-Even Ratio (${breakEvenRatio.toFixed(1)}%) exceeds the 85% caution guideline first, requiring ${breakEvenOccupancy.toFixed(1)}% occupancy; DSCR stands at ${dscr.toFixed(2)}x.`;
+    }
   }
 
   return {

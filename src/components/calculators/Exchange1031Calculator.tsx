@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { formatCurrency } from '@/lib/utils';
 import { Calculator, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import { Exchange1031Timeline } from './visuals/Exchange1031Timeline';
+import { CalculatorActionBar } from './common/CalculatorActionBar';
+import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
 
 interface Props {
   locale: string;
@@ -68,6 +70,49 @@ export function Exchange1031Calculator({ locale }: Props) {
   const netSaleProceeds = Math.max(0, salePrice - sellingExpenses);
   const realizedGain = Math.max(0, netSaleProceeds - originalCostBasis);
   const deferredTax = realizedGain * (taxRate / 100);
+
+  const handleShareDeal = async () => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams();
+    params.set('sp', salePrice.toString());
+    params.set('basis', originalCostBasis.toString());
+    params.set('exp', sellingExpenses.toString());
+    params.set('rate', taxRate.toString());
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${params.toString()}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleExportCsv = () => {
+    const rows = [
+      { metric: 'Relinquished Property Sale Price', value: salePrice },
+      { metric: 'Original Cost Basis', value: originalCostBasis },
+      { metric: 'Selling Expenses & Fees', value: sellingExpenses },
+      { metric: 'Net Sales Proceeds', value: netSaleProceeds },
+      { metric: 'Realized Capital Gain', value: Math.round(realizedGain) },
+      { metric: 'Estimated Combined Tax Rate', value: `${taxRate}%` },
+      { metric: 'Estimated Deferred Tax Liability', value: Math.round(deferredTax) },
+      { metric: 'Target Replacement Property Value', value: salePrice },
+      { metric: 'Target Reinvestment Equity', value: netSaleProceeds },
+    ];
+    const csv = generateCalculatorCsv('1031 Exchange Tax Deferral Calculator', rows, locale);
+    downloadCsv(`1031-exchange-${new Date().toISOString().slice(0, 10)}.csv`, csv);
+  };
+
+  const handleSaveDeal = () => {
+    const summary = `1031 Deferred Tax: ${formatCurrency(Math.round(deferredTax))} (Gain: ${formatCurrency(Math.round(realizedGain))}, Reinvest Target: ${formatCurrency(salePrice)})`;
+    saveCalculationToLocal('exchange_1031', '1031 Exchange Calculator', summary, {
+      salePrice,
+      originalCostBasis,
+      sellingExpenses,
+      taxRate,
+      deferredTax: Math.round(deferredTax),
+      realizedGain: Math.round(realizedGain),
+    });
+  };
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-12">
@@ -221,9 +266,17 @@ export function Exchange1031Calculator({ locale }: Props) {
           {/* Results Panel */}
           <div aria-live="polite" className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
             <div>
-              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-                {isZh ? '延税估算总览' : isEs ? 'Resumen de Aplazamiento Fiscal' : isPt ? 'Resumo de Diferimento Fiscal' : 'Tax Deferral Summary'}
-              </h3>
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  {isZh ? '延税估算总览' : isEs ? 'Resumen de Aplazamiento Fiscal' : isPt ? 'Resumo de Diferimento Fiscal' : 'Tax Deferral Summary'}
+                </h3>
+                <CalculatorActionBar
+                  locale={locale}
+                  onExportCsv={handleExportCsv}
+                  onSave={handleSaveDeal}
+                  onShare={handleShareDeal}
+                />
+              </div>
 
               {/* Major Output */}
               <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
