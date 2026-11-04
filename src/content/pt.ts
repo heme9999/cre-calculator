@@ -311,7 +311,7 @@ export const ptContent: LocaleContent = {
       { label: 'Constante do Empréstimo', desc: 'Percentual anualizado de amortização e juros por dólar financiado' },
     ],
     exampleTitle: 'Estudo de Caso Contínuo: Imóvel Multifamiliar de 24 Unidades ($2,8M, NOI $227.200)',
-    exampleContent: 'Utilizando nosso exemplo contínuo de 24 unidades residenciais ($2.800.000 de preço de compra, GPI de $355.000, 5% de vacância, OpEx de $110.050, gerando Cap Rate de 8,11% e NOI de $227.200):\n\n• Financiamento Bancário Comercial (75% LTV, 1.25x DSCR, 6,50% de juros, amortização em 25 anos):\n  - Limite por LTV (75%): $2.100.000\n  - Limite por DSCR: $2.243.243\n  - Financiamento Sancionado: $2.100.000 (Limitado pelo LTV)\n  - Parcela Mensal: $14.179 ($170.152 de serviço anual da dívida)\n  - DSCR Efetivo: 1,34x (Margem superior à exigência mínima de 1.25x)\n  - Fluxo de Caixa Líquido antes dos impostos: $57.048 / ano\n  - Retorno Cash-on-Cash: 7,55% sobre $756.000 de capital próprio total investido\n\n• Financiamento Agency Fannie Mae / Freddie Mac (80% LTV, 1.25x DSCR, 6,25% de juros, amortização em 30 anos):\n  - Limite por LTV (80%): $2.240.000\n  - Limite por DSCR: $2.460.788\n  - Financiamento Sancionado: $2.240.000 (Limitado pelo LTV)\n  - Parcela Mensal: $13.791 ($165.492 anuais)\n  - Fluxo de Caixa: $61.708 / ano (11,02% Cash-on-Cash sobre $560.000 de entrada)\n\n*Nota: Estudo de caso financeiro educativo padronizado para fins de comparação.*',
+    exampleContent: 'Utilizando nosso exemplo contínuo de 24 unidades residenciais ($2.800.000 de preço de compra, GPI de $336.000, 5% de vacância ($16.800), OpEx de $92.000, gerando Cap Rate de 8,11% e NOI de $227.200):\n\n• Financiamento Bancário Comercial (75% LTV, 1.25x DSCR, 6,50% de juros, amortização em 25 anos):\n  - Limite por LTV (75%): $2.100.000\n  - Limite por DSCR: $2.243.243\n  - Financiamento Sancionado: $2.100.000 (Limitado pelo LTV)\n  - Parcela Mensal: $14.179 ($170.152 de serviço anual da dívida)\n  - DSCR Efetivo: 1,34x (Margem superior à exigência mínima de 1.25x)\n  - Fluxo de Caixa Líquido antes dos impostos: $57.048 / ano\n  - Retorno Cash-on-Cash: 8,15% sobre $700.000 de entrada (ou 7,55% sobre $756.000 de capital total desembolsado incluindo 2% de custos de fechamento e reservas)\n\n• Financiamento Agency Fannie Mae / Freddie Mac (80% LTV, 1.25x DSCR, 6,25% de juros, amortização em 30 anos):\n  - Limite por LTV (80%): $2.240.000\n  - Limite por DSCR: $2.460.788\n  - Financiamento Sancionado: $2.240.000 (Limitado pelo LTV)\n  - Parcela Mensal: $13.791 ($165.492 anuais)\n  - Fluxo de Caixa: $61.708 / ano (11,02% Cash-on-Cash sobre $560.000 de entrada)\n\n*Nota: Estudo de caso financeiro educativo padronizado para fins de comparação.*',
     faqTitle: 'Perguntas Frequentes sobre Financiamento Multifamiliar',
     faqs: [
       {
@@ -337,6 +337,50 @@ export const ptContent: LocaleContent = {
       { title: 'Calculadora de DSCR', slug: 'dscr' },
       { title: 'Calculadora de Cash-on-Cash Return', slug: 'cash-on-cash' },
       { title: 'Calculadora de Cap Rate Multifamiliar', slug: 'multifamily-cap-rate' },
+    ],
+  },
+  freeRentalPropertyCalculator: {
+    metaTitle: 'Calculadora Gratuita de Imóveis de Aluguel — Fluxo de Caixa e Retorno',
+    metaDescription: 'Analise fluxo de caixa, NOI, Cap Rate, DSCR e retorno Cash-on-Cash para imóveis residenciais multifamiliares e comerciais. Gratuita e sem cadastro.',
+    h1: 'Calculadora Gratuita de Imóveis de Aluguel',
+    subtitle: 'Análise profissional de fluxo de caixa e subscrição para propriedades de locação. Projete receitas de aluguel, despesas operacionais, cobertura da dívida (DSCR) e retorno sobre capital investido.',
+    whatIsTitle: 'Como Analisar o Fluxo de Caixa e Rentabilidade de Imóveis de Aluguel',
+    whatIsContent: 'A análise financeira estruturada de uma propriedade de locação avança por três níveis de retorno:\n\n1. Operação do Imóvel: A Receita Bruta Programada somada a receitas acessórias (estacionamento, lavanderia), deduzida de vacância e inadimplência, resulta na Receita Bruta Efetiva (EGI). Subtraindo as despesas operacionais reais (IPTU, seguros, manutenção, taxa de administração e reservas), apura-se a Receita Operacional Líquida (NOI).\n\n2. Serviço da Dívida: Deduzindo o pagamento anual de juros e amortização da hipoteca (ADS) do NOI, obtém-se o Fluxo de Caixa Líquido antes dos impostos. Os bancos avaliam o índice DSCR (NOI / ADS) exigindo margem de segurança (geralmente ≥ 1.25x).\n\n3. Retorno do Investidor: O retorno do ativo sem dívida é medido pela Taxa de Capitalização (Cap Rate = NOI / Preço). O retorno sobre o capital próprio efetivamente aportado é medido pelo retorno Cash-on-Cash (Fluxo de Caixa / Capital Total Desembolsado).',
+    formulaTitle: 'Fórmulas Principais de Imóveis de Aluguel',
+    formulaCode: '[1. Receita Operacional Líquida]\nNOI = Receita Bruta Efetiva (EGI) − Despesas Operacionais (OpEx)\n\n[2. Fluxo de Caixa Líquido Antes dos Impostos]\nFluxo de Caixa = NOI − Serviço Anual da Dívida (ADS)\n\n[3. Taxa de Capitalização (Cap Rate)]\nCap Rate = (NOI / Preço de Compra) × 100%\n\n[4. Retorno Cash-on-Cash]\nCash-on-Cash = (Fluxo de Caixa Anual / Capital Total Investido) × 100%\n\n[5. Índice de Cobertura da Dívida (DSCR)]\nDSCR = NOI / Serviço Anual da Dívida',
+    formulaVariables: [
+      { label: 'Receita Bruta Efetiva (EGI)', desc: 'Receita bruta programada mais receitas adicionais deduzida a vacância' },
+      { label: 'Despesas Operacionais (OpEx)', desc: 'Tributos, seguros, administração predial, manutenção, condomínio e reservas' },
+      { label: 'Serviço Anual da Dívida (ADS)', desc: 'Total anual das parcelas de amortização e juros da hipoteca' },
+      { label: 'Capital Total Investido', desc: 'Entrada de recursos próprios mais custos de fechamento e reservas iniciais' },
+    ],
+    exampleTitle: 'Estudo de Caso Contínuo: Imóvel Multifamiliar de 24 Unidades ($2,8M, NOI $227.200)',
+    exampleContent: 'Utilizando nosso exemplo contínuo de 24 unidades residenciais ($2.800.000 de preço de compra, aluguel anual de $336.000, 5% de vacância, OpEx de $92.000):\n\n• Operação e Receitas:\n  - Receita Bruta Programada (GPI): $336.000\n  - Perda por Vacância (5,0%): $16.800\n  - Receita Bruta Efetiva (EGI): $319.200\n  - Despesas Operacionais (28,82% do EGI): $92.000\n  - Receita Operacional Líquida (NOI): $227.200\n  - Cap Rate de Entrada: 8,11%\n\n• Financiamento Bancário (75% LTV, 6,50% de juros, 25 anos amortização):\n  - Financiamento: $2.100.000\n  - Entrada Própria (25%): $700.000\n  - Custos de Fechamento (2%): $56.000\n  - Capital Total Desembolsado: $756.000\n  - Parcela Mensal: $14.179\n  - Serviço Anual da Dívida (ADS): $170.152\n  - Cobertura DSCR: 1,34x (Supera a exigência bancária de 1,25x)\n\n• Fluxo de Caixa e Retorno Final:\n  - Fluxo de Caixa Anual: $227.200 − $170.152 = $57.048 ($4.754/mês)\n  - Retorno Cash-on-Cash (Desembolso Total): 7,55% sobre $756.000 (compatível com Deal Analyzer)\n  - Retorno Cash-on-Cash (Apenas Entrada): 8,15% sobre $700.000\n  - Ponto de Equilíbrio (BER): 82,13% (Ocupação de equilíbrio BEO: 78,02%)\n\n*Nota: Estudo de caso financeiro educativo padronizado para fins de comparação.*',
+    faqTitle: 'Perguntas Frequentes sobre Calculadoras de Imóveis de Aluguel',
+    faqs: [
+      {
+        question: 'Por que esta calculadora de imóveis de aluguel é 100% gratuita e sem cadastro?',
+        answer: 'Muitas ferramentas do setor imobiliário exigem e-mail corporativo ou bloqueiam recursos com assinaturas caras. Acreditamos que o cálculo financeiro fundamental de subscrição comercial deve ser transparente e acessível a todo investidor e analista. Este aplicativo roda integralmente no seu navegador protegendo seus dados.',
+      },
+      {
+        question: 'Qual é a diferença entre Cap Rate e Cash-on-Cash Return?',
+        answer: 'O Cap Rate mede a taxa de retorno operacional do próprio imóvel como se fosse comprado integralmente à vista (NOI / Preço). O retorno Cash-on-Cash mede o rendimento real sobre o capital próprio que saiu do seu bolso após pagar as prestações do financiamento.',
+      },
+      {
+        question: 'Quais itens compõem as despesas operacionais de um imóvel de aluguel?',
+        answer: 'As despesas operacionais (OpEx) compreendem IPTU, seguros prediais, manutenção preventiva e corretiva, honorários de administração predial, contas de consumo de áreas comuns e reservas para benfeitorias. Não incluem as parcelas da dívida, depreciação contábil nem imposto de renda.',
+      },
+      {
+        question: 'Como os bancos utilizam o DSCR na análise de crédito para locação?',
+        answer: 'As instituições financeiras exigem um DSCR mínimo entre 1.20x e 1.25x. Isso garante que a receita líquida gerada pelos aluguéis supere o custo das parcelas do empréstimo em pelo menos 20% a 25%, criando um amortecedor contra inadimplência.',
+      },
+    ],
+    relatedTitle: 'Ferramentas de Investimento Relacionadas',
+    relatedCalculators: [
+      { title: 'Calculadora de Financiamento de Apartamentos', slug: 'apartment-building-mortgage' },
+      { title: 'Deal Analyzer (Análise Abrangente em 5 Anos)', slug: 'deal-analyzer' },
+      { title: 'Calculadora de DSCR', slug: 'dscr' },
+      { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
     ],
   },
   dscr: {
@@ -706,7 +750,7 @@ export const ptContent: LocaleContent = {
       },
       {
         title: 'Passo 5: Caso Prático Abrangente (Auditoria Financeira de 24 Unidades)',
-        content: 'Para compreender como todos os componentes operacionais se articulam, apresentamos a modelagem integral do edifício de 24 unidades avaliado em nosso Guia de Estimativa de NOI:\n\n- Termos de aquisição: Preço de compra de $2.800.000 ($116.667 por unidade).\n- NOI auditado e verificado: Receita potencial bruta de $336.000 deduzida de 5,0% de vacância normalizada ($16.800) resulta em $319.200 de EGI. Subtraindo despesas operacionais normalizadas de $92.000, fixa-se o NOI em $227.200.\n- Cap Rate de entrada: $227.200 ÷ $2.800.000 = 8,11% (compatível com os referenciais de ativos multifamiliares Classe B).\n- Financiamento bancário sênior: Estruturado com 75% LTV = empréstimo de $2.100.000 à taxa de 6,50% com amortização em 25 anos. Parcela mensal de $14.179 ($170.152 anuais de serviço da dívida).\n- Índice de cobertura da dívida (DSCR): $227.200 NOI ÷ $170.152 serviço anual = 1,34x, atendendo ao patamar bancário de 1,25x.\n- Capital próprio e retorno Cash-on-Cash: Entrada de 25% ($700.000) acrescida de $55.600 em custos de fechamento e reservas operacionais = $755.600 de capital total desembolsado. Fluxo de caixa líquido antes dos impostos = $227.200 − $170.152 = $57.048 anuais. Retorno Cash-on-Cash = $57.048 ÷ $755.600 = 7,55% (coincidente com o modelo do Deal Analyzer).\n- Margem de segurança de equilíbrio (BER): (OpEx $92.000 + Dívida $170.152) ÷ $319.200 EGI = 82,13% (ocupação de equilíbrio de 78,0%). A ocupação pode recuar até 78% antes que ocorra inadimplência no serviço da dívida.\n- Sensibilidade a juros (+100 bps): Com taxa a 7,50%, a parcela mensal passa a $15.515 ($186.180 anuais); o DSCR reduz-se para 1,22x; e o fluxo de caixa comprime-se para $41.020 (5,43% CoC). O ativo preserva solvência e retorno em caixa positivo mesmo sob forte ciclo de alta de juros.',
+        content: 'Para compreender como todos os componentes operacionais se articulam, apresentamos a modelagem integral do edifício de 24 unidades avaliado em nosso Guia de Estimativa de NOI:\n\n- Termos de aquisição: Preço de compra de $2.800.000 ($116.667 por unidade).\n- NOI auditado e verificado: Receita potencial bruta de $336.000 deduzida de 5,0% de vacância normalizada ($16.800) resulta em $319.200 de EGI. Subtraindo despesas operacionais normalizadas de $92.000, fixa-se o NOI em $227.200.\n- Cap Rate de entrada: $227.200 ÷ $2.800.000 = 8,11% (compatível com os referenciais de ativos multifamiliares Classe B).\n- Financiamento bancário sênior: Estruturado com 75% LTV = empréstimo de $2.100.000 à taxa de 6,50% com amortização em 25 anos. Parcela mensal de $14.179 ($170.152 anuais de serviço da dívida).\n- Índice de cobertura da dívida (DSCR): $227.200 NOI ÷ $170.152 serviço anual = 1,34x, atendendo ao patamar bancário de 1,25x.\n- Capital próprio e retorno Cash-on-Cash: Entrada de 25% ($700.000) acrescida de $55.600 em custos de fechamento e reservas operacionais = $755.600 de capital total desembolsado. Fluxo de caixa líquido antes dos impostos = $227.200 − $170.152 = $57.048 anuais. Retorno Cash-on-Cash = $57.048 ÷ $755.600 = 7,55% (coincidente com o modelo do Deal Analyzer).\n- Margem de segurança de equilíbrio (BER): (OpEx $92.000 + Dívida $170.152) ÷ $319.200 EGI = 82,13% (ocupação de equilíbrio de 78,0%). A ocupação pode recuar até 78% antes que ocorra inadimplência no serviço da dívida.\n- Sensibilidade a juros (+100 bps): Com taxa a 7,50%, a parcela mensal passa a $15.519 ($186.226 anuais); o DSCR reduz-se para 1,22x; e o fluxo de caixa comprime-se para $40.974 (5,42% CoC). O ativo preserva solvência e retorno em caixa positivo mesmo sob forte ciclo de alta de juros (Nota: Este teste de estresse avalia exclusivamente o choque de taxa mantendo a vacância base de 5%; se a vacância subir simultaneamente para 10%, o NOI comprime para $210.400 e o DSCR recua para 1,13x, conforme modelado em nosso Deal Analyzer).',
       },
       {
         title: 'Passo 6: Due diligence física, ambiental e jurídica',

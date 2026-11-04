@@ -383,7 +383,7 @@ export const enContent: LocaleContent = {
       { label: 'Loan Constant', desc: 'Annualized percentage payment of principal and interest per dollar of loan' },
     ],
     exampleTitle: 'Canonical 24-Unit Multifamily Property Case Study ($2.8M Valuation, $227,200 NOI)',
-    exampleContent: 'Using our canonical 24-unit apartment building example ($2,800,000 purchase price, $355,000 GPI, 5% vacancy, $110,050 OpEx, resulting in an 8.11% Cap Rate and $227,200 NOI):\n\n• Commercial Bank Program (75% LTV, 1.25x DSCR, 6.50% interest, 25-yr amort):\n  - Max Loan by LTV (75%): $2,100,000\n  - Max Allowable Debt Service for 1.25x DSCR: $227,200 / 1.25 = $181,760 / year\n  - Max Loan by DSCR: $2,243,243\n  - Sized Mortgage: $2,100,000 (Constrained by LTV)\n  - Monthly Payment: $14,179 ($170,152 annual debt service)\n  - Actual Sized DSCR: 1.34x (Cushion above 1.25x requirement)\n  - Pre-Tax Cash Flow: $57,048 / year\n  - Leveraged Cash-on-Cash Return: 7.55% on $756,000 total initial equity\n\n• Agency Fannie Mae / Freddie Mac Program (80% LTV, 1.25x DSCR, 6.25% interest, 30-yr amort):\n  - Max Loan by LTV (80%): $2,240,000\n  - Max Loan by DSCR: $2,460,788\n  - Sized Mortgage: $2,240,000 (Constrained by LTV)\n  - Monthly Payment: $13,791 ($165,492 annual debt service)\n  - Pre-Tax Cash Flow: $61,708 / year (11.02% Cash-on-Cash on $560,000 down payment)\n\n*Note: This is a standardized educational underwriting case study for illustrative comparison only.*',
+    exampleContent: 'Using our canonical 24-unit apartment building example ($2,800,000 purchase price, $336,000 GPI, 5% vacancy ($16,800), $92,000 OpEx, resulting in an 8.11% Cap Rate and $227,200 NOI):\n\n• Commercial Bank Program (75% LTV, 1.25x DSCR, 6.50% interest, 25-yr amort):\n  - Max Loan by LTV (75%): $2,100,000\n  - Max Allowable Debt Service for 1.25x DSCR: $227,200 / 1.25 = $181,760 / year\n  - Max Loan by DSCR: $2,243,243\n  - Sized Mortgage: $2,100,000 (Constrained by LTV)\n  - Monthly Payment: $14,179 ($170,152 annual debt service)\n  - Actual Sized DSCR: 1.34x (Cushion above 1.25x requirement)\n  - Pre-Tax Cash Flow: $57,048 / year\n  - Leveraged Cash-on-Cash Return: 8.15% on $700,000 down payment (or 7.55% on $756,000 total initial cash invested including 2% closing costs / working reserves)\n\n• Agency Fannie Mae / Freddie Mac Program (80% LTV, 1.25x DSCR, 6.25% interest, 30-yr amort):\n  - Max Loan by LTV (80%): $2,240,000\n  - Max Loan by DSCR: $2,460,788\n  - Sized Mortgage: $2,240,000 (Constrained by LTV)\n  - Monthly Payment: $13,791 ($165,492 annual debt service)\n  - Pre-Tax Cash Flow: $61,708 / year (11.02% Cash-on-Cash on $560,000 down payment)\n\n*Note: This is a standardized educational underwriting case study for illustrative comparison only.*',
     faqTitle: 'Frequently Asked Questions About Apartment Mortgages',
     faqs: [
       {
@@ -409,6 +409,50 @@ export const enContent: LocaleContent = {
       { title: 'DSCR Calculator', slug: 'dscr' },
       { title: 'Cash-on-Cash Return Calculator', slug: 'cash-on-cash' },
       { title: 'Multifamily Cap Rate Calculator', slug: 'multifamily-cap-rate' },
+    ],
+  },
+  freeRentalPropertyCalculator: {
+    metaTitle: 'Free Rental Property Calculator — Cash Flow & Investment Analysis',
+    metaDescription: 'Analyze commercial multifamily and residential rental property cash flow, cap rate, NOI, DSCR, and cash-on-cash returns. 100% free tool with zero sign-up or paywalls.',
+    h1: 'Free Rental Property Calculator',
+    subtitle: 'Free, professional-grade rental property cash flow and underwriting analysis. Model gross rental revenue, operational expenses, debt coverage (DSCR), cap rate, and leveraged cash-on-cash returns with no paywalls or required sign-up.',
+    whatIsTitle: 'How to Underwrite Rental Property Cash Flow & Returns',
+    whatIsContent: 'A professional rental property financial analysis moves systematically through three levels of returns:\n\n1. Top-Line Property Operations: Gross Potential Rent plus ancillary income (parking, laundry, storage), minus allowance for vacancy and bad debt, yields Effective Gross Income (EGI). Deducting real operating expenses (property taxes, insurance, repairs, management, utilities, capital reserves) yields Net Operating Income (NOI).\n\n2. Financing & Debt Coverage: Deducting annual principal and interest debt service (ADS) from NOI reveals Pre-Tax Net Cash Flow. Lenders evaluate the Debt Service Coverage Ratio (DSCR = NOI / ADS) to ensure an adequate buffer (typically 1.25x).\n\n3. Investor Yields: Unleveraged return is measured by the Capitalization Rate (Cap Rate = NOI / Purchase Price). Leveraged return on actual cash deployed is measured by Cash-on-Cash Return (CoC = Annual Cash Flow / Total Cash Invested).',
+    formulaTitle: 'The Core Rental Property Formulas',
+    formulaCode: '[1. Net Operating Income]\nNOI = Effective Gross Income (EGI) − Operating Expenses (OpEx)\n\n[2. Pre-Tax Net Cash Flow]\nCash Flow = NOI − Annual Debt Service (ADS)\n\n[3. Unleveraged Cap Rate]\nCap Rate = (NOI / Purchase Price) × 100%\n\n[4. Leveraged Cash-on-Cash Return]\nCash-on-Cash = (Pre-Tax Cash Flow / Total Initial Cash Invested) × 100%\n\n[5. Debt Service Coverage Ratio]\nDSCR = NOI / Annual Debt Service',
+    formulaVariables: [
+      { label: 'Effective Gross Income (EGI)', desc: 'Gross scheduled rental income plus other income minus vacancy and credit loss' },
+      { label: 'Operating Expenses (OpEx)', desc: 'Taxes, insurance, property management, maintenance, utilities, and replacement reserves' },
+      { label: 'Annual Debt Service (ADS)', desc: 'Total principal and interest mortgage payments over 12 months' },
+      { label: 'Total Cash Invested', desc: 'Down payment plus closing costs and upfront working capital reserves' },
+    ],
+    exampleTitle: 'Standard 24-Unit Rental Property Worked Example ($2.8M Valuation, $227,200 NOI)',
+    exampleContent: 'Using our canonical 24-unit multifamily rental baseline ($2,800,000 purchase price, $336,000 gross scheduled rent, 5% vacancy, $92,000 OpEx):\n\n• Top-Line Operations:\n  - Gross Potential Income (GPI): $336,000\n  - Vacancy Loss (5.0%): $16,800\n  - Effective Gross Income (EGI): $319,200\n  - Operating Expenses (28.82% of EGI): $92,000\n  - In-Place Net Operating Income (NOI): $227,200\n  - Going-In Cap Rate: 8.11%\n\n• Senior Debt Financing (75% LTV, 6.50% interest, 25-yr amort):\n  - Loan Amount: $2,100,000\n  - Down Payment (25%): $700,000\n  - Closing Costs (2%): $56,000\n  - Total Initial Cash Invested: $756,000\n  - Monthly Mortgage Payment: $14,179\n  - Annual Debt Service (ADS): $170,152\n  - Lender DSCR: 1.34x (Exceeds standard 1.25x benchmark)\n\n• Bottom-Line Net Cash Flow & Yields:\n  - Pre-Tax Annual Cash Flow: $227,200 − $170,152 = $57,048 ($4,754/month)\n  - All-In Cash-on-Cash Return: 7.55% on $756,000 total cash invested\n  - Down-Payment Cash-on-Cash: 8.15% on $700,000 down payment\n  - Break-Even Ratio (BER): 82.13% (Break-Even Occupancy: 78.02%)\n\n*Note: This is a standardized educational underwriting case study for illustrative investment comparison.*',
+    faqTitle: 'Frequently Asked Questions About Rental Property Calculators',
+    faqs: [
+      {
+        question: 'Why is this rental property calculator completely free with no registration?',
+        answer: 'Most real estate software requires an email address or puts multi-family underwriting behind a subscription paywall. We believe basic financial literacy and accurate commercial underwriting math should be openly accessible to every investor, broker, and underwriter. All calculations execute locally inside your browser with zero data tracking.',
+      },
+      {
+        question: 'What is the difference between Cap Rate and Cash-on-Cash Return?',
+        answer: 'Cap Rate measures the property unleveraged operational yield (NOI / Purchase Price) as if purchased entirely with cash, allowing objective comparison between different buildings and markets. Cash-on-Cash measures your actual cash return on the equity you personally invested after making debt service payments on your loan.',
+      },
+      {
+        question: 'What expenses should be included in rental property operating expenses?',
+        answer: 'Operating expenses (OpEx) include property taxes, hazard/liability insurance, repairs & maintenance, professional property management fees, common area utilities, legal/accounting fees, and replacement reserves. OpEx does NOT include mortgage debt service, depreciation, or income taxes.',
+      },
+      {
+        question: 'How do commercial lenders use DSCR when underwriting rental properties?',
+        answer: 'Commercial banks and agency lenders (Fannie Mae / Freddie Mac) require a minimum Debt Service Coverage Ratio (typically 1.20x to 1.25x). This ensures the property Net Operating Income covers the annual loan payments with a 20% to 25% safety margin to absorb tenant vacancies or rent fluctuations.',
+      },
+    ],
+    relatedTitle: 'Related Rental & Investment Calculators',
+    relatedCalculators: [
+      { title: 'Apartment Building Mortgage Calculator', slug: 'apartment-building-mortgage' },
+      { title: 'Deal Analyzer (5-Year Underwriting)', slug: 'deal-analyzer' },
+      { title: 'DSCR Calculator', slug: 'dscr' },
+      { title: 'Cap Rate Calculator', slug: 'cap-rate' },
     ],
   },
   dscr: {
@@ -778,7 +822,7 @@ export const enContent: LocaleContent = {
       },
       {
         title: "Step 5: End-to-End Underwriting Case Study (24-Unit Multifamily)",
-        content: "To see how all pieces link together, examine the full underwriting walkthrough for the 24-unit apartment building introduced in our NOI Estimation Guide:\n\n- Acquisition Terms: Purchase price of $2,800,000 ($116,667/unit).\n- Verified Net Operating Income: Gross potential rent of $336,000 minus 5.0% normalized vacancy ($16,800) leaves $319,200 EGI. Deducting normalized operating expenses of $92,000 gives an in-place NOI of $227,200.\n- Going-In Cap Rate: $227,200 ÷ $2,800,000 = 8.11% (well aligned with Class B multifamily benchmarks).\n- Commercial Mortgage Financing: Sized at 75% LTV = $2,100,000 senior debt at 6.50% interest with a 25-year amortization schedule. Monthly payment is $14,179 ($170,152 annual debt service).\n- Lender DSCR Compliance: $227,200 NOI ÷ $170,152 ADS = 1.34x DSCR (comfortably exceeding the lender's 1.25x minimum requirement).\n- Invested Equity & Cash-on-Cash Return: 25% down payment ($700,000) plus $55,600 in closing costs and immediate working reserves = $755,600 total cash out of pocket. Net annual pre-tax cash flow = $227,200 − $170,152 = $57,048. Cash-on-Cash Return = $57,048 ÷ $755,600 = 7.55%.\n- Break-Even Safety Cushion: (OpEx $92,000 + ADS $170,152) ÷ $319,200 EGI = 82.13% Break-Even Ratio (78.0% Break-Even Occupancy). Physical occupancy can drop from 95% down to 78% before debt service default occurs.\n- Stress Test (+100 bps Interest Shock): If loan rate closes at 7.50%, debt service climbs to $186,180 ($15,515/month); DSCR tightens to 1.22x; cash flow compresses to $41,020 (5.43% CoC). The asset remains self-sustaining with positive distributions even under rising rate conditions.",
+        content: "To see how all pieces link together, examine the full underwriting walkthrough for the 24-unit apartment building introduced in our NOI Estimation Guide:\n\n- Acquisition Terms: Purchase price of $2,800,000 ($116,667/unit).\n- Verified Net Operating Income: Gross potential rent of $336,000 minus 5.0% normalized vacancy ($16,800) leaves $319,200 EGI. Deducting normalized operating expenses of $92,000 gives an in-place NOI of $227,200.\n- Going-In Cap Rate: $227,200 ÷ $2,800,000 = 8.11% (well aligned with Class B multifamily benchmarks).\n- Commercial Mortgage Financing: Sized at 75% LTV = $2,100,000 senior debt at 6.50% interest with a 25-year amortization schedule. Monthly payment is $14,179 ($170,152 annual debt service).\n- Lender DSCR Compliance: $227,200 NOI ÷ $170,152 ADS = 1.34x DSCR (comfortably exceeding the lender's 1.25x minimum requirement).\n- Invested Equity & Cash-on-Cash Return: 25% down payment ($700,000) plus $55,600 in closing costs and immediate working reserves = $755,600 total cash out of pocket. Net annual pre-tax cash flow = $227,200 − $170,152 = $57,048. Cash-on-Cash Return = $57,048 ÷ $755,600 = 7.55%.\n- Break-Even Safety Cushion: (OpEx $92,000 + ADS $170,152) ÷ $319,200 EGI = 82.13% Break-Even Ratio (78.0% Break-Even Occupancy). Physical occupancy can drop from 95% down to 78% before debt service default occurs.\n- Stress Test (+100 bps Interest Shock): If loan rate closes at 7.50%, debt service climbs to $186,226 ($15,519/month); DSCR tightens to 1.22x; cash flow compresses to $40,974 (5.42% CoC). The asset remains self-sustaining with positive distributions even under rising rate conditions (Note: This rate-only stress test maintains 5% baseline vacancy; if vacancy simultaneously rises to 10%, NOI compresses to $210,400 and DSCR falls to 1.13x as modeled in our Deal Analyzer).",
       },
       {
         title: "Step 6: Physical and Legal Due Diligence",

@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/en/calculators/cash-on-cash/`,
     `${SITE_URL}/en/calculators/loan-payment/`,
     `${SITE_URL}/en/calculators/apartment-building-mortgage/`,
+    `${SITE_URL}/en/calculators/free-rental-property-calculator/`,
     `${SITE_URL}/en/calculators/dscr/`,
     `${SITE_URL}/en/calculators/1031-exchange/`,
     `${SITE_URL}/en/calculators/lease-vs-buy/`,

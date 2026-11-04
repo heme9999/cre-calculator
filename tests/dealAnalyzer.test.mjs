@@ -69,6 +69,22 @@ try {
       assert.strictEqual(stressResult.breakEvenOccupancy.toFixed(2), '82.81');
     });
 
+    await t.test('24-unit Rate-only (+100 bps) Stress Scenario in Underwriting Guide', () => {
+      const rateOnlyInput = {
+        ...DEFAULT_DEAL_INPUT,
+        interestRate: DEFAULT_DEAL_INPUT.interestRate + 1.0, // 7.50%
+      };
+      const result = calculateSingleScenario(rateOnlyInput);
+      assert.strictEqual(Math.round(result.monthlyPayment), 15519);
+      assert.strictEqual(Math.round(result.annualDebtService), 186226);
+      assert.strictEqual(result.dscr.toFixed(2), '1.22');
+      const cashFlow = result.noi - result.annualDebtService;
+      assert.strictEqual(Math.round(cashFlow), 40974);
+      const totalCashInvested = DEFAULT_DEAL_INPUT.purchasePrice * 0.25 + 55600; // $755,600
+      const coc = (cashFlow / totalCashInvested) * 100;
+      assert.strictEqual(coc.toFixed(2), '5.42');
+    });
+
     await t.test('5% vacancy yields EGI of 319,200', () => {
       const input = { ...DEFAULT_DEAL_INPUT, grossPotentialIncome: 336000, vacancyRate: 5 };
       const result = calculateSingleScenario(input);
@@ -676,6 +692,64 @@ try {
           child.stderr.includes(nCase.expectedErrSnippet),
           `Negative fixture [${nCase.mode}] stderr must contain "${nCase.expectedErrSnippet}". Got: ${child.stderr}`
         );
+      }
+    });
+
+    await t.test('24-unit baseline consistency across Apartment Mortgage and Underwriting Guide (4 locales)', () => {
+      const enFile = fs.readFileSync(path.join(__dirname, '../src/content/en.ts'), 'utf8');
+      const zhFile = fs.readFileSync(path.join(__dirname, '../src/content/zh.ts'), 'utf8');
+      const esFile = fs.readFileSync(path.join(__dirname, '../src/content/es.ts'), 'utf8');
+      const ptFile = fs.readFileSync(path.join(__dirname, '../src/content/pt.ts'), 'utf8');
+      const aptComponent = fs.readFileSync(path.join(__dirname, '../src/components/calculators/ApartmentBuildingMortgageCalculator.tsx'), 'utf8');
+
+      // Apartment Mortgage Calculator default state must reflect canonical baseline (GPI 336k, OpEx 92k)
+      assert.ok(aptComponent.includes('useState<number>(1166.67)'), 'ApartmentBuildingMortgageCalculator rent must default to 1166.67');
+      assert.ok(aptComponent.includes('useState<number>(28.82)'), 'ApartmentBuildingMortgageCalculator opex must default to 28.82');
+      assert.ok(!aptComponent.includes('useState<number>(1232.64)'), 'ApartmentBuildingMortgageCalculator must NOT contain old 1232.64 rent');
+      assert.ok(!aptComponent.includes('useState<number>(32.6)'), 'ApartmentBuildingMortgageCalculator must NOT contain old 32.6 opex');
+
+      // Underwriting guide Step 5 must contain exact stress arithmetic across all 4 locales
+      for (const [loc, file] of [['EN', enFile], ['ZH', zhFile], ['ES', esFile], ['PT', ptFile]]) {
+        // Must contain rate stress ADS $186,226 and monthly $15,519 (or 15.519 in PT/ES)
+        assert.ok(file.includes('186,226') || file.includes('186.226'), `[${loc}] Guide must have $186,226 ADS`);
+        assert.ok(file.includes('15,519') || file.includes('15.519'), `[${loc}] Guide must have $15,519 monthly`);
+        assert.ok(file.includes('40,974') || file.includes('40.974'), `[${loc}] Guide must have $40,974 cash flow`);
+        assert.ok(file.includes('5.42%') || file.includes('5,42%'), `[${loc}] Guide must have 5.42% CoC`);
+        assert.ok(file.includes('1.22x') || file.includes('1,22x'), `[${loc}] Guide must have 1.22x DSCR`);
+
+        // Must no longer contain old rate stress ADS $186,180
+        assert.ok(!file.includes('186,180') && !file.includes('186.180'), `[${loc}] Guide must NOT have outdated $186,180`);
+        assert.ok(!file.includes('15,515') && !file.includes('15.515'), `[${loc}] Guide must NOT have outdated $15,515`);
+
+        // Apartment mortgage example text must not contain old 355k GPI or 110k OpEx
+        assert.ok(!file.includes('$355,000') && !file.includes('$355.000'), `[${loc}] Apartment mortgage must NOT have $355,000 GPI`);
+        assert.ok(!file.includes('$110,050') && !file.includes('$110.050'), `[${loc}] Apartment mortgage must NOT have $110,050 OpEx`);
+      }
+    });
+
+    await t.test('Free Rental Property Calculator component & sitemap consistency (4 locales)', () => {
+      const enFile = fs.readFileSync(path.join(__dirname, '../src/content/en.ts'), 'utf8');
+      const zhFile = fs.readFileSync(path.join(__dirname, '../src/content/zh.ts'), 'utf8');
+      const esFile = fs.readFileSync(path.join(__dirname, '../src/content/es.ts'), 'utf8');
+      const ptFile = fs.readFileSync(path.join(__dirname, '../src/content/pt.ts'), 'utf8');
+      const sitemapFile = fs.readFileSync(path.join(__dirname, '../src/app/sitemap.ts'), 'utf8');
+      const freeRentalComp = fs.readFileSync(path.join(__dirname, '../src/components/calculators/FreeRentalPropertyCalculator.tsx'), 'utf8');
+      const pageFile = fs.readFileSync(path.join(__dirname, '../src/app/[locale]/calculators/free-rental-property-calculator/page.tsx'), 'utf8');
+
+      // 1. Sitemap must include the new page
+      assert.ok(sitemapFile.includes('free-rental-property-calculator'), 'sitemap.ts must contain free-rental-property-calculator');
+
+      // 2. Component must use canonical 24-unit baseline
+      assert.ok(freeRentalComp.includes('2800000'), 'FreeRentalPropertyCalculator must default price to 2800000');
+      assert.ok(freeRentalComp.includes('336000'), 'FreeRentalPropertyCalculator must default rent to 336000');
+      assert.ok(freeRentalComp.includes('92000'), 'FreeRentalPropertyCalculator must default OpEx to 92000');
+
+      // 3. Page must exist and import component
+      assert.ok(pageFile.includes('FreeRentalPropertyCalculator'), 'Page must render FreeRentalPropertyCalculator');
+
+      // 4. Content files must contain freeRentalPropertyCalculator across all 4 locales
+      for (const [loc, file] of [['EN', enFile], ['ZH', zhFile], ['ES', esFile], ['PT', ptFile]]) {
+        assert.ok(file.includes('freeRentalPropertyCalculator'), `[${loc}] must define freeRentalPropertyCalculator`);
       }
     });
   });

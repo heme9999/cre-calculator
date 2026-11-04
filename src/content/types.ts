@@ -180,6 +180,7 @@ export interface LocaleContent {
   cashOnCash: CalculatorPageContent;
   loanPayment: CalculatorPageContent;
   apartmentBuildingMortgage: CalculatorPageContent;
+  freeRentalPropertyCalculator: CalculatorPageContent;
   dscr: CalculatorPageContent;
   exchange1031: CalculatorPageContent;
   leaseVsBuy: CalculatorPageContent;

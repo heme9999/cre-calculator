@@ -202,6 +202,26 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
       icon: Building2,
     },
     {
+      slug: 'free-rental-property-calculator',
+      badge: isZh ? '租赁测算' : isEs ? 'Flujo de Alquiler' : isPt ? 'Fluxo de Locação' : 'Rental Cash Flow',
+      title: isZh ? '免费出租物业收益分析计算器' : isEs ? 'Calculadora Gratuita de Inmuebles en Alquiler' : isPt ? 'Calculadora Gratuita de Imóveis de Aluguel' : 'Free Rental Property Calculator',
+      formula: isZh
+        ? '现金流 = EGI − OpEx − 贷款本息 (ADS)'
+        : isEs
+        ? 'Flujo de Caja = EGI − Gastos Operativos − Servicio de Deuda'
+        : isPt
+        ? 'Fluxo de Caixa = EGI − Despesas Operacionais − Serviço da Dívida'
+        : 'Net Cash Flow = EGI − OpEx − Debt Service (ADS)',
+      desc: isZh
+        ? '多户公寓与商业租赁物业投资全案测算工具。一站式计算净营业收入 (NOI)、月度/年度净现金流、Cap Rate、CoC 与 DSCR，完全免费无注册。'
+        : isEs
+        ? 'Analice el flujo de caja, NOI, Cap Rate, DSCR y retorno Cash-on-Cash para inmuebles de alquiler residencial y comercial multifamiliar. 100% gratuita.'
+        : isPt
+        ? 'Calcule fluxo de caixa, NOI, Cap Rate, DSCR e retorno Cash-on-Cash para imóveis residenciais multifamiliares e comerciais de locação. Gratuito e sem cadastro.'
+        : 'Analyze multifamily and commercial rental cash flow, NOI, cap rate, DSCR, and cash-on-cash return. 100% free with no sign-up or paywalls.',
+      icon: DollarSign,
+    },
+    {
       slug: '1031-exchange',
       badge: isZh ? '税务筹划' : isEs ? 'Diferimiento Fiscal' : isPt ? 'Diferimento Fiscal' : 'Tax Strategy',
       title: isZh ? '1031 Exchange 延税计算器' : isEs ? 'Calculadora de Intercambio 1031' : isPt ? 'Calculadora de Troca 1031' : '1031 Exchange Tax Calculator',
