@@ -52,7 +52,7 @@ export const ptContent: LocaleContent = {
         badge: 'Alavancagem',
       },
       {
-        slug: 'loanPayment',
+        slug: 'loan-payment',
         title: 'Calculadora de Pagamento de Empréstimo Comercial',
         description: 'Calcule parcelas mensais de amortização e juros, total de encargos acumulados e cronogramas de amortização.',
         badge: 'Bancário',
@@ -378,7 +378,7 @@ export const ptContent: LocaleContent = {
     relatedTitle: 'Ferramentas de Investimento Relacionadas',
     relatedCalculators: [
       { title: 'Calculadora de Financiamento de Apartamentos', slug: 'apartment-building-mortgage' },
-      { title: 'Deal Analyzer (Análise Abrangente em 5 Anos)', slug: 'deal-analyzer' },
+      { title: 'Deal Analyzer (Subscrição e Teste de Estresse)', slug: 'deal-analyzer' },
       { title: 'Calculadora de DSCR', slug: 'dscr' },
       { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
     ],

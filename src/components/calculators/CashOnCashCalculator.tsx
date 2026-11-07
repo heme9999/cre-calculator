@@ -559,7 +559,7 @@ export function CashOnCashCalculator({ locale }: Props) {
                   href={`/${locale}/tools/deal-analyzer/#pp=${purchasePrice}&dp=${downPaymentPercent}&noi=${annualNoi}&ds=${annualDebtService}&gpi=${estimatedGpi}&opex=${estimatedOpex}&vac=5&ir=${estimatedRate}&ay=25&cc=${ccPercent.toFixed(2)}`}
                   className="flex items-center justify-between p-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition text-white font-semibold"
                 >
-                  <span>{isZh ? '带入 Deal Analyzer 运行 5 年综合分析与压力测试' : isEs ? 'Llevar a Deal Analyzer para Proyección a 5 Años' : isPt ? 'Llevar ao Deal Analyzer para Projeção de 5 Anos' : 'Send to Deal Analyzer for 5-Year Underwriting'}</span>
+                  <span>{isZh ? '带入 Deal Analyzer 进行综合承销与压力测试' : isEs ? 'Llevar a Deal Analyzer para Evaluación y Prueba de Estrés' : isPt ? 'Levar ao Deal Analyzer para Subscrição e Teste de Estresse' : 'Send to Deal Analyzer for Comprehensive Underwriting & Stress Test'}</span>
                   <ArrowRight className="w-3.5 h-3.5 text-white" />
                 </Link>
               </div>

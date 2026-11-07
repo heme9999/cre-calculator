@@ -752,6 +752,44 @@ try {
         assert.ok(file.includes('freeRentalPropertyCalculator'), `[${loc}] must define freeRentalPropertyCalculator`);
       }
     });
+
+    await t.test('Free Rental Property Calculator & Homepage Deal Analyzer source and content regression', () => {
+      const pageFile = fs.readFileSync(path.join(__dirname, '../src/app/[locale]/calculators/free-rental-property-calculator/page.tsx'), 'utf8');
+      const homePageFile = fs.readFileSync(path.join(__dirname, '../src/app/[locale]/page.tsx'), 'utf8');
+      const freeRentalComp = fs.readFileSync(path.join(__dirname, '../src/components/calculators/FreeRentalPropertyCalculator.tsx'), 'utf8');
+      const enFile = fs.readFileSync(path.join(__dirname, '../src/content/en.ts'), 'utf8');
+      const zhFile = fs.readFileSync(path.join(__dirname, '../src/content/zh.ts'), 'utf8');
+      const esFile = fs.readFileSync(path.join(__dirname, '../src/content/es.ts'), 'utf8');
+      const ptFile = fs.readFileSync(path.join(__dirname, '../src/content/pt.ts'), 'utf8');
+
+      // 1. Source code check: free-rental page must route deal-analyzer to /tools/
+      assert.ok(pageFile.includes("r.slug === 'deal-analyzer'"), 'Page must check r.slug === "deal-analyzer"');
+      assert.ok(pageFile.includes("tools/deal-analyzer"), 'Page must route deal-analyzer to tools/deal-analyzer');
+
+      // 2. Source code check: home page must route deal-analyzer to /tools/
+      assert.ok(homePageFile.includes("calc.key === 'deal-analyzer'"), 'HomePage must check calc.key === "deal-analyzer"');
+      assert.ok(homePageFile.includes("tools/deal-analyzer"), 'HomePage must route deal-analyzer to tools/deal-analyzer');
+
+      // 3. Wording check: No 5-Year Underwriting overclaims in Related Tools content or main CTA
+      assert.ok(!freeRentalComp.includes('5 年全景承销') && !freeRentalComp.includes('5-Year Underwriting'), 'FreeRentalPropertyCalculator CTA must not overclaim 5-year underwriting');
+      assert.ok(freeRentalComp.includes('综合承销与压力测试') && freeRentalComp.includes('Comprehensive Underwriting & Stress Test'), 'FreeRentalPropertyCalculator CTA must use Comprehensive Underwriting & Stress Test');
+
+      const contentFiles = [
+        ['EN', enFile, 'Deal Analyzer (Comprehensive Underwriting & Stress Test)'],
+        ['ZH', zhFile, 'Deal Analyzer (综合承销与压力测试)'],
+        ['ES', esFile, 'Deal Analyzer (Evaluación y Prueba de Estrés)'],
+        ['PT', ptFile, 'Deal Analyzer (Subscrição e Teste de Estresse)'],
+      ];
+
+      for (const [loc, file, expectedTitle] of contentFiles) {
+        assert.ok(file.includes(expectedTitle), `[${loc}] must include title "${expectedTitle}" in relatedCalculators`);
+        assert.ok(!file.includes('Deal Analyzer (5-Year Underwriting)') && !file.includes('Deal Analyzer (5年全景承销分析)'), `[${loc}] must not contain 5-year overclaim`);
+      }
+
+      // 4. ES and PT content underwritingHub defines deal-analyzer key
+      assert.ok(esFile.includes("key: 'deal-analyzer'"), 'es.ts underwritingHub must include deal-analyzer');
+      assert.ok(ptFile.includes("key: 'deal-analyzer'"), 'pt.ts underwritingHub must include deal-analyzer');
+    });
   });
 } catch (e) {
   console.error('Test setup or compilation failed:');

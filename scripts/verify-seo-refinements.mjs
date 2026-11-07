@@ -6,6 +6,10 @@ import puppeteer from 'puppeteer-core';
 import {
   setupAnalyticsBlocker
 } from './lib/puppeteer-analytics-blocker.mjs';
+import {
+  verifyPostBuildDealAnalyzerArtifacts,
+  verifyDealAnalyzerClickNavigation
+} from './lib/deal-analyzer-link-validator.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,10 +56,11 @@ const server = http.createServer((req, res) => {
     reqPath += 'index.html';
   }
   let filePath = path.join(outDir, reqPath);
-  if (!fs.existsSync(filePath) && fs.existsSync(filePath + '.html')) {
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+    filePath = path.join(filePath, 'index.html');
+  } else if (!fs.existsSync(filePath) && fs.existsSync(filePath + '.html')) {
     filePath += '.html';
-  }
-  if (!fs.existsSync(filePath) && fs.existsSync(path.join(filePath, 'index.html'))) {
+  } else if (!fs.existsSync(filePath) && fs.existsSync(path.join(filePath, 'index.html'))) {
     filePath = path.join(filePath, 'index.html');
   }
 
@@ -289,6 +294,20 @@ async function runVerification() {
     }
   }
 
+  // 3.5. Strict Post-Build Static HTML Artifact Verification
+  console.log('\n==================================================');
+  console.log('3.5. Strict Post-Build Static HTML Artifact Verification');
+  console.log('==================================================');
+
+  const artifactCheck = verifyPostBuildDealAnalyzerArtifacts(outDir, ['en', 'zh', 'es', 'pt'], ['es', 'pt']);
+  for (const passedMsg of artifactCheck.passed) {
+    console.log(`  ✅ ${passedMsg}`);
+  }
+  for (const errMsg of artifactCheck.errors) {
+    console.error(`❌ ${errMsg}`);
+    totalErrors++;
+  }
+
   // 4. Scan and Test ALL HTML routes via Headless Browser
   const allRoutes = getAllHtmlRoutes(outDir).filter(r => r.startsWith('/en/') || r.startsWith('/zh/') || r.startsWith('/es/') || r.startsWith('/pt/'));
   console.log(`\n==================================================`);
@@ -318,6 +337,7 @@ async function runVerification() {
     const isSitemapApproved = APPROVED_SITEMAP_URLS.has(fullCanonicalUrl);
 
     const page = await browser.newPage();
+    await page.setViewport({ width: 1280, height: 900 });
     const blocker = await setupAnalyticsBlocker(page, { silent: true });
     const consoleErrors = [];
     page.on('console', msg => {
@@ -534,6 +554,38 @@ async function runVerification() {
           console.error(`❌ [${route}] Unlocalized English fallback phrase "${phrase}" detected on ${isEs ? 'ES' : 'PT'} page!`);
           routeErrors++;
         }
+      }
+    }
+
+    // Special Check 1: Free Rental Property Calculator Deal Analyzer card click navigation
+    if (route.endsWith('/calculators/free-rental-property-calculator/')) {
+      const routeLocale = isZh ? 'zh' : isEs ? 'es' : isPt ? 'pt' : 'en';
+      const cardSelector = `section.bg-slate-100 a[href="/${routeLocale}/tools/deal-analyzer/"]`;
+      const clickResult = await verifyDealAnalyzerClickNavigation(page, {
+        route,
+        locale: routeLocale,
+        cardSelector,
+        baseUrl: 'http://localhost:3459',
+      });
+      for (const errMsg of clickResult.errors) {
+        console.error(`❌ ${errMsg}`);
+        routeErrors++;
+      }
+    }
+
+    // Special Check 2: ES & PT Homepage Underwriting Hub Deal Analyzer click navigation
+    if (route === '/es/' || route === '/pt/') {
+      const homeLocale = isEs ? 'es' : 'pt';
+      const hubCardSelector = `main .bg-slate-50 a[href="/${homeLocale}/tools/deal-analyzer/"]`;
+      const clickResult = await verifyDealAnalyzerClickNavigation(page, {
+        route,
+        locale: homeLocale,
+        cardSelector: hubCardSelector,
+        baseUrl: 'http://localhost:3459',
+      });
+      for (const errMsg of clickResult.errors) {
+        console.error(`❌ ${errMsg}`);
+        routeErrors++;
       }
     }
 

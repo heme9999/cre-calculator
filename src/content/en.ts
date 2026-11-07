@@ -450,7 +450,7 @@ export const enContent: LocaleContent = {
     relatedTitle: 'Related Rental & Investment Calculators',
     relatedCalculators: [
       { title: 'Apartment Building Mortgage Calculator', slug: 'apartment-building-mortgage' },
-      { title: 'Deal Analyzer (5-Year Underwriting)', slug: 'deal-analyzer' },
+      { title: 'Deal Analyzer (Comprehensive Underwriting & Stress Test)', slug: 'deal-analyzer' },
       { title: 'DSCR Calculator', slug: 'dscr' },
       { title: 'Cap Rate Calculator', slug: 'cap-rate' },
     ],

@@ -128,16 +128,21 @@ export default async function FreeRentalPropertyCalculatorPage({ params }: PageP
         <section className="bg-slate-100 rounded-2xl p-6 md:p-8 space-y-4">
           <h2 className="text-lg font-bold text-slate-900">{content.relatedTitle}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {content.relatedCalculators.map((r, idx) => (
-              <Link
-                key={idx}
-                href={`/${locale}/calculators/${r.slug}/`}
-                className="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 hover:shadow-xs transition text-sm font-semibold text-slate-800 hover:text-emerald-700"
-              >
-                <span>{r.title}</span>
-                <ArrowRight className="w-4 h-4 text-emerald-600" />
-              </Link>
-            ))}
+            {content.relatedCalculators.map((r, idx) => {
+              const href = r.slug === 'deal-analyzer'
+                ? `/${locale}/tools/deal-analyzer/`
+                : `/${locale}/calculators/${r.slug}/`;
+              return (
+                <Link
+                  key={idx}
+                  href={href}
+                  className="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 hover:shadow-xs transition text-sm font-semibold text-slate-800 hover:text-emerald-700"
+                >
+                  <span>{r.title}</span>
+                  <ArrowRight className="w-4 h-4 text-emerald-600" />
+                </Link>
+              );
+            })}
           </div>
         </section>
       </div>

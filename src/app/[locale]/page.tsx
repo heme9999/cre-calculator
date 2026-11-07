@@ -220,24 +220,29 @@ export default async function HomePage({ params }: PageProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {home.underwritingHub.calculators.map((calc) => (
-            <div key={calc.key} className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 hover:border-emerald-500/40 hover:shadow-xs transition-[border-color,box-shadow] duration-150 flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <h3 className="text-base font-bold text-slate-900">
-                  <Link href={`/${locale}/calculators/${calc.key}/`} className="hover:text-emerald-600 transition-colors duration-150">
-                    {calc.title}
-                  </Link>
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {calc.desc}
-                </p>
+          {home.underwritingHub.calculators.map((calc) => {
+            const href = calc.key === 'deal-analyzer'
+              ? `/${locale}/tools/deal-analyzer/`
+              : `/${locale}/calculators/${calc.key}/`;
+            return (
+              <div key={calc.key} className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 hover:border-emerald-500/40 hover:shadow-xs transition-[border-color,box-shadow] duration-150 flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <h3 className="text-base font-bold text-slate-900">
+                    <Link href={href} className="hover:text-emerald-600 transition-colors duration-150">
+                      {calc.title}
+                    </Link>
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    {calc.desc}
+                  </p>
+                </div>
+                <Link href={href} className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1 hover:gap-1.5 transition-[gap] duration-150 ease-out active-press">
+                  <span>{calc.cta}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
-              <Link href={`/${locale}/calculators/${calc.key}/`} className="text-xs font-bold text-emerald-600 inline-flex items-center gap-1 hover:gap-1.5 transition-[gap] duration-150 ease-out active-press">
-                <span>{calc.cta}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          ))}
+            );
+          })}
 
           <div className="bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl p-6 border border-slate-800 shadow-[0_8px_24px_rgba(0,0,0,0.2)] flex flex-col justify-between space-y-4">
             <div className="space-y-2">

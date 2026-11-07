@@ -450,7 +450,7 @@ export const zhContent: LocaleContent = {
     relatedTitle: '相关出租物业与商业地产工具',
     relatedCalculators: [
       { title: '公寓与多户住宅商业贷款测算器', slug: 'apartment-building-mortgage' },
-      { title: 'Deal Analyzer (5年全景承销分析)', slug: 'deal-analyzer' },
+      { title: 'Deal Analyzer (综合承销与压力测试)', slug: 'deal-analyzer' },
       { title: '偿债覆盖率 (DSCR) 计算器', slug: 'dscr' },
       { title: '资本化率 (Cap Rate) 计算器', slug: 'cap-rate' },
     ],

@@ -598,7 +598,7 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                   href={`/${locale}/tools/deal-analyzer/#pp=${Math.round(propertyPrice)}&dp=${Math.round(impliedDownPaymentPercent)}&noi=${Math.round(noi)}&ds=${Math.round(currentResult.annualDebtService)}&gpi=${Math.round(grossPotentialIncome)}&opex=${Math.round(operatingExpenses)}&vac=${vacancyRate}&ir=${interestRate}&ay=${amortizationYears}`}
                   className="flex items-center justify-between p-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 transition text-white text-xs font-bold"
                 >
-                  <span>{isZh ? '带入 Deal Analyzer 进行 5 年全景承销与压力测试' : isEs ? 'Llevar a Deal Analyzer para Proyección Completa' : isPt ? 'Llevar ao Deal Analyzer para Projeção Completa' : 'Send to Deal Analyzer for 5-Year Underwriting'}</span>
+                  <span>{isZh ? '带入 Deal Analyzer 进行综合承销与压力测试' : isEs ? 'Llevar a Deal Analyzer para Evaluación y Prueba de Estrés' : isPt ? 'Levar ao Deal Analyzer para Subscrição e Teste de Estresse' : 'Send to Deal Analyzer for Comprehensive Underwriting & Stress Test'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>

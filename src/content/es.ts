@@ -52,7 +52,7 @@ export const esContent: LocaleContent = {
         badge: 'Apalancamiento',
       },
       {
-        slug: 'loanPayment',
+        slug: 'loan-payment',
         title: 'Calculadora de Pagos de Préstamos Comerciales',
         description: 'Calcule pagos mensuales de principal e intereses, intereses totales acumulados y tablas de amortización.',
         badge: 'Bancario',
@@ -378,7 +378,7 @@ export const esContent: LocaleContent = {
     relatedTitle: 'Herramientas Inmobiliarias Relacionadas',
     relatedCalculators: [
       { title: 'Calculadora de Hipoteca de Edificios de Apartamentos', slug: 'apartment-building-mortgage' },
-      { title: 'Deal Analyzer (Análisis Integral a 5 Años)', slug: 'deal-analyzer' },
+      { title: 'Deal Analyzer (Evaluación y Prueba de Estrés)', slug: 'deal-analyzer' },
       { title: 'Calculadora de DSCR', slug: 'dscr' },
       { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
     ],
