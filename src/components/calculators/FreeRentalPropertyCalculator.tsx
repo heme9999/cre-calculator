@@ -357,7 +357,13 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
                     <span className="absolute right-3 top-2.5 text-slate-400 font-semibold">%</span>
                   </div>
                   <div className="text-xs text-slate-500">
-                    {isZh ? `空置损失: ${formatCurrency(vacancyLoss)} | 有效毛收入 (EGI): ${formatCurrency(effectiveGrossIncome)}` : `Vacancy Loss: ${formatCurrency(vacancyLoss)} | EGI: ${formatCurrency(effectiveGrossIncome)}`}
+                    {isZh
+                      ? `空置损失: ${formatCurrency(vacancyLoss)} | 有效毛收入 (EGI): ${formatCurrency(effectiveGrossIncome)}`
+                      : isEs
+                      ? `Pérdida por Vacancia: ${formatCurrency(vacancyLoss)} | Ingreso Bruto Efectivo (EGI): ${formatCurrency(effectiveGrossIncome)}`
+                      : isPt
+                      ? `Perda por Vacância: ${formatCurrency(vacancyLoss)} | Receita Bruta Efetiva (EGI): ${formatCurrency(effectiveGrossIncome)}`
+                      : `Vacancy Loss: ${formatCurrency(vacancyLoss)} | EGI: ${formatCurrency(effectiveGrossIncome)}`}
                   </div>
                 </div>
               </div>
@@ -388,6 +394,10 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
                 <div className="text-xs text-slate-500">
                   {isZh
                     ? `费用率: ${opexRatio.toFixed(1)}% EGI | 净营业收入 (NOI): ${formatCurrency(noi)}`
+                    : isEs
+                    ? `Ratio de Gastos: ${opexRatio.toFixed(1)}% EGI | Ingreso Operativo Neto (NOI): ${formatCurrency(noi)}`
+                    : isPt
+                    ? `Índice de Despesas: ${opexRatio.toFixed(1)}% EGI | Receita Operacional Líquida (NOI): ${formatCurrency(noi)}`
                     : `Expense Ratio: ${opexRatio.toFixed(1)}% | NOI: ${formatCurrency(noi)}`}
                 </div>
               </div>
@@ -446,10 +456,10 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
                   onChange={(e) => setAmortizationYears(Number(e.target.value))}
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900 bg-white"
                 >
-                  <option value={15}>15 {isZh ? '年' : 'Years'}</option>
-                  <option value={20}>20 {isZh ? '年' : 'Years'}</option>
-                  <option value={25}>25 {isZh ? '年 (商业银行常用)' : 'Years (Bank Std)'}</option>
-                  <option value={30}>30 {isZh ? '年 (Agency/住宅标准)' : 'Years (Agency Std)'}</option>
+                  <option value={15}>{isZh ? '15 年' : isEs ? '15 Años' : isPt ? '15 Anos' : '15 Years'}</option>
+                  <option value={20}>{isZh ? '20 年' : isEs ? '20 Años' : isPt ? '20 Anos' : '20 Years'}</option>
+                  <option value={25}>{isZh ? '25 年 (商业银行常用)' : isEs ? '25 Años (Estándar Bancario)' : isPt ? '25 Anos (Padrão Bancário)' : '25 Years (Bank Std)'}</option>
+                  <option value={30}>{isZh ? '30 年 (Agency/住宅标准)' : isEs ? '30 Años (Estándar Agency/Residencial)' : isPt ? '30 Anos (Padrão Agency/Residencial)' : '30 Years (Agency Std)'}</option>
                 </select>
               </div>
             </div>
@@ -483,19 +493,27 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
             {/* Core Return Metrics Grid */}
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60">
-                <span className="text-slate-400 block mb-0.5">{isZh ? '净营业收入 NOI' : 'Net Operating Income'}</span>
+                <span className="text-slate-400 block mb-0.5">
+                  {isZh ? '净营业收入 NOI' : isEs ? 'Ingreso Operativo Neto (NOI)' : isPt ? 'Receita Operacional Líquida (NOI)' : 'Net Operating Income'}
+                </span>
                 <span className="text-base font-bold text-white font-mono">{formatCurrency(noi)}</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60">
-                <span className="text-slate-400 block mb-0.5">{isZh ? '资本化率 Cap Rate' : 'Going-In Cap Rate'}</span>
+                <span className="text-slate-400 block mb-0.5">
+                  {isZh ? '资本化率 Cap Rate' : isEs ? 'Tasa de Capitalización (Cap Rate)' : isPt ? 'Taxa de Capitalização (Cap Rate)' : 'Going-In Cap Rate'}
+                </span>
                 <span className="text-base font-bold text-emerald-400 font-mono">{formatPercent(capRate)}</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60">
-                <span className="text-slate-400 block mb-0.5">{isZh ? '偿债覆盖率 DSCR' : 'DSCR Coverage'}</span>
+                <span className="text-slate-400 block mb-0.5">
+                  {isZh ? '偿债覆盖率 DSCR' : isEs ? 'Cobertura de Deuda (DSCR)' : isPt ? 'Cobertura da Dívida (DSCR)' : 'DSCR Coverage'}
+                </span>
                 <span className="text-base font-bold text-white font-mono">{dscr.toFixed(2)}x</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60">
-                <span className="text-slate-400 block mb-0.5">{isZh ? '保本比率 BER' : 'Break-Even Ratio'}</span>
+                <span className="text-slate-400 block mb-0.5">
+                  {isZh ? '保本比率 BER' : isEs ? 'Punto de Equilibrio (BER)' : isPt ? 'Ponto de Equilíbrio (BER)' : 'Break-Even Ratio'}
+                </span>
                 <span className="text-base font-bold text-slate-200 font-mono">{formatPercent(breakEvenRatio)}</span>
               </div>
             </div>
@@ -503,37 +521,61 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
             {/* Detailed Line-by-Line Breakdown */}
             <div className="space-y-2.5 pt-2 border-t border-slate-800 text-xs">
               <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">{isZh ? '贷款本金 (Loan Amount):' : 'Loan Amount:'}</span>
+                <span className="text-slate-400">
+                  {isZh ? '贷款本金 (Loan Amount):' : isEs ? 'Monto del Préstamo:' : isPt ? 'Valor do Empréstimo:' : 'Loan Amount:'}
+                </span>
                 <span className="font-bold text-slate-100 font-mono">{formatCurrency(loanAmount)} ({((100 - downPaymentPercent)).toFixed(0)}% LTV)</span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">{isZh ? '月供与年度还本付息 (ADS):' : 'Annual Debt Service (ADS):'}</span>
-                <span className="font-bold text-slate-100 font-mono">{formatCurrency(annualDebtService)} ({formatCurrency(monthlyPayment)}/mo)</span>
+                <span className="text-slate-400">
+                  {isZh ? '月供与年度还本付息 (ADS):' : isEs ? 'Servicio Anual de la Deuda (ADS):' : isPt ? 'Serviço Anual da Dívida (ADS):' : 'Annual Debt Service (ADS):'}
+                </span>
+                <span className="font-bold text-slate-100 font-mono">{formatCurrency(annualDebtService)} ({formatCurrency(monthlyPayment)}/{isZh ? '月' : isEs ? 'mes' : isPt ? 'mês' : 'mo'})</span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">{isZh ? '实际自付总现金 (Total Equity):' : 'Total Cash Invested:'}</span>
+                <span className="text-slate-400">
+                  {isZh ? '实际自付总现金 (Total Equity):' : isEs ? 'Capital Total Invertido:' : isPt ? 'Capital Total Investido:' : 'Total Cash Invested:'}
+                </span>
                 <span className="font-bold text-slate-100 font-mono">{formatCurrency(totalCashInvested)}</span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '现金回报率 (全款自付口径):' : 'Cash-on-Cash (All-In):'}</span>
+                  <span className="text-slate-400 block">
+                    {isZh ? '现金回报率 (全款自付口径):' : isEs ? 'Retorno sobre Efectivo (Capital Total):' : isPt ? 'Retorno sobre Caixa (Capital Total):' : 'Cash-on-Cash (All-In):'}
+                  </span>
                   <span className="text-[10px] text-slate-500 block">
-                    {isZh ? `首付 + 过户费 ($${totalCashInvested.toLocaleString()})` : `Down payment + Closing costs`}
+                    {isZh
+                      ? `首付 + 过户费 ($${totalCashInvested.toLocaleString()})`
+                      : isEs
+                      ? `Entrada + Gastos de cierre ($${totalCashInvested.toLocaleString()})`
+                      : isPt
+                      ? `Entrada + Custos de fechamento ($${totalCashInvested.toLocaleString()})`
+                      : 'Down payment + Closing costs'}
                   </span>
                 </div>
                 <span className="font-bold text-emerald-400 font-mono text-sm">{formatPercent(cashOnCashTotal)}</span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '现金回报率 (仅首付款口径):' : 'Cash-on-Cash (Down Payment):'}</span>
+                  <span className="text-slate-400 block">
+                    {isZh ? '现金回报率 (仅首付款口径):' : isEs ? 'Retorno sobre Efectivo (Solo Entrada):' : isPt ? 'Retorno sobre Caixa (Apenas Entrada):' : 'Cash-on-Cash (Down Payment):'}
+                  </span>
                   <span className="text-[10px] text-slate-500 block">
-                    {isZh ? `仅限首付款 ($${downPayment.toLocaleString()})` : `Pure down payment only`}
+                    {isZh
+                      ? `仅限首付款 ($${downPayment.toLocaleString()})`
+                      : isEs
+                      ? `Solo entrada inicial ($${downPayment.toLocaleString()})`
+                      : isPt
+                      ? `Apenas entrada inicial ($${downPayment.toLocaleString()})`
+                      : 'Pure down payment only'}
                   </span>
                 </div>
                 <span className="font-bold text-slate-300 font-mono text-sm">{formatPercent(cashOnCashDownPaymentOnly)}</span>
               </div>
               <div className="flex justify-between items-center py-1">
-                <span className="text-slate-400">{isZh ? '保本所需最低出租率 (BEO):' : 'Break-Even Occupancy (BEO):'}</span>
+                <span className="text-slate-400">
+                  {isZh ? '保本所需最低出租率 (BEO):' : isEs ? 'Ocupación de Equilibrio (BEO):' : isPt ? 'Ocupação de Equilíbrio (BEO):' : 'Break-Even Occupancy (BEO):'}
+                </span>
                 <span className="font-bold text-slate-200 font-mono">{formatPercent(breakEvenOccupancy)}</span>
               </div>
             </div>
@@ -566,11 +608,15 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
           <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3">
             <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5 uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-              {isZh ? '100% 免费，无门槛限制' : '100% Free & Unrestricted'}
+              {isZh ? '100% 免费，无门槛限制' : isEs ? '100% Gratuito y Sin Restricciones' : isPt ? '100% Gratuito e Sem Restrições' : '100% Free & Unrestricted'}
             </h3>
             <p className="text-xs text-slate-600 leading-relaxed">
               {isZh
                 ? '无需注册账号、无需绑定信用卡、无分析次数上限。所有计算全部在您的浏览器本地实时完成，数据不上传第三方服务器，保障投资尽调隐私。'
+                : isEs
+                ? 'Sin registro obligatorio, sin tarjeta de crédito y sin muros de pago. Todos los cálculos se ejecutan localmente en su navegador para garantizar privacidad instantánea.'
+                : isPt
+                ? 'Sem necessidade de cadastro, sem cartão de crédito e sem bloqueios pagos. Todos os cálculos são executados localmente no seu navegador para total privacidade.'
                 : 'Zero sign-up required, zero credit card prompts, and zero artificial paywalls. All calculations execute locally inside your browser for instant privacy and zero data leakage.'}
             </p>
           </div>

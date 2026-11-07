@@ -736,20 +736,34 @@ try {
       const freeRentalComp = fs.readFileSync(path.join(__dirname, '../src/components/calculators/FreeRentalPropertyCalculator.tsx'), 'utf8');
       const pageFile = fs.readFileSync(path.join(__dirname, '../src/app/[locale]/calculators/free-rental-property-calculator/page.tsx'), 'utf8');
 
-      // 1. Sitemap must include the new page
-      assert.ok(sitemapFile.includes('free-rental-property-calculator'), 'sitemap.ts must contain free-rental-property-calculator');
+      // 1. Sitemap must include the page across all 4 locales
+      for (const loc of ['en', 'zh', 'es', 'pt']) {
+        assert.ok(
+          sitemapFile.includes(`/${loc}/calculators/free-rental-property-calculator/`),
+          `sitemap.ts must contain /${loc}/calculators/free-rental-property-calculator/`
+        );
+      }
 
-      // 2. Component must use canonical 24-unit baseline
+      // 2. Component must use canonical 24-unit baseline & localize ES/PT results panel
       assert.ok(freeRentalComp.includes('2800000'), 'FreeRentalPropertyCalculator must default price to 2800000');
       assert.ok(freeRentalComp.includes('336000'), 'FreeRentalPropertyCalculator must default rent to 336000');
       assert.ok(freeRentalComp.includes('92000'), 'FreeRentalPropertyCalculator must default OpEx to 92000');
+      assert.ok(freeRentalComp.includes('Pérdida por Vacancia:') && freeRentalComp.includes('Perda por Vacância:'), 'FreeRentalPropertyCalculator must localize Vacancy Loss in ES/PT');
+      assert.ok(freeRentalComp.includes('Retorno sobre Efectivo (Capital Total):') && freeRentalComp.includes('Retorno sobre Caixa (Capital Total):'), 'FreeRentalPropertyCalculator must localize Cash-on-Cash in ES/PT');
 
-      // 3. Page must exist and import component
+      // 3. Page must exist, import component, and not noindex non-EN locales
       assert.ok(pageFile.includes('FreeRentalPropertyCalculator'), 'Page must render FreeRentalPropertyCalculator');
+      assert.ok(!pageFile.includes("noindex: locale !== 'en'"), 'Page must be indexable across all 4 locales');
 
-      // 4. Content files must contain freeRentalPropertyCalculator across all 4 locales
+      // 4. Content files, Header, and Footer must include free-rental-property-calculator & apartment-building-mortgage
+      const headerFile = fs.readFileSync(path.join(__dirname, '../src/components/layout/Header.tsx'), 'utf8');
+      const footerFile = fs.readFileSync(path.join(__dirname, '../src/components/layout/Footer.tsx'), 'utf8');
+      assert.ok(headerFile.includes('free-rental-property-calculator') && headerFile.includes('apartment-building-mortgage'), 'Header must include both new calculators');
+      assert.ok(footerFile.includes('free-rental-property-calculator') && footerFile.includes('apartment-building-mortgage'), 'Footer must include both new calculators');
       for (const [loc, file] of [['EN', enFile], ['ZH', zhFile], ['ES', esFile], ['PT', ptFile]]) {
         assert.ok(file.includes('freeRentalPropertyCalculator'), `[${loc}] must define freeRentalPropertyCalculator`);
+        assert.ok(file.includes("slug: 'free-rental-property-calculator'"), `[${loc}] home.calculators must include free-rental-property-calculator`);
+        assert.ok(file.includes("slug: 'apartment-building-mortgage'"), `[${loc}] home.calculators must include apartment-building-mortgage`);
       }
     });
 

@@ -25,23 +25,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/en/guides/1031-exchange-process/`,
     `${SITE_URL}/en/guides/how-to-underwrite-a-deal/`,
 
-    // Chinese Core Pages (4)
+    // Chinese Core Pages (5)
     `${SITE_URL}/zh/`,
     `${SITE_URL}/zh/calculators/cap-rate/`,
     `${SITE_URL}/zh/calculators/noi/`,
     `${SITE_URL}/zh/calculators/dscr/`,
+    `${SITE_URL}/zh/calculators/free-rental-property-calculator/`,
 
-    // Spanish Core Pages (4)
+    // Spanish Core Pages (5)
     `${SITE_URL}/es/`,
     `${SITE_URL}/es/calculators/cap-rate/`,
     `${SITE_URL}/es/calculators/noi/`,
     `${SITE_URL}/es/calculators/dscr/`,
+    `${SITE_URL}/es/calculators/free-rental-property-calculator/`,
 
-    // Portuguese Core Pages (4)
+    // Portuguese Core Pages (5)
     `${SITE_URL}/pt/`,
     `${SITE_URL}/pt/calculators/cap-rate/`,
     `${SITE_URL}/pt/calculators/noi/`,
     `${SITE_URL}/pt/calculators/dscr/`,
+    `${SITE_URL}/pt/calculators/free-rental-property-calculator/`,
 
     // Programmatic Cap Rate Landing Pages (4)
     `${SITE_URL}/en/calculators/multifamily-cap-rate/`,

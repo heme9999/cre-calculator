@@ -15,6 +15,7 @@ export const MULTILINGUAL_CORE_ROUTES = new Set([
   'calculators/cap-rate',
   'calculators/noi',
   'calculators/dscr',
+  'calculators/free-rental-property-calculator',
 ]);
 
 function getOgImageInfo(path: string, locale: 'en' | 'zh' | 'es' | 'pt', title: string) {

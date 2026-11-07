@@ -65,6 +65,8 @@ export interface NavContent {
   noi: string;
   cashOnCash: string;
   loanPayment: string;
+  apartmentBuildingMortgage: string;
+  freeRentalProperty: string;
   dscr: string;
   exchange1031: string;
   leaseVsBuy: string;

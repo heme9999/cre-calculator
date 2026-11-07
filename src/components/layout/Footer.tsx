@@ -66,6 +66,16 @@ export function Footer({ locale }: FooterProps) {
                 </Link>
               </li>
               <li>
+                <Link href={`/${locale}/calculators/apartment-building-mortgage/`} className="hover:text-emerald-400 transition-colors">
+                  {nav.apartmentBuildingMortgage}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/calculators/free-rental-property-calculator/`} className="hover:text-emerald-400 transition-colors">
+                  {nav.freeRentalProperty}
+                </Link>
+              </li>
+              <li>
                 <Link href={`/${locale}/calculators/dscr/`} className="hover:text-emerald-400 transition-colors">
                   {nav.dscr}
                 </Link>

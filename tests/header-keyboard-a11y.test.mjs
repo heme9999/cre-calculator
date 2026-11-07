@@ -23,17 +23,19 @@ test('Header calculators disclosure navigation accessibility attributes in stati
     assert.ok(navMatch, `#calculators-navigation container must exist (${locale})`);
     const navInner = navMatch[1];
     const linkMatches = navInner.match(/<a\s[^>]*>/g) || [];
-    assert.equal(linkMatches.length, 8, `Expected 8 calculator links inside #calculators-navigation (${locale})`);
+    assert.equal(linkMatches.length, 10, `Expected 10 calculator links inside #calculators-navigation (${locale})`);
     for (const linkTag of linkMatches) {
       assert.match(linkTag, /tabindex=["']-1["']/, `Closed disclosure link must have tabindex="-1" (${locale}): ${linkTag}`);
     }
 
-    // 4. Verify all 8 core calculators are present in the dropdown
+    // 4. Verify all 10 calculators are present in the dropdown
     const expectedCalculators = [
       `/${locale}/calculators/cap-rate/`,
       `/${locale}/calculators/noi/`,
       `/${locale}/calculators/cash-on-cash/`,
       `/${locale}/calculators/loan-payment/`,
+      `/${locale}/calculators/apartment-building-mortgage/`,
+      `/${locale}/calculators/free-rental-property-calculator/`,
       `/${locale}/calculators/dscr/`,
       `/${locale}/calculators/1031-exchange/`,
       `/${locale}/calculators/lease-vs-buy/`,

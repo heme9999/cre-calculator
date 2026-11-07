@@ -114,23 +114,26 @@ const APPROVED_SITEMAP_URLS = new Set([
   'https://crecalculators.com/en/guides/1031-exchange-process/',
   'https://crecalculators.com/en/guides/how-to-underwrite-a-deal/',
 
-  // Chinese Core Pages (4)
+  // Chinese Core Pages (5)
   'https://crecalculators.com/zh/',
   'https://crecalculators.com/zh/calculators/cap-rate/',
   'https://crecalculators.com/zh/calculators/noi/',
   'https://crecalculators.com/zh/calculators/dscr/',
+  'https://crecalculators.com/zh/calculators/free-rental-property-calculator/',
 
-  // Spanish Core Pages (4)
+  // Spanish Core Pages (5)
   'https://crecalculators.com/es/',
   'https://crecalculators.com/es/calculators/cap-rate/',
   'https://crecalculators.com/es/calculators/noi/',
   'https://crecalculators.com/es/calculators/dscr/',
+  'https://crecalculators.com/es/calculators/free-rental-property-calculator/',
 
-  // Portuguese Core Pages (4)
+  // Portuguese Core Pages (5)
   'https://crecalculators.com/pt/',
   'https://crecalculators.com/pt/calculators/cap-rate/',
   'https://crecalculators.com/pt/calculators/noi/',
   'https://crecalculators.com/pt/calculators/dscr/',
+  'https://crecalculators.com/pt/calculators/free-rental-property-calculator/',
 
   // Programmatic Cap Rate Landing Pages (4)
   'https://crecalculators.com/en/calculators/multifamily-cap-rate/',
@@ -160,6 +163,7 @@ const MULTILINGUAL_CORE_PATHS = new Set([
   '/calculators/cap-rate/',
   '/calculators/noi/',
   '/calculators/dscr/',
+  '/calculators/free-rental-property-calculator/',
 ]);
 
 const PRIORITY_ROUTES = [
@@ -548,6 +552,11 @@ async function runVerification() {
         'Underwriting Standards & Calculation Formulas',
         'Commercial Real Estate Overview',
         'Core Regional Economic Drivers',
+        'Vacancy Loss:',
+        'Going-In Cap Rate',
+        'Cash-on-Cash (All-In):',
+        'Cash-on-Cash (Down Payment):',
+        '100% Free & Unrestricted',
       ];
       for (const phrase of forbiddenEnglishHeadings) {
         if (evaluated.bodyText.includes(phrase) || evaluated.title.includes(phrase)) {
