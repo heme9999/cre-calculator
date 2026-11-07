@@ -7,7 +7,7 @@ export const esContent: LocaleContent = {
     dealAnalyzer: 'Analizador Integral',
     capRate: 'Tasa de Capitalización (Cap Rate)',
     noi: 'Ingreso Operativo Neto (NOI)',
-    cashOnCash: 'Cash-on-Cash Return',
+    cashOnCash: 'Retorno sobre Efectivo (CoC)',
     loanPayment: 'Pago de Préstamo',
     apartmentBuildingMortgage: 'Hipoteca Multifamiliar',
     freeRentalProperty: 'Propiedad en Alquiler',
@@ -49,7 +49,7 @@ export const esContent: LocaleContent = {
       },
       {
         slug: 'cash-on-cash',
-        title: 'Calculadora de Cash-on-Cash Return',
+        title: 'Calculadora de Retorno sobre Efectivo (CoC)',
         description: 'Mida el rendimiento anual real sobre el capital efectivo invertido después de pagar la deuda hipotecaria.',
         badge: 'Apalancamiento',
       },
@@ -86,7 +86,7 @@ export const esContent: LocaleContent = {
       {
         slug: 'apartment-building-mortgage',
         title: 'Calculadora de Hipoteca para Edificios de Apartamentos',
-        description: 'Modele préstamos comerciales multifamiliares (5+ unidades) bajo estándares Agency, Bancarios y HUD 223(f) con límites LTV y DSCR.',
+        description: 'Modele préstamos comerciales multifamiliares (5+ unidades) bajo estándares de Agencia, Bancarios y HUD 223(f) con límites LTV y DSCR.',
         badge: 'Deuda Multifamiliar',
       },
     ],
@@ -131,7 +131,7 @@ export const esContent: LocaleContent = {
     h1: 'Deal Analyzer: Suite Integral de Debida Diligencia Comercial',
     subtitle: 'Ingrese las variables de adquisición de la propiedad una sola vez para modelar simultáneamente rendimiento, apalancamiento, servicio de deuda y resiliencia ante caídas de mercado.',
     whatIsTitle: '¿Qué es el Deal Analyzer?',
-    whatIsContent: 'Deal Analyzer es una suite integral de modelado financiero que unifica todas las métricas críticas de inversión inmobiliaria comercial (Cap Rate, NOI, Cash-on-Cash Return, DSCR, Break-Even Ratio y Break-Even Occupancy) en un solo flujo de trabajo dinámico.',
+    whatIsContent: 'Deal Analyzer es una suite integral de modelado financiero que unifica todas las métricas críticas de inversión inmobiliaria comercial (Cap Rate, NOI, Retorno sobre Efectivo, DSCR, Break-Even Ratio y Break-Even Occupancy) en un solo flujo de trabajo dinámico.',
     formulaTitle: 'Marco Computacional Integrado',
     formulaCode: 'Flujo de Caja Antes de Impuestos (CFBT) = NOI - Servicio Anual de la Deuda',
     formulaVariables: [
@@ -174,7 +174,7 @@ export const esContent: LocaleContent = {
     faqTitle: 'Preguntas Frecuentes sobre Cap Rate',
     faqs: [
       { question: '¿Cuál es un buen Cap Rate para invertir?', answer: 'Depende del tipo de activo y la ciudad. En mercados primarios como Nueva York o Miami, los activos clase A operan entre 4.8% y 5.5%, mientras que en mercados secundarios oscilan entre 6.0% y 7.5%.' },
-      { question: '¿Cuál es la diferencia entre Cap Rate y Cash-on-Cash Return?', answer: 'El Cap Rate mide el rendimiento de todo el activo sin deuda. El Cash-on-Cash mide el rendimiento del dinero en efectivo efectivamente invertido como pago inicial tras pagar la hipoteca.' },
+      { question: '¿Cuál es la diferencia entre Cap Rate y Retorno sobre Efectivo (Cash-on-Cash)?', answer: 'El Cap Rate mide el rendimiento de todo el activo sin deuda. El Retorno sobre Efectivo (Cash-on-Cash) mide el rendimiento del dinero en efectivo efectivamente invertido como pago inicial tras pagar la hipoteca.' },
       { question: '¿El Cap Rate incluye pagos de hipoteca?', answer: 'No. El Cap Rate es una métrica no apalancada; los pagos de principal e intereses se excluyen deliberadamente para comparar inmuebles de manera neutral.' },
     ],
     relatedTitle: 'Calculadoras Financieras Relacionadas',
@@ -228,20 +228,20 @@ export const esContent: LocaleContent = {
     ],
   },
   cashOnCash: {
-    metaTitle: 'Calculadora de Cash-on-Cash Return | Rendimiento de Capital',
-    metaDescription: 'Calcule el retorno de efectivo sobre efectivo (Cash-on-Cash Return) para evaluar el apalancamiento financiero de su inversión inmobiliaria.',
-    h1: 'Calculadora de Cash-on-Cash Return',
+    metaTitle: 'Calculadora de Retorno sobre Efectivo (Cash-on-Cash) | Rendimiento de Capital',
+    metaDescription: 'Calcule el retorno de efectivo sobre efectivo (CoC) para evaluar el apalancamiento financiero de su inversión inmobiliaria.',
+    h1: 'Calculadora de Retorno sobre Efectivo (Cash-on-Cash)',
     subtitle: 'Mida la rentabilidad anual neta generada por cada dólar de capital efectivamente invertido de su bolsillo.',
-    whatIsTitle: '¿Qué es el Cash-on-Cash Return?',
-    whatIsContent: 'El retorno de efectivo sobre efectivo (Cash-on-Cash Return) mide el flujo de caja neto antes de impuestos del primer año en relación con el capital total en efectivo que usted desembolsó. A diferencia del Cap Rate, que analiza la propiedad sin deuda, el Cash-on-Cash refleja directamente el impacto de su estructura de financiamiento.\n\nEl "Capital Total Invertido" debe incluir el pago inicial (entrada), costos de cierre, tarifas de originación del préstamo y reparaciones iniciales inmediatas. El "Flujo de Caja Anual Antes de Impuestos" es el NOI menos el servicio anual de la deuda. Tenga en cuenta que esta métrica evalúa el rendimiento del capital en el bolsillo durante el primer año; no equivale a la TIR (IRR) ni contabiliza la revalorización futura o amortización del capital del préstamo.',
-    formulaTitle: 'La Fórmula del Cash-on-Cash',
-    formulaCode: 'Cash-on-Cash Return = (Flujo de Caja Anual Antes de Impuestos / Capital Total Invertido) × 100%',
+    whatIsTitle: '¿Qué es el Retorno sobre Efectivo (Cash-on-Cash)?',
+    whatIsContent: 'El retorno de efectivo sobre efectivo (Cash-on-Cash) mide el flujo de caja neto antes de impuestos del primer año en relación con el capital total en efectivo que usted desembolsó. A diferencia del Cap Rate, que analiza la propiedad sin deuda, el Cash-on-Cash refleja directamente el impacto de su estructura de financiamiento.\n\nEl "Capital Total Invertido" debe incluir el pago inicial (entrada), costos de cierre, tarifas de originación del préstamo y reparaciones iniciales inmediatas. El "Flujo de Caja Anual Antes de Impuestos" es el NOI menos el servicio anual de la deuda. Tenga en cuenta que esta métrica evalúa el rendimiento del capital en el bolsillo durante el primer año; no equivale a la TIR (IRR) ni contabiliza la revalorización futura o amortización del capital del préstamo.',
+    formulaTitle: 'La Fórmula del Retorno sobre Efectivo (Cash-on-Cash)',
+    formulaCode: 'Retorno sobre Efectivo (CoC) = (Flujo de Caja Anual Antes de Impuestos / Capital Total Invertido) × 100%',
     formulaVariables: [
       { label: 'Flujo de Caja Anual', desc: 'NOI menos el servicio anual de la deuda (pagos de hipoteca)' },
       { label: 'Capital Total Invertido', desc: 'Pago inicial + costos de cierre + mejoras de capital inmediatas — no el precio total de compra' },
     ],
     exampleTitle: 'Caso Práctico Ilustrativo',
-    exampleContent: 'Usted compra un inmueble comercial por $1,200,000 con un pago inicial del 25% ($300,000) más $30,000 en costos de cierre y adecuaciones inmediatas, para un capital total invertido de $330,000. El NOI anual es de $84,000 y el servicio anual de la deuda es de $54,000.\n\nFlujo de Caja Anual = $84,000 − $54,000 = $30,000\nCash-on-Cash Return = $30,000 / $330,000 = 9.09%\n\nEn comparación con el Cap Rate de la propiedad ($84,000 / $1,200,000 = 7.00%), en esta estructura de financiamiento el rendimiento en efectivo del primer año (9.09%) supera el Cap Rate no apalancado debido a que la constante del préstamo permite un flujo de caja inicial más holgado sobre el capital propio.\n\n*Nota: Este es un caso práctico hipotético con fines estrictamente ilustrativos, no representa una oferta real ni asesoramiento de inversión.*',
+    exampleContent: 'Usted compra un inmueble comercial por $1,200,000 con un pago inicial del 25% ($300,000) más $30,000 en costos de cierre y adecuaciones inmediatas, para un capital total invertido de $330,000. El NOI anual es de $84,000 y el servicio anual de la deuda es de $54,000.\n\nFlujo de Caja Anual = $84,000 − $54,000 = $30,000\nRetorno sobre Efectivo (CoC) = $30,000 / $330,000 = 9.09%\n\nEn comparación con el Cap Rate de la propiedad ($84,000 / $1,200,000 = 7.00%), en esta estructura de financiamiento el rendimiento en efectivo del primer año (9.09%) supera el Cap Rate no apalancado debido a que la constante del préstamo permite un flujo de caja inicial más holgado sobre el capital propio.\n\n*Nota: Este es un caso práctico hipotético con fines estrictamente ilustrativos, no representa una oferta real ni asesoramiento de inversión.*',
     faqTitle: 'Preguntas Frecuentes sobre Cash-on-Cash',
     faqs: [
       {
@@ -311,21 +311,21 @@ export const esContent: LocaleContent = {
   },
   apartmentBuildingMortgage: {
     metaTitle: 'Calculadora de Hipoteca de Edificios Multifamiliares — Suscripción y Límite de Crédito',
-    metaDescription: 'Calcule préstamos comerciales para edificios de apartamentos (5+ unidades) bajo normas de Agency (Fannie/Freddie), bancos comerciales y HUD 223(f). Doble verificación por LTV y DSCR.',
+    metaDescription: 'Calcule préstamos comerciales para edificios de apartamentos (5+ unidades) bajo normas de Agencia (Fannie/Freddie), bancos comerciales y HUD 223(f). Doble verificación por LTV y DSCR.',
     h1: 'Calculadora de Hipoteca de Edificios de Apartamentos',
-    subtitle: 'Dimensione préstamos hipotecarios comerciales para inmuebles multifamiliares en programas de Agency (Fannie Mae / Freddie Mac), bancos y HUD 223(f). Verifique restricciones por LTV y DSCR, pagos mensuales y rentabilidad.',
+    subtitle: 'Dimensione préstamos hipotecarios comerciales para inmuebles multifamiliares en programas de Agencia (Fannie Mae / Freddie Mac), bancos y HUD 223(f). Verifique restricciones por LTV y DSCR, pagos mensuales y rentabilidad.',
     whatIsTitle: 'Cómo se dimensiona una hipoteca comercial multifamiliar',
-    whatIsContent: 'Las hipotecas comerciales para edificios residenciales (5 o más unidades) se evalúan de manera muy distinta a los préstamos para viviendas residenciales unifamiliares. Los prestamistas no evalúan la nómina personal del prestatario, sino la capacidad operativa del inmueble a través de dos restricciones matemáticas principales:\n\n1. Restricción por LTV (Loan-to-Value): Fija un tope de endeudamiento como porcentaje del valor de tasación o precio de compra (habitualmente 70%–75% en bancos comerciales, 80% en Agency Fannie/Freddie, y hasta 85% en HUD 223(f)).\n2. Restricción por DSCR (Ratio de Cobertura de Deuda): Garantiza que el Ingreso Operativo Neto (NOI) supere el servicio anual de la deuda en un factor de seguridad mínimo (habitualmente 1.25x en bancos y Agency, 1.176x en HUD).\n\nEl importe final aprobado por la entidad crediticia será SIEMPRE el MENOR entre el límite de LTV y el límite de DSCR. En entornos de tasas de interés más elevadas, el DSCR se convierte en la restricción vinculante determinante.',
+    whatIsContent: 'Las hipotecas comerciales para edificios residenciales (5 o más unidades) se evalúan de manera muy distinta a los préstamos para viviendas residenciales unifamiliares. Los prestamistas no evalúan la nómina personal del prestatario, sino la capacidad operativa del inmueble a través de dos restricciones matemáticas principales:\n\n1. Restricción por LTV (Loan-to-Value): Fija un tope de endeudamiento como porcentaje del valor de tasación o precio de compra (habitualmente 70%–75% en bancos comerciales, 80% en Agencia Fannie/Freddie, y hasta 85% en HUD 223(f)).\n2. Restricción por DSCR (Ratio de Cobertura de Deuda): Garantiza que el Ingreso Operativo Neto (NOI) supere el servicio anual de la deuda en un factor de seguridad mínimo (habitualmente 1.25x en bancos y Agencia, 1.176x en HUD).\n\nEl importe final aprobado por la entidad crediticia será SIEMPRE el MENOR entre el límite de LTV y el límite de DSCR. En entornos de tasas de interés más elevadas, el DSCR se convierte en la restricción vinculante determinante.',
     formulaTitle: 'Fórmulas de Suscripción Hipotecaria',
     formulaCode: '[1. Préstamo Máximo por LTV]\nPréstamo_LTV = Precio de Compra × % LTV Máximo\n\n[2. Servicio Anual de Deuda Máximo por DSCR]\nServicio Máximo_DSCR = NOI / DSCR Mínimo Requerido\n\n[3. Préstamo Máximo por DSCR]\nPréstamo_DSCR = Servicio Máximo_DSCR / Constante de Préstamo\ndonde Constante Anual = 12 × [ r(1 + r)^n ] / [ (1 + r)^n − 1 ]\n\n[4. Préstamo Aprobado Vinculante]\nPréstamo Sancionado = min( Préstamo_LTV, Préstamo_DSCR )',
     formulaVariables: [
       { label: 'Precio de Compra', desc: 'Precio contractual de adquisición o valor de tasación independiente ($)' },
       { label: 'NOI', desc: 'Ingreso Operativo Neto anual tras deducir gastos operativos' },
-      { label: 'Umbral DSCR', desc: 'Ratio mínimo exigido por la entidad (ej. 1.25x en bancos/Agency, 1.176x en HUD)' },
+      { label: 'Umbral DSCR', desc: 'Ratio mínimo exigido por la entidad (ej. 1.25x en bancos/Agencia, 1.176x en HUD)' },
       { label: 'Constante de Préstamo', desc: 'Porcentaje anualizado de pago de capital e interés por dólar prestado' },
     ],
     exampleTitle: 'Caso Práctico Continuo: Edificio Multifamiliar de 24 Unidades ($2.8M, NOI $227,200)',
-    exampleContent: 'Aplicando nuestro ejemplo continuo de 24 unidades residenciales ($2,800,000 de precio de compra, GPI $336,000, 5% vacancia ($16,800), OpEx $92,000, Cap Rate del 8.11% y NOI de $227,200):\n\n• Préstamo de Banco Comercial (75% LTV, 1.25x DSCR, 6.50% interés, 25 años amortización):\n  - Límite por LTV (75%): $2,100,000\n  - Límite por DSCR: $2,243,243\n  - Préstamo Sancionado: $2,100,000 (Limitado por LTV)\n  - Cuota Mensual: $14,179 ($170,152 de servicio de deuda anual)\n  - DSCR Real: 1.34x (Colchón superior al 1.25x exigido)\n  - Flujo de Caja Neto antes de impuestos: $57,048 / año\n  - Retorno Cash-on-Cash: 8.15% sobre $700,000 de anticipo (o 7.55% sobre $756,000 de capital total invertido incluyendo 2% de gastos de cierre y reservas)\n\n• Préstamo Agency Fannie Mae / Freddie Mac (80% LTV, 1.25x DSCR, 6.25% interés, 30 años amortización):\n  - Límite por LTV (80%): $2,240,000\n  - Límite por DSCR: $2,460,788\n  - Préstamo Sancionado: $2,240,000 (Limitado por LTV)\n  - Cuota Mensual: $13,791 ($165,492 anuales)\n  - Flujo de Caja: $61,708 / año (11.02% Cash-on-Cash sobre $560,000 de anticipo)\n\n*Nota: Ejemplo financiero educativo estandarizado con fines comparativos.*',
+    exampleContent: 'Aplicando nuestro ejemplo continuo de 24 unidades residenciales ($2,800,000 de precio de compra, GPI $336,000, 5% vacancia ($16,800), OpEx $92,000, Cap Rate del 8.11% y NOI de $227,200):\n\n• Préstamo de Banco Comercial (75% LTV, 1.25x DSCR, 6.50% interés, 25 años amortización):\n  - Límite por LTV (75%): $2,100,000\n  - Límite por DSCR: $2,243,243\n  - Préstamo Sancionado: $2,100,000 (Limitado por LTV)\n  - Cuota Mensual: $14,179 ($170,152 de servicio de deuda anual)\n  - DSCR Real: 1.34x (Colchón superior al 1.25x exigido)\n  - Flujo de Caja Neto antes de impuestos: $57,048 / año\n  - Retorno Cash-on-Cash: 8.15% sobre $700,000 de anticipo (o 7.55% sobre $756,000 de capital total invertido incluyendo 2% de gastos de cierre y reservas)\n\n• Préstamo de Agencia Fannie Mae / Freddie Mac (80% LTV, 1.25x DSCR, 6.25% interés, 30 años amortización):\n  - Límite por LTV (80%): $2,240,000\n  - Límite por DSCR: $2,460,788\n  - Préstamo Sancionado: $2,240,000 (Limitado por LTV)\n  - Cuota Mensual: $13,791 ($165,492 anuales)\n  - Flujo de Caja: $61,708 / año (11.02% Cash-on-Cash sobre $560,000 de anticipo)\n\n*Nota: Ejemplo financiero educativo estandarizado con fines comparativos.*',
     faqTitle: 'Preguntas Frecuentes sobre Hipotecas Multifamiliares',
     faqs: [
       {
@@ -337,8 +337,8 @@ export const esContent: LocaleContent = {
         answer: 'El LTV protege a la entidad frente a caídas en el valor de tasación del inmueble mediante el capital propio aportado por el inversor. El DSCR protege contra el impago mensual garantizando que los alquileres cobrados cubran holgadamente la cuota de la hipoteca. La entidad siempre otorga el importe que resulte menor.',
       },
       {
-        question: '¿En qué se diferencian los préstamos Agency (Fannie/Freddie) de los préstamos bancarios de cartera?',
-        answer: 'Los préstamos Agency ofrecen financiamiento sin recurso (Non-recourse), amortizaciones más largas a 30 años y hasta un 80% de LTV, pero imponen penalizaciones estrictas por pago anticipado (Yield Maintenance o Defeasance). Los bancos comerciales prestan desde su propio balance, con penalizaciones escalonadas más flexibles, pero habitualmente requieren aval personal (Recourse) y limitan el LTV al 70%–75%.',
+        question: '¿En qué se diferencian los préstamos de Agencia (Fannie/Freddie) de los préstamos bancarios de cartera?',
+        answer: 'Los préstamos de Agencia ofrecen financiamiento sin recurso (Non-recourse), amortizaciones más largas a 30 años y hasta un 80% de LTV, pero imponen penalizaciones estrictas por pago anticipado (Yield Maintenance o Defeasance). Los bancos comerciales prestan desde su propio balance, con penalizaciones escalonadas más flexibles, pero habitualmente requieren aval personal (Recourse) y limitan el LTV al 70%–75%.',
       },
       {
         question: '¿Qué es el programa de financiamiento HUD / FHA 223(f)?',
@@ -349,7 +349,7 @@ export const esContent: LocaleContent = {
     relatedCalculators: [
       { title: 'Calculadora de Pagos de Préstamos Comerciales', slug: 'loan-payment' },
       { title: 'Calculadora de DSCR', slug: 'dscr' },
-      { title: 'Calculadora de Cash-on-Cash Return', slug: 'cash-on-cash' },
+      { title: 'Calculadora de Retorno sobre Efectivo (CoC)', slug: 'cash-on-cash' },
       { title: 'Calculadora de Cap Rate Multifamiliar', slug: 'multifamily-cap-rate' },
     ],
   },
@@ -377,7 +377,7 @@ export const esContent: LocaleContent = {
         answer: 'La mayoría de plataformas inmobiliarias exigen registro de correo electrónico o cobran suscripciones para análisis multifamiliares. Creemos que las matemáticas financieras de suscripción comercial deben ser abiertas y accesibles para todo inversor y analista. Esta herramienta funciona 100% en su navegador local protegiendo su privacidad.',
       },
       {
-        question: '¿Cuál es la diferencia entre Cap Rate y Cash-on-Cash Return?',
+        question: '¿Cuál es la diferencia entre Cap Rate y Retorno sobre Efectivo (Cash-on-Cash)?',
         answer: 'El Cap Rate mide el rendimiento operativo intrínseco del activo como si se adquiriera íntegramente al contado (NOI / Precio). El retorno Cash-on-Cash mide el rendimiento financiero real sobre el capital propio desembolsado de su bolsillo tras pagar la cuota de la hipoteca.',
       },
       {
@@ -427,7 +427,7 @@ export const esContent: LocaleContent = {
         answer: 'Se puede incrementar el DSCR aumentando el NOI (subiendo rentas, reduciendo la vacancia o recortando gastos operativos) o disminuyendo el servicio de la deuda (aportando mayor pago inicial para pedir prestado menos, negociando una tasa de interés más baja o extendiendo el plazo de amortización).',
       },
       {
-        question: '¿En qué se diferencia el DSCR del Cap Rate y del Cash-on-Cash Return?',
+        question: '¿En qué se diferencia el DSCR del Cap Rate y del Retorno sobre Efectivo (Cash-on-Cash)?',
         answer: 'El Cap Rate mide la rentabilidad del inmueble de forma independiente a la financiación; el Cash-on-Cash mide el rendimiento del capital efectivo aportado tras pagar la hipoteca; el DSCR mide el margen de seguridad de la cobertura de la deuda. Los prestamistas se basan en el DSCR para fijar el monto máximo del préstamo.',
       },
     ],
@@ -647,7 +647,7 @@ export const esContent: LocaleContent = {
     relatedCalculators: [
       { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
       { title: 'Calculadora de Ingreso Operativo Neto (NOI)', slug: 'noi' },
-      { title: 'Calculadora de Cash-on-Cash Return', slug: 'cash-on-cash' },
+      { title: 'Calculadora de Retorno sobre Efectivo (CoC)', slug: 'cash-on-cash' },
     ],
   },
   howToEstimateNoiGuide: {
@@ -737,7 +737,7 @@ export const esContent: LocaleContent = {
     relatedCalculators: [
       { title: 'Calculadora de Intercambio 1031', slug: '1031-exchange' },
       { title: 'Calculadora de Cap Rate', slug: 'cap-rate' },
-      { title: 'Calculadora de Cash-on-Cash Return', slug: 'cash-on-cash' },
+      { title: 'Calculadora de Retorno sobre Efectivo (CoC)', slug: 'cash-on-cash' },
     ],
   },
   howToUnderwriteDealGuide: {
@@ -756,7 +756,7 @@ export const esContent: LocaleContent = {
       },
       {
         title: 'Paso 3: Calcular las métricas financieras clave',
-        content: 'Con un NOI validado, calcule los indicadores determinantes para la toma de decisiones:\n\n- Cap Rate: ¿El rendimiento de entrada resulta competitivo para este activo y mercado?\n- Cash-on-Cash Return: ¿Cuál es el rendimiento efectivo sobre el capital desembolsado según las condiciones de financiación realistas?\n- DSCR: ¿Alcanza el ratio de cobertura de deuda el umbral bancario mínimo (habitualmente 1.20–1.25) con el préstamo proyectado?\n- Break-Even Ratio: ¿Qué margen de seguridad existe antes de que un aumento de vacancia o de costes sitúe el flujo de caja en terreno negativo?\n\nSi los márgenes resultan ajustados, identifique con precisión en qué variable se concentra el riesgo (precio de compra, condiciones crediticias o margen de mejora en la gestión).',
+        content: 'Con un NOI validado, calcule los indicadores determinantes para la toma de decisiones:\n\n- Cap Rate: ¿El rendimiento de entrada resulta competitivo para este activo y mercado?\n- Retorno sobre Efectivo (Cash-on-Cash): ¿Cuál es el rendimiento efectivo sobre el capital desembolsado según las condiciones de financiación realistas?\n- DSCR: ¿Alcanza el ratio de cobertura de deuda el umbral bancario mínimo (habitualmente 1.20–1.25) con el préstamo proyectado?\n- Break-Even Ratio: ¿Qué margen de seguridad existe antes de que un aumento de vacancia o de costes sitúe el flujo de caja en terreno negativo?\n\nSi los márgenes resultan ajustados, identifique con precisión en qué variable se concentra el riesgo (precio de compra, condiciones crediticias o margen de mejora en la gestión).',
       },
       {
         title: 'Paso 4: Someter los números a pruebas de estrés',

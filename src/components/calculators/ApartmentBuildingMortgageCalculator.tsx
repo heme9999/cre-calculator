@@ -281,9 +281,9 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                     : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100/70 text-slate-700'
                 }`}
               >
-                <div className="text-xs font-semibold text-slate-500">Agency</div>
+                <div className="text-xs font-semibold text-slate-500">{isEs ? 'Agencia' : isPt ? 'Agência' : 'Agency'}</div>
                 <div className="text-sm">Fannie / Freddie</div>
-                <div className="text-[11px] text-slate-500 mt-1">80% LTV • 30y Amort</div>
+                <div className="text-[11px] text-slate-500 mt-1">80% LTV • 30{isEs ? 'a' : isPt ? 'a' : 'y'} Amort</div>
               </button>
 
               <button
@@ -295,9 +295,9 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                     : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100/70 text-slate-700'
                 }`}
               >
-                <div className="text-xs font-semibold text-slate-500">Portfolio</div>
-                <div className="text-sm">Commercial Bank</div>
-                <div className="text-[11px] text-slate-500 mt-1">75% LTV • 25y Amort</div>
+                <div className="text-xs font-semibold text-slate-500">{isEs ? 'Cartera' : isPt ? 'Carteira' : 'Portfolio'}</div>
+                <div className="text-sm">{isEs ? 'Banco Comercial' : isPt ? 'Banco Comercial' : 'Commercial Bank'}</div>
+                <div className="text-[11px] text-slate-500 mt-1">75% LTV • 25{isEs ? 'a' : isPt ? 'a' : 'y'} Amort</div>
               </button>
 
               <button
@@ -309,9 +309,9 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                     : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100/70 text-slate-700'
                 }`}
               >
-                <div className="text-xs font-semibold text-slate-500">Government</div>
+                <div className="text-xs font-semibold text-slate-500">{isEs ? 'Gobierno' : isPt ? 'Governo' : 'Government'}</div>
                 <div className="text-sm">HUD / FHA 223(f)</div>
-                <div className="text-[11px] text-slate-500 mt-1">85% LTV • 35y Amort</div>
+                <div className="text-[11px] text-slate-500 mt-1">85% LTV • 35{isEs ? 'a' : isPt ? 'a' : 'y'} Amort</div>
               </button>
 
               <button
@@ -323,9 +323,9 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                     : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100/70 text-slate-700'
                 }`}
               >
-                <div className="text-xs font-semibold text-slate-500">Custom</div>
+                <div className="text-xs font-semibold text-slate-500">{isEs ? 'Personalizado' : isPt ? 'Personalizado' : 'Custom'}</div>
                 <div className="text-sm">{isZh ? '自定义' : isEs ? 'A Medida' : isPt ? 'Personalizado' : 'Custom Terms'}</div>
-                <div className="text-[11px] text-slate-500 mt-1">{isZh ? '手动调整所有参数' : 'Adjust All Terms'}</div>
+                <div className="text-[11px] text-slate-500 mt-1">{isZh ? '手动调整所有参数' : isEs ? 'Ajustar todos los términos' : isPt ? 'Ajustar todos os termos' : 'Adjust All Terms'}</div>
               </button>
             </div>
           </div>
@@ -413,7 +413,13 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                     className="w-32 px-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
                   />
                   <div className="text-xs text-slate-500">
-                    {isZh ? `推算年运营费用: ${formatCurrency(operatingExpenses)} | 净营业收入 NOI: ${formatCurrency(noi)}` : `Calculated OpEx: ${formatCurrency(operatingExpenses)} | NOI: ${formatCurrency(noi)}`}
+                    {isZh
+                      ? `推算年运营费用: ${formatCurrency(operatingExpenses)} | 净营业收入 NOI: ${formatCurrency(noi)}`
+                      : isEs
+                      ? `Gastos Operativos Calculados: ${formatCurrency(operatingExpenses)} | NOI: ${formatCurrency(noi)}`
+                      : isPt
+                      ? `Despesas Operacionais Calculadas: ${formatCurrency(operatingExpenses)} | NOI: ${formatCurrency(noi)}`
+                      : `Calculated OpEx: ${formatCurrency(operatingExpenses)} | NOI: ${formatCurrency(noi)}`}
                   </div>
                 </div>
               </div>
@@ -494,11 +500,11 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                   }}
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900 bg-white"
                 >
-                  <option value={15}>15 {isZh ? '年摊销' : 'Years'}</option>
-                  <option value={20}>20 {isZh ? '年摊销' : 'Years'}</option>
-                  <option value={25}>25 {isZh ? '年摊销 (常见商业银行)' : 'Years (Commercial Bank Standard)'}</option>
-                  <option value={30}>30 {isZh ? '年摊销 (Agency 房利美/房地美)' : 'Years (Agency Fannie/Freddie)'}</option>
-                  <option value={35}>35 {isZh ? '年摊销 (HUD 223f 政府保险)' : 'Years (FHA / HUD 223f)'}</option>
+                  <option value={15}>15 {isZh ? '年摊销' : isEs ? 'Años' : isPt ? 'Anos' : 'Years'}</option>
+                  <option value={20}>20 {isZh ? '年摊销' : isEs ? 'Años' : isPt ? 'Anos' : 'Years'}</option>
+                  <option value={25}>25 {isZh ? '年摊销 (常见商业银行)' : isEs ? 'Años (Estándar Bancario Comercial)' : isPt ? 'Anos (Padrão Bancário Comercial)' : 'Years (Commercial Bank Standard)'}</option>
+                  <option value={30}>30 {isZh ? '年摊销 (Agency 房利美/房地美)' : isEs ? 'Años (Agencia Fannie/Freddie)' : isPt ? 'Anos (Agência Fannie/Freddie)' : 'Years (Agency Fannie/Freddie)'}</option>
+                  <option value={35}>35 {isZh ? '年摊销 (HUD 223f 政府保险)' : isEs ? 'Años (FHA / HUD 223f)' : isPt ? 'Anos (FHA / HUD 223f)' : 'Years (FHA / HUD 223f)'}</option>
                 </select>
               </div>
             </div>
@@ -527,6 +533,10 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                   <ShieldCheck className="w-3.5 h-3.5" />
                   {isZh
                     ? `受限于 ${currentResult.controllingConstraint}`
+                    : isEs
+                    ? `Limitado por ${currentResult.controllingConstraint}`
+                    : isPt
+                    ? `Limitado por ${currentResult.controllingConstraint}`
                     : `Constrained by ${currentResult.controllingConstraint}`}
                 </span>
               </div>
@@ -535,11 +545,11 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
             {/* LTV vs DSCR dual constraint breakdown */}
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60">
-                <span className="text-slate-400 block mb-0.5">{isZh ? 'LTV 估值约束上限' : 'Max Loan by LTV'} ({maxLtv}%)</span>
+                <span className="text-slate-400 block mb-0.5">{isZh ? 'LTV 估值约束上限' : isEs ? 'Préstamo Máx. por LTV' : isPt ? 'Empréstimo Máx. por LTV' : 'Max Loan by LTV'} ({maxLtv}%)</span>
                 <span className="text-base font-bold text-white font-mono">{formatCurrency(currentResult.loanByLtv)}</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60">
-                <span className="text-slate-400 block mb-0.5">{isZh ? 'DSCR 偿债约束上限' : 'Max Loan by DSCR'} ({minDscr}x)</span>
+                <span className="text-slate-400 block mb-0.5">{isZh ? 'DSCR 偿债约束上限' : isEs ? 'Préstamo Máx. por DSCR' : isPt ? 'Empréstimo Máx. por DSCR' : 'Max Loan by DSCR'} ({minDscr}x)</span>
                 <span className="text-base font-bold text-white font-mono">{formatCurrency(currentResult.loanByDscr)}</span>
               </div>
             </div>
@@ -547,36 +557,40 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
             {/* Key Payment and Return Metrics */}
             <div className="space-y-3 pt-2 border-t border-slate-800 text-xs">
               <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">{isZh ? '每月还本付息 (Monthly P&I):' : 'Monthly Debt Service:'}</span>
+                <span className="text-slate-400">{isZh ? '每月还本付息 (Monthly P&I):' : isEs ? 'Servicio Mensual de la Deuda:' : isPt ? 'Serviço Mensal da Dívida:' : 'Monthly Debt Service:'}</span>
                 <span className="font-bold text-slate-100 font-mono text-sm">{formatCurrency(currentResult.monthlyPayment)}</span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">{isZh ? '年度还本付息总额 (ADS):' : 'Annual Debt Service:'}</span>
+                <span className="text-slate-400">{isZh ? '年度还本付息总额 (ADS):' : isEs ? 'Servicio Anual de la Deuda (ADS):' : isPt ? 'Serviço Anual da Dívida (ADS):' : 'Annual Debt Service:'}</span>
                 <span className="font-bold text-slate-100 font-mono text-sm">{formatCurrency(currentResult.annualDebtService)}</span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">{isZh ? '所需自有首付资金 (Equity):' : 'Required Down Payment:'}</span>
+                <span className="text-slate-400">{isZh ? '所需自有首付资金 (Equity):' : isEs ? 'Pago Inicial Requerido (Capital):' : isPt ? 'Entrada Necessária (Capital):' : 'Required Down Payment:'}</span>
                 <span className="font-bold text-slate-100 font-mono text-sm">{formatCurrency(currentResult.equityRequired)} ({impliedDownPaymentPercent.toFixed(1)}%)</span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">{isZh ? '还贷后税前现金流 (Net Cash Flow):' : 'Pre-Tax Net Cash Flow:'}</span>
+                <span className="text-slate-400">{isZh ? '还贷后税前现金流 (Net Cash Flow):' : isEs ? 'Flujo de Caja Neto Antes de Impuestos:' : isPt ? 'Fluxo de Caixa Líquido Antes dos Impostos:' : 'Pre-Tax Net Cash Flow:'}</span>
                 <span className={`font-bold font-mono text-sm ${currentResult.cashFlow >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                  {formatCurrency(currentResult.cashFlow)} / yr
+                  {formatCurrency(currentResult.cashFlow)} / {isZh ? '年' : isEs ? 'año' : isPt ? 'ano' : 'yr'}
                 </span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
                 <div>
-                  <span className="text-slate-400 block">{isZh ? '现金回报率 (Cash-on-Cash Return):' : 'Cash-on-Cash Return:'}</span>
+                  <span className="text-slate-400 block">{isZh ? '现金回报率 (Cash-on-Cash Return):' : isEs ? 'Retorno sobre Efectivo (CoC):' : isPt ? 'Retorno sobre Caixa (CoC):' : 'Cash-on-Cash Return:'}</span>
                   <span className="text-[10px] text-slate-500 block">
                     {isZh
                       ? `基于首付款 (若计约2%过户费/储备金则为 7.55%)`
+                      : isEs
+                      ? `sobre el pago inicial (o 7.55% incluyendo 2% de cierre / reservas)`
+                      : isPt
+                      ? `sobre a entrada (ou 7.55% incluindo 2% de fechamento / reservas)`
                       : `on down payment (or 7.55% with 2% closing costs / reserves)`}
                   </span>
                 </div>
                 <span className="font-bold text-emerald-400 font-mono text-sm">{formatPercent(currentResult.cashOnCash)}</span>
               </div>
               <div className="flex justify-between items-center py-1">
-                <span className="text-slate-400">{isZh ? '债务收益率 (Debt Yield):' : 'Debt Yield:'}</span>
+                <span className="text-slate-400">{isZh ? '债务收益率 (Debt Yield):' : isEs ? 'Rendimiento de la Deuda (Debt Yield):' : isPt ? 'Rendimento da Dívida (Debt Yield):' : 'Debt Yield:'}</span>
                 <span className="font-bold text-slate-200 font-mono text-sm">{formatPercent(currentResult.debtYield)}</span>
               </div>
             </div>
@@ -591,7 +605,7 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                   href={`/${locale}/calculators/cash-on-cash/#price=${Math.round(propertyPrice)}&downPayment=${Math.round(impliedDownPaymentPercent)}&annualNoi=${Math.round(noi)}&debt=${Math.round(currentResult.annualDebtService)}`}
                   className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 transition text-slate-200 hover:text-white text-xs font-semibold"
                 >
-                  <span>{isZh ? '将贷款方案带入 Cash-on-Cash 计算器' : isEs ? 'Enviar Términos a Calculadora Cash-on-Cash' : isPt ? 'Enviar Termos para Calculadora Cash-on-Cash' : 'Send Loan Terms to Cash-on-Cash Calculator'}</span>
+                  <span>{isZh ? '将贷款方案带入 Cash-on-Cash 计算器' : isEs ? 'Enviar Términos a Calculadora de Retorno sobre Efectivo' : isPt ? 'Enviar Termos para Calculadora de Retorno sobre Caixa' : 'Send Loan Terms to Cash-on-Cash Calculator'}</span>
                   <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
                 </Link>
                 <Link
@@ -609,33 +623,33 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
           <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3">
             <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5 uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-              {isZh ? '主流多户住宅商业贷款横向对比' : 'Multifamily Debt Program Comparison'}
+              {isZh ? '主流多户住宅商业贷款横向对比' : isEs ? 'Comparación de Programas de Deuda Multifamiliar' : isPt ? 'Comparação de Programas de Dívida Multifamiliar' : 'Multifamily Debt Program Comparison'}
             </h3>
             <div className="overflow-x-auto text-xs">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-slate-200 text-slate-500">
-                    <th className="py-2 pr-2 font-semibold">Program</th>
-                    <th className="py-2 px-2 font-semibold">Max Loan</th>
-                    <th className="py-2 px-2 font-semibold">Monthly P&I</th>
-                    <th className="py-2 pl-2 font-semibold text-right">CoC Return</th>
+                    <th className="py-2 pr-2 font-semibold">{isZh ? '贷款产品' : isEs ? 'Programa' : isPt ? 'Programa' : 'Program'}</th>
+                    <th className="py-2 px-2 font-semibold">{isZh ? '最高贷款' : isEs ? 'Préstamo Máx.' : isPt ? 'Empréstimo Máx.' : 'Max Loan'}</th>
+                    <th className="py-2 px-2 font-semibold">{isZh ? '月供本息' : isEs ? 'Cuota Mensual' : isPt ? 'Parcela Mensal' : 'Monthly P&I'}</th>
+                    <th className="py-2 pl-2 font-semibold text-right">{isZh ? 'CoC 回报' : isEs ? 'Retorno CoC' : isPt ? 'Retorno CoC' : 'CoC Return'}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-700">
                   <tr className={selectedPreset === 'agency' ? 'bg-emerald-50/50 font-semibold' : ''}>
-                    <td className="py-2.5 pr-2">Agency (80% / 30y)</td>
+                    <td className="py-2.5 pr-2">{isEs ? 'Agencia (80% / 30a)' : isPt ? 'Agência (80% / 30a)' : 'Agency (80% / 30y)'}</td>
                     <td className="py-2.5 px-2 font-mono">{formatCurrency(agencyResult.sizedLoan)}</td>
                     <td className="py-2.5 px-2 font-mono">{formatCurrency(agencyResult.monthlyPayment)}</td>
                     <td className="py-2.5 pl-2 text-right font-mono text-emerald-700">{agencyResult.cashOnCash.toFixed(2)}%</td>
                   </tr>
                   <tr className={selectedPreset === 'bank' ? 'bg-emerald-50/50 font-semibold' : ''}>
-                    <td className="py-2.5 pr-2">Bank (75% / 25y)</td>
+                    <td className="py-2.5 pr-2">{isEs ? 'Banco (75% / 25a)' : isPt ? 'Banco (75% / 25a)' : 'Bank (75% / 25y)'}</td>
                     <td className="py-2.5 px-2 font-mono">{formatCurrency(bankResult.sizedLoan)}</td>
                     <td className="py-2.5 px-2 font-mono">{formatCurrency(bankResult.monthlyPayment)}</td>
                     <td className="py-2.5 pl-2 text-right font-mono text-emerald-700">{bankResult.cashOnCash.toFixed(2)}%</td>
                   </tr>
                   <tr className={selectedPreset === 'hud' ? 'bg-emerald-50/50 font-semibold' : ''}>
-                    <td className="py-2.5 pr-2">HUD 223(f) (85% / 35y)</td>
+                    <td className="py-2.5 pr-2">{isEs ? 'HUD 223(f) (85% / 35a)' : isPt ? 'HUD 223(f) (85% / 35a)' : 'HUD 223(f) (85% / 35y)'}</td>
                     <td className="py-2.5 px-2 font-mono">{formatCurrency(hudResult.sizedLoan)}</td>
                     <td className="py-2.5 px-2 font-mono">{formatCurrency(hudResult.monthlyPayment)}</td>
                     <td className="py-2.5 pl-2 text-right font-mono text-emerald-700">{hudResult.cashOnCash.toFixed(2)}%</td>

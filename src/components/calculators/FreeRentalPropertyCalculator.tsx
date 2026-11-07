@@ -459,7 +459,7 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
                   <option value={15}>{isZh ? '15 年' : isEs ? '15 Años' : isPt ? '15 Anos' : '15 Years'}</option>
                   <option value={20}>{isZh ? '20 年' : isEs ? '20 Años' : isPt ? '20 Anos' : '20 Years'}</option>
                   <option value={25}>{isZh ? '25 年 (商业银行常用)' : isEs ? '25 Años (Estándar Bancario)' : isPt ? '25 Anos (Padrão Bancário)' : '25 Years (Bank Std)'}</option>
-                  <option value={30}>{isZh ? '30 年 (Agency/住宅标准)' : isEs ? '30 Años (Estándar Agency/Residencial)' : isPt ? '30 Anos (Padrão Agency/Residencial)' : '30 Years (Agency Std)'}</option>
+                  <option value={30}>{isZh ? '30 年 (Agency/住宅标准)' : isEs ? '30 Años (Estándar de Agencia/Residencial)' : isPt ? '30 Anos (Padrão de Agência/Residencial)' : '30 Years (Agency Std)'}</option>
                 </select>
               </div>
             </div>
@@ -597,7 +597,7 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
                   href={`/${locale}/calculators/apartment-building-mortgage/`}
                   className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 transition text-slate-200 hover:text-white text-xs font-semibold"
                 >
-                  <span>{isZh ? '使用多户商业房贷计算器测算 Agency / Bank / HUD 额度' : isEs ? 'Dimensionar Hipoteca Multifamiliar (Agency / Banco / HUD)' : isPt ? 'Dimensionar Financiamento Multifamiliar (Agency / Banco / HUD)' : 'Size Loan via Apartment Building Mortgage Calculator'}</span>
+                  <span>{isZh ? '使用多户商业房贷计算器测算 Agency / Bank / HUD 额度' : isEs ? 'Dimensionar Hipoteca Multifamiliar (Agencia / Banco / HUD)' : isPt ? 'Dimensionar Financiamento Multifamiliar (Agência / Banco / HUD)' : 'Size Loan via Apartment Building Mortgage Calculator'}</span>
                   <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
                 </Link>
               </div>

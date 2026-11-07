@@ -94,77 +94,47 @@ function getAllHtmlRoutes(dir, base = '') {
   return results;
 }
 
-const APPROVED_SITEMAP_URLS = new Set([
-  // English Core Pages (15)
-  'https://crecalculators.com/en/',
-  'https://crecalculators.com/en/calculators/cap-rate/',
-  'https://crecalculators.com/en/calculators/noi/',
-  'https://crecalculators.com/en/calculators/cash-on-cash/',
-  'https://crecalculators.com/en/calculators/loan-payment/',
-  'https://crecalculators.com/en/calculators/apartment-building-mortgage/',
-  'https://crecalculators.com/en/calculators/free-rental-property-calculator/',
-  'https://crecalculators.com/en/calculators/dscr/',
-  'https://crecalculators.com/en/calculators/1031-exchange/',
-  'https://crecalculators.com/en/calculators/lease-vs-buy/',
-  'https://crecalculators.com/en/calculators/break-even-ratio/',
-  'https://crecalculators.com/en/tools/deal-analyzer/',
-  'https://crecalculators.com/en/guides/',
-  'https://crecalculators.com/en/guides/cap-rate-benchmarks-by-city/',
-  'https://crecalculators.com/en/guides/how-to-estimate-noi/',
-  'https://crecalculators.com/en/guides/1031-exchange-process/',
-  'https://crecalculators.com/en/guides/how-to-underwrite-a-deal/',
-
-  // Chinese Core Pages (5)
-  'https://crecalculators.com/zh/',
-  'https://crecalculators.com/zh/calculators/cap-rate/',
-  'https://crecalculators.com/zh/calculators/noi/',
-  'https://crecalculators.com/zh/calculators/dscr/',
-  'https://crecalculators.com/zh/calculators/free-rental-property-calculator/',
-
-  // Spanish Core Pages (5)
-  'https://crecalculators.com/es/',
-  'https://crecalculators.com/es/calculators/cap-rate/',
-  'https://crecalculators.com/es/calculators/noi/',
-  'https://crecalculators.com/es/calculators/dscr/',
-  'https://crecalculators.com/es/calculators/free-rental-property-calculator/',
-
-  // Portuguese Core Pages (5)
-  'https://crecalculators.com/pt/',
-  'https://crecalculators.com/pt/calculators/cap-rate/',
-  'https://crecalculators.com/pt/calculators/noi/',
-  'https://crecalculators.com/pt/calculators/dscr/',
-  'https://crecalculators.com/pt/calculators/free-rental-property-calculator/',
-
-  // Programmatic Cap Rate Landing Pages (4)
-  'https://crecalculators.com/en/calculators/multifamily-cap-rate/',
-  'https://crecalculators.com/en/calculators/industrial-cap-rate/',
-  'https://crecalculators.com/en/calculators/self-storage-cap-rate/',
-  'https://crecalculators.com/en/calculators/nnn-lease-cap-rate/',
-
-  // CRE Glossary Hub & Defined Terms (8)
-  'https://crecalculators.com/en/glossary/',
-  'https://crecalculators.com/en/glossary/noi/',
-  'https://crecalculators.com/en/glossary/cap-rate/',
-  'https://crecalculators.com/en/glossary/dscr/',
-  'https://crecalculators.com/en/glossary/ber/',
-  'https://crecalculators.com/en/glossary/beo/',
-  'https://crecalculators.com/en/glossary/irr/',
-  'https://crecalculators.com/en/glossary/grm/',
-
-  // City Benchmark Expansion Guides (4)
-  'https://crecalculators.com/en/guides/cap-rate-benchmarks-by-city/austin-tx-cap-rates/',
-  'https://crecalculators.com/en/guides/cap-rate-benchmarks-by-city/miami-fl-cap-rates/',
-  'https://crecalculators.com/en/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/',
-  'https://crecalculators.com/en/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/',
-]);
-
 const MULTILINGUAL_CORE_PATHS = new Set([
   '/',
   '/calculators/cap-rate/',
   '/calculators/noi/',
-  '/calculators/dscr/',
+  '/calculators/cash-on-cash/',
+  '/calculators/loan-payment/',
+  '/calculators/apartment-building-mortgage/',
   '/calculators/free-rental-property-calculator/',
+  '/calculators/dscr/',
+  '/calculators/1031-exchange/',
+  '/calculators/lease-vs-buy/',
+  '/calculators/break-even-ratio/',
+  '/tools/deal-analyzer/',
+  '/guides/',
+  '/guides/cap-rate-benchmarks-by-city/',
+  '/guides/how-to-estimate-noi/',
+  '/guides/1031-exchange-process/',
+  '/guides/how-to-underwrite-a-deal/',
+  '/calculators/multifamily-cap-rate/',
+  '/calculators/industrial-cap-rate/',
+  '/calculators/self-storage-cap-rate/',
+  '/calculators/nnn-lease-cap-rate/',
+  '/glossary/',
+  '/glossary/noi/',
+  '/glossary/cap-rate/',
+  '/glossary/dscr/',
+  '/glossary/ber/',
+  '/glossary/beo/',
+  '/glossary/irr/',
+  '/glossary/grm/',
+  '/guides/cap-rate-benchmarks-by-city/austin-tx-cap-rates/',
+  '/guides/cap-rate-benchmarks-by-city/miami-fl-cap-rates/',
+  '/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/',
+  '/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/',
 ]);
+
+const APPROVED_SITEMAP_URLS = new Set(
+  ['en', 'zh', 'es', 'pt'].flatMap((loc) =>
+    [...MULTILINGUAL_CORE_PATHS].map((subPath) => `https://crecalculators.com/${loc}${subPath}`)
+  )
+);
 
 const PRIORITY_ROUTES = [
   '/en/calculators/cap-rate/',
@@ -557,6 +527,8 @@ async function runVerification() {
         'Cash-on-Cash (All-In):',
         'Cash-on-Cash (Down Payment):',
         '100% Free & Unrestricted',
+        'Cash-on-Cash Return',
+        'Agency',
       ];
       for (const phrase of forbiddenEnglishHeadings) {
         if (evaluated.bodyText.includes(phrase) || evaluated.title.includes(phrase)) {

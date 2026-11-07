@@ -37,7 +37,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     locale,
     title: item.metaTitle,
     description: item.metaDescription,
-    noindex: locale !== 'en',
   });
 }
 

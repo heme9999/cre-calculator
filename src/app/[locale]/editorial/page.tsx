@@ -123,7 +123,7 @@ const EDITORIAL_COPY: Record<
     dscrLabel: 'DSCR (Ratio de Cobertura del Servicio de la Deuda)',
     dscrDesc:
       'Métrica clave de cobertura de flujo de caja utilizada por prestamistas comerciales. Muchos programas convencionales toman como referencia orientativa un DSCR ≥ 1.20x a 1.25x.',
-    cocLabel: 'Cash-on-Cash Return (Retorno Efectivo sobre Efectivo)',
+    cocLabel: 'Retorno Efectivo sobre Efectivo (Cash-on-Cash)',
     cocDesc:
       'Calcula la proporción del flujo de caja anual antes de impuestos en relación con el capital total en efectivo invertido inicialmente (enganche más costos de cierre y reservas).',
     sourcesTitle: 'Portales Públicos de Investigación y Enlaces de Referencia',
@@ -155,7 +155,7 @@ const EDITORIAL_COPY: Record<
     dscrLabel: 'DSCR (Índice de Cobertura do Serviço da Dívida)',
     dscrDesc:
       'Métrica essencial de cobertura de fluxo de caixa utilizada por credores comerciais. Muitos programas convencionais utilizam DSCR ≥ 1.20x a 1.25x como diretriz referencial.',
-    cocLabel: 'Cash-on-Cash Return (Retorno sobre o Caixa Investido)',
+    cocLabel: 'Retorno sobre o Caixa Investido (Cash-on-Cash)',
     cocDesc:
       'Calcula a proporção do fluxo de caixa anual antes de impostos em relação ao capital total em dinheiro investido inicialmente (entrada mais custos de fechamento e reservas).',
     sourcesTitle: 'Portais Públicos de Pesquisa e Links de Referência',

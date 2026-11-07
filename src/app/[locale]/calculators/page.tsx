@@ -188,16 +188,16 @@ export default async function CalculatorsHubPage({ params }: PageProps) {
       formula: isZh
         ? 'Agency vs 商业银行 vs HUD 223(f) 放贷额度测算'
         : isEs
-        ? 'Dimensionamiento de Crédito Agency vs Banco vs HUD'
+        ? 'Dimensionamiento de Crédito de Agencia vs Banco vs HUD'
         : isPt
-        ? 'Dimensionamento de Crédito Agency vs Banco vs HUD'
+        ? 'Dimensionamento de Crédito de Agência vs Banco vs HUD'
         : 'Agency vs Commercial Bank vs HUD Dual-Constraint Loan Sizing',
       desc: isZh
         ? '多户住宅（5单元以上）商业贷款测算工具。双重检验 LTV 与 DSCR 约束，推算最高放贷金额、月供与现金回报。'
         : isEs
-        ? 'Dimensione hipotecas comerciales para edificios multifamiliares comparando Agency, bancos y HUD 223(f) por LTV y DSCR.'
+        ? 'Dimensione hipotecas comerciales para edificios multifamiliares comparando Agencia, bancos y HUD 223(f) por LTV y DSCR.'
         : isPt
-        ? 'Calcule financiamentos imobiliários comerciais para imóveis multifamiliares comparando Agency, bancos e HUD 223(f).'
+        ? 'Calcule financiamentos imobiliários comerciais para imóveis multifamiliares comparando Agência, bancos e HUD 223(f).'
         : 'Size commercial multifamily mortgages across Agency (Fannie/Freddie), Commercial Bank, and HUD programs dual-testing LTV and DSCR.',
       icon: Building2,
     },

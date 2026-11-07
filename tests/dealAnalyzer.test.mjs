@@ -736,13 +736,25 @@ try {
       const freeRentalComp = fs.readFileSync(path.join(__dirname, '../src/components/calculators/FreeRentalPropertyCalculator.tsx'), 'utf8');
       const pageFile = fs.readFileSync(path.join(__dirname, '../src/app/[locale]/calculators/free-rental-property-calculator/page.tsx'), 'utf8');
 
-      // 1. Sitemap must include the page across all 4 locales
+      // 1. Sitemap must include all core calculators across all 4 locales
       for (const loc of ['en', 'zh', 'es', 'pt']) {
-        assert.ok(
-          sitemapFile.includes(`/${loc}/calculators/free-rental-property-calculator/`),
-          `sitemap.ts must contain /${loc}/calculators/free-rental-property-calculator/`
-        );
+        for (const slug of [
+          'free-rental-property-calculator',
+          'apartment-building-mortgage',
+          'cash-on-cash',
+          'loan-payment',
+          '1031-exchange',
+          'lease-vs-buy',
+          'break-even-ratio',
+        ]) {
+          assert.ok(
+            sitemapFile.includes(`/${loc}/calculators/${slug}/`),
+            `sitemap.ts must contain /${loc}/calculators/${slug}/`
+          );
+        }
       }
+      assert.ok(!esFile.includes('Cash-on-Cash Return') && !ptFile.includes('Cash-on-Cash Return'), 'es.ts and pt.ts must localize Cash-on-Cash Return');
+      assert.ok(!esFile.includes('Agency') && !ptFile.includes('Agency'), 'es.ts and pt.ts must localize Agency');
 
       // 2. Component must use canonical 24-unit baseline & localize ES/PT results panel
       assert.ok(freeRentalComp.includes('2800000'), 'FreeRentalPropertyCalculator must default price to 2800000');

@@ -462,7 +462,7 @@ export const uiTranslations: Record<Locale, UiTranslations> = {
     home: {
       heroTag: 'Suite Profesional de Análisis en Bienes Raíces Comerciales (CRE)',
       cocLeadIn: '¿Desea medir el retorno de su capital con apalancamiento? Acceda a nuestra ',
-      cocLinkText: 'Calculadora de Cash-on-Cash Return',
+      cocLinkText: 'Calculadora de Retorno sobre Efectivo (CoC)',
       ctaDealAnalyzer: 'Analizar una Propiedad Gratis',
       ctaCapRate: 'Calculadora de Cap Rate',
       trustText: '100% Gratuito · Sin registro · Cálculos en su navegador · Exportación en PDF y CSV',

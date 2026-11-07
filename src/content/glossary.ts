@@ -654,7 +654,7 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       },
       faqs: [
         { question: '¿Qué se considera un buen Cap Rate en bienes raíces comerciales?', answer: 'Un "buen" Cap Rate depende del perfil de riesgo del activo y de las tasas de interés del mercado. Por lo general, los inversores buscan Cap Rates al menos 100 a 150 puntos básicos por encima del coste de financiación (apalancamiento positivo).' },
-        { question: '¿Cuál es la diferencia entre Cap Rate y Cash-on-Cash Return?', answer: 'El Cap Rate mide el retorno no apalancado sobre el valor total del inmueble. El Retorno Cash-on-Cash mide el rendimiento del flujo de caja generado exclusivamente sobre el capital propio (pago inicial) aportado.' },
+        { question: '¿Cuál es la diferencia entre Cap Rate y Retorno sobre Efectivo (Cash-on-Cash)?', answer: 'El Cap Rate mide el retorno no apalancado sobre el valor total del inmueble. El Retorno Cash-on-Cash mide el rendimiento del flujo de caja generado exclusivamente sobre el capital propio (pago inicial) aportado.' },
         { question: '¿Por qué varían los Cap Rates según el tipo de propiedad?', answer: 'Cada clase de activo presenta riesgos distintos. El sector multifamiliar e industrial suele tener Cap Rates más bajos por su liquidez y estabilidad, mientras que las oficinas antiguas presentan Cap Rates más altos por el riesgo de desocupación.' },
       ],
     },
