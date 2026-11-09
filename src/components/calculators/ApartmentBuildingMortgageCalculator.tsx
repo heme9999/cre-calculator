@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { formatCurrency, formatPercent } from '@/lib/utils';
+import { formatCurrency, formatPercent, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
 import {
   Building2,
   ShieldCheck,
@@ -351,10 +351,11 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-slate-400 font-semibold">$</span>
                   <input
-                    type="number"
-                    value={propertyPrice || ''}
-                    onChange={(e) => setPropertyPrice(Math.max(0, Number(e.target.value)))}
-                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(propertyPrice)}
+                    onChange={(e) => setPropertyPrice(Math.max(0, parseNumberInput(e.target.value)))}
+                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold tabular-nums text-slate-900"
                   />
                 </div>
               </div>

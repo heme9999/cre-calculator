@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
 import { Calculator, ShieldCheck, AlertTriangle, ShieldAlert, CheckCircle2, Info, ArrowRight, Scale, TrendingDown, Sparkles } from 'lucide-react';
 import { DscrCoverageTierVisualizer } from './visuals/DscrCoverageTierVisualizer';
 import { getUiTranslations } from '@/lib/translations';
@@ -331,10 +331,11 @@ export function DscrCalculator({ locale }: Props) {
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                 <input
                   id="dscr-noi-input"
-                  type="number"
-                  value={noi || ''}
-                  onChange={(e) => setNoi(parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                  type="text"
+                  inputMode="numeric"
+                  value={formatNumberWithCommas(noi)}
+                  onChange={(e) => setNoi(parseNumberInput(e.target.value))}
+                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                   placeholder="250,000"
                 />
               </div>
@@ -389,10 +390,11 @@ export function DscrCalculator({ locale }: Props) {
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                     <input
                       id="dscr-annual-debt-input"
-                      type="number"
-                      value={annualDebtService || ''}
-                      onChange={(e) => setAnnualDebtService(parseFloat(e.target.value) || 0)}
-                      className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                      type="text"
+                      inputMode="numeric"
+                      value={formatNumberWithCommas(annualDebtService)}
+                      onChange={(e) => setAnnualDebtService(parseNumberInput(e.target.value))}
+                      className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                       placeholder="187,500"
                     />
                   </div>
@@ -406,10 +408,11 @@ export function DscrCalculator({ locale }: Props) {
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                     <input
                       id="dscr-monthly-payment-input"
-                      type="number"
-                      value={monthlyPayment || ''}
-                      onChange={(e) => setMonthlyPayment(parseFloat(e.target.value) || 0)}
-                      className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                      type="text"
+                      inputMode="numeric"
+                      value={formatNumberWithCommas(monthlyPayment)}
+                      onChange={(e) => setMonthlyPayment(parseNumberInput(e.target.value))}
+                      className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                       placeholder="15,625"
                     />
                   </div>
@@ -545,10 +548,11 @@ export function DscrCalculator({ locale }: Props) {
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-sm">$</span>
                   <input
                     id="dscr-property-value-input"
-                    type="number"
-                    value={propertyValue || ''}
-                    onChange={(e) => setPropertyValue(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2.5 text-slate-900 text-sm font-semibold focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(propertyValue)}
+                    onChange={(e) => setPropertyValue(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2.5 text-slate-900 text-sm font-semibold tabular-nums focus:outline-none"
                     placeholder="3,333,333"
                   />
                 </div>

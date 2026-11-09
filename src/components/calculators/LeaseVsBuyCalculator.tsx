@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
 import { calculateLoanDetails } from '@/lib/loanCalculations';
 import { Calculator, ArrowRightLeft, Building, Key } from 'lucide-react';
 import { CalculatorActionBar } from './common/CalculatorActionBar';
@@ -219,10 +219,11 @@ export function LeaseVsBuyCalculator({ locale }: Props) {
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden bg-white">
                 <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                 <input
-                  type="number"
-                  value={monthlyRent || ''}
-                  onChange={(e) => setMonthlyRent(parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-4 py-2.5 text-slate-900 font-semibold focus:outline-none text-sm"
+                  type="text"
+                  inputMode="numeric"
+                  value={formatNumberWithCommas(monthlyRent)}
+                  onChange={(e) => setMonthlyRent(parseNumberInput(e.target.value))}
+                  className="w-full pl-8 pr-4 py-2.5 text-slate-900 font-semibold tabular-nums focus:outline-none text-sm"
                   placeholder="10,000"
                 />
               </div>
@@ -278,10 +279,11 @@ export function LeaseVsBuyCalculator({ locale }: Props) {
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden bg-white">
                 <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                 <input
-                  type="number"
-                  value={purchasePrice || ''}
-                  onChange={(e) => setPurchasePrice(parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-4 py-2.5 text-slate-900 font-semibold focus:outline-none text-sm"
+                  type="text"
+                  inputMode="numeric"
+                  value={formatNumberWithCommas(purchasePrice)}
+                  onChange={(e) => setPurchasePrice(parseNumberInput(e.target.value))}
+                  className="w-full pl-8 pr-4 py-2.5 text-slate-900 font-semibold tabular-nums focus:outline-none text-sm"
                   placeholder="1,800,000"
                 />
               </div>

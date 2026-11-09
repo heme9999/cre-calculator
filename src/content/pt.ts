@@ -281,7 +281,7 @@ export const ptContent: LocaleContent = {
       { label: 'm', desc: 'Número do Mês da Parcela (1 até n)' },
     ],
     exampleTitle: 'Comparativo em Financiamento de $2.1M (Juros de 6.5%, Amortização 25 Anos, Vencimento 10 Anos)',
-    exampleContent: 'Considere um empréstimo comercial de $2,100,000 a 6.5% de juros:\n- Parcelas Fixas (Price): Parcela fixa de $14,179/mês. Saldo balão residual no ano 10: $1,627,458.\n- Amortização Constante (SAC): Parcela inicial de $18,375/mês, decrescendo progressivamente. Saldo balão residual no ano 10: $1,260,000.\n\n*Nota: Este é um exemplo hipotético para fins puramente ilustrativos, não representando uma oferta real nem recomendação de investimento.*',
+    exampleContent: 'Considere um empréstimo comercial de $2,100,000 a 6.5% de juros:\n- Parcelas Fixas (Price): Parcela fixa de $14,179/mês. Saldo balão residual no ano 10: $1,627,739.\n- Amortização Constante (SAC): Parcela inicial de $18,375/mês, decrescendo progressivamente. Saldo balão residual no ano 10: $1,260,000.\n\n*Nota: Este é um exemplo hipotético para fins puramente ilustrativos, não representando uma oferta real nem recomendação de investimento.*',
     faqTitle: 'Perguntas Frequentes sobre Financiamentos Comerciais',
     faqs: [
       {

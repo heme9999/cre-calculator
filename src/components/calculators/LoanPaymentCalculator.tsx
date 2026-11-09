@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
 import { calculateLoanDetails, PaymentType } from '@/lib/loanCalculations';
 import { Calculator, Calendar, Table as TableIcon, Layers } from 'lucide-react';
 import { CalculatorActionBar } from './common/CalculatorActionBar';
@@ -265,10 +265,11 @@ export function LoanPaymentCalculator({ locale }: Props) {
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold" aria-hidden="true">$</span>
               <input
                 id="loan-amount-input"
-                type="number"
-                value={loanAmount || ''}
-                onChange={(e) => setLoanAmount(parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                type="text"
+                inputMode="numeric"
+                value={formatNumberWithCommas(loanAmount)}
+                onChange={(e) => setLoanAmount(parseNumberInput(e.target.value))}
+                className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                 placeholder="1,300,000"
                 aria-label={isZh ? '贷款本金总额' : isEs ? 'Monto del Préstamo' : isPt ? 'Valor do Financiamento' : 'Principal Loan Amount'}
               />

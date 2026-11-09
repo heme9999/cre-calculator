@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
 import { Calculator, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import { Exchange1031Timeline } from './visuals/Exchange1031Timeline';
 import { CalculatorActionBar } from './common/CalculatorActionBar';
@@ -183,11 +183,11 @@ export function Exchange1031Calculator({ locale }: Props) {
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                 <input
                   id="sale-price-input"
-                  type="number"
-                  min="0"
-                  value={salePrice || ''}
-                  onChange={(e) => setSalePrice(parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                  type="text"
+                  inputMode="numeric"
+                  value={formatNumberWithCommas(salePrice)}
+                  onChange={(e) => setSalePrice(Math.max(0, parseNumberInput(e.target.value)))}
+                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                   placeholder="2,500,000"
                 />
               </div>
@@ -203,11 +203,11 @@ export function Exchange1031Calculator({ locale }: Props) {
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="cost-basis-input"
-                    type="number"
-                    min="0"
-                    value={originalCostBasis || ''}
-                    onChange={(e) => setOriginalCostBasis(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(originalCostBasis)}
+                    onChange={(e) => setOriginalCostBasis(Math.max(0, parseNumberInput(e.target.value)))}
+                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                     placeholder="1,200,000"
                   />
                 </div>
@@ -221,11 +221,11 @@ export function Exchange1031Calculator({ locale }: Props) {
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="selling-expenses-input"
-                    type="number"
-                    min="0"
-                    value={sellingExpenses || ''}
-                    onChange={(e) => setSellingExpenses(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(sellingExpenses)}
+                    onChange={(e) => setSellingExpenses(Math.max(0, parseNumberInput(e.target.value)))}
+                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                     placeholder="150,000"
                   />
                 </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { formatCurrency, formatPercent } from '@/lib/utils';
+import { formatCurrency, formatPercent, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
 import { Calculator, PieChart, Info, Layers, ArrowRight } from 'lucide-react';
 import { CalculatorActionBar } from './common/CalculatorActionBar';
 import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
@@ -176,10 +176,12 @@ export function NoiCalculator({ locale }: Props) {
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="noi-gross-income"
-                    type="number"
-                    value={grossIncome || ''}
-                    onChange={(e) => setGrossIncome(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    role="spinbutton"
+                    value={formatNumberWithCommas(grossIncome)}
+                    onChange={(e) => setGrossIncome(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm tabular-nums focus:outline-none"
                     placeholder="312,000"
                   />
                 </div>
@@ -230,10 +232,12 @@ export function NoiCalculator({ locale }: Props) {
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="noi-tax"
-                    type="number"
-                    value={propertyTax || ''}
-                    onChange={(e) => setPropertyTax(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    role="spinbutton"
+                    value={formatNumberWithCommas(propertyTax)}
+                    onChange={(e) => setPropertyTax(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium tabular-nums focus:outline-none"
                   />
                 </div>
               </div>
@@ -246,10 +250,12 @@ export function NoiCalculator({ locale }: Props) {
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="noi-insurance"
-                    type="number"
-                    value={insurance || ''}
-                    onChange={(e) => setInsurance(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    role="spinbutton"
+                    value={formatNumberWithCommas(insurance)}
+                    onChange={(e) => setInsurance(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium tabular-nums focus:outline-none"
                   />
                 </div>
               </div>
@@ -262,10 +268,12 @@ export function NoiCalculator({ locale }: Props) {
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="noi-maintenance"
-                    type="number"
-                    value={maintenance || ''}
-                    onChange={(e) => setMaintenance(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    role="spinbutton"
+                    value={formatNumberWithCommas(maintenance)}
+                    onChange={(e) => setMaintenance(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium tabular-nums focus:outline-none"
                   />
                 </div>
               </div>
@@ -278,10 +286,12 @@ export function NoiCalculator({ locale }: Props) {
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="noi-management"
-                    type="number"
-                    value={managementFee || ''}
-                    onChange={(e) => setManagementFee(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    role="spinbutton"
+                    value={formatNumberWithCommas(managementFee)}
+                    onChange={(e) => setManagementFee(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium tabular-nums focus:outline-none"
                   />
                 </div>
               </div>
@@ -294,10 +304,12 @@ export function NoiCalculator({ locale }: Props) {
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="noi-utilities"
-                    type="number"
-                    value={utilities || ''}
-                    onChange={(e) => setUtilities(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    role="spinbutton"
+                    value={formatNumberWithCommas(utilities)}
+                    onChange={(e) => setUtilities(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium tabular-nums focus:outline-none"
                   />
                 </div>
               </div>

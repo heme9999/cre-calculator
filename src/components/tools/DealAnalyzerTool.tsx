@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { formatCurrency, formatPercent } from '@/lib/utils';
+import { formatCurrency, formatPercent, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
 import { PaymentType } from '@/lib/loanCalculations';
 import {
   calculateDealAnalysis,
@@ -691,11 +691,11 @@ export function DealAnalyzerTool({ locale }: Props) {
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                     <input
                       id="purchase-price-input"
-                      type="number"
-                      min="0"
-                      value={purchasePrice || ''}
-                      onChange={(e) => setPurchasePrice(parseFloat(e.target.value) || 0)}
-                      className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
+                      type="text"
+                      inputMode="numeric"
+                      value={formatNumberWithCommas(purchasePrice)}
+                      onChange={(e) => setPurchasePrice(Math.max(0, parseNumberInput(e.target.value)))}
+                      className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm tabular-nums focus:outline-none"
                       placeholder="2,800,000"
                     />
                   </div>
@@ -741,12 +741,12 @@ export function DealAnalyzerTool({ locale }: Props) {
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                     <input
                       id="gpi-input"
-                      type="number"
-                      min="0"
+                      type="text"
+                      inputMode="numeric"
                       aria-describedby="gpi-help"
-                      value={grossPotentialIncome || ''}
-                      onChange={(e) => setGrossPotentialIncome(parseFloat(e.target.value) || 0)}
-                      className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
+                      value={formatNumberWithCommas(grossPotentialIncome)}
+                      onChange={(e) => setGrossPotentialIncome(Math.max(0, parseNumberInput(e.target.value)))}
+                      className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm tabular-nums focus:outline-none"
                       placeholder="336,000"
                     />
                   </div>
@@ -788,12 +788,12 @@ export function DealAnalyzerTool({ locale }: Props) {
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                     <input
                       id="opex-input"
-                      type="number"
-                      min="0"
+                      type="text"
+                      inputMode="numeric"
                       aria-describedby="opex-help"
-                      value={operatingExpenses || ''}
-                      onChange={(e) => setOperatingExpenses(parseFloat(e.target.value) || 0)}
-                      className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
+                      value={formatNumberWithCommas(operatingExpenses)}
+                      onChange={(e) => setOperatingExpenses(Math.max(0, parseNumberInput(e.target.value)))}
+                      className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm tabular-nums focus:outline-none"
                       placeholder="92,000"
                     />
                   </div>

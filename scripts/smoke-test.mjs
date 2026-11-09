@@ -190,7 +190,7 @@ async function runSmokeTests() {
 
     // Test calculation
     await page.evaluate(() => {
-      const inputs = document.querySelectorAll('input[type="number"]');
+      const inputs = document.querySelectorAll('#noi-gross-income, #noi-vacancy, #noi-tax, #noi-insurance, #noi-maintenance, #noi-management, #noi-utilities');
       if (inputs.length >= 7) {
         const setReactValue = (input, value) => {
           const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
@@ -289,12 +289,12 @@ async function runSmokeTests() {
       annualNoi: document.getElementById('coc-annual-noi')?.value,
       annualDebtService: document.getElementById('coc-annual-debt-service')?.value,
     }));
-    if (defaultInputValues.purchasePrice !== '1200000') throw new Error(`Default purchase price expected 1200000, got ${defaultInputValues.purchasePrice}`);
+    if (defaultInputValues.purchasePrice !== '1,200,000') throw new Error(`Default purchase price expected 1,200,000, got ${defaultInputValues.purchasePrice}`);
     if (defaultInputValues.downPaymentPercent !== '25') throw new Error(`Default down payment expected 25, got ${defaultInputValues.downPaymentPercent}`);
-    if (defaultInputValues.closingCosts !== '15000') throw new Error(`Default closing costs expected 15000, got ${defaultInputValues.closingCosts}`);
-    if (defaultInputValues.upfrontCapex !== '15000') throw new Error(`Default upfront capex expected 15000, got ${defaultInputValues.upfrontCapex}`);
-    if (defaultInputValues.annualNoi !== '84000') throw new Error(`Default annual NOI expected 84000, got ${defaultInputValues.annualNoi}`);
-    if (defaultInputValues.annualDebtService !== '54000') throw new Error(`Default debt service expected 54000, got ${defaultInputValues.annualDebtService}`);
+    if (defaultInputValues.closingCosts !== '15,000') throw new Error(`Default closing costs expected 15,000, got ${defaultInputValues.closingCosts}`);
+    if (defaultInputValues.upfrontCapex !== '15,000') throw new Error(`Default upfront capex expected 15,000, got ${defaultInputValues.upfrontCapex}`);
+    if (defaultInputValues.annualNoi !== '84,000') throw new Error(`Default annual NOI expected 84,000, got ${defaultInputValues.annualNoi}`);
+    if (defaultInputValues.annualDebtService !== '54,000') throw new Error(`Default debt service expected 54,000, got ${defaultInputValues.annualDebtService}`);
 
     const resDefault = await getCocResults();
     assertCocResults(resDefault, {
@@ -1081,10 +1081,10 @@ async function runSmokeTests() {
     const restoredRate = await sharedNewPage.$eval('#rate-input', el => el.value);
 
     if (
-      restoredPp !== '4000000' ||
-      restoredGpi !== '500000' ||
+      restoredPp !== '4,000,000' ||
+      restoredGpi !== '500,000' ||
       restoredVac !== '6' ||
-      restoredOpex !== '170000' ||
+      restoredOpex !== '170,000' ||
       restoredDp !== '30' ||
       restoredRate !== '6.25'
     ) {

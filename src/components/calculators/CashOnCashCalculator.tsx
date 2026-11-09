@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { formatCurrency, formatPercent } from '@/lib/utils';
+import { formatCurrency, formatPercent, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
 import { Calculator, DollarSign, Zap, TrendingUp, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
 import { CalculatorActionBar } from './common/CalculatorActionBar';
 import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
@@ -299,10 +299,12 @@ export function CashOnCashCalculator({ locale }: Props) {
                   <input
                     id="coc-purchase-price"
                     name="purchasePrice"
-                    type="number"
-                    value={purchasePrice || ''}
-                    onChange={(e) => setPurchasePrice(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    role="spinbutton"
+                    value={formatNumberWithCommas(purchasePrice)}
+                    onChange={(e) => setPurchasePrice(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm tabular-nums focus:outline-none"
                     placeholder="1,200,000"
                   />
                 </div>
@@ -344,10 +346,12 @@ export function CashOnCashCalculator({ locale }: Props) {
                   <input
                     id="coc-closing-costs"
                     name="closingCosts"
-                    type="number"
-                    value={closingCosts || ''}
-                    onChange={(e) => setClosingCosts(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    role="spinbutton"
+                    value={formatNumberWithCommas(closingCosts)}
+                    onChange={(e) => setClosingCosts(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium tabular-nums focus:outline-none"
                     placeholder="15,000"
                   />
                 </div>
@@ -362,10 +366,12 @@ export function CashOnCashCalculator({ locale }: Props) {
                   <input
                     id="coc-upfront-capex"
                     name="upfrontCapex"
-                    type="number"
-                    value={upfrontCapex || ''}
-                    onChange={(e) => setUpfrontCapex(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    role="spinbutton"
+                    value={formatNumberWithCommas(upfrontCapex)}
+                    onChange={(e) => setUpfrontCapex(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2 text-slate-900 text-sm font-medium tabular-nums focus:outline-none"
                     placeholder="15,000"
                   />
                 </div>
@@ -390,10 +396,12 @@ export function CashOnCashCalculator({ locale }: Props) {
                   <input
                     id="coc-annual-noi"
                     name="annualNoi"
-                    type="number"
-                    value={annualNoi || ''}
-                    onChange={(e) => setAnnualNoi(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    role="spinbutton"
+                    value={formatNumberWithCommas(annualNoi)}
+                    onChange={(e) => setAnnualNoi(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm tabular-nums focus:outline-none"
                     placeholder="84,000"
                   />
                 </div>
@@ -408,10 +416,12 @@ export function CashOnCashCalculator({ locale }: Props) {
                   <input
                     id="coc-annual-debt-service"
                     name="annualDebtService"
-                    type="number"
-                    value={annualDebtService || ''}
-                    onChange={(e) => setAnnualDebtService(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    role="spinbutton"
+                    value={formatNumberWithCommas(annualDebtService)}
+                    onChange={(e) => setAnnualDebtService(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2 text-slate-900 font-semibold text-sm tabular-nums focus:outline-none"
                     placeholder="54,000"
                   />
                 </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { formatCurrency, formatPercent } from '@/lib/utils';
+import { formatCurrency, formatPercent, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
 import {
   Building2,
   DollarSign,
@@ -269,10 +269,11 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-slate-400 font-semibold">$</span>
                   <input
-                    type="number"
-                    value={purchasePrice || ''}
-                    onChange={(e) => setPurchasePrice(Math.max(0, Number(e.target.value)))}
-                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(purchasePrice)}
+                    onChange={(e) => setPurchasePrice(Math.max(0, parseNumberInput(e.target.value)))}
+                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold tabular-nums text-slate-900"
                   />
                 </div>
               </div>
@@ -315,10 +316,11 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-slate-400 font-semibold">$</span>
                   <input
-                    type="number"
-                    value={annualGrossRent || ''}
-                    onChange={(e) => setAnnualGrossRent(Math.max(0, Number(e.target.value)))}
-                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(annualGrossRent)}
+                    onChange={(e) => setAnnualGrossRent(Math.max(0, parseNumberInput(e.target.value)))}
+                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold tabular-nums text-slate-900"
                   />
                 </div>
                 <span className="text-[11px] text-slate-400 mt-0.5 block">
@@ -333,10 +335,11 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-slate-400 font-semibold">$</span>
                   <input
-                    type="number"
-                    value={annualOtherIncome || ''}
-                    onChange={(e) => setAnnualOtherIncome(Math.max(0, Number(e.target.value)))}
-                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(annualOtherIncome)}
+                    onChange={(e) => setAnnualOtherIncome(Math.max(0, parseNumberInput(e.target.value)))}
+                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold tabular-nums text-slate-900"
                   />
                 </div>
               </div>
@@ -385,10 +388,11 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
                 <div className="relative w-full sm:w-64">
                   <span className="absolute left-3 top-2.5 text-slate-400 font-semibold">$</span>
                   <input
-                    type="number"
-                    value={annualOperatingExpenses || ''}
-                    onChange={(e) => setAnnualOperatingExpenses(Math.max(0, Number(e.target.value)))}
-                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(annualOperatingExpenses)}
+                    onChange={(e) => setAnnualOperatingExpenses(Math.max(0, parseNumberInput(e.target.value)))}
+                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold tabular-nums text-slate-900"
                   />
                 </div>
                 <div className="text-xs text-slate-500">

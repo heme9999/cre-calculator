@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { formatCurrency, formatPercent } from '@/lib/utils';
+import { formatCurrency, formatPercent, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
 import { Calculator, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { DEFAULT_DEAL_INPUT } from '@/lib/dealAnalyzerCalculations';
 import { CalculatorActionBar } from './common/CalculatorActionBar';
@@ -211,10 +211,11 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                 <input
-                  type="number"
-                  value={grossPotentialIncome || ''}
-                  onChange={(e) => setGrossPotentialIncome(parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                  type="text"
+                  inputMode="numeric"
+                  value={formatNumberWithCommas(grossPotentialIncome)}
+                  onChange={(e) => setGrossPotentialIncome(parseNumberInput(e.target.value))}
+                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                   placeholder="336,000"
                 />
               </div>
@@ -246,10 +247,11 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                 <input
-                  type="number"
-                  value={operatingExpenses || ''}
-                  onChange={(e) => setOperatingExpenses(parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                  type="text"
+                  inputMode="numeric"
+                  value={formatNumberWithCommas(operatingExpenses)}
+                  onChange={(e) => setOperatingExpenses(parseNumberInput(e.target.value))}
+                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                   placeholder="92,000"
                 />
               </div>
@@ -262,10 +264,11 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                 <input
-                  type="number"
-                  value={annualDebtService || ''}
-                  onChange={(e) => setAnnualDebtService(parseFloat(e.target.value) || 0)}
-                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                  type="text"
+                  inputMode="numeric"
+                  value={formatNumberWithCommas(annualDebtService)}
+                  onChange={(e) => setAnnualDebtService(parseNumberInput(e.target.value))}
+                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                   placeholder="170,152"
                 />
               </div>
