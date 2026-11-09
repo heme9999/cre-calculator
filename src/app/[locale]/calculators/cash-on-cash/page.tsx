@@ -139,7 +139,7 @@ export default async function CashOnCashPage({ params }: PageProps) {
                 : isEs
                 ? 'Considere una propiedad multifamiliar hipotética de 24 unidades adquirida por $2,800,000.'
                 : isPt
-                ? 'Considere um imóvel multifamiliar hipotético de 24 unidades adquirido por $2.800.000.'
+                ? 'Considere um imóvel multifamiliar hipotético de 24 unidades adquirido por $2,800,000.'
                 : 'Consider a hypothetical 24-unit multifamily property purchased for $2,800,000.'}
             </p>
             <ul className="list-disc pl-5 space-y-1">
@@ -149,7 +149,7 @@ export default async function CashOnCashPage({ params }: PageProps) {
                   : isEs
                   ? 'Capital total invertido: $756,000 (25% de anticipo de $700k, más 2% de costos de cierre de $56k)'
                   : isPt
-                  ? 'Capital total investido: $756.000 (25% de entrada de $700k, mais 2% de custos de fechamento de $56k)'
+                  ? 'Capital total investido: $756,000 (25% de entrada de $700k, mais 2% de custos de fechamento de $56k)'
                   : 'Total cash invested: $756,000 (25% down payment of $700k, plus 2% closing costs of $56k)'}
               </li>
               <li>
@@ -158,7 +158,7 @@ export default async function CashOnCashPage({ params }: PageProps) {
                   : isEs
                   ? 'Ingreso bruto efectivo (EGI): $319,200 ($336k brutos menos 5% de desocupación)'
                   : isPt
-                  ? 'Receita bruta efetiva (EGI): $319.200 ($336k brutos menos 5% de vacância)'
+                  ? 'Receita bruta efetiva (EGI): $319,200 ($336k brutos menos 5% de vacância)'
                   : 'Effective gross income (EGI): $319,200 ($336k gross, minus 5% vacancy)'}
               </li>
               <li>
@@ -167,7 +167,7 @@ export default async function CashOnCashPage({ params }: PageProps) {
                   : isEs
                   ? 'Gastos operativos (OpEx): $92,000'
                   : isPt
-                  ? 'Despesas operacionais (OpEx): $92.000'
+                  ? 'Despesas operacionais (OpEx): $92,000'
                   : 'Operating expenses: $92,000'}
               </li>
               <li>
@@ -176,7 +176,7 @@ export default async function CashOnCashPage({ params }: PageProps) {
                   : isEs
                   ? 'Condiciones del préstamo: $2,100,000 al 6.5% de interés, amortización a 25 años'
                   : isPt
-                  ? 'Condições do financiamento: $2.100.000 a 6,5% de juros, amortização em 25 anos'
+                  ? 'Condições do financiamento: $2,100,000 a 6,5% de juros, amortização em 25 anos'
                   : 'Loan terms: $2,100,000 at 6.5% interest, 25-year amortization'}
               </li>
             </ul>
@@ -206,9 +206,9 @@ export default async function CashOnCashPage({ params }: PageProps) {
                   <>
                     Ao deduzir as despesas operacionais,{' '}
                     <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-semibold">calculamos o NOI do imóvel</Link>
-                    {' '}em $227.200 (que serve de base para o{' '}
+                    {' '}em $227,200 (que serve de base para o{' '}
                     <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">Cap Rate sem alavancagem</Link>
-                    ). Em seguida, calculamos o serviço anual da dívida em $170.152. Ao subtrair o serviço da dívida, obtém-se um Fluxo de Caixa Anual Antes dos Impostos de $57.048.
+                    ). Em seguida, calculamos o serviço anual da dívida em $170,152. Ao subtrair o serviço da dívida, obtém-se um Fluxo de Caixa Anual Antes dos Impostos de $57,048.
                   </>
                 ) : (
                   <>
@@ -232,7 +232,7 @@ export default async function CashOnCashPage({ params }: PageProps) {
                   : isEs
                   ? 'Al dividir el flujo de caja anual antes de impuestos de $57,048 entre los $756,000 de capital total invertido, se obtiene un Rendimiento Cash-on-Cash del 7.55% (fórmula: CoC = (NOI - Servicio Anual de Deuda) / (Pago Inicial + Costos de Cierre + Mejoras Iniciales)). Observe que este rendimiento en efectivo resulta inferior al Cap Rate no apalancado del 8.11% (NOI / Precio de Compra), a pesar de que la tasa de interés nominal es del 6.5%. No se puede juzgar si el CoC supera al Cap Rate basándose únicamente en la tasa nominal: el servicio anual de deuda de $170,152 incluye amortización de principal, lo que reduce el numerador de flujo de caja, mientras que los $56,000 en costos iniciales de cierre aumentan el denominador de capital invertido. Aunque la amortización incrementa el patrimonio neto con el tiempo, la acumulación de capital y el dinero en efectivo recibido en el año 1 no son el mismo indicador.'
                   : isPt
-                  ? 'Ao dividir o fluxo de caixa anual antes dos impostos de $57.048 pelo capital total investido de $756.000, obtém-se um Retorno Cash-on-Cash no primeiro ano de 7,55% (fórmula: CoC = (NOI - Serviço Anual da Dívida) / (Entrada + Custos de Fechamento + Reformas Iniciais)). Observe que esse retorno em dinheiro fica abaixo do Cap Rate sem dívida de 8,11% (NOI / Preço de Compra), mesmo com taxa de juros nominal em 6,5%. Não se pode avaliar se o CoC supera o Cap Rate apenas pela taxa nominal: o serviço anual da dívida de $170.152 inclui amortização de principal, reduzindo o numerador do fluxo de caixa, enquanto $56.000 em custos iniciais aumentam o denominador do capital investido. Embora a amortização acumule patrimônio ao longo do tempo, o acúmulo de patrimônio e o dinheiro em mãos no primeiro ano não constituem o mesmo indicador.'
+                  ? 'Ao dividir o fluxo de caixa anual antes dos impostos de $57,048 pelo capital total investido de $756,000, obtém-se um Retorno Cash-on-Cash no primeiro ano de 7,55% (fórmula: CoC = (NOI - Serviço Anual da Dívida) / (Entrada + Custos de Fechamento + Reformas Iniciais)). Observe que esse retorno em dinheiro fica abaixo do Cap Rate sem dívida de 8,11% (NOI / Preço de Compra), mesmo com taxa de juros nominal em 6,5%. Não se pode avaliar se o CoC supera o Cap Rate apenas pela taxa nominal: o serviço anual da dívida de $170,152 inclui amortização de principal, reduzindo o numerador do fluxo de caixa, enquanto $56,000 em custos iniciais aumentam o denominador do capital investido. Embora a amortização acumule patrimônio ao longo do tempo, o acúmulo de patrimônio e o dinheiro em mãos no primeiro ano não constituem o mesmo indicador.'
                   : 'Dividing your $57,048 annual pre-tax cash flow by your $756,000 total cash invested yields a first-year Cash-on-Cash Return of 7.55% (formula: CoC = (NOI - Annual Debt Service) / (Down Payment + Closing Costs + Upfront Capex)). Notice this is lower than the unleveraged 8.11% Cap Rate (NOI / Purchase Price), even though the loan\'s nominal interest rate is 6.5%. One cannot judge whether CoC exceeds Cap Rate based solely on nominal interest rate: the $170,152 debt service includes principal amortization, reducing the cash flow numerator, while $56,000 in upfront closing costs increases the cash invested denominator. While debt amortization builds principal equity over time, equity accumulation and year-one cash-in-pocket are not the same metric; on a pure year-one cash received basis, the yield is 7.55%.'}
               </p>
             </div>
@@ -264,7 +264,7 @@ export default async function CashOnCashPage({ params }: PageProps) {
                   <>
                     E se os juros subirem para 7,5% e a vacância piorar para 10%?
                     <br />
-                    O serviço anual da dívida sobe para $186.226, enquanto o NOI cai para $210.400. O fluxo de caixa antes dos impostos despenca para $24.174. Sob esse cenário de estresse, seu Retorno Cash-on-Cash cai para apenas 3,20%. Além disso, seu{' '}
+                    O serviço anual da dívida sobe para $186,226, enquanto o NOI cai para $210,400. O fluxo de caixa antes dos impostos despenca para $24,174. Sob esse cenário de estresse, seu Retorno Cash-on-Cash cai para apenas 3,20%. Além disso, seu{' '}
                     <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">DSCR (Índice de Cobertura do Serviço da Dívida)</Link>
                     {' '}cai para 1,13x (aproximando-se dos limites exigidos por credores conforme o contrato de financiamento). Para modelar esses riscos simultaneamente, utilize a ferramenta completa{' '}
                     <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">Deal Analyzer</Link>.

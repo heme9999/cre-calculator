@@ -26,6 +26,7 @@ export function CalculatorActionBar({
 
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [csvExported, setCsvExported] = useState(false);
 
   const labels = {
     share: isZh ? '分享' : isEs ? 'Compartir' : isPt ? 'Compartilhar' : 'Share',
@@ -33,6 +34,7 @@ export function CalculatorActionBar({
     save: isZh ? '本地保存' : isEs ? 'Guardar' : isPt ? 'Salvar' : 'Save',
     saved: isZh ? '已保存' : isEs ? 'Guardado' : isPt ? 'Salvo' : 'Saved',
     csv: isZh ? '导出 CSV' : isEs ? 'Exportar CSV' : isPt ? 'Exportar CSV' : 'Export CSV',
+    csvDone: isZh ? '已导出' : isEs ? 'Descargado' : isPt ? 'Baixado' : 'Downloaded',
     print: isZh ? '打印' : isEs ? 'Imprimir' : isPt ? 'Imprimir' : 'Print',
   };
 
@@ -46,6 +48,12 @@ export function CalculatorActionBar({
     if (onSave) onSave();
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+  };
+
+  const handleCsvClick = () => {
+    if (onExportCsv) onExportCsv();
+    setCsvExported(true);
+    setTimeout(() => setCsvExported(false), 2000);
   };
 
   const handlePrintClick = () => {
@@ -87,12 +95,21 @@ export function CalculatorActionBar({
       {onExportCsv && (
         <button
           type="button"
-          onClick={onExportCsv}
+          onClick={handleCsvClick}
           aria-label={labels.csv}
           className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:text-emerald-700 hover:border-emerald-300 active:scale-95 transition-all shadow-2xs font-medium"
         >
-          <Download className="w-3.5 h-3.5 text-slate-500" />
-          <span>{labels.csv}</span>
+          {csvExported ? (
+            <>
+              <Check className="w-3.5 h-3.5 text-emerald-600" />
+              <span className="text-emerald-600 font-bold">{labels.csvDone}</span>
+            </>
+          ) : (
+            <>
+              <Download className="w-3.5 h-3.5 text-slate-500" />
+              <span>{labels.csv}</span>
+            </>
+          )}
         </button>
       )}
 

@@ -133,7 +133,7 @@ export default async function LoanPaymentPage({ params }: PageProps) {
                 </>
               ) : isPt ? (
                 <>
-                  Este financiamento de $2.100.000 corresponde ao nosso exemplo contínuo de imóvel multifamiliar de 24 unidades (preço de compra de $2,8M, 25% de entrada). Uma vez calculado o serviço anual da dívida, combine-o com o NOI do imóvel na{' '}
+                  Este financiamento de $2,100,000 corresponde ao nosso exemplo contínuo de imóvel multifamiliar de 24 unidades (preço de compra de $2,8M, 25% de entrada). Uma vez calculado o serviço anual da dívida, combine-o com o NOI do imóvel na{' '}
                   <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">
                     calculadora de DSCR
                   </Link>

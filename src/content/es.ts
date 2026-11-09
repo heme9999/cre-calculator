@@ -280,8 +280,8 @@ export const esContent: LocaleContent = {
       { label: 'n', desc: 'Total de Cuotas de Amortización (Años de Amortización × 12)' },
       { label: 'm', desc: 'Número del Mes de Pago (1 hasta n)' },
     ],
-    exampleTitle: 'Comparativa en un Préstamo de $1.3M (Tasa 6.5%, Amortización 25 Años, Vencimiento 10 Años)',
-    exampleContent: 'Suponga un financiamiento comercial de $1,300,000 al 6.5% de interés:\n- Cuota Constante: Cuota fija de $8,778/mes. Saldo balloon al año 10: $1,007,025.\n- Capital Constante: Cuota inicial de $11,375/mes, que desciende gradualmente. Saldo balloon al año 10: $780,000.\n\n*Nota: Este es un caso práctico hipotético con fines estrictamente ilustrativos, no representa una oferta real ni asesoramiento de inversión.*',
+    exampleTitle: 'Comparativa en un Préstamo de $2.1M (Tasa 6.5%, Amortización 25 Años, Vencimiento 10 Años)',
+    exampleContent: 'Suponga un financiamiento comercial de $2,100,000 al 6.5% de interés:\n- Cuota Constante: Cuota fija de $14,179/mes. Saldo balloon al año 10: $1,627,458.\n- Capital Constante: Cuota inicial de $18,375/mes, que desciende gradualmente. Saldo balloon al año 10: $1,260,000.\n\n*Nota: Este es un caso práctico hipotético con fines estrictamente ilustrativos, no representa una oferta real ni asesoramiento de inversión.*',
     faqTitle: 'Preguntas Frecuentes sobre Préstamos Comerciales',
     faqs: [
       {

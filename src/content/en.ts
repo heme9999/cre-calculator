@@ -352,7 +352,7 @@ export const enContent: LocaleContent = {
       { label: 'n', desc: 'Total Amortization Payments (Amortization Years × 12)' },
       { label: 'm', desc: 'Payment Month Number (1 through n)' },
     ],
-    exampleTitle: 'Hypothetical Scenario Comparison ($1.3M Loan, 6.5% Rate, 25-Yr Amort, 10-Yr Maturity)',
+    exampleTitle: 'Hypothetical Scenario Comparison ($2.1M Loan, 6.5% Rate, 25-Yr Amort, 10-Yr Maturity)',
     exampleContent: '\n\n*Note: This is a hypothetical worked example for illustrative purposes only, not representing a real listing, transaction, or investment advice.*',
     faqTitle: 'Frequently Asked Questions',
     faqs: [

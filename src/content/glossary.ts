@@ -870,9 +870,9 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       ],
       example: {
         title: 'Exemplo Prático em Imóvel Comercial',
-        scenario: 'Um edifício residencial de 20 unidades produz $300.000 em Aluguel Potencial Bruto com 5% de vacância ($15.000) e $10.000 em receitas de estacionamento, resultando em um EGI de $295.000. Os tributos anuais são de $42.000, seguros $14.000, administração $20.000 e manutenção/serviços somam $39.000 (OpEx total = $115.000).',
-        calculation: 'NOI = $295.000 (EGI) - $115.000 (OpEx) = $180.000 / ano.',
-        interpretation: 'O imóvel gera $180.000 em caixa operacional líquido anual antes de pagar parcelas de empréstimos ou realizar distribuições aos investidores.',
+        scenario: 'Um edifício residencial de 20 unidades produz $300,000 em Aluguel Potencial Bruto com 5% de vacância ($15,000) e $10,000 em receitas de estacionamento, resultando em um EGI de $295,000. Os tributos anuais são de $42,000, seguros $14,000, administração $20,000 e manutenção/serviços somam $39,000 (OpEx total = $115,000).',
+        calculation: 'NOI = $295,000 (EGI) - $115,000 (OpEx) = $180,000 / ano.',
+        interpretation: 'O imóvel gera $180,000 em caixa operacional líquido anual antes de pagar parcelas de empréstimos ou realizar distribuições aos investidores.',
       },
       benchmarks: [
         'A relação de despesas operacionais (OpEx / EGI) varia normalmente entre 40% e 52% em imóveis multifamiliares.',
@@ -908,8 +908,8 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       ],
       example: {
         title: 'Exemplo Prático em Imóvel Comercial',
-        scenario: 'Um galpão logístico industrial gera $360.000 em NOI anual estabilizado. O preço de venda pedido é de $5.500.000.',
-        calculation: 'Cap Rate = ($360.000 / $5.500.000) × 100 = 6,55%.',
+        scenario: 'Um galpão logístico industrial gera $360,000 em NOI anual estabilizado. O preço de venda pedido é de $5,500,000.',
+        calculation: 'Cap Rate = ($360,000 / $5,500,000) × 100 = 6,55%.',
         interpretation: 'Se adquirido à vista, o imóvel oferece um retorno anual de 6,55% sobre o capital total investido.',
       },
       benchmarks: [
@@ -946,9 +946,9 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       ],
       example: {
         title: 'Exemplo Prático em Imóvel Comercial',
-        scenario: 'Um centro comercial gera $250.000 de NOI anual. O financiamento proposto requer parcelas mensais de $15.000 ($180.000 por ano).',
-        calculation: 'DSCR = $250.000 (NOI) / $180.000 (Dívida) = 1,39x.',
-        interpretation: 'O imóvel produz $1,39 de receita líquida para cada $1,00 de serviço de dívida, oferecendo uma margem de segurança de 39% ($70.000 de reserva anual) que atende com folga as exigências dos bancos.',
+        scenario: 'Um centro comercial gera $250,000 de NOI anual. O financiamento proposto requer parcelas mensais de $15,000 ($180,000 por ano).',
+        calculation: 'DSCR = $250,000 (NOI) / $180,000 (Dívida) = 1,39x.',
+        interpretation: 'O imóvel produz $1,39 de receita líquida para cada $1,00 de serviço de dívida, oferecendo uma margem de segurança de 39% ($70,000 de reserva anual) que atende com folga as exigências dos bancos.',
       },
       benchmarks: [
         '≥ 1,25x: Patamar mínimo padrão exigido na análise de crédito comercial convencional.',
@@ -985,8 +985,8 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       ],
       example: {
         title: 'Exemplo Prático em Imóvel Comercial',
-        scenario: 'Um imóvel comercial de uso misto tem Receita Bruta Potencial (GPI) de $400.000. As despesas operacionais anuais somam $130.000 e o serviço anual da dívida é de $170.000.',
-        calculation: 'BER = [ ($130.000 + $170.000) / $400.000 ] × 100 = [ $300.000 / $400.000 ] × 100 = 75,0%.',
+        scenario: 'Um imóvel comercial de uso misto tem Receita Bruta Potencial (GPI) de $400,000. As despesas operacionais anuais somam $130,000 e o serviço anual da dívida é de $170,000.',
+        calculation: 'BER = [ ($130,000 + $170,000) / $400,000 ] × 100 = [ $300,000 / $400,000 ] × 100 = 75,0%.',
         interpretation: 'O imóvel atinge o equilíbrio com 75% da receita potencial total. A vacância pode chegar a 25% antes de o investidor precisar injetar dinheiro do próprio bolso.',
       },
       benchmarks: [
@@ -1024,8 +1024,8 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       ],
       example: {
         title: 'Exemplo Prático em Imóvel Comercial',
-        scenario: 'Um condomínio residencial de 50 apartamentos cobra aluguel médio de $1.200/mês, totalizando $720.000 em Aluguel Potencial Bruto. As despesas operacionais são de $290.000 e o serviço da dívida anual é de $286.000.',
-        calculation: 'BEO = [ ($290.000 + $286.000) / $720.000 ] × 100 = [ $576.000 / $720.000 ] × 100 = 80,0%.',
+        scenario: 'Um condomínio residencial de 50 apartamentos cobra aluguel médio de $1,200/mês, totalizando $720,000 em Aluguel Potencial Bruto. As despesas operacionais são de $290,000 e o serviço da dívida anual é de $286,000.',
+        calculation: 'BEO = [ ($290,000 + $286,000) / $720,000 ] × 100 = [ $576,000 / $720,000 ] × 100 = 80,0%.',
         interpretation: 'O imóvel necessita de exatamente 80% de ocupação (40 de 50 unidades alugadas a valor de mercado) para atingir o ponto de equilíbrio. Ocupações acima de 80% geram lucro livre para os investidores.',
       },
       benchmarks: [
@@ -1041,7 +1041,7 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       },
       faqs: [
         { question: 'Por que os bancos dão tanta importância à Ocupação de Equilíbrio?', answer: 'Para confirmar que a taxa de vacância média histórica da região está confortavelmente abaixo do ponto de equilíbrio do empreendimento, mitigando o risco de calote.' },
-        { question: 'Um imóvel pode ter NOI positivo e ainda assim não atingir sua Ocupação de Equilíbrio?', answer: 'Sim. Se o NOI for de $100.000 mas o serviço da dívida for de $120.000, o imóvel é operacionalmente rentável, mas gera receita insuficiente para honrar a dívida assumida.' },
+        { question: 'Um imóvel pode ter NOI positivo e ainda assim não atingir sua Ocupação de Equilíbrio?', answer: 'Sim. Se o NOI for de $100,000 mas o serviço da dívida for de $120,000, o imóvel é operacionalmente rentável, mas gera receita insuficiente para honrar a dívida assumida.' },
         { question: 'De que maneira a alavancagem financeira impacta a Ocupação de Equilíbrio?', answer: 'Maior endividamento eleva diretamente as parcelas anuais de amortização e juros, aumentando a ocupação mínima necessária para manter a operação solvente.' },
       ],
     },
@@ -1063,7 +1063,7 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       ],
       example: {
         title: 'Exemplo Prático em Imóvel Comercial',
-        scenario: 'Um investidor aplica $500.000 em capital próprio em um projeto comercial. Em 5 anos, o imóvel distribui $35.000 no ano 1, $40.000 no ano 2, $45.000 no ano 3, $50.000 no ano 4 e $55.000 no ano 5. No 5º ano, é vendido com saldo líquido de $750.000 (total de caixa no ano 5 = $805.000).' ,
+        scenario: 'Um investidor aplica $500,000 em capital próprio em um projeto comercial. Em 5 anos, o imóvel distribui $35,000 no ano 1, $40,000 no ano 2, $45,000 no ano 3, $50,000 no ano 4 e $55,000 no ano 5. No 5º ano, é vendido com saldo líquido de $750,000 (total de caixa no ano 5 = $805,000).' ,
         calculation: 'Ao descontar CF0 (-$500k) contra os fluxos CF1-CF5, apura-se uma TIR anualizada de 17,4%.',
         interpretation: 'O investidor obteve um retorno composto anualizado de 17,4% sobre seu capital durante os 5 anos de investimento.',
       },
@@ -1101,8 +1101,8 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       ],
       example: {
         title: 'Exemplo Prático em Imóvel Comercial',
-        scenario: 'Um prédio com 8 apartamentos residenciais é colocado à venda por $1.200.000. As unidades produzem um aluguel mensal somado de $10.000 ($120.000 ao ano).',
-        calculation: 'GRM = $1.200.000 / $120.000 = 10,0x.',
+        scenario: 'Um prédio com 8 apartamentos residenciais é colocado à venda por $1,200,000. As unidades produzem um aluguel mensal somado de $10,000 ($120,000 ao ano).',
+        calculation: 'GRM = $1,200,000 / $120,000 = 10,0x.',
         interpretation: 'O imóvel está precificado em 10 vezes o seu faturamento bruto anual de locação.',
       },
       benchmarks: [

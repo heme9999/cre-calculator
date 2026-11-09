@@ -69,6 +69,12 @@ export function LoanScenarioComparison({ locale }: Props) {
           <ul className="space-y-2 text-xs text-slate-700">
             <li className="flex justify-between">
               <span className="text-slate-600">
+                {isZh ? '10年累计归还本金:' : isEs ? 'Capital amortizado en 10 años:' : isPt ? 'Principal amortizado em 10 anos:' : '10-Yr Principal Paid:'}
+              </span>
+              <span className="font-semibold text-slate-900">{formatCurrency(Math.round(inst.termPrincipal))}</span>
+            </li>
+            <li className="flex justify-between">
+              <span className="text-slate-600">
                 {isZh ? '10年累计支付利息:' : isEs ? 'Intereses pagados en 10 años:' : isPt ? 'Juros pagos em 10 anos:' : '10-Yr Interest Paid:'}
               </span>
               <span className="font-semibold text-slate-900">{formatCurrency(Math.round(inst.termInterest))}</span>
@@ -118,6 +124,12 @@ export function LoanScenarioComparison({ locale }: Props) {
             </li>
             <li className="flex justify-between">
               <span className="text-slate-600">
+                {isZh ? '10年累计归还本金:' : isEs ? 'Capital amortizado en 10 años:' : isPt ? 'Principal amortizado em 10 anos:' : '10-Yr Principal Paid:'}
+              </span>
+              <span className="font-semibold text-slate-900">{formatCurrency(Math.round(prin.termPrincipal))}</span>
+            </li>
+            <li className="flex justify-between">
+              <span className="text-slate-600">
                 {isZh ? '10年累计支付利息:' : isEs ? 'Intereses pagados en 10 años:' : isPt ? 'Juros pagos em 10 anos:' : '10-Yr Interest Paid:'}
               </span>
               <span className="font-semibold text-emerald-700">{formatCurrency(Math.round(prin.termInterest))}</span>
@@ -136,6 +148,27 @@ export function LoanScenarioComparison({ locale }: Props) {
             </li>
           </ul>
         </div>
+      </div>
+
+      {/* Exact Unrounded Reconciliation Note */}
+      <div className="bg-slate-100/80 border border-slate-200 rounded-xl px-4 py-3 text-[11px] text-slate-600 leading-relaxed">
+        {isZh ? (
+          <p>
+            <strong>手算验算说明：</strong>按未截断月利率 <code>r = 6.5% ÷ 12 = 0.00541667...</code> 及 <code>n = 300</code> 期计算，等额本息精确月供为 <strong>$14,179.35/月</strong>（120 个月共还款 <strong>$1,701,522</strong> = 累计还本 <strong>$472,542</strong> + 累计利息 <strong>$1,228,980</strong>；第 10 年末气球尾款 = <code>$2,100,000 − $472,542 = $1,627,458</code>）。若对应默认 <strong>$1,300,000</strong> 贷款（同利率与期限），等额本息月供为 <strong>$8,778/月</strong>，第 10 年气球尾款为 <strong>$1,007,474</strong>。
+          </p>
+        ) : isEs ? (
+          <p>
+            <strong>Verificación de cálculo:</strong> Usando la tasa mensual sin redondeo intermedio <code>r = 6.5% ÷ 12 = 0.00541667...</code> (<code>n = 300</code> meses), la cuota exacta es <strong>$14,179.35/mes</strong> (120 pagos = <strong>$1,701,522</strong> total = <strong>$472,542</strong> capital + <strong>$1,228,980</strong> intereses; saldo balloon al año 10 = <code>$2,100,000 − $472,542 = $1,627,458</code>). Para el préstamo predeterminado de <strong>$1,300,000</strong> en los mismos términos, la cuota fija es <strong>$8,778/mes</strong> y el saldo balloon es <strong>$1,007,474</strong>.
+          </p>
+        ) : isPt ? (
+          <p>
+            <strong>Verificação de cálculo:</strong> Usando a taxa mensal sem arredondamento intermediário <code>r = 6.5% ÷ 12 = 0.00541667...</code> (<code>n = 300</code> meses), a parcela exata na Tabela Price é <strong>$14,179.35/mês</strong> (120 pagamentos = <strong>$1,701,522</strong> total = <strong>$472,542</strong> principal + <strong>$1,228,980</strong> juros; saldo balão no ano 10 = <code>$2,100,000 − $472,542 = $1,627,458</code>). Para o financiamento padrão de <strong>$1,300,000</strong> nas mesmas condições, a parcela fixa é <strong>$8,778/mês</strong> e o saldo balão é <strong>$1,007,474</strong>.
+          </p>
+        ) : (
+          <p>
+            <strong>Hand-Calculation Breakdown:</strong> Using unrounded monthly interest <code>r = 6.5% ÷ 12 = 0.00541667...</code> over <code>n = 300</code> months, exact fixed monthly P&amp;I is <strong>$14,179.35/mo</strong> (120 payments = <strong>$1,701,522</strong> total P&amp;I = <strong>$472,542</strong> principal repaid + <strong>$1,228,980</strong> interest paid; Year 10 balloon = <code>$2,100,000 − $472,542 = $1,627,458</code>). For the default <strong>$1,300,000</strong> loan under the same terms, monthly P&amp;I is <strong>$8,778/mo</strong> with a Year 10 balloon of <strong>$1,007,474</strong>.
+          </p>
+        )}
       </div>
     </div>
   );

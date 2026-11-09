@@ -1159,8 +1159,8 @@ async function runSmokeTests() {
     const loadedNoi = await page.$eval('#caprate-noi-input', el => el.value);
     const loadedCap = await page.$eval('[data-testid="cap-rate-result"]', el => el.textContent.trim());
 
-    if (loadedPrice !== '3500000' || loadedNoi !== '218750' || loadedCap !== '6.25%') {
-      throw new Error(`Load Page Example failed to update inputs/result: Price=${loadedPrice} (expected 3500000), NOI=${loadedNoi} (expected 218750), Cap=${loadedCap} (expected 6.25%)`);
+    if (loadedPrice !== '3,500,000' || loadedNoi !== '218,750' || loadedCap !== '6.25%') {
+      throw new Error(`Load Page Example failed to update inputs/result: Price=${loadedPrice} (expected 3,500,000), NOI=${loadedNoi} (expected 218,750), Cap=${loadedCap} (expected 6.25%)`);
     }
     console.log('✅ Cap Rate property-type entry cards and Load Page Example button verified with input & result card assertions ($3,500,000 / $218,750 -> 6.25%).');
 

@@ -59,7 +59,7 @@ export function LeaseVsBuyScenarioComparison({ locale }: Props) {
           : isEs
           ? `Suponga que una empresa necesita un espacio comercial u oficina durante 10 años (Escenario Base: precio de compra de $1.8M, 25% de anticipo, préstamo de $1.35M al 6.5% con amortización a 25 años; alquiler de $10,000/mes con escalamiento del 3%; plusvalía del 3% anual y costos de venta del 5%):`
           : isPt
-          ? `Suponha que uma empresa precise de um espaço comercial ou escritório durante 10 anos (Cenário Base: preço de compra de $1,8M, 25% de entrada, financiamento de $1,35M a 6,5% com amortização em 25 anos; aluguel de $10.000/mês com reajuste de 3%; valorização de 3% ao ano e custos de venda de 5%):`
+          ? `Suponha que uma empresa precise de um espaço comercial ou escritório durante 10 anos (Cenário Base: preço de compra de $1,8M, 25% de entrada, financiamento de $1,35M a 6,5% com amortização em 25 anos; aluguel de $10,000/mês com reajuste de 3%; valorização de 3% ao ano e custos de venda de 5%):`
           : `Suppose a company requires an office space for 10 years (Benchmark Scenario: $1.8M Purchase Price, 25% Down, $1.35M Loan at 6.5% Rate & 25-Yr Amortization; $10k/mo Initial Rent with 3% Escalation; 3% Appreciation & 5% Exit Selling Costs):`}
       </p>
 

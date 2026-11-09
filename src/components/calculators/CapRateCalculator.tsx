@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { formatCurrency, formatPercent } from '@/lib/utils';
+import { formatCurrency, formatPercent, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
 import { Calculator, TrendingUp, AlertCircle, Info, ArrowRight } from 'lucide-react';
 import { CapRateVisualGauge } from './visuals/CapRateVisualGauge';
 import { getUiTranslations } from '@/lib/translations';
@@ -257,10 +257,11 @@ export function CapRateCalculator({ locale, defaultPrice, defaultNoi }: Props) {
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="caprate-price-input"
-                    type="number"
-                    value={purchasePrice || ''}
-                    onChange={(e) => setPurchasePrice(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(purchasePrice)}
+                    onChange={(e) => setPurchasePrice(parseNumberInput(e.target.value))}
+                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                     placeholder="2,400,000"
                   />
                 </div>
@@ -287,11 +288,12 @@ export function CapRateCalculator({ locale, defaultPrice, defaultNoi }: Props) {
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="caprate-noi-input"
-                    type="number"
+                    type="text"
+                    inputMode="numeric"
                     aria-describedby="caprate-noi-help"
-                    value={noi || ''}
-                    onChange={(e) => setNoi(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                    value={formatNumberWithCommas(noi)}
+                    onChange={(e) => setNoi(parseNumberInput(e.target.value))}
+                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                     placeholder="168,000"
                   />
                 </div>
@@ -329,11 +331,12 @@ export function CapRateCalculator({ locale, defaultPrice, defaultNoi }: Props) {
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="caprate-noi-reverse-input"
-                    type="number"
+                    type="text"
+                    inputMode="numeric"
                     aria-describedby="caprate-noi-reverse-help"
-                    value={noi || ''}
-                    onChange={(e) => setNoi(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                    value={formatNumberWithCommas(noi)}
+                    onChange={(e) => setNoi(parseNumberInput(e.target.value))}
+                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                     placeholder="168,000"
                   />
                 </div>
@@ -399,10 +402,11 @@ export function CapRateCalculator({ locale, defaultPrice, defaultNoi }: Props) {
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
                     id="caprate-listing-input"
-                    type="number"
-                    value={purchasePrice || ''}
-                    onChange={(e) => setPurchasePrice(parseFloat(e.target.value) || 0)}
-                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold focus:outline-none"
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(purchasePrice)}
+                    onChange={(e) => setPurchasePrice(parseNumberInput(e.target.value))}
+                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
                     placeholder="2,400,000"
                   />
                 </div>

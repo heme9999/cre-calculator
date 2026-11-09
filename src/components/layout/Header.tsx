@@ -172,9 +172,9 @@ export function Header({ locale }: HeaderProps) {
             href={`/${locale}/tools/deal-analyzer/`}
             className="active-press hover:text-white transition-colors flex items-center gap-1.5 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 hover:text-emerald-200 px-3 py-1 rounded-full border border-emerald-500/35 font-semibold text-xs shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
           >
-            <span>{nav.dealAnalyzer}</span>
+            <span>{isZh ? 'Deal Analyzer' : nav.dealAnalyzer}</span>
             <span className="text-[10px] bg-emerald-500 text-slate-950 px-1.5 py-0.2 rounded font-black uppercase">
-              {isZh ? '综合' : 'Suite'}
+              {isZh ? '综合尽调' : 'Suite'}
             </span>
           </Link>
 

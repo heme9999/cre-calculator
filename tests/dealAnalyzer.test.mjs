@@ -816,6 +816,42 @@ try {
       assert.ok(esFile.includes("key: 'deal-analyzer'"), 'es.ts underwritingHub must include deal-analyzer');
       assert.ok(ptFile.includes("key: 'deal-analyzer'"), 'pt.ts underwritingHub must include deal-analyzer');
     });
+
+    await t.test('Monday Routine Audit Remediation (Loan Payment $2.1M alignment, Save/CSV feedback, ZH Nav, PT formatting, Cap Rate commas, PDF toast)', () => {
+      const enFile = fs.readFileSync(path.join(__dirname, '../src/content/en.ts'), 'utf8');
+      const zhFile = fs.readFileSync(path.join(__dirname, '../src/content/zh.ts'), 'utf8');
+      const esFile = fs.readFileSync(path.join(__dirname, '../src/content/es.ts'), 'utf8');
+      const ptFile = fs.readFileSync(path.join(__dirname, '../src/content/pt.ts'), 'utf8');
+      const loanScenario = fs.readFileSync(path.join(__dirname, '../src/components/calculators/LoanScenarioComparison.tsx'), 'utf8');
+      const dealAnalyzerTool = fs.readFileSync(path.join(__dirname, '../src/components/tools/DealAnalyzerTool.tsx'), 'utf8');
+      const headerFile = fs.readFileSync(path.join(__dirname, '../src/components/layout/Header.tsx'), 'utf8');
+      const capRatePage = fs.readFileSync(path.join(__dirname, '../src/app/[locale]/calculators/cap-rate/page.tsx'), 'utf8');
+      const capRateCalc = fs.readFileSync(path.join(__dirname, '../src/components/calculators/CapRateCalculator.tsx'), 'utf8');
+
+      // 1. Loan Payment exampleTitle aligns with $2.1M body across all 4 locales + transparent unrounded breakdown
+      assert.ok(enFile.includes('Hypothetical Scenario Comparison ($2.1M Loan, 6.5% Rate, 25-Yr Amort, 10-Yr Maturity)'), 'en.ts loanPayment.exampleTitle must be $2.1M');
+      assert.ok(zhFile.includes('对比演算示例 ($210万贷款, 6.5%利率, 25年摊销, 10年到期)'), 'zh.ts loanPayment.exampleTitle must be $210万');
+      assert.ok(esFile.includes('Comparativa en un Préstamo de $2.1M'), 'es.ts loanPayment.exampleTitle must be $2.1M');
+      assert.ok(ptFile.includes('Comparativo em Financiamento de $2.1M'), 'pt.ts loanPayment.exampleTitle must be $2.1M');
+      assert.ok(loanScenario.includes('$14,179.35') && loanScenario.includes('$472,542') && loanScenario.includes('$1,627,458'), 'LoanScenarioComparison must display unrounded hand-calculation breakdown');
+
+      // 2. Deal Analyzer Save & CSV feedback + single mutually-exclusive activeToast / pdfStatus
+      assert.ok(dealAnalyzerTool.includes("const [pdfStatus, setPdfStatus] = useState<'idle' | 'generating' | 'downloaded'>('idle')"), 'DealAnalyzerTool must use single mutually-exclusive pdfStatus state');
+      assert.ok(dealAnalyzerTool.includes('savedDealNotice') && dealAnalyzerTool.includes('csvExportedNotice'), 'DealAnalyzerTool must provide button & toast feedback for Save and CSV export');
+      assert.ok(!dealAnalyzerTool.includes('const [isExportingPdf,') && !dealAnalyzerTool.includes('const [pdfSuccessNotice,'), 'DealAnalyzerTool must not use separate conflicting PDF toast booleans');
+
+      // 3. Chinese Header Deal Analyzer pill does not duplicate "综合"
+      assert.ok(headerFile.includes("{isZh ? 'Deal Analyzer' : nav.dealAnalyzer}"), 'Header must not duplicate 综合 in ZH Deal Analyzer pill');
+
+      // 4. Portuguese Cap Rate page uses comma thousand separators ($2,800,000 / $227,200) matching calculator summary
+      assert.ok(capRatePage.includes('Preço de aquisição: $2,800,000'), 'PT Cap Rate page must use $2,800,000');
+      assert.ok(!capRatePage.includes('$2.800.000'), 'PT Cap Rate page must not mix dot-thousand $2.800.000');
+      assert.ok(!/\$\d{1,3}(?:\.\d{3})+/.test(ptFile), 'pt.ts must not contain dot-separated USD currency strings');
+
+      // 5. Cap Rate Calculator inputs format numbers with thousand commas
+      assert.ok(capRateCalc.includes('formatNumberWithCommas(purchasePrice)') && capRateCalc.includes('formatNumberWithCommas(noi)'), 'CapRateCalculator inputs must format values with commas');
+      assert.ok(capRateCalc.includes('inputMode="numeric"'), 'CapRateCalculator formatted inputs must include inputMode="numeric"');
+    });
   });
 } catch (e) {
   console.error('Test setup or compilation failed:');

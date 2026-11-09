@@ -352,7 +352,7 @@ export const zhContent: LocaleContent = {
       { label: 'n', desc: '总摊销期数 (摊销年限 × 12)' },
       { label: 'm', desc: '当前还款期数 (第 1 至 n 个月)' },
     ],
-    exampleTitle: '对比演算示例 ($130万贷款, 6.5%利率, 25年摊销, 10年到期)',
+    exampleTitle: '对比演算示例 ($210万贷款, 6.5%利率, 25年摊销, 10年到期)',
     exampleContent: '\n\n*注：此为演示计算逻辑的假设演算示例，不代表真实挂牌、成交或投资建议。*',
     faqTitle: '常见问题',
     faqs: [

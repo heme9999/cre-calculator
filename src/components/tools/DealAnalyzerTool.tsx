@@ -56,15 +56,28 @@ export function DealAnalyzerTool({ locale }: Props) {
 
   // UI state
   const [showStressTest, setShowStressTest] = useState<boolean>(false);
-  const [isExportingPdf, setIsExportingPdf] = useState<boolean>(false);
-  const [pdfSuccessNotice, setPdfSuccessNotice] = useState<boolean>(false);
+  const [pdfStatus, setPdfStatus] = useState<'idle' | 'generating' | 'downloaded'>('idle');
+  const [savedDealNotice, setSavedDealNotice] = useState<boolean>(false);
+  const [csvExportedNotice, setCsvExportedNotice] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
+  const [activeToast, setActiveToast] = useState<{ kind: 'generating' | 'success'; message: string } | null>(null);
+  const isExportingRef = useRef<boolean>(false);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pdfBtnTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showSavedModal, setShowSavedModal] = useState<boolean>(false);
   const [savedDeals, setSavedDeals] = useState<Array<{ name: string; date: string; input: DealAnalyzerInput }>>([]);
   const [isClient, setIsClient] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
   const moreMenuBtnRef = useRef<HTMLButtonElement>(null);
+
+  const showSuccessToast = (message: string, durationMs = 3200) => {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    setActiveToast({ kind: 'success', message });
+    toastTimerRef.current = setTimeout(() => {
+      setActiveToast(null);
+    }, durationMs);
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -169,6 +182,17 @@ export function DealAnalyzerTool({ locale }: Props) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    setCsvExportedNotice(true);
+    setTimeout(() => setCsvExportedNotice(false), 2500);
+    showSuccessToast(
+      isZh
+        ? '✅ CSV 尽调数据表已成功导出并开始下载'
+        : isEs
+        ? '✅ ¡Archivo CSV de análisis exportado y descargado!'
+        : isPt
+        ? '✅ Arquivo CSV de análise exportado e baixado!'
+        : '✅ CSV underwriting report downloaded!'
+    );
   };
 
   const handleSaveDeal = () => {
@@ -185,6 +209,17 @@ export function DealAnalyzerTool({ locale }: Props) {
     } catch {
       // ignore
     }
+    setSavedDealNotice(true);
+    setTimeout(() => setSavedDealNotice(false), 2500);
+    showSuccessToast(
+      isZh
+        ? `✅ 测算方案已保存至本地 (${dealName})`
+        : isEs
+        ? `✅ Análisis guardado en el navegador (${dealName})`
+        : isPt
+        ? `✅ Análise salva no navegador (${dealName})`
+        : `✅ Deal saved to browser storage (${dealName})`
+    );
   };
 
   const handleLoadDeal = (loadedInput: DealAnalyzerInput) => {
@@ -204,9 +239,22 @@ export function DealAnalyzerTool({ locale }: Props) {
 
   // DOM Screenshot PDF Export Handler using html2canvas-pro + jsPDF
   const handleExportPdf = async () => {
-    if (!pdfTemplateRef.current) return;
+    if (!pdfTemplateRef.current || isExportingRef.current) return;
+    isExportingRef.current = true;
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    if (pdfBtnTimerRef.current) clearTimeout(pdfBtnTimerRef.current);
     try {
-      setIsExportingPdf(true);
+      setPdfStatus('generating');
+      setActiveToast({
+        kind: 'generating',
+        message: isZh
+          ? '正在生成 PDF 承销报告，请稍候...'
+          : isEs
+          ? 'Generando informe PDF, por favor espere...'
+          : isPt
+          ? 'Gerando relatório PDF, aguarde...'
+          : 'Generating PDF underwriting report, please wait...',
+      });
       const html2canvas = (await import('html2canvas-pro')).default;
       const { jsPDF } = await import('jspdf');
 
@@ -331,12 +379,24 @@ export function DealAnalyzerTool({ locale }: Props) {
       (pdf.internal as unknown as { write: (s: string) => void }).write('0 Tr');
 
       pdf.save(`deal-analyzer-underwriting-summary-${locale}.pdf`);
-      setPdfSuccessNotice(true);
-      setTimeout(() => setPdfSuccessNotice(false), 3500);
+      setPdfStatus('downloaded');
+      showSuccessToast(
+        isZh
+          ? '✅ 承销报告已成功导出为 PDF 并开始下载'
+          : isEs
+          ? '✅ ¡Informe PDF exportado y descargado con éxito!'
+          : isPt
+          ? '✅ Relatório PDF exportado e baixado com sucesso!'
+          : '✅ PDF underwriting summary downloaded successfully!',
+        3500
+      );
+      pdfBtnTimerRef.current = setTimeout(() => setPdfStatus('idle'), 3500);
     } catch (err) {
       console.error('PDF export failed:', err);
+      setPdfStatus('idle');
+      setActiveToast(null);
     } finally {
-      setIsExportingPdf(false);
+      isExportingRef.current = false;
     }
   };
 
@@ -398,11 +458,22 @@ export function DealAnalyzerTool({ locale }: Props) {
             <div className="hidden md:flex flex-wrap items-center gap-2.5">
               <button
                 type="button"
+                data-testid="save-deal-btn"
                 onClick={handleSaveDeal}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
                 title={t.saveDealTitle}
               >
-                <span>{t.saveDeal}</span>
+                <span className={savedDealNotice ? 'text-emerald-300' : ''}>
+                  {savedDealNotice
+                    ? isZh
+                      ? '✅ 已保存'
+                      : isEs
+                      ? '✅ ¡Guardado!'
+                      : isPt
+                      ? '✅ Salvo!'
+                      : '✅ Saved!'
+                    : t.saveDeal}
+                </span>
               </button>
 
               {savedDeals.length > 0 && (
@@ -417,11 +488,22 @@ export function DealAnalyzerTool({ locale }: Props) {
 
               <button
                 type="button"
+                data-testid="export-csv-btn"
                 onClick={handleExportCsv}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press"
                 title={t.csvExportTitle}
               >
-                <span>{t.csvExport}</span>
+                <span className={csvExportedNotice ? 'text-emerald-300' : ''}>
+                  {csvExportedNotice
+                    ? isZh
+                      ? '✅ CSV 已导出'
+                      : isEs
+                      ? '✅ ¡CSV Descargado!'
+                      : isPt
+                      ? '✅ CSV Baixado!'
+                      : '✅ CSV Downloaded!'
+                    : t.csvExport}
+                </span>
               </button>
 
               <button
@@ -435,16 +517,17 @@ export function DealAnalyzerTool({ locale }: Props) {
 
               <button
                 type="button"
+                data-testid="export-pdf-btn"
                 onClick={handleExportPdf}
-                disabled={isExportingPdf}
+                disabled={pdfStatus === 'generating'}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold text-xs transition-[background-color,border-color,transform] duration-150 ease-out active-press disabled:opacity-50"
               >
-                {isExportingPdf ? (
+                {pdfStatus === 'generating' ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
                     <span>{t.generating}</span>
                   </>
-                ) : pdfSuccessNotice ? (
+                ) : pdfStatus === 'downloaded' ? (
                   <>
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     <span className="text-emerald-300">{isZh ? '已导出 PDF' : isEs ? '¡Descargado!' : isPt ? 'Baixado!' : 'Downloaded!'}</span>
@@ -493,18 +576,38 @@ export function DealAnalyzerTool({ locale }: Props) {
                       : 'opacity-0 scale-95 invisible pointer-events-none'
                   }`}
                 >
-                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleSaveDeal(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">{t.saveDeal}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleSaveDeal(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">
+                    {savedDealNotice
+                      ? isZh
+                        ? '✅ 已保存'
+                        : isEs
+                        ? '✅ ¡Guardado!'
+                        : isPt
+                        ? '✅ Salvo!'
+                        : '✅ Saved!'
+                      : t.saveDeal}
+                  </button>
                   {savedDeals.length > 0 && (
                     <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { setShowSavedModal(true); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-emerald-300 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">📂 {t.savedCount(savedDeals.length)}</button>
                   )}
-                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportCsv(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">{t.csvExport}</button>
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportCsv(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">
+                    {csvExportedNotice
+                      ? isZh
+                        ? '✅ CSV 已导出'
+                        : isEs
+                        ? '✅ ¡CSV Descargado!'
+                        : isPt
+                        ? '✅ CSV Baixado!'
+                        : '✅ CSV Downloaded!'
+                      : t.csvExport}
+                  </button>
                   <button tabIndex={moreMenuOpen ? 0 : -1} data-testid="share-deal-btn-mobile" onClick={() => { handleCopyLink(); setMoreMenuOpen(false); }} className="text-left w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg focus:bg-slate-700 outline-none transition-colors duration-100">{copiedLink ? t.linkCopied : t.shareLink}</button>
-                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportPdf(); setMoreMenuOpen(false); }} disabled={isExportingPdf} className="flex items-center gap-1.5 w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg disabled:opacity-50 focus:bg-slate-700 outline-none transition-colors duration-100">
-                    {isExportingPdf ? (
+                  <button tabIndex={moreMenuOpen ? 0 : -1} onClick={() => { handleExportPdf(); setMoreMenuOpen(false); }} disabled={pdfStatus === 'generating'} className="flex items-center gap-1.5 w-full px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-700 rounded-lg disabled:opacity-50 focus:bg-slate-700 outline-none transition-colors duration-100">
+                    {pdfStatus === 'generating' ? (
                       <>
                         <Loader2 className="w-3 h-3 animate-spin text-emerald-400" /> {t.generating}
                       </>
-                    ) : pdfSuccessNotice ? (
+                    ) : pdfStatus === 'downloaded' ? (
                       <>
                         <CheckCircle2 className="w-3 h-3 text-emerald-400" /> {isZh ? '已导出 PDF' : isEs ? '¡Descargado!' : isPt ? 'Baixado!' : 'Downloaded!'}
                       </>
@@ -1090,24 +1193,24 @@ export function DealAnalyzerTool({ locale }: Props) {
       )}
 
       {/* Hidden Printable DOM Card for html2canvas-pro Screenshot Export */}
-      {isExportingPdf && (
+      {/* Unified Single-State Toast Notification (Mutually Exclusive Generating vs Success) */}
+      {activeToast && (
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-6 z-50 bg-slate-900/95 backdrop-blur-sm text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-3 text-xs font-semibold animate-pulse"
+          data-testid="deal-analyzer-toast"
+          className={
+            activeToast.kind === 'generating'
+              ? 'fixed bottom-6 right-6 z-50 bg-slate-900/95 backdrop-blur-sm text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-3 text-xs font-semibold animate-pulse'
+              : 'fixed bottom-6 right-6 z-50 bg-emerald-950/95 backdrop-blur-sm text-emerald-100 px-4 py-3 rounded-xl shadow-2xl border border-emerald-500/50 flex items-center gap-3 text-xs font-semibold shadow-emerald-900/30'
+          }
         >
-          <div className="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin shrink-0" />
-          <span>{isZh ? '正在生成 PDF 承销报告，请稍候...' : isEs ? 'Generando informe PDF, por favor espere...' : isPt ? 'Gerando relatório PDF, aguarde...' : 'Generating PDF underwriting report, please wait...'}</span>
-        </div>
-      )}
-      {pdfSuccessNotice && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="fixed bottom-6 right-6 z-50 bg-emerald-950/95 backdrop-blur-sm text-emerald-100 px-4 py-3 rounded-xl shadow-2xl border border-emerald-500/50 flex items-center gap-3 text-xs font-semibold shadow-emerald-900/30"
-        >
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-          <span>{isZh ? '✅ 承销报告已成功导出为 PDF 并开始下载' : isEs ? '✅ ¡Informe PDF exportado y descargado con éxito!' : isPt ? '✅ Relatório PDF exportado e baixado com sucesso!' : '✅ PDF underwriting summary downloaded successfully!'}</span>
+          {activeToast.kind === 'generating' ? (
+            <div className="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin shrink-0" />
+          ) : (
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          )}
+          <span>{activeToast.message}</span>
         </div>
       )}
       <div className="absolute left-[-9999px] top-[-9999px]" style={{ width: '800px' }}>

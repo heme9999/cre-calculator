@@ -123,7 +123,7 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
                   : isEs
                   ? 'Gastos operativos (OpEx): $92,000'
                   : isPt
-                  ? 'Despesas operacionais (OpEx): $92.000'
+                  ? 'Despesas operacionais (OpEx): $92,000'
                   : 'Operating Expenses (OpEx): $92,000'}
               </li>
               <li>
@@ -145,7 +145,7 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
                   </>
                 ) : isPt ? (
                   <>
-                    Serviço anual da dívida: $170.152 (veja o{' '}
+                    Serviço anual da dívida: $170,152 (veja o{' '}
                     <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">
                       cálculo do financiamento comercial
                     </Link>
@@ -167,7 +167,7 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
                   : isEs
                   ? 'Ingreso bruto efectivo (EGI): $319,200 (basado en $336k GPI y 5% de desocupación)'
                   : isPt
-                  ? 'Receita bruta efetiva (EGI): $319.200 (com base em $336k GPI e 5% de vacância)'
+                  ? 'Receita bruta efetiva (EGI): $319,200 (com base em $336k GPI e 5% de vacância)'
                   : 'Effective Gross Income (EGI): $319,200 (based on $336k GPI and 5% vacancy)'}
               </li>
             </ul>
@@ -177,7 +177,7 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
                 : isEs
                 ? 'Cálculo: Ratio de Cobertura de Gastos (BER) = ($92,000 + $170,152) / $319,200 = 82.13%\nOcupación de Equilibrio (BEO) = ($92,000 + $170,152) / $336,000 = 78.02%'
                 : isPt
-                ? 'Cálculo: Índice de Ponto de Equilíbrio (BER) = ($92.000 + $170.152) / $319.200 = 82.13%\nOcupação de Ponto de Equilíbrio (BEO) = ($92.000 + $170.152) / $336.000 = 78.02%'
+                ? 'Cálculo: Índice de Ponto de Equilíbrio (BER) = ($92,000 + $170,152) / $319,200 = 82.13%\nOcupação de Ponto de Equilíbrio (BEO) = ($92,000 + $170,152) / $336,000 = 78.02%'
                 : 'Calculation: Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%\nBreak-Even Occupancy = ($92,000 + $170,152) / $336,000 = 78.02%'}
             </p>
             <p className="mt-2">

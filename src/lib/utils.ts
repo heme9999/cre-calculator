@@ -10,8 +10,13 @@ export function formatPercent(val: number, decimals: number = 2): string {
   return `${val.toFixed(decimals)}%`;
 }
 
+export function formatNumberWithCommas(val: number): string {
+  if (!val || isNaN(val) || !isFinite(val)) return '';
+  return Math.round(val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
 export function parseNumberInput(val: string): number {
-  const cleaned = val.replace(/,/g, '');
+  const cleaned = val.replace(/[^0-9.-]/g, '');
   const parsed = parseFloat(cleaned);
   return isNaN(parsed) ? 0 : parsed;
 }

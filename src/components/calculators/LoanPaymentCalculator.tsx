@@ -273,8 +273,8 @@ export function LoanPaymentCalculator({ locale }: Props) {
                 aria-label={isZh ? '贷款本金总额' : isEs ? 'Monto del Préstamo' : isPt ? 'Valor do Financiamento' : 'Principal Loan Amount'}
               />
             </div>
-            <div className="flex gap-2 mt-2">
-              {[1000000, 1300000, 2000000, 5000000].map((val) => (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {[1000000, 1300000, 2100000, 5000000].map((val) => (
                 <button
                   key={val}
                   type="button"
