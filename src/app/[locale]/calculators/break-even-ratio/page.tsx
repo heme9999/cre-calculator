@@ -101,61 +101,54 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* Worked Example */}
+        {/* Worked Example 1 */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
           <h2 className="text-xl font-bold text-slate-900">
-            {isZh ? '商业地产分析案例 (Illustrative Example)' : isEs ? 'Ejemplo Práctico en Propiedad Comercial' : isPt ? 'Exemplo Prático em Imóvel Comercial' : 'Worked Commercial Property Example'}
+            {isZh ? '商业地产分析案例 1：48 单元花园公寓社区 (Multifamily)' : locale === 'es' ? 'Caso Práctico 1: Complejo Residencial de 48 Unidades' : locale === 'pt' ? 'Exemplo Prático 1: Condomínio Residencial de 48 Unidades' : 'Worked Example 1: 48-Unit Garden Apartment Community'}
           </h2>
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-3">
             <p>
               {isZh
-                ? '回顾我们贯穿始终的 24 单元多户住宅案例（24-unit multifamily）。'
-                : isEs
-                ? 'Retomando nuestro ejemplo continuo de propiedad multifamiliar de 24 unidades.'
-                : isPt
-                ? 'Retomando nosso exemplo contínuo de imóvel multifamiliar de 24 unidades.'
-                : 'Returning to our ongoing 24-unit multifamily example.'}
+                ? '评估一处位于成熟次级市场的 48 单元花园公寓社区（收购价 $4,600,000）：'
+                : locale === 'es'
+                ? 'Evaluación de una comunidad multifamiliar de 48 unidades adquirida por $4,600,000:'
+                : locale === 'pt'
+                ? 'Avaliação de um empreendimento multifamiliar de 48 unidades adquirido por $4,600,000:'
+                : 'Consider a 48-unit garden apartment community acquired for $4,600,000 in a stabilized secondary submarket:'}
             </p>
             <ul className="list-disc pl-5 space-y-1">
               <li>
                 {isZh
-                  ? '运营费用 (OpEx): $92,000'
-                  : isEs
-                  ? 'Gastos operativos (OpEx): $92,000'
-                  : isPt
-                  ? 'Despesas operacionais (OpEx): $92,000'
-                  : 'Operating Expenses (OpEx): $92,000'}
+                  ? '潜在总收入 (GPI): $576,000 (48 单元 × $1,000/月 × 12) | 5% 空置后有效毛收入 (EGI): $547,200'
+                  : locale === 'es'
+                  ? 'Ingreso Potencial Bruto (GPI): $576,000 (48 u. × $1,000/mes × 12) | EGI tras 5% vacancia: $547,200'
+                  : locale === 'pt'
+                  ? 'Receita Bruta Potencial (GPI): $576,000 (48 un. × $1,000/mês × 12) | EGI após 5% vacância: $547,200'
+                  : 'Gross Potential Income (GPI): $576,000 (48 units × $1,000/mo × 12) | Effective Gross Income (EGI at 5% vacancy): $547,200'}
+              </li>
+              <li>
+                {isZh
+                  ? '年度运营费用 (OpEx): $168,000 (房产税、保险、管理与日常维修)'
+                  : locale === 'es'
+                  ? 'Gastos operativos anuales (OpEx): $168,000 (impuestos, seguros y mantenimiento)'
+                  : locale === 'pt'
+                  ? 'Despesas operacionais anuais (OpEx): $168,000 (impostos, seguro e gestão)'
+                  : 'Annual Operating Expenses (OpEx): $168,000 (taxes, insurance, management, maintenance)'}
               </li>
               <li>
                 {isZh ? (
                   <>
-                    年还本付息额 (Annual Debt Service): $170,152（详见{' '}
+                    年还本付息额 (Annual Debt Service): $276,400（基于 75% LTV 贷款 $3,450,000，利率 6.50%，25 年摊销；详见{' '}
                     <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">
-                      商业贷款计算
+                      商业贷款月供计算
                     </Link>
                     ）
                   </>
-                ) : isEs ? (
-                  <>
-                    Servicio anual de deuda: $170,152 (consulte el{' '}
-                    <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">
-                      cálculo del préstamo comercial
-                    </Link>
-                    )
-                  </>
-                ) : isPt ? (
-                  <>
-                    Serviço anual da dívida: $170,152 (veja o{' '}
-                    <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">
-                      cálculo do financiamento comercial
-                    </Link>
-                    )
-                  </>
                 ) : (
                   <>
-                    Annual Debt Service: $170,152 (see the{' '}
+                    Annual Debt Service: $276,400 (sized at 75% LTV = $3,450,000 senior debt at 6.50% interest, 25-year amortization; see{' '}
                     <Link href={`/${locale}/calculators/loan-payment/`} className="text-emerald-600 hover:underline">
-                      loan payment calculation
+                      loan payment calculations
                     </Link>
                     )
                   </>
@@ -163,102 +156,148 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
               </li>
               <li>
                 {isZh
-                  ? '有效毛收入 (Effective Gross Income): $319,200 (基于 $336k GPI 和 5% 空置率)'
-                  : isEs
-                  ? 'Ingreso bruto efectivo (EGI): $319,200 (basado en $336k GPI y 5% de desocupación)'
-                  : isPt
-                  ? 'Receita bruta efetiva (EGI): $319,200 (com base em $336k GPI e 5% de vacância)'
-                  : 'Effective Gross Income (EGI): $319,200 (based on $336k GPI and 5% vacancy)'}
+                  ? '固定支出总额 (Total Outlays) = $168,000 + $276,400 = $444,400'
+                  : 'Total Fixed Annual Outlays = $168,000 (OpEx) + $276,400 (Debt Service) = $444,400'}
               </li>
             </ul>
             <p className="font-semibold text-slate-900 mt-2 whitespace-pre-line">
               {isZh
-                ? '计算 Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%\n计算 Break-Even Occupancy = ($92,000 + $170,152) / $336,000 = 78.02%'
-                : isEs
-                ? 'Cálculo: Ratio de Cobertura de Gastos (BER) = ($92,000 + $170,152) / $319,200 = 82.13%\nOcupación de Equilibrio (BEO) = ($92,000 + $170,152) / $336,000 = 78.02%'
-                : isPt
-                ? 'Cálculo: Índice de Ponto de Equilíbrio (BER) = ($92,000 + $170,152) / $319,200 = 82.13%\nOcupação de Ponto de Equilíbrio (BEO) = ($92,000 + $170,152) / $336,000 = 78.02%'
-                : 'Calculation: Break-Even Ratio = ($92,000 + $170,152) / $319,200 = 82.13%\nBreak-Even Occupancy = ($92,000 + $170,152) / $336,000 = 78.02%'}
+                ? '计算 Break-Even Ratio (BER) = $444,400 ÷ $547,200 (EGI) = 81.21%\n计算 Break-Even Occupancy (BEO) = $444,400 ÷ $576,000 (GPI) = 77.15%'
+                : locale === 'es'
+                ? 'Cálculo: Break-Even Ratio (BER) = $444,400 ÷ $547,200 (EGI) = 81.21%\nBreak-Even Occupancy (BEO) = $444,400 ÷ $576,000 (GPI) = 77.15%'
+                : locale === 'pt'
+                ? 'Cálculo: Break-Even Ratio (BER) = $444,400 ÷ $547,200 (EGI) = 81.21%\nBreak-Even Occupancy (BEO) = $444,400 ÷ $576,000 (GPI) = 77.15%'
+                : 'Calculation: Break-Even Ratio (BER) = $444,400 ÷ $547,200 (EGI) = 81.21%\nBreak-Even Occupancy (BEO) = $444,400 ÷ $576,000 (GPI) = 77.15%'}
             </p>
-            <p className="mt-2">
+            <p className="mt-2 text-xs sm:text-sm text-slate-600">
+              {isZh
+                ? '【解读】：BEO 为 77.15%，表明该公寓只需保持 78% 的出租率即可维持自负盈亏；而 BER 为 81.21%，处于放贷机构普遍认可的 80%–85% 安全合规区间内。'
+                : 'Interpretation: A BEO of 77.15% confirms the property only needs ~78% physical occupancy to avoid negative cash flow. A BER of 81.21% satisfies institutional underwriting criteria (typical <=85% hurdle).'}
+            </p>
+          </div>
+        </section>
+
+        {/* Worked Example 2: Industrial Flex Park under Rate Stress */}
+        <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
+          <h2 className="text-xl font-bold text-slate-900">
+            {isZh
+              ? '商业地产分析案例 2：30,000 平方英尺工业园区 (加息环境下的承销压力测试)'
+              : locale === 'es'
+              ? 'Caso Práctico 2: Parque Industrial de 30,000 sq ft (Estrés Financiero)'
+              : locale === 'pt'
+              ? 'Exemplo Prático 2: Parque Industrial de 30,000 sq ft (Estresse Financeiro)'
+              : 'Worked Example 2: 30,000 Sq Ft Industrial Flex Park Under Rate Stress'}
+          </h2>
+          <div className="bg-slate-50 border-l-4 border-amber-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-3">
+            <p>
+              {isZh
+                ? '评估一处总买价为 $3,200,000 的工业物流园区，在高利率环境（7.25% 固定贷款）下的盈亏平衡临界点：'
+                : 'Evaluate a $3,200,000 multi-tenant light industrial flex park sized during an elevated interest rate environment (7.25% debt):'}
+            </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>
+                {isZh ? '年潜在总租金 (GPI): $360,000 | 7% 结构性空置后 EGI: $334,800' : 'Gross Potential Income: $360,000 | EGI at 7% vacancy: $334,800'}
+              </li>
+              <li>
+                {isZh ? '年度运营费用 (OpEx): $85,000 | 贷款年本息还款 ($2,240,000 贷款按 7.25% 利率): $194,548' : 'Annual Operating Expenses: $85,000 | Annual Debt Service ($2,240,000 loan at 7.25%): $194,548'}
+              </li>
+              <li>
+                {isZh ? '年度必须支付总现金 (Total Outlays) = $85,000 + $194,548 = $279,548' : 'Total Required Fixed Outlays: $85,000 + $194,548 = $279,548'}
+              </li>
+            </ul>
+            <p className="font-semibold text-slate-900 mt-2 whitespace-pre-line">
+              {isZh
+                ? '计算 Break-Even Ratio (BER) = $279,548 ÷ $334,800 (EGI) = 83.50%\n计算 Break-Even Occupancy (BEO) = $279,548 ÷ $360,000 (GPI) = 77.65%'
+                : 'Calculation: Break-Even Ratio (BER) = $279,548 ÷ $334,800 (EGI) = 83.50%\nBreak-Even Occupancy (BEO) = $279,548 ÷ $360,000 (GPI) = 77.65%'}
+            </p>
+            <p className="mt-2 text-xs sm:text-sm text-slate-600">
+              {isZh
+                ? '【压力测试启示】：当借贷利率上升 75 bps 时，年还贷额增加导致 BER 快速逼近 83.50%，接近贷方 85% 的红线上限。若未来再招商免租期延长，现金流将极易转负。'
+                : 'Stress Testing Takeaway: Higher debt costs push the BER up to 83.50%, uncomfortably close to the 85% lender threshold. Any leasing delay or insurance escalation would rapidly threaten debt solvency.'}
+            </p>
+          </div>
+        </section>
+
+        {/* How to Interpret Break-Even Results */}
+        <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
+          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-emerald-600" />
+            {isZh
+              ? '结果深度解读：放贷机构的三级风险警戒线与承销准则'
+              : locale === 'es'
+              ? 'Cómo Interpretar el Resultado: Umbrales Bancarios y Zonas de Riesgo'
+              : locale === 'pt'
+              ? 'Como Interpretar o Resultado: Critérios Bancários e Zonas de Risco'
+              : 'How to Interpret Break-Even Results (Lender Underwriting Tiers)'}
+          </h2>
+          <div className="space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
+            <p>
+              {isZh
+                ? '商业地产放贷机构与机构投资人评估 Break-Even 指标时，通常将结果划分为三个核心风险区间：'
+                : 'Commercial mortgage lenders (including Fannie Mae, Freddie Mac, and life companies) categorize break-even metrics into three primary underwriting safety zones:'}
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+              <div className="bg-emerald-50/70 p-4 rounded-xl border border-emerald-200 space-y-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-900 block flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  {isZh ? '绿色安全区 (BER < 80%)' : 'Green Safe Tier (BER < 80%)'}
+                </span>
+                <p className="text-emerald-950">
+                  {isZh
+                    ? '资产具备极其坚实的抗跌缓冲垫层。即使遭遇宏观衰退或局部租户退租，营业收入仍有 20% 以上的下降空间才触及违约线。此类资产最容易获得优厚贷款利率与高 LTV。'
+                    : 'The property has an exceptional cash flow cushion. Physical occupancy can drop significantly before the asset faces debt distress. Lenders readily approve optimal interest spreads and maximum leverage.'}
+                </p>
+              </div>
+
+              <div className="bg-amber-50/70 p-4 rounded-xl border border-amber-200 space-y-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-amber-900 block flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                  {isZh ? '黄色警示区 (BER 80%–85%)' : 'Yellow Caution Tier (BER 80%–85%)'}
+                </span>
+                <p className="text-amber-950">
+                  {isZh
+                    ? '符合大多数成熟商业银行的进场基准，但风险缓冲偏薄。若遇地税重估、财产险大幅涨价或单个大租户违约，现金流易转负。银行常要求设立 3–6 个月的偿债专项准备金 (Debt Service Escrow)。'
+                    : 'Acceptable for stabilized properties in primary submarkets, but safety margins are thin. Property tax reassessments or insurance spikes can push the deal into deficit. Lenders often require 3–6 months P&I escrows.'}
+                </p>
+              </div>
+
+              <div className="bg-rose-50/70 p-4 rounded-xl border border-rose-200 space-y-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-rose-900 block flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                  {isZh ? '红色高危区 (BER > 85%)' : 'Red High-Risk Tier (BER > 85%)'}
+                </span>
+                <p className="text-rose-950">
+                  {isZh
+                    ? '高杠杆或高营运成本资产的危险状态。轻微的空置率上升即可引发房贷断供。商业贷方通常会直接拒贷，或强制要求买方追加 10%–15% 的首付款以压缩贷款本金。'
+                    : 'Severe default vulnerability. A 5% dip in physical occupancy immediately wipes out operating cash flow. Conventional lenders will decline financing or require additional equity down payment to de-leverage.'}
+                </p>
+              </div>
+            </div>
+
+            <p className="pt-2">
               {isZh ? (
                 <>
-                  这意味着该物业的 BEO 为 78.02%，即至少需要维持约 78% 的入住率才能刚好覆盖所有开销和房贷。而 BER 为 82.13%，满足本站示例设定的 ≤85% 测算参考规则（注意：这并非全行业通用的贷方审批门槛，实际要求取决于贷款机构与产品）。想在一个页面上同时测试入住率、利率和{' '}
-                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
-                    Cash-on-Cash 收益率
+                  在测试物业盈亏平衡缓冲的同时，建议横向对比其资本化率是否在行业健康合理范畴内。请查阅我们的{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    全美主要商业物业 Cap Rate 基准参考表
                   </Link>
-                  {' '}之间的联动关系吗？请使用{' '}
+                  ，核对目标资产的无杠杆回报水平与市场均值。同时使用{' '}
                   <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">
                     Deal Analyzer 综合尽调工具
-                  </Link>。
-                </>
-              ) : isEs ? (
-                <>
-                  Esto significa que el BEO es del 78.02%, por lo que la propiedad necesita mantener al menos un 78% de ocupación solo para cubrir sus costos y la hipoteca. El BER es del 82.13%, cumpliendo con la regla de referencia ilustrativa de ≤85% de este sitio (tenga en cuenta que no es un umbral bancario universal; los requisitos reales varían según el prestamista). Para comprobar cómo interactúan en una sola página la ocupación, las tasas y el{' '}
-                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
-                    rendimiento Cash-on-Cash
                   </Link>
-                  , pruebe nuestra herramienta integral{' '}
-                  <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">
-                    Deal Analyzer
-                  </Link>.
-                </>
-              ) : isPt ? (
-                <>
-                  Isso significa que o BEO é de 78.02%, portanto o imóvel precisa manter pelo menos cerca de 78% de ocupação apenas para pagar as despesas e o financiamento. O BER é de 82.13%, atendendo à regra de referência ilustrativa de ≤85% deste site (note que isso não é um limite bancário universal; as exigências reais variam por credor). Para testar como interagem em uma única página a ocupação, os juros e o{' '}
-                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
-                    retorno Cash-on-Cash
-                  </Link>
-                  , utilize nossa ferramenta completa{' '}
-                  <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">
-                    Deal Analyzer
-                  </Link>.
+                  {' '}对空置率与利率进行联动压力测试。
                 </>
               ) : (
                 <>
-                  This means the BEO is 78.02%, so the property needs to maintain at least 78% occupancy just to pay its bills. The BER is 82.13%, satisfying this tool&apos;s illustrative ≤85% reference rule (note that this is not a universal lender threshold; actual requirements vary by lender and debt program). To test how changes in occupancy, rates, and{' '}
-                  <Link href={`/${locale}/calculators/cash-on-cash/`} className="text-emerald-600 hover:underline font-semibold">
-                    Cash-on-Cash Return
+                  When testing your break-even margin against market distress, compare the asset&apos;s unlevered yield against peer sectors in our{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    National Cap Rate Benchmarks Master Reference Table
                   </Link>
-                  {' '}interact together on one page, try our comprehensive{' '}
+                  , or run multidimensional stress tests in our{' '}
                   <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">
-                    Deal Analyzer tool
+                    Deal Analyzer Tool
                   </Link>.
-                </>
-              )}
-            </p>
-            <p className="mt-3 text-xs sm:text-sm text-slate-600">
-              {isZh ? (
-                <>
-                  在评估物业的盈亏平衡点与抗风险垫层时，还应关注资产类别对应的风险收益定价。可查阅我们的{' '}
-                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
-                    全美主要物业 Cap Rate 基准参考表
-                  </Link>
-                  ，核对目标资产的无杠杆回报水平与市场均值。
-                </>
-              ) : isEs ? (
-                <>
-                  Al analizar los márgenes de seguridad operativa y la ocupación de equilibrio, compare el rendimiento subyacente con nuestra{' '}
-                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
-                    Tabla Maestra de Cap Rates Nacionales
-                  </Link>
-                  .
-                </>
-              ) : isPt ? (
-                <>
-                  Ao avaliar as margens de segurança operacional e o ponto de equilíbrio, compare o rendimento com a nossa{' '}
-                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
-                    Tabela Mestra de Cap Rates Nacionais
-                  </Link>
-                  .
-                </>
-              ) : (
-                <>
-                  When assessing whether your break-even occupancy leaves adequate margin against local market distress, compare the asset&apos;s unlevered yield against peer sectors in our{' '}
-                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
-                    National Cap Rate Benchmarks Reference Table
-                  </Link>
-                  .
                 </>
               )}
             </p>

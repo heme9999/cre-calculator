@@ -843,9 +843,9 @@ try {
       // 3. Chinese Header Deal Analyzer pill does not duplicate "综合"
       assert.ok(headerFile.includes("{isZh ? 'Deal Analyzer' : nav.dealAnalyzer}"), 'Header must not duplicate 综合 in ZH Deal Analyzer pill');
 
-      // 4. Portuguese Cap Rate page uses comma thousand separators ($2,800,000 / $227,200) matching calculator summary
-      assert.ok(capRatePage.includes('Preço de aquisição: $2,800,000'), 'PT Cap Rate page must use $2,800,000');
-      assert.ok(!capRatePage.includes('$2.800.000'), 'PT Cap Rate page must not mix dot-thousand $2.800.000');
+      // 4. Portuguese Cap Rate page uses comma thousand separators ($3,850,000 / $269,500) matching calculator summary
+      assert.ok(capRatePage.includes('Preço de aquisição: $3,850,000'), 'PT Cap Rate page must use $3,850,000');
+      assert.ok(!capRatePage.includes('$3.850.000'), 'PT Cap Rate page must not mix dot-thousand $3.850.000');
       assert.ok(!/\$\d{1,3}(?:\.\d{3})+/.test(ptFile), 'pt.ts must not contain dot-separated USD currency strings');
 
       // 5. Cap Rate, Loan Payment, and Deal Analyzer inputs format numbers with thousand commas

@@ -52,9 +52,9 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
           const parsed = JSON.parse(saved);
           if (parsed.propertyPrice) setPropertyPrice(Number(parsed.propertyPrice));
           if (parsed.units) setUnits(Number(parsed.units));
-          if (parsed.monthlyRentPerUnit) setMonthlyRentPerUnit(Number(parsed.monthlyRentPerUnit));
-          if (parsed.vacancyRate !== undefined) setVacancyRate(Number(parsed.vacancyRate));
-          if (parsed.opexRatio !== undefined) setOpexRatio(Number(parsed.opexRatio));
+          if (parsed.monthlyRentPerUnit) setMonthlyRentPerUnit(Math.round(Number(parsed.monthlyRentPerUnit) * 100) / 100);
+          if (parsed.vacancyRate !== undefined) setVacancyRate(Math.round(Number(parsed.vacancyRate) * 100) / 100);
+          if (parsed.opexRatio !== undefined) setOpexRatio(Math.round(Number(parsed.opexRatio) * 100) / 100);
           if (parsed.maxLtv !== undefined) setMaxLtv(Number(parsed.maxLtv));
           if (parsed.minDscr !== undefined) setMinDscr(Number(parsed.minDscr));
           if (parsed.interestRate !== undefined) setInterestRate(Number(parsed.interestRate));
@@ -379,13 +379,15 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-slate-400 font-semibold">$</span>
                   <input
-                    type="number"
-                    step="0.01"
+                    type="text"
+                    inputMode="decimal"
                     aria-label={isZh ? '每户平均月租金' : isEs ? 'Alquiler Mensual Medio por Unidad' : isPt ? 'Aluguel Médio Mensal por Unidade' : 'Average Monthly Rent per Unit'}
-                    aria-valuenow={Math.round(monthlyRentPerUnit * 100) / 100}
-                    aria-valuetext={`$${(Math.round(monthlyRentPerUnit * 100) / 100).toFixed(2)}`}
-                    value={monthlyRentPerUnit ? Number((Math.round(monthlyRentPerUnit * 100) / 100).toFixed(2)) : ''}
-                    onChange={(e) => setMonthlyRentPerUnit(Math.max(0, Math.round(Number(e.target.value) * 100) / 100))}
+                    value={monthlyRentPerUnit ? monthlyRentPerUnit.toFixed(2) : ''}
+                    onChange={(e) => {
+                      const clean = e.target.value.replace(/[^0-9.]/g, '');
+                      const val = parseFloat(clean);
+                      setMonthlyRentPerUnit(isNaN(val) ? 0 : Math.round(val * 100) / 100);
+                    }}
                     className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
                   />
                 </div>
@@ -410,10 +412,15 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                 </label>
                 <div className="flex items-center gap-4">
                   <input
-                    type="number"
-                    step="0.1"
-                    value={opexRatio || ''}
-                    onChange={(e) => setOpexRatio(Math.max(0, Math.min(95, Number(e.target.value))))}
+                    type="text"
+                    inputMode="decimal"
+                    aria-label={isZh ? '运营费用比率' : isEs ? 'Ratio de Gastos Operativos' : isPt ? 'Razão de Despesas Operacionais' : 'Operating Expense Ratio'}
+                    value={opexRatio ? opexRatio.toFixed(2) : ''}
+                    onChange={(e) => {
+                      const clean = e.target.value.replace(/[^0-9.]/g, '');
+                      const val = parseFloat(clean);
+                      setOpexRatio(isNaN(val) ? 0 : Math.min(95, Math.round(val * 100) / 100));
+                    }}
                     className="w-32 px-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
                   />
                   <div className="text-xs text-slate-500">

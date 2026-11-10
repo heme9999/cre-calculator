@@ -7,6 +7,8 @@ import { Exchange1031Timeline } from './visuals/Exchange1031Timeline';
 import { CalculatorActionBar } from './common/CalculatorActionBar';
 import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
 
+export type FilingStatus = 'single' | 'married_jointly' | 'married_separately' | 'head_of_household';
+
 interface Props {
   locale: string;
 }
@@ -21,6 +23,7 @@ export function Exchange1031Calculator({ locale }: Props) {
   const [originalCostBasis, setOriginalCostBasis] = useState<number>(565000);
   const [depreciationTaken, setDepreciationTaken] = useState<number>(132000);
   const [sellingExpenses, setSellingExpenses] = useState<number>(52500);
+  const [filingStatus, setFilingStatus] = useState<FilingStatus>('single');
   const [capitalGainsRate, setCapitalGainsRate] = useState<number>(15);
   const [stateTaxRate, setStateTaxRate] = useState<number>(5);
 
@@ -50,6 +53,7 @@ export function Exchange1031Calculator({ locale }: Props) {
           if (parsed.originalCostBasis !== undefined && !isNaN(Number(parsed.originalCostBasis))) setOriginalCostBasis(Number(parsed.originalCostBasis));
           if (parsed.depreciationTaken !== undefined && !isNaN(Number(parsed.depreciationTaken))) setDepreciationTaken(Number(parsed.depreciationTaken));
           if (parsed.sellingExpenses !== undefined && !isNaN(Number(parsed.sellingExpenses))) setSellingExpenses(Number(parsed.sellingExpenses));
+          if (parsed.filingStatus) setFilingStatus(parsed.filingStatus as FilingStatus);
           if (parsed.capitalGainsRate !== undefined && !isNaN(Number(parsed.capitalGainsRate))) setCapitalGainsRate(Number(parsed.capitalGainsRate));
           if (parsed.stateTaxRate !== undefined && !isNaN(Number(parsed.stateTaxRate))) setStateTaxRate(Number(parsed.stateTaxRate));
           if (parsed.closingDate) setClosingDate(parsed.closingDate);
@@ -72,6 +76,7 @@ export function Exchange1031Calculator({ locale }: Props) {
         originalCostBasis,
         depreciationTaken,
         sellingExpenses,
+        filingStatus,
         capitalGainsRate,
         stateTaxRate,
         closingDate,
@@ -79,7 +84,15 @@ export function Exchange1031Calculator({ locale }: Props) {
     } catch {
       // ignore
     }
-  }, [salePrice, originalCostBasis, depreciationTaken, sellingExpenses, capitalGainsRate, stateTaxRate, closingDate]);
+  }, [salePrice, originalCostBasis, depreciationTaken, sellingExpenses, filingStatus, capitalGainsRate, stateTaxRate, closingDate]);
+
+  const niitThresholdMap: Record<FilingStatus, number> = {
+    single: 200000,
+    married_jointly: 250000,
+    married_separately: 125000,
+    head_of_household: 200000,
+  };
+  const currentNiitThreshold = niitThresholdMap[filingStatus];
 
   // Rigorous Tax Breakdown Calculations
   // 1. Adjusted Cost Basis = Original Purchase Basis - Cumulative Depreciation
@@ -337,27 +350,44 @@ export function Exchange1031Calculator({ locale }: Props) {
               </div>
             </div>
 
-            {/* Tax Rates Configuration */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            {/* Tax Rates & Filing Status Configuration */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+              <div>
+                <label htmlFor="filing-status-select" className="block text-xs font-bold text-slate-700 mb-1.5">
+                  {isZh ? '纳税申报身份 (Filing Status)' : isEs ? 'Estado de Declaración (Filing Status)' : isPt ? 'Status de Declaração (Filing Status)' : 'Tax Filing Status'}
+                </label>
+                <select
+                  id="filing-status-select"
+                  value={filingStatus}
+                  onChange={(e) => setFilingStatus(e.target.value as FilingStatus)}
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-900 font-semibold text-xs sm:text-sm bg-white focus:outline-none focus:border-emerald-500"
+                >
+                  <option value="single">Single ($200k NIIT)</option>
+                  <option value="married_jointly">Married Filing Jointly ($250k NIIT)</option>
+                  <option value="married_separately">Married Filing Separately ($125k NIIT)</option>
+                  <option value="head_of_household">Head of Household ($200k NIIT)</option>
+                </select>
+              </div>
+
               <div>
                 <label htmlFor="capital-gains-rate-select" className="block text-xs font-bold text-slate-700 mb-1.5">
-                  {isZh ? '联邦长期资本利得税率' : isEs ? 'Tasa Federal Ganancias de Capital' : isPt ? 'Alíquota Federal de Ganho de Capital' : 'Federal Long-Term Capital Gains Rate'}
+                  {isZh ? '联邦长期资本利得税率' : isEs ? 'Tasa Federal Ganancias Capital' : isPt ? 'Alíquota Federal de Capital' : 'Federal Capital Gains Rate'}
                 </label>
                 <select
                   id="capital-gains-rate-select"
                   value={capitalGainsRate}
                   onChange={(e) => setCapitalGainsRate(Number(e.target.value))}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-900 font-semibold text-sm bg-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-900 font-semibold text-xs sm:text-sm bg-white focus:outline-none focus:border-emerald-500"
                 >
-                  <option value={15}>15% (Standard Bracket · Rev. Proc. 2025-32)</option>
+                  <option value={15}>15% (Standard · Rev. Proc. 2025-32)</option>
                   <option value={20}>20% (High Income Bracket)</option>
-                  <option value={0}>0% (Low Income Exemption Bracket)</option>
+                  <option value={0}>0% (Low Income Exemption)</option>
                 </select>
               </div>
 
               <div>
                 <label htmlFor="state-tax-rate-input" className="block text-xs font-bold text-slate-700 mb-1.5">
-                  {isZh ? '州所得税率 (示例 5%)' : isEs ? 'Tasa Impositiva Estatal (Ej. 5%)' : isPt ? 'Alíquota Estadual (Ex. 5%)' : 'State Tax Rate (Example 5% Illustrative)'}
+                  {isZh ? '州所得税率 (示例 5%)' : isEs ? 'Tasa Estatal (Ej. 5%)' : isPt ? 'Alíquota Estadual (Ex. 5%)' : 'State Tax Rate (5% Example)'}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <input
@@ -482,7 +512,11 @@ export function Exchange1031Calculator({ locale }: Props) {
                   <span className="font-bold text-slate-900">{formatCurrency(Math.round(federalCapitalGainsTax))}</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-100 pl-2">
-                  <span>{isZh ? '6. 净投资所得税 NIIT (3.8% · IRC §1411):' : '6. Net Investment Income Tax (3.8% NIIT):'}</span>
+                  <span>
+                    {isZh
+                      ? `6. 净投资所得税 NIIT (3.8% · 申报门槛 $${(currentNiitThreshold / 1000).toFixed(0)}k):`
+                      : `6. Net Investment Income Tax (3.8% NIIT · $${(currentNiitThreshold / 1000).toFixed(0)}k threshold):`}
+                  </span>
                   <span className="font-bold text-slate-900">{formatCurrency(Math.round(niitTax))}</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-100 pl-2">

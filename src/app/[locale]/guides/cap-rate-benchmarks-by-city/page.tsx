@@ -158,7 +158,7 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
               </tr>
               <tr className="hover:bg-slate-50/80 transition-colors">
                 <td className="py-3 px-4 font-bold text-slate-900">Single-Tenant Net Lease / NNN (单租户净租)</td>
-                <td className="py-3 px-4 font-bold text-emerald-700 whitespace-nowrap bg-emerald-50/40">6.70% – 8.00%</td>
+                <td className="py-3 px-4 font-bold text-emerald-700 whitespace-nowrap bg-emerald-50/40">6.00% – 8.00%</td>
                 <td className="py-3 px-4 text-xs text-slate-600">The Boulder Group Q3 2026</td>
                 <td className="py-3 px-4 text-slate-600 leading-relaxed text-xs">National overall net lease average is 6.92%. Investment-grade corporate credit (CVS, Walgreens, Dollar General) prices 6.00%–6.75%; franchisee guarantees trade 7.25%–8.00%+.</td>
               </tr>

@@ -3,8 +3,70 @@ import { SITE_URL } from '@/lib/constants';
 
 export const dynamic = 'force-static';
 
+function getLastModified(url: string): Date {
+  // Freshly updated in latest overhaul (Nov 10, 2026)
+  if (
+    url.endsWith('/') && (url.endsWith('/en/') || url.endsWith('/zh/') || url.endsWith('/es/') || url.endsWith('/pt/')) ||
+    url.includes('/calculators/1031-exchange/') ||
+    url.includes('/calculators/dscr/') ||
+    url.includes('/calculators/cap-rate/') ||
+    url.includes('/calculators/break-even-ratio/') ||
+    url.includes('/calculators/apartment-building-mortgage/') ||
+    url.includes('/guides/dscr-complete-guide/') ||
+    url.includes('/guides/loan-amortization-and-balloon-loans/') ||
+    url.includes('/guides/cash-on-cash-vs-irr/') ||
+    url.includes('/guides/buy-vs-lease-decision-framework/') ||
+    url.includes('/guides/commercial-real-estate-underwriting-checklist/') ||
+    url.includes('/guides/cap-rate-benchmarks-by-city/') && !url.includes('-cap-rates/') ||
+    url.includes('/about/') ||
+    url.includes('/contact/') ||
+    url.includes('/privacy/') ||
+    url.includes('/glossary/irr/') ||
+    url.includes('/glossary/grm/')
+  ) {
+    return new Date('2026-11-10T08:00:00.000Z');
+  }
+
+  // Refined calculation tools & core workflows (Nov 9, 2026)
+  if (
+    url.includes('/calculators/cash-on-cash/') ||
+    url.includes('/calculators/loan-payment/') ||
+    url.includes('/calculators/noi/') ||
+    url.includes('/calculators/lease-vs-buy/') ||
+    url.includes('/calculators/free-rental-property-calculator/') ||
+    url.includes('/tools/deal-analyzer/') ||
+    url.includes('/terms/')
+  ) {
+    return new Date('2026-11-09T12:00:00.000Z');
+  }
+
+  // Niche property cap rate calculators & editorial guidelines (Nov 8, 2026)
+  if (
+    url.includes('/calculators/multifamily-cap-rate/') ||
+    url.includes('/calculators/industrial-cap-rate/') ||
+    url.includes('/calculators/self-storage-cap-rate/') ||
+    url.includes('/calculators/nnn-lease-cap-rate/') ||
+    url.includes('/editorial/') ||
+    url.includes('/guides/how-to-underwrite-a-deal/')
+  ) {
+    return new Date('2026-11-08T10:00:00.000Z');
+  }
+
+  // City cap rate benchmark guides & reference guides (Nov 7, 2026)
+  if (
+    url.includes('-cap-rates/') ||
+    url.includes('/guides/how-to-estimate-noi/') ||
+    url.includes('/guides/1031-exchange-process/') ||
+    url.endsWith('/guides/')
+  ) {
+    return new Date('2026-11-07T14:00:00.000Z');
+  }
+
+  // Baseline glossary definitions & index (Nov 6, 2026)
+  return new Date('2026-11-06T09:00:00.000Z');
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastmod = new Date('2026-11-10');
 
   // 172 High-Value Indexable URLs (43 Symmetrical Routes × 4 Locales: en, zh, es, pt)
   const approvedUrls = [
@@ -191,6 +253,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return approvedUrls.map((url) => ({
     url,
-    lastModified: lastmod,
+    lastModified: getLastModified(url),
   }));
 }
