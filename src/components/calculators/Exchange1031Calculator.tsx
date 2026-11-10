@@ -23,7 +23,7 @@ export function Exchange1031Calculator({ locale }: Props) {
   const [originalCostBasis, setOriginalCostBasis] = useState<number>(565000);
   const [depreciationTaken, setDepreciationTaken] = useState<number>(132000);
   const [sellingExpenses, setSellingExpenses] = useState<number>(52500);
-  const [filingStatus, setFilingStatus] = useState<FilingStatus>('single');
+  const [filingStatus, setFilingStatus] = useState<FilingStatus>('married_jointly');
   const [sellerMagi, setSellerMagi] = useState<number>(650000);
   const [capitalGainsRate, setCapitalGainsRate] = useState<number>(15);
   const [stateTaxRate, setStateTaxRate] = useState<number>(5);
@@ -396,8 +396,12 @@ export function Exchange1031Calculator({ locale }: Props) {
                 </div>
                 <p className="text-[10px] text-slate-500 mt-1">
                   {isZh
-                    ? `NIIT 计税基数: min(利得, MAGI - 门槛) = $${formatNumberWithCommas(Math.round(niitSubjectGain))}`
-                    : `NIIT taxable base: min(gain, MAGI − $${(currentNiitThreshold / 1000).toFixed(0)}k threshold) = $${formatNumberWithCommas(Math.round(niitSubjectGain))}`}
+                    ? `NIIT 计税基数: min(利得, MAGI - 门槛) = $${niitSubjectGain > 0 ? formatNumberWithCommas(Math.round(niitSubjectGain)) : '0'}`
+                    : isEs
+                    ? `Base imponible NIIT: min(ganancia, MAGI − $${(currentNiitThreshold / 1000).toFixed(0)}k umbral) = $${niitSubjectGain > 0 ? formatNumberWithCommas(Math.round(niitSubjectGain)) : '0'}`
+                    : isPt
+                    ? `Base tributável NIIT: min(ganho, MAGI − $${(currentNiitThreshold / 1000).toFixed(0)}k limite) = $${niitSubjectGain > 0 ? formatNumberWithCommas(Math.round(niitSubjectGain)) : '0'}`
+                    : `NIIT taxable base: min(gain, MAGI − $${(currentNiitThreshold / 1000).toFixed(0)}k threshold) = $${niitSubjectGain > 0 ? formatNumberWithCommas(Math.round(niitSubjectGain)) : '0'}`}
                 </p>
               </div>
 
@@ -546,8 +550,12 @@ export function Exchange1031Calculator({ locale }: Props) {
                 <div className="flex justify-between py-1 border-b border-slate-100 pl-2">
                   <span>
                     {isZh
-                      ? `6. 净投资所得税 NIIT (3.8% · 计税基数 $${formatNumberWithCommas(Math.round(niitSubjectGain))}):`
-                      : `6. Net Investment Income Tax (3.8% NIIT · on $${formatNumberWithCommas(Math.round(niitSubjectGain))} base):`}
+                      ? `6. 净投资所得税 NIIT (3.8% · 计税基数 $${niitSubjectGain > 0 ? formatNumberWithCommas(Math.round(niitSubjectGain)) : '0'}):`
+                      : isEs
+                      ? `6. Impuesto sobre la Renta Neta de Inversión (3.8% NIIT · base de $${niitSubjectGain > 0 ? formatNumberWithCommas(Math.round(niitSubjectGain)) : '0'}):`
+                      : isPt
+                      ? `6. Imposto sobre Renda Líquida de Investimento (3,8% NIIT · base de $${niitSubjectGain > 0 ? formatNumberWithCommas(Math.round(niitSubjectGain)) : '0'}):`
+                      : `6. Net Investment Income Tax (3.8% NIIT · on $${niitSubjectGain > 0 ? formatNumberWithCommas(Math.round(niitSubjectGain)) : '0'} base):`}
                   </span>
                   <span className="font-bold text-slate-900">{formatCurrency(Math.round(niitTax))}</span>
                 </div>

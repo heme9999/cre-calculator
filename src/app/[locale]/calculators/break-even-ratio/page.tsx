@@ -279,7 +279,7 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3 mt-4">
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-emerald-600" />
-                <span>{isZh ? '核心辨析：Break-Even Ratio (BER) 与 Break-Even Occupancy (BEO) 的本质差异' : 'Critical Distinction: Break-Even Ratio (BER) vs. Break-Even Occupancy (BEO)'}</span>
+                <span>{isZh ? '承销机制与实战：BER 与 BEO 的本质差异 (Underwriting Mechanics: BER vs. BEO & 5 Balance-Sheet Levers)' : 'Underwriting Mechanics: BER vs. BEO & 5 Balance-Sheet Levers'}</span>
               </h3>
               <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                 {isZh
@@ -320,8 +320,8 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
                 <li>
                   <strong>{isZh ? '延长贷款本息摊销期 (Amortization Extension)' : 'Extend Amortization Period'}:</strong>{' '}
                   {isZh
-                    ? '将商业贷款摊销期限由 25 年拉长至 30 年，可直接削减约 8% 的年度债务本息支出，瞬间降低 BER 约 3–5 个百分点。'
-                    : 'Negotiating a 30-year amortization schedule instead of 25 years reduces annual debt service by approximately 7%–9%, instantly lowering your BER by 300 to 500 basis points.'}
+                    ? '将商业贷款摊销期限由 25 年拉长至 30 年，可直接削减约 6%–8%（例如 6.5% 利率下约 6.4%）的年度债务本息支出，降低 BER 约 300–500 个基点（3–5 个百分点）。'
+                    : 'Negotiating a 30-year amortization schedule instead of 25 years reduces annual debt service by approximately 6%–8% (e.g. 6.4% on a 6.50% commercial loan), lowering your BER by 300 to 500 basis points.'}
                 </li>
                 <li>
                   <strong>{isZh ? '争取前期只还息期 (Interest-Only Period)' : 'Secure Initial Interest-Only (IO) Terms'}:</strong>{' '}
