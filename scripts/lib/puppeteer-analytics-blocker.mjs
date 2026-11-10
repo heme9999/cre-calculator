@@ -192,6 +192,19 @@ export async function setupAnalyticsBlocker(page, options = {}) {
     }
 
     const url = req.url();
+    if (url.includes('googlesyndication.com') || url.includes('doubleclick.net')) {
+      req.respond({
+        status: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/javascript',
+        },
+        contentType: 'application/javascript',
+        body: 'window.adsbygoogle = window.adsbygoogle || [];',
+      });
+      return;
+    }
+
     if (isCloudflareAnalyticsRequest(url, allowedOrigins)) {
       let isRum = false;
       try {

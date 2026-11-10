@@ -107,6 +107,57 @@ export default async function FreeRentalPropertyCalculatorPage({ params }: PageP
           </div>
         </section>
 
+        {/* Guide Banner */}
+        <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs">
+          <div className="space-y-2 max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300">
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>
+                {isZh
+                  ? '租金与全周期尽调'
+                  : isEs
+                  ? 'Guía de Rendimientos'
+                  : isPt
+                  ? 'Guia de Retornos'
+                  : 'Rental Returns & Underwriting'}
+              </span>
+            </span>
+            <h3 className="text-xl font-bold text-slate-900">
+              {isZh
+                ? '从首年租金收益到 5 年全周期回报：如何科学评估出租物业'
+                : isEs
+                ? 'Rendimiento en Efectivo vs TIR: Cómo Evaluar Propiedades en Alquiler'
+                : isPt
+                ? 'Retorno em Caixa vs TIR: Como Avaliar Imóveis para Locação'
+                : 'Rental Cash Flow vs Whole-Life Return: How to Underwrite Rentals'}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              {isZh
+                ? '不仅看每月的净现金流，更要结合本金摊销积累、折旧抵税和内部收益率 (IRR) 进行综合压力测试。'
+                : isEs
+                ? 'Analice el flujo de caja mensual junto con la amortización del préstamo, beneficios fiscales y la TIR proyectada.'
+                : isPt
+                ? 'Analise o fluxo de caixa mensal juntamente com a amortização da dívida, benefícios fiscais e a TIR projetada.'
+                : 'Look beyond monthly cash flow to assess principal paydown, depreciation tax shields, and 5-year IRR.'}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/guides/cash-on-cash-vs-irr/`}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shrink-0 transition-all shadow-xs"
+          >
+            <span>
+              {isZh
+                ? '阅读回报对比指南'
+                : isEs
+                ? 'Leer Guía de Retornos'
+                : isPt
+                ? 'Ler Guia de Retornos'
+                : 'Read Returns Guide'}
+            </span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </section>
+
         {/* FAQs */}
         <section className="space-y-4">
           <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">

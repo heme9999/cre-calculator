@@ -230,6 +230,57 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* Guide Banner */}
+        <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs">
+          <div className="space-y-2 max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300">
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>
+                {isZh
+                  ? '专业承销清单'
+                  : isEs
+                  ? 'Lista de Verificación de Suscripción'
+                  : isPt
+                  ? 'Checklist de Subscrição'
+                  : 'Underwriting Best Practices'}
+              </span>
+            </span>
+            <h3 className="text-xl font-bold text-slate-900">
+              {isZh
+                ? '商业地产尽调与承销实用核对清单'
+                : isEs
+                ? 'Lista de Verificación para Evaluación de Bienes Raíces Comerciales'
+                : isPt
+                ? 'Checklist de Avaliação para Imóveis Comerciais'
+                : 'Commercial Real Estate Underwriting Checklist'}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              {isZh
+                ? '涵盖实地物业核查、租约审查、债务覆盖压力测试与盈亏平衡出租率标准的完整尽调指引。'
+                : isEs
+                ? 'Una lista completa que abarca inspección física, auditoría de contratos, pruebas de estrés y ocupación de equilibrio.'
+                : isPt
+                ? 'Um guia completo cobrindo vistoria do imóvel, auditoria de contratos, estresse de dívida e taxa de equilíbrio.'
+                : 'A comprehensive checklist covering property inspections, lease audits, debt service stress tests, and break-even occupancy targets.'}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/guides/commercial-real-estate-underwriting-checklist/`}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shrink-0 transition-all shadow-xs"
+          >
+            <span>
+              {isZh
+                ? '阅读尽调清单'
+                : isEs
+                ? 'Leer Lista de Verificación'
+                : isPt
+                ? 'Ler Checklist'
+                : 'Read Underwriting Checklist'}
+            </span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </section>
+
         {/* FAQs */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
           <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">

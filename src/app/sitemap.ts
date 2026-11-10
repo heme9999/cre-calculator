@@ -4,9 +4,11 @@ import { SITE_URL } from '@/lib/constants';
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  // High-Value Indexable URLs (152 URLs total: 38 Core Routes × 4 Locales: en, zh, es, pt)
+  const lastmod = new Date('2026-11-10');
+
+  // 172 High-Value Indexable URLs (43 Symmetrical Routes × 4 Locales: en, zh, es, pt)
   const approvedUrls = [
-    // English Pages (38)
+    // English Pages (43)
     `${SITE_URL}/en/`,
     `${SITE_URL}/en/calculators/cap-rate/`,
     `${SITE_URL}/en/calculators/noi/`,
@@ -45,8 +47,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/en/guides/cap-rate-benchmarks-by-city/miami-fl-cap-rates/`,
     `${SITE_URL}/en/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/`,
     `${SITE_URL}/en/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/`,
+    `${SITE_URL}/en/about/`,
+    `${SITE_URL}/en/privacy/`,
+    `${SITE_URL}/en/contact/`,
+    `${SITE_URL}/en/editorial/`,
+    `${SITE_URL}/en/terms/`,
 
-    // Chinese Pages (38)
+    // Chinese Pages (43)
     `${SITE_URL}/zh/`,
     `${SITE_URL}/zh/calculators/cap-rate/`,
     `${SITE_URL}/zh/calculators/noi/`,
@@ -85,8 +92,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/zh/guides/cap-rate-benchmarks-by-city/miami-fl-cap-rates/`,
     `${SITE_URL}/zh/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/`,
     `${SITE_URL}/zh/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/`,
+    `${SITE_URL}/zh/about/`,
+    `${SITE_URL}/zh/privacy/`,
+    `${SITE_URL}/zh/contact/`,
+    `${SITE_URL}/zh/editorial/`,
+    `${SITE_URL}/zh/terms/`,
 
-    // Spanish Pages (38)
+    // Spanish Pages (43)
     `${SITE_URL}/es/`,
     `${SITE_URL}/es/calculators/cap-rate/`,
     `${SITE_URL}/es/calculators/noi/`,
@@ -125,8 +137,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/es/guides/cap-rate-benchmarks-by-city/miami-fl-cap-rates/`,
     `${SITE_URL}/es/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/`,
     `${SITE_URL}/es/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/`,
+    `${SITE_URL}/es/about/`,
+    `${SITE_URL}/es/privacy/`,
+    `${SITE_URL}/es/contact/`,
+    `${SITE_URL}/es/editorial/`,
+    `${SITE_URL}/es/terms/`,
 
-    // Portuguese Pages (38)
+    // Portuguese Pages (43)
     `${SITE_URL}/pt/`,
     `${SITE_URL}/pt/calculators/cap-rate/`,
     `${SITE_URL}/pt/calculators/noi/`,
@@ -165,9 +182,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/pt/guides/cap-rate-benchmarks-by-city/miami-fl-cap-rates/`,
     `${SITE_URL}/pt/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/`,
     `${SITE_URL}/pt/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/`,
+    `${SITE_URL}/pt/about/`,
+    `${SITE_URL}/pt/privacy/`,
+    `${SITE_URL}/pt/contact/`,
+    `${SITE_URL}/pt/editorial/`,
+    `${SITE_URL}/pt/terms/`,
   ];
 
   return approvedUrls.map((url) => ({
     url,
+    lastModified: lastmod,
   }));
 }

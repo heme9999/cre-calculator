@@ -131,6 +131,57 @@ export default async function ApartmentBuildingMortgagePage({ params }: PageProp
           </div>
         </section>
 
+        {/* Guide Banner */}
+        <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs">
+          <div className="space-y-2 max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300">
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>
+                {isZh
+                  ? '多户住宅信贷指南'
+                  : isEs
+                  ? 'Guía de Crédito Multifamiliar'
+                  : isPt
+                  ? 'Guia de Crédito Multifamiliar'
+                  : 'Multifamily Lending Guide'}
+              </span>
+            </span>
+            <h3 className="text-xl font-bold text-slate-900">
+              {isZh
+                ? 'DSCR (偿债备付率) 完全指南：机构放贷审核核心'
+                : isEs
+                ? 'Guía Completa de DSCR: Criterios Clave de Prestamistas'
+                : isPt
+                ? 'Guia Completo de DSCR: Critérios Centrais dos Credores'
+                : 'The Complete Guide to DSCR: How Commercial Lenders Underwrite Loans'}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              {isZh
+                ? '了解银行和 Agency 机构在审批公寓贷款时如何计算 DSCR、最低覆盖要求以及贷款额度反推。'
+                : isEs
+                ? 'Aprenda cómo los bancos e instituciones calculan el DSCR, los umbrales mínimos y la capacidad máxima de endeudamiento.'
+                : isPt
+                ? 'Entenda como os bancos calculam o DSCR, as exigências mínimas e a capacidade máxima de financiamento.'
+                : 'Learn how commercial lenders evaluate debt coverage, agency thresholds, and maximum borrowing capacity.'}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/guides/dscr-complete-guide/`}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shrink-0 transition-all shadow-xs"
+          >
+            <span>
+              {isZh
+                ? '阅读 DSCR 指南'
+                : isEs
+                ? 'Leer Guía de DSCR'
+                : isPt
+                ? 'Ler Guia de DSCR'
+                : 'Read DSCR Guide'}
+            </span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </section>
+
         {/* FAQs */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
           <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">

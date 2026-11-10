@@ -159,6 +159,57 @@ export default async function LoanPaymentPage({ params }: PageProps) {
             </p>
           </div>
         </section>
+        {/* Guide Banner */}
+        <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs">
+          <div className="space-y-2 max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300">
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>
+                {isZh
+                  ? '深度商业贷款指南'
+                  : isEs
+                  ? 'Guía Completa de Financiamiento'
+                  : isPt
+                  ? 'Guia Completo de Financiamento'
+                  : 'Comprehensive Debt Guide'}
+              </span>
+            </span>
+            <h3 className="text-xl font-bold text-slate-900">
+              {isZh
+                ? '商业地产贷款摊销与气球贷完全解析'
+                : isEs
+                ? 'Amortización de Préstamos Comerciales y Pagos Balloon'
+                : isPt
+                ? 'Amortização de Empréstimos Comerciais e Pagamentos Balão'
+                : 'Commercial Loan Amortization and Balloon Loans'}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              {isZh
+                ? '详解等额本息与等额本金差异、气球尾款测算公式、再融资风险控制，以及摊销年限如何影响全周期权益积累。'
+                : isEs
+                ? 'Comprenda las cuotas fijas vs decrecientes, el cálculo del saldo balloon y cómo estructurar el financiamiento comercial de forma segura.'
+                : isPt
+                ? 'Entenda parcelas fixas vs decrescentes, o cálculo do saldo balão e como estruturar o crédito comercial de forma segura.'
+                : 'Understand fixed vs declining payments, balloon payoff calculations, refinancing risk, and how amortization schedules shape equity accumulation over time.'}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/guides/loan-amortization-and-balloon-loans/`}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shrink-0 transition-all shadow-xs"
+          >
+            <span>
+              {isZh
+                ? '阅读摊销指南'
+                : isEs
+                ? 'Leer Guía de Amortización'
+                : isPt
+                ? 'Ler Guia de Amortização'
+                : 'Read Amortization Guide'}
+            </span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </section>
+
         {/* FAQs */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
           <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">

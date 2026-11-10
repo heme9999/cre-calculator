@@ -49,6 +49,11 @@ export const MULTILINGUAL_CORE_ROUTES = new Set([
   'guides/cap-rate-benchmarks-by-city/miami-fl-cap-rates',
   'guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates',
   'guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates',
+  'about',
+  'privacy',
+  'contact',
+  'editorial',
+  'terms',
 ]);
 
 function getOgImageInfo(path: string, locale: 'en' | 'zh' | 'es' | 'pt', title: string) {

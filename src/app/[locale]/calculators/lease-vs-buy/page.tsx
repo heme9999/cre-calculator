@@ -107,6 +107,57 @@ export default async function LeaseVsBuyPage({ params }: PageProps) {
           <LeaseVsBuyScenarioComparison locale={locale} />
         </section>
 
+        {/* Guide Banner */}
+        <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs">
+          <div className="space-y-2 max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300">
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>
+                {isZh
+                  ? '战略决策指南'
+                  : isEs
+                  ? 'Guía Estratégica'
+                  : isPt
+                  ? 'Guia Estratégico'
+                  : 'Strategic CRE Guide'}
+              </span>
+            </span>
+            <h3 className="text-xl font-bold text-slate-900">
+              {isZh
+                ? '商业地产买 vs 租决策分析框架'
+                : isEs
+                ? 'Marco de Decisión: Comprar vs Alquilar Propiedades Comerciales'
+                : isPt
+                ? 'Estrutura de Decisão: Comprar vs Alugar Imóveis Comerciais'
+                : 'Commercial Real Estate Buy vs Lease Decision Framework'}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              {isZh
+                ? '系统评估资金机会成本、折旧抵税、改造成本风险与 5–10 年全周期财务净现值 (NPV) 对比。'
+                : isEs
+                ? 'Un marco financiero completo que evalúa costo de oportunidad, deducciones fiscales, capex y valor presente neto.'
+                : isPt
+                ? 'Uma análise financeira detalhada avaliando custo de oportunidade, benefícios fiscais e valor presente líquido.'
+                : 'A step-by-step financial framework evaluating opportunity cost, tax deductions, capital expenditure risk, and 5-to-10 year hold scenarios.'}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/guides/buy-vs-lease-decision-framework/`}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shrink-0 transition-all shadow-xs"
+          >
+            <span>
+              {isZh
+                ? '阅读决策指南'
+                : isEs
+                ? 'Leer Marco de Decisión'
+                : isPt
+                ? 'Ler Estrutura de Decisão'
+                : 'Read Decision Framework'}
+            </span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </section>
+
         {/* FAQs */}
         <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
           <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">

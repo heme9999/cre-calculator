@@ -2,6 +2,7 @@ import React from 'react';
 import '../globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { AdSlot } from '@/components/common/AdSlot';
 import { LOCALES } from '@/lib/constants';
 
 export function generateStaticParams() {
@@ -35,6 +36,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <Header locale={locale} />
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
           {children}
+          <AdSlot className="mt-12" />
         </main>
         <Footer locale={locale} />
       </body>

@@ -3,11 +3,12 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { getContent } from '@/content';
 import { LOCALES, SITE_URL, resolveLocale } from '@/lib/constants';
-import { JsonLd, getWebSiteJsonLd } from '@/components/seo/JsonLd';
-import { Calculator, ArrowRight, TrendingUp, ShieldCheck, Zap, Workflow, BookOpen, Layers } from 'lucide-react';
+import { JsonLd, getWebSiteJsonLd, getFaqPageJsonLd } from '@/components/seo/JsonLd';
+import { Calculator, ArrowRight, TrendingUp, ShieldCheck, Zap, Workflow, BookOpen, Layers, HelpCircle, CheckCircle, UserCheck, Calendar } from 'lucide-react';
 import { DealAnalyzerPreview } from '@/components/home/DealAnalyzerPreview';
 import { buildSeoMetadata } from '@/lib/seo';
 import { getUiTranslations } from '@/lib/translations';
+import { HOME_SECTIONS } from '@/content/homeSections';
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
@@ -37,6 +38,8 @@ export default async function HomePage({ params }: PageProps) {
   const home = content.home;
   const t = getUiTranslations(locale);
 
+  const homeData = HOME_SECTIONS[locale] || HOME_SECTIONS.en;
+
   const jsonLdData = getWebSiteJsonLd(
     content.nav.brandName,
     home.metaDescription,
@@ -44,9 +47,12 @@ export default async function HomePage({ params }: PageProps) {
     locale
   );
 
+  const faqJsonLd = getFaqPageJsonLd(homeData.faqs);
+
   return (
     <div className="space-y-16 py-4">
       <JsonLd data={jsonLdData} />
+      <JsonLd data={faqJsonLd} />
 
       {/* Hero Section */}
       <section className="pt-2">
@@ -322,6 +328,94 @@ export default async function HomePage({ params }: PageProps) {
               </div>
               <h3 className="text-base font-bold text-white">{item.title}</h3>
               <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Developer Attribution & Verification Standards */}
+      <section className="bg-white rounded-3xl p-8 md:p-10 border border-slate-200 shadow-xs space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
+          <div className="space-y-2 max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+              <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>{homeData.developer.badge}</span>
+            </span>
+            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              {homeData.developer.title}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 font-medium">
+              {homeData.developer.subtitle}
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 shrink-0 self-start md:self-auto">
+            <Calendar className="w-3.5 h-3.5 text-emerald-600" />
+            <span>{homeData.developer.reviewDate}</span>
+          </div>
+        </div>
+
+        <p className="text-sm text-slate-700 leading-relaxed max-w-3xl">
+          {homeData.developer.intro}
+        </p>
+
+        <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 space-y-3">
+          <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 text-emerald-600" />
+            <span>{homeData.developer.standardsTitle}</span>
+          </h3>
+          <ul className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-slate-600 leading-relaxed">
+            {homeData.developer.standardsPoints.map((pt, idx) => (
+              <li key={idx} className="bg-white p-3 rounded-xl border border-slate-200/60 shadow-xs">
+                {pt}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2 border-t border-slate-100 text-xs">
+          <p className="text-slate-500 italic max-w-xl">
+            {homeData.developer.disclaimer}
+          </p>
+          <div className="flex flex-wrap items-center gap-3 font-semibold text-emerald-700 shrink-0">
+            <Link href={`/${locale}/about/`} className="hover:underline">
+              {homeData.developer.aboutLinkText}
+            </Link>
+            <span>·</span>
+            <Link href={`/${locale}/editorial/`} className="hover:underline">
+              {homeData.developer.editorialLinkText}
+            </Link>
+            <span>·</span>
+            <Link href={`/${locale}/contact/`} className="hover:underline">
+              {homeData.developer.contactLinkText}
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Frequently Asked Questions */}
+      <section className="space-y-6">
+        <div className="border-b border-slate-200 pb-4">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-600 mb-1">
+            <HelpCircle className="w-4 h-4 text-emerald-600" />
+            <span>FAQ</span>
+          </div>
+          <h2 className="text-2xl font-extrabold text-slate-900">
+            {homeData.faqTitle}
+          </h2>
+          <p className="text-sm text-slate-600 mt-1">
+            {homeData.faqSubtitle}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4">
+          {homeData.faqs.map((faq, idx) => (
+            <div key={idx} className="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-xs space-y-2">
+              <h3 className="font-bold text-slate-900 text-base">
+                {faq.question}
+              </h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                {faq.answer}
+              </p>
             </div>
           ))}
         </div>

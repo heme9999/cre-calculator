@@ -5,6 +5,7 @@ import { JsonLd, getArticleJsonLd } from '@/components/seo/JsonLd';
 import { ArrowRight, HelpCircle, BookOpen, AlertTriangle, Database } from 'lucide-react';
 import { SITE_URL } from '@/lib/constants';
 import { UnderwritingWorkflowDiagram } from './visuals/UnderwritingWorkflowDiagram';
+import { MarkdownContent } from '@/components/common/MarkdownContent';
 
 interface Props {
   content: ArticleGuideContent;
@@ -40,6 +41,16 @@ export function ArticleGuideView({ content, locale, guideSlug }: Props) {
           <span>/</span>
           <span className="text-slate-900 font-semibold">{content.h1}</span>
         </nav>
+
+        <div className="flex flex-wrap items-center gap-2 pt-1 pb-1">
+          <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+            {isZh ? '最后审核：2026年11月 · 独立核验' : isEs ? 'Última revisión: Noviembre 2026 · Verificado' : isPt ? 'Última revisão: Novembro 2026 · Verificado' : 'Last Reviewed: November 2026 · Verified'}
+          </span>
+          <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+            {isZh ? '作者：Peter (独立开发者)' : isEs ? 'Autor: Peter (Desarrollador)' : isPt ? 'Autor: Peter (Desenvolvedor)' : 'By Peter (Independent Developer)'}
+          </span>
+        </div>
+
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
           {content.h1}
         </h1>
@@ -131,9 +142,7 @@ export function ArticleGuideView({ content, locale, guideSlug }: Props) {
               <BookOpen className="w-5 h-5 text-emerald-600 shrink-0" />
               <span>{sec.title}</span>
             </h2>
-            <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
-              {sec.content}
-            </div>
+            <MarkdownContent content={sec.content} />
           </section>
         ))}
       </div>

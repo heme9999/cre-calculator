@@ -133,6 +133,11 @@ const MULTILINGUAL_CORE_PATHS = new Set([
   '/guides/cap-rate-benchmarks-by-city/miami-fl-cap-rates/',
   '/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/',
   '/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/',
+  '/about/',
+  '/privacy/',
+  '/contact/',
+  '/editorial/',
+  '/terms/',
 ]);
 
 const APPROVED_SITEMAP_URLS = new Set(

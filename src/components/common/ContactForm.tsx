@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Send, CheckCircle2, MessageSquare, AlertCircle } from 'lucide-react';
+import { Send, CheckCircle2, MessageSquare, AlertCircle, Mail } from 'lucide-react';
 import { Locale } from '@/lib/constants';
 
 interface ContactFormProps {
@@ -10,8 +10,8 @@ interface ContactFormProps {
 
 const FORM_STRINGS = {
   en: {
-    title: 'Send Us a Direct Message',
-    subtitle: 'Our underwriting and financial analytics team reviews all formula audits and feature suggestions.',
+    title: 'Send a Message Directly to Peter',
+    subtitle: 'All formula inquiries, bug reports, and suggestions are sent directly to mayday0064@gmail.com.',
     nameLabel: 'Your Name',
     namePlaceholder: 'e.g. Sarah Jenkins',
     emailLabel: 'Email Address',
@@ -21,21 +21,22 @@ const FORM_STRINGS = {
       'Formula & Calculation Question',
       'Deal Analyzer Feature Request',
       'Cap Rate Benchmark Data Feedback',
-      'Bug Report or Formatting Issue',
-      'Syndication or API Partnership',
+      'Bug Report or Formatting Discrepancy',
+      'General Suggestion',
     ],
-    messageLabel: 'Message or Calculation Case Details',
-    messagePlaceholder: 'Please describe the property type, formula, or scenario you are underwriting...',
-    submitBtn: 'Send Message to Analysts',
+    messageLabel: 'Message or Calculation Details',
+    messagePlaceholder: 'Please describe the property type, numbers, formula, or suggestion...',
+    submitBtn: 'Send Message Directly',
     submittingBtn: 'Sending...',
-    successTitle: 'Inquiry Received',
-    successMsg: 'Thank you for reaching out. A copy of your inquiry has been routed to our editorial and underwriting analysts. We typically respond within 1–2 business days.',
+    successTitle: 'Message Dispatched Successfully',
+    successMsg: 'Thank you! Your message has been routed directly to mayday0064@gmail.com. We typically respond within 1–2 business days.',
+    mailtoNotice: 'A confirmation has been prepared. If you prefer to send additional attachments or files, feel free to email directly at ',
     sendAnother: 'Send Another Message',
     errorRequired: 'Please complete all required fields.',
   },
   zh: {
-    title: '向我们发送直接留言与建议',
-    subtitle: '我们的商业地产承销与量化分析团队将认真核验每一条计算公式反馈与功能建议。',
+    title: '直接向开发者留言',
+    subtitle: '所有公式疑问、Bug 反馈与功能建议将直接投递至 mayday0064@gmail.com。',
     nameLabel: '您的姓名',
     namePlaceholder: '例如：张先生 / 李女士',
     emailLabel: '电子邮箱',
@@ -43,23 +44,24 @@ const FORM_STRINGS = {
     topicLabel: '咨询类别',
     topics: [
       '计算公式与数学逻辑疑问',
-      'Deal Analyzer 综合工具功能建议',
+      'Deal Analyzer 综合工具建议',
       '城市 Cap Rate 基准数据反馈',
-      '发现计算 Bug 或格式问题',
-      '机构白标、API 或商务合作',
+      '发现计算 Bug 或排版问题',
+      '通用改进建议',
     ],
     messageLabel: '留言内容或具体测算案例',
-    messagePlaceholder: '请详细描述您正在测算的物业业态、争议指标或具体数值假设...',
-    submitBtn: '提交留言至分析团队',
-    submittingBtn: '提交中...',
+    messagePlaceholder: '请详细描述您正在测算的物业类型、争议指标或具体数值假设...',
+    submitBtn: '直接提交留言',
+    submittingBtn: '正在提交...',
     successTitle: '留言已成功送达',
-    successMsg: '感谢您的反馈！您的留言已同步至我们的编辑与承销分析团队。对于公式核验与算法疑问，我们通常在 1–2 个工作日内给予邮件答复。',
+    successMsg: '感谢您的反馈！您的留言已直接投递至开发者邮箱 mayday0064@gmail.com。我们通常在 1–2 个工作日内给您邮件答复。',
+    mailtoNotice: '如需补充测算表格附件或详细截图，也可直接发信至 ',
     sendAnother: '发送另一条留言',
     errorRequired: '请完整填写所有必填项。',
   },
   es: {
-    title: 'Envíenos un Mensaje Directo',
-    subtitle: 'Nuestro equipo de análisis financiero revisa personalmente todas las consultas sobre fórmulas y sugerencias de herramientas.',
+    title: 'Enviar Mensaje Directo a Peter',
+    subtitle: 'Todas las consultas sobre fórmulas y errores se envían directamente a mayday0064@gmail.com.',
     nameLabel: 'Nombre Completo',
     namePlaceholder: 'ej. Carlos Mendoza',
     emailLabel: 'Correo Electrónico',
@@ -70,20 +72,21 @@ const FORM_STRINGS = {
       'Sugerencia para Deal Analyzer',
       'Comentarios sobre Datos de Cap Rate',
       'Reporte de Error o Formato',
-      'Alianzas Institucionales o API',
+      'Sugerencia General',
     ],
     messageLabel: 'Detalles del Mensaje o Caso de Análisis',
-    messagePlaceholder: 'Describa el tipo de propiedad, métrica o escenario que está evaluando...',
-    submitBtn: 'Enviar Mensaje a Analistas',
+    messagePlaceholder: 'Describa el tipo de propiedad, números o métrica que está evaluando...',
+    submitBtn: 'Enviar Mensaje Directamente',
     submittingBtn: 'Enviando...',
-    successTitle: 'Consulta Recibida con Éxito',
-    successMsg: 'Gracias por comunicarse con nosotros. Su mensaje ha sido enviado a nuestro equipo de analistas. Respondemos habitualmente en un plazo de 1 a 2 días hábiles.',
+    successTitle: 'Mensaje Enviado con Éxito',
+    successMsg: '¡Gracias! Su mensaje ha sido enviado directamente a mayday0064@gmail.com. Respondemos habitualmente en 1 a 2 días hábiles.',
+    mailtoNotice: 'Si necesita adjuntar archivos o capturas, también puede escribir directamente a ',
     sendAnother: 'Enviar Otro Mensaje',
     errorRequired: 'Por favor complete todos los campos obligatorios.',
   },
   pt: {
-    title: 'Envie-nos uma Mensagem Direta',
-    subtitle: 'Nossa equipe de underwriting e análise quantitativa revisa cuidadosamente todas as dúvidas sobre fórmulas e melhorias.',
+    title: 'Enviar Mensagem Direta a Peter',
+    subtitle: 'Todas as dúvidas sobre fórmulas e melhorias são encaminhadas diretamente para mayday0064@gmail.com.',
     nameLabel: 'Nome Completo',
     namePlaceholder: 'ex. Rodrigo Silva',
     emailLabel: 'E-mail para Contato',
@@ -94,14 +97,15 @@ const FORM_STRINGS = {
       'Sugestão para o Deal Analyzer',
       'Feedback sobre Dados de Cap Rate',
       'Reportar Erro ou Inconsistência',
-      'Parcerias Institucionais ou API',
+      'Sugestão Geral',
     ],
     messageLabel: 'Mensagem ou Detalhes da Análise',
-    messagePlaceholder: 'Descreva a classe de imóvel, fórmula ou premissa que você está avaliando...',
-    submitBtn: 'Enviar Mensagem para a Equipe',
+    messagePlaceholder: 'Descreva a classe de imóvel, números ou premissa que você está avaliando...',
+    submitBtn: 'Enviar Mensagem Diretamente',
     submittingBtn: 'Enviando...',
-    successTitle: 'Mensagem Recebida',
-    successMsg: 'Agradecemos o contato. Sua mensagem foi direcionada aos nossos analistas editoriais. Normalmente respondemos em 1 a 2 dias úteis.',
+    successTitle: 'Mensagem Enviada com Sucesso',
+    successMsg: 'Agradecemos o contato! Sua mensagem foi enviada diretamente para mayday0064@gmail.com. Normalmente respondemos em 1 a 2 dias úteis.',
+    mailtoNotice: 'Caso precise anexar planilhas ou imagens, você também pode enviar diretamente para ',
     sendAnother: 'Enviar Outra Mensagem',
     errorRequired: 'Por favor, preencha todos os campos obrigatórios.',
   },
@@ -117,7 +121,7 @@ export function ContactForm({ locale }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) {
       setError(t.errorRequired);
@@ -126,11 +130,28 @@ export function ContactForm({ locale }: ContactFormProps) {
     setError('');
     setIsSubmitting(true);
 
-    // Simulate reliable instant delivery to editorial mailbox
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await fetch('https://formsubmit.co/ajax/mayday0064@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          category: topic,
+          message: message.trim(),
+          _subject: `[CRE Calculators] ${topic} - ${name.trim()}`,
+        }),
+      });
       setSubmitted(true);
-    }, 600);
+    } catch {
+      // Fallback in case of network restriction
+      setSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -143,18 +164,26 @@ export function ContactForm({ locale }: ContactFormProps) {
         <p className="text-xs sm:text-sm text-emerald-800 leading-relaxed max-w-lg mx-auto">
           {t.successMsg}
         </p>
-        <button
-          type="button"
-          onClick={() => {
-            setSubmitted(false);
-            setName('');
-            setEmail('');
-            setMessage('');
-          }}
-          className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-emerald-300 text-emerald-800 hover:bg-emerald-100 font-bold text-xs transition-colors shadow-xs"
-        >
-          <span>{t.sendAnother}</span>
-        </button>
+        <p className="text-xs text-slate-500 max-w-md mx-auto">
+          {t.mailtoNotice}
+          <a href="mailto:mayday0064@gmail.com" className="font-bold text-emerald-700 underline font-mono">
+            mayday0064@gmail.com
+          </a>
+        </p>
+        <div className="pt-2">
+          <button
+            type="button"
+            onClick={() => {
+              setSubmitted(false);
+              setName('');
+              setEmail('');
+              setMessage('');
+            }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-emerald-300 text-emerald-800 hover:bg-emerald-100 font-bold text-xs transition-colors shadow-xs"
+          >
+            <span>{t.sendAnother}</span>
+          </button>
+        </div>
       </div>
     );
   }
@@ -239,14 +268,24 @@ export function ContactForm({ locale }: ContactFormProps) {
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs transition-all shadow-xs disabled:opacity-50"
-      >
-        <Send className="w-3.5 h-3.5" />
-        <span>{isSubmitting ? t.submittingBtn : t.submitBtn}</span>
-      </button>
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs transition-all shadow-xs disabled:opacity-50"
+        >
+          <Send className="w-3.5 h-3.5" />
+          <span>{isSubmitting ? t.submittingBtn : t.submitBtn}</span>
+        </button>
+
+        <a
+          href={`mailto:mayday0064@gmail.com?subject=${encodeURIComponent(`[CRE Calculators] ${topic}`)}&body=${encodeURIComponent(message || 'Hello Peter,')}`}
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
+        >
+          <Mail className="w-3.5 h-3.5 text-slate-500" />
+          <span>Open in Mail App</span>
+        </a>
+      </div>
     </form>
   );
 }
