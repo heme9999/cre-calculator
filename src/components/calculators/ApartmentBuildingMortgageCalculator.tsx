@@ -118,8 +118,8 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
       setInterestRate(6.5);
       setAmortizationYears(25);
     } else if (preset === 'hud') {
-      setMaxLtv(85);
-      setMinDscr(1.176);
+      setMaxLtv(87);
+      setMinDscr(1.15);
       setInterestRate(5.85);
       setAmortizationYears(35);
     }
@@ -194,13 +194,13 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
   // Benchmarked Multi-Program Comparison
   const agencyResult = calculateLoanForProgram(propertyPrice, noi, 80, 1.25, 6.25, 30);
   const bankResult = calculateLoanForProgram(propertyPrice, noi, 75, 1.25, 6.5, 25);
-  const hudResult = calculateLoanForProgram(propertyPrice, noi, 85, 1.176, 5.85, 35);
+  const hudResult = calculateLoanForProgram(propertyPrice, noi, 87, 1.15, 5.85, 35);
 
   const handleExportCsv = () => {
     const rows = [
       { metric: 'Property Purchase Price', value: propertyPrice },
       { metric: 'Multifamily Units', value: units },
-      { metric: 'Average Monthly Rent per Unit', value: monthlyRentPerUnit },
+      { metric: 'Average Monthly Rent per Unit', value: Number((Math.round(monthlyRentPerUnit * 100) / 100).toFixed(2)) },
       { metric: 'Gross Potential Income (GPI)', value: Math.round(grossPotentialIncome) },
       { metric: 'Vacancy Rate', value: `${vacancyRate}%` },
       { metric: 'Effective Gross Income (EGI)', value: Math.round(effectiveGrossIncome) },
@@ -381,8 +381,11 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                   <input
                     type="number"
                     step="0.01"
-                    value={monthlyRentPerUnit || ''}
-                    onChange={(e) => setMonthlyRentPerUnit(Math.max(0, Number(e.target.value)))}
+                    aria-label={isZh ? '每户平均月租金' : isEs ? 'Alquiler Mensual Medio por Unidad' : isPt ? 'Aluguel Médio Mensal por Unidade' : 'Average Monthly Rent per Unit'}
+                    aria-valuenow={Math.round(monthlyRentPerUnit * 100) / 100}
+                    aria-valuetext={`$${(Math.round(monthlyRentPerUnit * 100) / 100).toFixed(2)}`}
+                    value={monthlyRentPerUnit ? Number((Math.round(monthlyRentPerUnit * 100) / 100).toFixed(2)) : ''}
+                    onChange={(e) => setMonthlyRentPerUnit(Math.max(0, Math.round(Number(e.target.value) * 100) / 100))}
                     className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
                   />
                 </div>

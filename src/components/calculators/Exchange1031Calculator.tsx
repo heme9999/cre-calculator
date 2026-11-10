@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { formatCurrency, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
-import { Calculator, ShieldAlert, CheckCircle2 } from 'lucide-react';
+import { Calculator, ShieldAlert, CheckCircle2, Calendar, FileText, ArrowRight, Layers } from 'lucide-react';
 import { Exchange1031Timeline } from './visuals/Exchange1031Timeline';
 import { CalculatorActionBar } from './common/CalculatorActionBar';
 import { generateCalculatorCsv, downloadCsv, saveCalculationToLocal } from '@/lib/calculatorExport';
@@ -16,11 +16,20 @@ export function Exchange1031Calculator({ locale }: Props) {
   const isEs = locale === 'es';
   const isPt = locale === 'pt';
 
-  // Inputs
-  const [salePrice, setSalePrice] = useState<number>(2500000);
-  const [originalCostBasis, setOriginalCostBasis] = useState<number>(1200000);
-  const [sellingExpenses, setSellingExpenses] = useState<number>(150000);
-  const [taxRate, setTaxRate] = useState<number>(25);
+  // Default worked example: $875k sale price, $565k purchase basis, $132k depreciation, $52.5k expenses
+  const [salePrice, setSalePrice] = useState<number>(875000);
+  const [originalCostBasis, setOriginalCostBasis] = useState<number>(565000);
+  const [depreciationTaken, setDepreciationTaken] = useState<number>(132000);
+  const [sellingExpenses, setSellingExpenses] = useState<number>(52500);
+  const [capitalGainsRate, setCapitalGainsRate] = useState<number>(15);
+  const [stateTaxRate, setStateTaxRate] = useState<number>(5);
+
+  // Closing Date for 45/180 Day Deadline Calculator
+  const getTodayDateString = () => {
+    const today = new Date();
+    return today.toISOString().slice(0, 10);
+  };
+  const [closingDate, setClosingDate] = useState<string>(getTodayDateString());
 
   const isInitializedRef = useRef(false);
 
@@ -39,8 +48,11 @@ export function Exchange1031Calculator({ locale }: Props) {
           const parsed = JSON.parse(saved);
           if (parsed.salePrice !== undefined && !isNaN(Number(parsed.salePrice))) setSalePrice(Number(parsed.salePrice));
           if (parsed.originalCostBasis !== undefined && !isNaN(Number(parsed.originalCostBasis))) setOriginalCostBasis(Number(parsed.originalCostBasis));
+          if (parsed.depreciationTaken !== undefined && !isNaN(Number(parsed.depreciationTaken))) setDepreciationTaken(Number(parsed.depreciationTaken));
           if (parsed.sellingExpenses !== undefined && !isNaN(Number(parsed.sellingExpenses))) setSellingExpenses(Number(parsed.sellingExpenses));
-          if (parsed.taxRate !== undefined && !isNaN(Number(parsed.taxRate))) setTaxRate(Number(parsed.taxRate));
+          if (parsed.capitalGainsRate !== undefined && !isNaN(Number(parsed.capitalGainsRate))) setCapitalGainsRate(Number(parsed.capitalGainsRate));
+          if (parsed.stateTaxRate !== undefined && !isNaN(Number(parsed.stateTaxRate))) setStateTaxRate(Number(parsed.stateTaxRate));
+          if (parsed.closingDate) setClosingDate(parsed.closingDate);
         }
       } catch {
         // ignore
@@ -58,26 +70,75 @@ export function Exchange1031Calculator({ locale }: Props) {
       sessionStorage.setItem(getStorageKey(), JSON.stringify({
         salePrice,
         originalCostBasis,
+        depreciationTaken,
         sellingExpenses,
-        taxRate,
+        capitalGainsRate,
+        stateTaxRate,
+        closingDate,
       }));
     } catch {
       // ignore
     }
-  }, [salePrice, originalCostBasis, sellingExpenses, taxRate]);
+  }, [salePrice, originalCostBasis, depreciationTaken, sellingExpenses, capitalGainsRate, stateTaxRate, closingDate]);
 
-  // Calculations
+  // Rigorous Tax Breakdown Calculations
+  // 1. Adjusted Cost Basis = Original Purchase Basis - Cumulative Depreciation
+  const adjustedCostBasis = Math.max(0, originalCostBasis - depreciationTaken);
+
+  // 2. Net Sales Proceeds = Sale Price - Selling Expenses
   const netSaleProceeds = Math.max(0, salePrice - sellingExpenses);
-  const realizedGain = Math.max(0, netSaleProceeds - originalCostBasis);
-  const deferredTax = realizedGain * (taxRate / 100);
+
+  // 3. Total Realized Capital Gain = Net Sales Proceeds - Adjusted Basis
+  const realizedGain = Math.max(0, netSaleProceeds - adjustedCostBasis);
+
+  // 4. §1250 Depreciation Recapture Gain (lesser of total realized gain or depreciation taken, per Thomson Reuters / IRC §1250)
+  const depreciationRecaptureGain = Math.min(realizedGain, Math.max(0, depreciationTaken));
+
+  // 5. Remaining Long-Term Capital Gain
+  const remainingCapitalGain = Math.max(0, realizedGain - depreciationRecaptureGain);
+
+  // 6. Tax Breakdown Items
+  const depreciationRecaptureTax = depreciationRecaptureGain * 0.25; // Flat 25% federal §1250 recapture
+  const federalCapitalGainsTax = remainingCapitalGain * (capitalGainsRate / 100); // 0%, 15%, or 20%
+  const niitTax = realizedGain * 0.038; // Net Investment Income Tax 3.8% under IRC §1411
+  const stateTax = realizedGain * (stateTaxRate / 100); // Illustrative State income tax rate
+
+  // 7. Total Tax Liability & Effective Combined Rate
+  const totalTaxLiability = depreciationRecaptureTax + federalCapitalGainsTax + niitTax + stateTax;
+  const effectiveTaxRate = realizedGain > 0 ? (totalTaxLiability / realizedGain) * 100 : 0;
+  const deferredTax = totalTaxLiability;
+
+  // Deadline Calculations (Calendar Days)
+  const calculateDeadlineDate = (baseDateStr: string, daysToAdd: number): string => {
+    try {
+      const parts = baseDateStr.split('-');
+      if (parts.length === 3) {
+        const d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+        d.setDate(d.getDate() + daysToAdd);
+        return d.toLocaleDateString(locale === 'zh' ? 'zh-CN' : locale === 'es' ? 'es-ES' : locale === 'pt' ? 'pt-BR' : 'en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        });
+      }
+    } catch {
+      // fallback
+    }
+    return '';
+  };
+
+  const idDeadlineDate = calculateDeadlineDate(closingDate, 45);
+  const exchangeDeadlineDate = calculateDeadlineDate(closingDate, 180);
 
   const handleShareDeal = async () => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams();
     params.set('sp', salePrice.toString());
     params.set('basis', originalCostBasis.toString());
+    params.set('dep', depreciationTaken.toString());
     params.set('exp', sellingExpenses.toString());
-    params.set('rate', taxRate.toString());
+    params.set('cgr', capitalGainsRate.toString());
+    params.set('st', stateTaxRate.toString());
     const shareUrl = `${window.location.origin}${window.location.pathname}#${params.toString()}`;
     try {
       await navigator.clipboard.writeText(shareUrl);
@@ -89,28 +150,46 @@ export function Exchange1031Calculator({ locale }: Props) {
   const handleExportCsv = () => {
     const rows = [
       { metric: 'Relinquished Property Sale Price', value: salePrice },
-      { metric: 'Original Cost Basis', value: originalCostBasis },
+      { metric: 'Original Purchase Cost Basis', value: originalCostBasis },
+      { metric: 'Cumulative Depreciation Taken', value: depreciationTaken },
+      { metric: 'Adjusted Cost Basis', value: Math.round(adjustedCostBasis) },
       { metric: 'Selling Expenses & Fees', value: sellingExpenses },
-      { metric: 'Net Sales Proceeds', value: netSaleProceeds },
-      { metric: 'Realized Capital Gain', value: Math.round(realizedGain) },
-      { metric: 'Estimated Combined Tax Rate', value: `${taxRate}%` },
-      { metric: 'Estimated Deferred Tax Liability', value: Math.round(deferredTax) },
-      { metric: 'Target Replacement Property Value', value: salePrice },
-      { metric: 'Target Reinvestment Equity', value: netSaleProceeds },
+      { metric: 'Net Sales Proceeds', value: Math.round(netSaleProceeds) },
+      { metric: 'Total Realized Capital Gain', value: Math.round(realizedGain) },
+      { metric: '§1250 Depreciation Recapture Gain (25% rate)', value: Math.round(depreciationRecaptureGain) },
+      { metric: '§1250 Recapture Tax (25%)', value: Math.round(depreciationRecaptureTax) },
+      { metric: 'Remaining Long-Term Capital Gain', value: Math.round(remainingCapitalGain) },
+      { metric: `Federal Capital Gains Tax (${capitalGainsRate}%)`, value: Math.round(federalCapitalGainsTax) },
+      { metric: 'Net Investment Income Tax (NIIT 3.8%)', value: Math.round(niitTax) },
+      { metric: `State Tax (${stateTaxRate}% illustrative)`, value: Math.round(stateTax) },
+      { metric: 'Total Estimated Tax Liability', value: Math.round(totalTaxLiability) },
+      { metric: 'Effective Combined Tax Rate', value: `${effectiveTaxRate.toFixed(2)}%` },
+      { metric: 'Total Deferred Tax via 1031 Exchange', value: Math.round(deferredTax) },
+      { metric: 'Relinquished Closing Date', value: closingDate },
+      { metric: '45-Day Identification Deadline', value: idDeadlineDate },
+      { metric: '180-Day Exchange Completion Deadline', value: exchangeDeadlineDate },
+      { metric: '100% Tax Deferral Replacement Value Target', value: salePrice },
+      { metric: '100% Tax Deferral Reinvestment Equity Target', value: Math.round(netSaleProceeds) },
     ];
-    const csv = generateCalculatorCsv('1031 Exchange Tax Deferral Calculator', rows, locale);
-    downloadCsv(`1031-exchange-${new Date().toISOString().slice(0, 10)}.csv`, csv);
+    const csv = generateCalculatorCsv('1031 Exchange Tax Breakdown Calculator', rows, locale);
+    downloadCsv(`1031-exchange-breakdown-${new Date().toISOString().slice(0, 10)}.csv`, csv);
   };
 
   const handleSaveDeal = () => {
-    const summary = `1031 Deferred Tax: ${formatCurrency(Math.round(deferredTax))} (Gain: ${formatCurrency(Math.round(realizedGain))}, Reinvest Target: ${formatCurrency(salePrice)})`;
-    saveCalculationToLocal('exchange_1031', '1031 Exchange Calculator', summary, {
+    const summary = `1031 Deferred Tax: ${formatCurrency(Math.round(deferredTax))} (Gain: ${formatCurrency(Math.round(realizedGain))}, Recapture: ${formatCurrency(Math.round(depreciationRecaptureTax))}, Target: ${formatCurrency(salePrice)})`;
+    saveCalculationToLocal('exchange_1031', '1031 Exchange Breakdown Calculator', summary, {
       salePrice,
       originalCostBasis,
+      depreciationTaken,
       sellingExpenses,
-      taxRate,
-      deferredTax: Math.round(deferredTax),
+      adjustedCostBasis: Math.round(adjustedCostBasis),
       realizedGain: Math.round(realizedGain),
+      depreciationRecaptureTax: Math.round(depreciationRecaptureTax),
+      federalCapitalGainsTax: Math.round(federalCapitalGainsTax),
+      niitTax: Math.round(niitTax),
+      stateTax: Math.round(stateTax),
+      totalTaxLiability: Math.round(totalTaxLiability),
+      closingDate,
     });
   };
 
@@ -121,25 +200,27 @@ export function Exchange1031Calculator({ locale }: Props) {
         <div>
           <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-2">
             <Calculator className="w-3.5 h-3.5" />
-            {isZh ? '资本利得延税计算' : isEs ? 'Análisis de Aplazamiento Fiscal' : isPt ? 'Análise de Diferimento Fiscal' : 'Tax Deferral Analysis'}
+            <span>
+              {isZh ? '资本利得与折旧追回税拆分' : isEs ? 'Desglose de Ganancias y Recaptura §1250' : isPt ? 'Detalhamento Tributário e Recaptura §1250' : 'Tax Deferral & §1250 Recapture Breakdown'}
+            </span>
           </div>
           <h2 className="text-xl md:text-2xl font-bold">
             {isZh
-              ? '1031 Exchange 延税计算器'
+              ? '1031 Exchange 延税与折旧追回税计算器'
               : isEs
-              ? 'Calculadora de Aplazamiento Fiscal (Intercambio 1031)'
+              ? 'Calculadora de Aplazamiento Fiscal 1031 y Recaptura §1250'
               : isPt
-              ? 'Calculadora de Diferimento Fiscal (Troca 1031)'
-              : '1031 Exchange Tax Deferral Calculator'}
+              ? 'Calculadora de Diferimento Fiscal 1031 e Recaptura §1250'
+              : '1031 Exchange Tax Deferral & §1250 Recapture Calculator'}
           </h2>
-          <p className="text-slate-400 text-sm mt-1">
+          <p className="text-slate-400 text-sm mt-1 max-w-2xl leading-relaxed">
             {isZh
-              ? '估算出售商业地产时通过 1031 置换可延迟缴纳的资本利得税金额与再投资门槛'
+              ? '分别拆算 §1250 折旧追回税 (25%)、联邦长期资本利得税 (15%-20%)、NIIT (3.8%) 与州税，并自动计算 45 天识别与 180 天交割法定截止日。'
               : isEs
-              ? 'Estime el impuesto sobre ganancias de capital diferido y los objetivos de reinversión para intercambios 1031'
+              ? 'Desglose detallado de recaptura §1250 (25%), ganancias federales a largo plazo (15%-20%), NIIT (3.8%) e impuestos estatales con calculadora de plazos de 45/180 días.'
               : isPt
-              ? 'Estime o imposto sobre ganho de capital diferido e as metas de reinvestimento para trocas de bens semelhantes (Troca 1031)'
-              : 'Estimate deferred capital gains tax and reinvestment targets for 1031 like-kind exchanges'}
+              ? 'Detalhamento de recaptura §1250 (25%), ganho de capital federal (15%-20%), NIIT (3,8%) e tributos estaduais com cálculo automático de prazos de 45 e 180 dias.'
+              : 'Break down §1250 depreciation recapture (25%), federal long-term capital gains (15%–20%), NIIT (3.8%), and state taxes, with automatic 45-day and 180-day deadline calculators.'}
           </p>
         </div>
       </div>
@@ -150,20 +231,20 @@ export function Exchange1031Calculator({ locale }: Props) {
         <p className="leading-relaxed">
           {isZh ? (
             <>
-              <strong>重要免责声明：</strong>
-              本计算器仅供初步财务估算与概念演示，不构成任何税务、法律或专业投资建议。实际递延税负受折旧追回税率 (Depreciation Recapture 25%)、联邦资本利得税 (15%-20%)、州税 (State Tax) 及净投资所得税 (NIIT 3.8%) 等多重因素影响。在进行 1031 Exchange 交易前，请务必咨询专业合规的合格中介人 (QI) 及执业注册会计师 (CPA)。
+              <strong>税务与法规说明：</strong>
+              本计算器用于教育演示与财务测算。2026 年联邦长期资本利得税门槛参照 IRS 收入程序规则 Rev. Proc. 2025-32；§1250 折旧追回原则（取已提折旧与总收益之较小者）遵循 Thomson Reuters 税务标准与 IRC §1250。州税率（示例 5%）因所在州而异（0% 至 13.3%）。本工具不构成法律或税务建议，交易前请务必咨询合格中介人 (QI) 及执业注册会计师 (CPA)。
             </>
           ) : isEs ? (
             <>
-              <strong>Aviso Legal y Tributario Obligatorio:</strong> Esta calculadora ofrece estimaciones simplificadas únicamente con fines informativos y no constituye asesoramiento legal o fiscal. La obligación tributaria real depende de la recuperación de depreciación (25%), tasas federales de ganancias de capital (15%-20%), impuestos estatales y el impuesto sobre ingresos netos de inversión (NIIT del 3.8%). Consulte siempre a un Intermediario Calificado (QI) y a un Contador Público Certificado (CPA) antes de ejecutar un intercambio 1031.
+              <strong>Aviso Legal y Fiscal:</strong> Los tramos federales 2026 corresponden a IRS Rev. Proc. 2025-32. La recaptura de depreciación §1250 (menor entre ganancia o depreciación acumulada) sigue los estándares de Thomson Reuters e IRC §1250. La tasa impositiva estatal (5% de ejemplo) varía según el estado (0% a 13.3%). Consulte a su Intermediario Calificado (QI) y a su CPA.
             </>
           ) : isPt ? (
             <>
-              <strong>Aviso Legal e Tributário Obrigatório:</strong> Esta calculadora fornece apenas estimativas simplificadas para fins informativos e não constitui consultoria jurídica ou fiscal. A carga tributária real depende da recuperação de depreciação (25%), alíquotas federais de ganho de capital (15%-20%), tributos estaduais e NIIT (3,8%). Consulte sempre um Intermediário Qualificado (QI) e um contador certificado (CPA) antes de estruturar uma troca 1031.
+              <strong>Aviso Fiscal Obrigatório:</strong> As faixas federais de 2026 baseiam-se na Rev. Proc. 2025-32 do IRS. A recaptura de depreciação §1250 (menor entre ganho ou depreciação acumulada) segue as normas contábeis da Thomson Reuters e IRC §1250. A alíquota estadual (5% ilustrativa) varia entre 0% e 13,3%. Consulte seu Intermediário Qualificado (QI) e seu contador (CPA).
             </>
           ) : (
             <>
-              <strong>Mandatory Tax Disclaimer:</strong> This calculator provides simplified estimations only and does not constitute legal or tax advice. Actual tax liability depends on depreciation recapture (25%), federal capital gains rates (15-20%), state taxes, and NIIT (3.8%). Always consult a Qualified Intermediary (QI) and a licensed CPA prior to executing a 1031 exchange.
+              <strong>Mandatory Tax Disclosure:</strong> 2026 federal capital gains brackets reflect IRS Rev. Proc. 2025-32. Unrecaptured §1250 depreciation recapture (lesser of total realized gain or cumulative depreciation) is modeled under IRC §1250 and Thomson Reuters Tax standards. State tax rates (example 5% illustrative) range from 0% to 13.3% depending on jurisdiction. Always consult a Qualified Intermediary (QI) and licensed CPA before executing an exchange.
             </>
           )}
         </p>
@@ -172,12 +253,17 @@ export function Exchange1031Calculator({ locale }: Props) {
       {/* Body */}
       <div className="p-6 md:p-8 space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Inputs */}
-          <div className="lg:col-span-7 space-y-6">
+          {/* Inputs Column */}
+          <div className="lg:col-span-7 space-y-5">
+            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 border-b border-slate-200 pb-2">
+              <Layers className="w-4 h-4 text-emerald-600" />
+              <span>{isZh ? '1. 物业交易与税务假设' : isEs ? '1. Datos de Venta y Parámetros Fiscales' : isPt ? '1. Dados da Venda e Parâmetros Fiscais' : '1. Property Sale & Tax Parameters'}</span>
+            </h3>
+
             {/* Sale Price */}
             <div>
-              <label htmlFor="sale-price-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '拟出售物业售价 (Sale Price)' : isEs ? 'Precio de Venta del Inmueble ($)' : isPt ? 'Preço de Venda do Imóvel ($)' : 'Property Sale Price ($)'}
+              <label htmlFor="sale-price-input" className="block text-xs font-bold text-slate-700 mb-1.5">
+                {isZh ? '拟出售物业售价 (Sale Price)' : isEs ? 'Precio de Venta del Inmueble ($)' : isPt ? 'Preço de Venda do Imóvel ($)' : 'Relinquished Property Sale Price ($)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -187,17 +273,17 @@ export function Exchange1031Calculator({ locale }: Props) {
                   inputMode="numeric"
                   value={formatNumberWithCommas(salePrice)}
                   onChange={(e) => setSalePrice(Math.max(0, parseNumberInput(e.target.value)))}
-                  className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
-                  placeholder="2,500,000"
+                  className="w-full pl-8 pr-4 py-2.5 text-slate-900 font-semibold tabular-nums focus:outline-none text-sm"
+                  placeholder="875,000"
                 />
               </div>
             </div>
 
-            {/* Cost Basis & Selling Expenses */}
+            {/* Cost Basis & Cumulative Depreciation */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="cost-basis-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                  {isZh ? '原始成本基准 (Cost Basis)' : isEs ? 'Base de Costo Original ($)' : isPt ? 'Custo de Aquisição Original ($)' : 'Original Cost Basis ($)'}
+                <label htmlFor="cost-basis-input" className="block text-xs font-bold text-slate-700 mb-1.5">
+                  {isZh ? '原始买入成本基准 (Original Cost Basis)' : isEs ? 'Base de Costo Original de Compra ($)' : isPt ? 'Custo de Aquisição Original ($)' : 'Original Purchase Cost Basis ($)'}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
@@ -207,68 +293,137 @@ export function Exchange1031Calculator({ locale }: Props) {
                     inputMode="numeric"
                     value={formatNumberWithCommas(originalCostBasis)}
                     onChange={(e) => setOriginalCostBasis(Math.max(0, parseNumberInput(e.target.value)))}
-                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
-                    placeholder="1,200,000"
+                    className="w-full pl-8 pr-4 py-2.5 text-slate-900 font-semibold tabular-nums focus:outline-none text-sm"
+                    placeholder="565,000"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="selling-expenses-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                  {isZh ? '交易经纪与过户费用' : isEs ? 'Gastos de Venta y Cierre ($)' : isPt ? 'Despesas de Venda e Corretagem ($)' : 'Selling Expenses ($)'}
+                <label htmlFor="depreciation-input" className="block text-xs font-bold text-slate-700 mb-1.5">
+                  {isZh ? '累计已提取折旧 (Depreciation Taken)' : isEs ? 'Depreciación Acumulada Deducida ($)' : isPt ? 'Depreciação Acumulada Duzida ($)' : 'Cumulative Depreciation Taken ($)'}
                 </label>
                 <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                   <input
-                    id="selling-expenses-input"
+                    id="depreciation-input"
                     type="text"
                     inputMode="numeric"
-                    value={formatNumberWithCommas(sellingExpenses)}
-                    onChange={(e) => setSellingExpenses(Math.max(0, parseNumberInput(e.target.value)))}
-                    className="w-full pl-8 pr-4 py-3 text-slate-900 font-semibold tabular-nums focus:outline-none"
-                    placeholder="150,000"
+                    value={formatNumberWithCommas(depreciationTaken)}
+                    onChange={(e) => setDepreciationTaken(Math.max(0, parseNumberInput(e.target.value)))}
+                    className="w-full pl-8 pr-4 py-2.5 text-slate-900 font-semibold tabular-nums focus:outline-none text-sm"
+                    placeholder="132,000"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Combined Tax Rate */}
+            {/* Selling Expenses */}
             <div>
-              <label htmlFor="tax-rate-input" className="block text-sm font-semibold text-slate-700 mb-2">
-                {isZh ? '预计综合税率 (%)' : isEs ? 'Tasa Impositiva Combinada Estimada (%)' : isPt ? 'Alíquota Combinada Estimada de Impostos (%)' : 'Estimated Combined Tax Rate (%)'}
+              <label htmlFor="selling-expenses-input" className="block text-xs font-bold text-slate-700 mb-1.5">
+                {isZh ? '经纪佣金与过户交割税费 (Selling Expenses & Fees)' : isEs ? 'Comisiones y Gastos de Cierre ($)' : isPt ? 'Comissões e Despesas de Fechamento ($)' : 'Selling Expenses & Broker Commissions ($)'}
               </label>
               <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">$</span>
                 <input
-                  id="tax-rate-input"
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="0.5"
-                  value={taxRate || ''}
-                  onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)}
-                  className="w-full pl-4 pr-8 py-3 text-slate-900 font-semibold focus:outline-none"
-                  placeholder="25"
+                  id="selling-expenses-input"
+                  type="text"
+                  inputMode="numeric"
+                  value={formatNumberWithCommas(sellingExpenses)}
+                  onChange={(e) => setSellingExpenses(Math.max(0, parseNumberInput(e.target.value)))}
+                  className="w-full pl-8 pr-4 py-2.5 text-slate-900 font-semibold tabular-nums focus:outline-none text-sm"
+                  placeholder="52,500"
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">%</span>
               </div>
-              <p className="text-xs text-slate-500 mt-1">
-                {isZh
-                  ? '包含联邦资本利得税 (15%-20%)、州税 (0%-13.3%)、折旧追回税 (25%) 及 NIIT (3.8%) 的综合预估税率'
-                  : isEs
-                  ? 'Estimación combinada de ganancias de capital federales, impuestos estatales, recuperación de depreciación y NIIT'
-                  : isPt
-                  ? 'Estimativa combinada de ganho de capital federal, impostos estaduais, recuperação de depreciação e NIIT'
-                  : 'Combined estimate of Federal Capital Gains, State Tax, Depreciation Recapture, and NIIT'}
-              </p>
+            </div>
+
+            {/* Tax Rates Configuration */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              <div>
+                <label htmlFor="capital-gains-rate-select" className="block text-xs font-bold text-slate-700 mb-1.5">
+                  {isZh ? '联邦长期资本利得税率' : isEs ? 'Tasa Federal Ganancias de Capital' : isPt ? 'Alíquota Federal de Ganho de Capital' : 'Federal Long-Term Capital Gains Rate'}
+                </label>
+                <select
+                  id="capital-gains-rate-select"
+                  value={capitalGainsRate}
+                  onChange={(e) => setCapitalGainsRate(Number(e.target.value))}
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-900 font-semibold text-sm bg-white focus:outline-none focus:border-emerald-500"
+                >
+                  <option value={15}>15% (Standard Bracket · Rev. Proc. 2025-32)</option>
+                  <option value={20}>20% (High Income Bracket)</option>
+                  <option value={0}>0% (Low Income Exemption Bracket)</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="state-tax-rate-input" className="block text-xs font-bold text-slate-700 mb-1.5">
+                  {isZh ? '州所得税率 (示例 5%)' : isEs ? 'Tasa Impositiva Estatal (Ej. 5%)' : isPt ? 'Alíquota Estadual (Ex. 5%)' : 'State Tax Rate (Example 5% Illustrative)'}
+                </label>
+                <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
+                  <input
+                    id="state-tax-rate-input"
+                    type="number"
+                    min="0"
+                    max="15"
+                    step="0.1"
+                    value={stateTaxRate || ''}
+                    onChange={(e) => setStateTaxRate(parseFloat(e.target.value) || 0)}
+                    className="w-full pl-3 pr-8 py-2.5 text-slate-900 font-semibold text-sm focus:outline-none"
+                    placeholder="5.0"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-xs">%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Statutory Deadline Date Picker Section */}
+            <div className="pt-4 border-t border-slate-200 space-y-3">
+              <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-emerald-600" />
+                <span>{isZh ? '2. 法定置换截止日测算' : isEs ? '2. Plazos Legales de Intercambio 1031' : isPt ? '2. Prazos Legais da Troca 1031' : '2. Statutory 1031 Deadline Calculator'}</span>
+              </h3>
+              <div>
+                <label htmlFor="closing-date-input" className="block text-xs font-bold text-slate-700 mb-1.5">
+                  {isZh ? '旧物业出售交割日 (Relinquished Property Closing Date)' : isEs ? 'Fecha de Cierre de Venta del Inmueble Cedido' : isPt ? 'Data de Fechamento da Venda do Imóvel Cedido' : 'Relinquished Property Closing Date'}
+                </label>
+                <input
+                  id="closing-date-input"
+                  type="date"
+                  value={closingDate}
+                  onChange={(e) => setClosingDate(e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-900 font-semibold text-sm bg-white focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
+                  <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider block">
+                    {isZh ? '45 天物业识别截止日' : isEs ? 'Plazo de Identificación (45 Días)' : isPt ? 'Prazo de Identificação (45 Dias)' : '45-Day Identification Deadline'}
+                  </span>
+                  <span className="text-sm font-black text-amber-950 block mt-0.5">{idDeadlineDate || 'Day 45 Midnight'}</span>
+                  <span className="text-[10px] text-amber-700 block mt-0.5">
+                    {isZh ? '严格日历日（含周末与节假日，午夜截止）' : 'Strict calendar days by midnight (no extensions)'}
+                  </span>
+                </div>
+                <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3">
+                  <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">
+                    {isZh ? '180 天交割完成截止日' : isEs ? 'Plazo de Cierre Final (180 Días)' : isPt ? 'Prazo de Fechamento Final (180 Dias)' : '180-Day Exchange Completion Deadline'}
+                  </span>
+                  <span className="text-sm font-black text-emerald-950 block mt-0.5">{exchangeDeadlineDate || 'Day 180 Midnight'}</span>
+                  <span className="text-[10px] text-emerald-700 block mt-0.5">
+                    {isZh ? '完成全部目标物业交割过户' : 'Must close & title replacement asset'}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Results Panel */}
           <div aria-live="polite" className="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
-            <div>
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  {isZh ? '延税估算总览' : isEs ? 'Resumen de Aplazamiento Fiscal' : isPt ? 'Resumo de Diferimento Fiscal' : 'Tax Deferral Summary'}
+                  {isZh ? '10 项逐项税务拆解总览' : isEs ? 'Desglose Impositivo de 10 Puntos' : isPt ? 'Detalhamento Tributário em 10 Pontos' : '10-Point Tax Deferral Summary'}
                 </h3>
                 <CalculatorActionBar
                   locale={locale}
@@ -278,50 +433,79 @@ export function Exchange1031Calculator({ locale }: Props) {
                 />
               </div>
 
-              {/* Major Output */}
-              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+              {/* Major Output: Total Tax Deferred */}
+              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  {isZh ? '预计可延迟缴纳资本利得税' : isEs ? 'Impuesto Diferido Estimado' : isPt ? 'Imposto Diferido Estimado' : 'Estimated Deferred Tax'}
+                  {isZh ? '预计延税总额 (Total Tax Deferred)' : isEs ? 'Impuesto Total Diferido Estimado' : isPt ? 'Total de Imposto Diferido Estimado' : 'Total Estimated Tax Deferred via 1031'}
                 </span>
                 <div className="text-3xl md:text-4xl font-black text-emerald-600 mt-1">
                   {formatCurrency(Math.round(deferredTax))}
                 </div>
-                <p className="text-xs text-slate-500 mt-1">
-                  {isZh
-                    ? `基于约 ${formatCurrency(Math.round(realizedGain))} 的资本利得收益及 ${taxRate}% 综合税率`
-                    : isEs
-                    ? `Basado en ${formatCurrency(Math.round(realizedGain))} de ganancia realizada al ${taxRate}% de tasa combinada`
-                    : isPt
-                    ? `Baseado em ${formatCurrency(Math.round(realizedGain))} de ganho realizado à alíquota de ${taxRate}%`
-                    : `Based on ${formatCurrency(Math.round(realizedGain))} realized gain at ${taxRate}% combined tax rate`}
-                </p>
+                <div className="flex items-center justify-between text-xs text-slate-500 mt-1.5 pt-1.5 border-t border-slate-100">
+                  <span>{isZh ? '总收益实际综合税负:' : 'Effective Tax Rate:'}</span>
+                  <span className="font-bold text-slate-800">{effectiveTaxRate.toFixed(1)}% of realized gain</span>
+                </div>
               </div>
 
-              {/* Breakdown */}
-              <div className="space-y-3 text-sm border-t border-slate-200 pt-4">
-                <div className="flex justify-between text-slate-700">
-                  <span>{isZh ? '出售扣除费用后净所得 (Net Proceeds):' : isEs ? 'Ingresos Netos de la Venta:' : isPt ? 'Receita Líquida da Venda:' : 'Net Sale Proceeds:'}</span>
-                  <span className="font-semibold text-slate-900">{formatCurrency(Math.round(netSaleProceeds))}</span>
+              {/* 10-Item Structured Breakdown */}
+              <div className="space-y-2 text-xs border-t border-slate-200 pt-3 text-slate-700">
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span>{isZh ? '1. 调整后成本基准 (Adjusted Basis):' : '1. Adjusted Cost Basis:'}</span>
+                  <span className="font-bold text-slate-900">{formatCurrency(Math.round(adjustedCostBasis))}</span>
                 </div>
-                <div className="flex justify-between text-slate-700">
-                  <span>{isZh ? '变现资本利得 (Realized Gain):' : isEs ? 'Ganancia de Capital Realizada:' : isPt ? 'Ganho de Capital Realizado:' : 'Realized Capital Gain:'}</span>
-                  <span className="font-semibold text-slate-900">{formatCurrency(Math.round(realizedGain))}</span>
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span>{isZh ? '2. 出售净所得 (Net Sale Proceeds):' : '2. Net Sale Proceeds:'}</span>
+                  <span className="font-bold text-slate-900">{formatCurrency(Math.round(netSaleProceeds))}</span>
                 </div>
-                <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs space-y-1 mt-3">
-                  <div className="flex items-center gap-1.5 font-bold text-emerald-950">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>{isZh ? '100% 全额延税再投资目标:' : isEs ? 'Regla de Reinversión para Diferimiento al 100%:' : isPt ? 'Regra de Reinvestimento para Diferimento de 100%:' : '100% Tax Deferral Reinvestment Rule:'}</span>
-                  </div>
-                  <p className="text-[11px] text-emerald-800 leading-relaxed">
-                    {isZh
-                      ? `新购买的目标物业售价需 ≥ ${formatCurrency(Math.round(netSaleProceeds))}，且出售净现金需全部重新投入新项目中。`
-                      : isEs
-                      ? `El precio de compra del inmueble de reemplazo debe ser ≥ ${formatCurrency(Math.round(netSaleProceeds))} y todo el capital neto en efectivo debe ser reinvertido.`
-                      : isPt
-                      ? `O preço de compra do imóvel substituto deve ser ≥ ${formatCurrency(Math.round(netSaleProceeds))}, com todo o capital líquido reinvestido.`
-                      : `Replacement property purchase price must be ≥ ${formatCurrency(Math.round(netSaleProceeds))} with all net cash equity reinvested.`}
-                  </p>
+                <div className="flex justify-between py-1 border-b border-slate-100 bg-slate-100/60 px-1.5 rounded">
+                  <span className="font-semibold text-slate-900">{isZh ? '3. 变现资本利得总额 (Total Realized Gain):' : '3. Total Realized Capital Gain:'}</span>
+                  <span className="font-black text-slate-950">{formatCurrency(Math.round(realizedGain))}</span>
                 </div>
+                <div className="flex justify-between py-1 border-b border-slate-100 pl-2">
+                  <span className="text-amber-800 font-medium">{isZh ? '• §1250 折旧追回额 (Recapture Part):' : '• §1250 Depreciation Recapture Part:'}</span>
+                  <span className="font-bold text-amber-900">{formatCurrency(Math.round(depreciationRecaptureGain))}</span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-100 pl-2">
+                  <span className="text-slate-600">{isZh ? '• 剩余长期资本利得 (Remaining LTCG):' : '• Remaining Long-Term Gain:'}</span>
+                  <span className="font-bold text-slate-900">{formatCurrency(Math.round(remainingCapitalGain))}</span>
+                </div>
+
+                <div className="pt-2 pb-1 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                  {isZh ? '四项具体税款明细 (Tax Breakdown)' : 'Four Tax Component Breakdown'}
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-100 pl-2 text-amber-900">
+                  <span>{isZh ? '4. §1250 折旧追回税 (固定 25%):' : '4. §1250 Recapture Tax (Flat 25%):'}</span>
+                  <span className="font-bold">{formatCurrency(Math.round(depreciationRecaptureTax))}</span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-100 pl-2">
+                  <span>{isZh ? `5. 联邦长期资本利得税 (${capitalGainsRate}%):` : `5. Federal Capital Gains Tax (${capitalGainsRate}%):`}</span>
+                  <span className="font-bold text-slate-900">{formatCurrency(Math.round(federalCapitalGainsTax))}</span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-100 pl-2">
+                  <span>{isZh ? '6. 净投资所得税 NIIT (3.8% · IRC §1411):' : '6. Net Investment Income Tax (3.8% NIIT):'}</span>
+                  <span className="font-bold text-slate-900">{formatCurrency(Math.round(niitTax))}</span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-100 pl-2">
+                  <span>{isZh ? `7. 州资本利得税 (示例 ${stateTaxRate}%):` : `7. State Capital Gains Tax (${stateTaxRate}% Example):`}</span>
+                  <span className="font-bold text-slate-900">{formatCurrency(Math.round(stateTax))}</span>
+                </div>
+                <div className="flex justify-between py-1.5 font-bold text-slate-950 bg-emerald-100/60 px-2 rounded mt-2">
+                  <span>{isZh ? '8. 应纳税款总计 (Total Tax Liability):' : '8. Total Tax Liability without 1031:'}</span>
+                  <span>{formatCurrency(Math.round(totalTaxLiability))}</span>
+                </div>
+              </div>
+
+              {/* 100% Tax Deferral Reinvestment Rule Box */}
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs space-y-1 mt-3">
+                <div className="flex items-center gap-1.5 font-bold text-emerald-950">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>{isZh ? '100% 全额延税再投资硬性规则:' : '100% Full Deferral Reinvestment Rules:'}</span>
+                </div>
+                <p className="text-[11px] text-emerald-800 leading-relaxed">
+                  {isZh
+                    ? `新购买的目标物业售价需 ≥ ${formatCurrency(salePrice)}，且全部出售净现金（${formatCurrency(Math.round(netSaleProceeds))}）必须全额转入新项目（经由合格中介人 QI 保管），若留存现金或贷款减少将产生即期应税 Boot。`
+                    : `Replacement property purchase price must be ≥ ${formatCurrency(salePrice)} and all net cash equity (${formatCurrency(Math.round(netSaleProceeds))}) must be reinvested through your Qualified Intermediary (QI). Retaining cash or debt reduction triggers taxable boot.`}
+                </p>
               </div>
             </div>
           </div>

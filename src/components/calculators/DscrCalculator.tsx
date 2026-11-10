@@ -104,6 +104,33 @@ export function DscrCalculator({ locale }: Props) {
       ? (isZh ? 'LTV 价值比率' : isEs ? 'LTV' : isPt ? 'LTV' : 'LTV')
       : (isZh ? 'Debt Yield 债务收益率' : isEs ? 'Debt Yield' : isPt ? 'Debt Yield' : 'Debt Yield');
 
+  // 2D Sensitivity Matrix: NOI (±10%) vs Interest Rate (±1.0%)
+  const noiSteps = [
+    { label: '-10%', val: noi * 0.9 },
+    { label: 'Base', val: noi },
+    { label: '+10%', val: noi * 1.1 },
+  ];
+  const rateSteps = [
+    { label: `-1.0% (${Math.max(0.1, interestRate - 1).toFixed(2)}%)`, rate: Math.max(0.1, interestRate - 1) },
+    { label: `Base (${interestRate.toFixed(2)}%)`, rate: interestRate },
+    { label: `+1.0% (${(interestRate + 1).toFixed(2)}%)`, rate: interestRate + 1 },
+  ];
+
+  const currentLoanAmount = loanConstant > 0 ? (effectiveDebtService / loanConstant) : bindingMaxLoan;
+
+  const getMatrixDscr = (testNoi: number, testRate: number) => {
+    const rTest = (Math.max(0.1, testRate) / 100) / 12;
+    const mFactor =
+      rTest > 0 && n > 0
+        ? (rTest * Math.pow(1 + rTest, n)) / (Math.pow(1 + rTest, n) - 1)
+        : n > 0
+        ? 1 / n
+        : 0;
+    const testAds = currentLoanAmount * mFactor * 12;
+    if (testAds <= 0) return 0;
+    return testNoi / testAds;
+  };
+
   // Chained parameter calculations (Item 8)
   const impliedDownPayment = Math.max(0, propertyValue - bindingMaxLoan);
   const impliedDownPaymentPercent = propertyValue > 0 ? Math.round((impliedDownPayment / propertyValue) * 100) : 25;
@@ -723,6 +750,59 @@ export function DscrCalculator({ locale }: Props) {
                   stressBindingName
                 )}
               </p>
+            </div>
+
+            {/* 2D Sensitivity Matrix: NOI vs Interest Rate */}
+            <div className="p-4 rounded-xl bg-white border border-slate-200 text-xs space-y-2.5 shadow-xs">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <span className="font-bold text-slate-900 block">
+                  {isZh ? 'DSCR 敏感性压力测试矩阵 (NOI ±10% · 利率 ±1%)' : isEs ? 'Matriz de Estrés DSCR (NOI ±10% · Tasa ±1%)' : isPt ? 'Matriz de Estresse DSCR (NOI ±10% · Juros ±1%)' : 'DSCR Sensitivity Matrix (NOI ±10% vs Rate ±1%)'}
+                </span>
+                <span className="text-[10px] text-slate-500 font-bold bg-slate-100 px-2 py-0.5 rounded-md">{targetDscr}x Target</span>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-center text-[11px] border-collapse">
+                  <thead>
+                    <tr className="bg-slate-100 text-slate-700">
+                      <th className="p-1.5 text-left font-bold">{isZh ? '利率 \\ NOI' : 'Rate \\ NOI'}</th>
+                      {noiSteps.map((s, idx) => (
+                        <th key={idx} className="p-1.5 font-bold">{s.label} ({formatCurrency(Math.round(s.val))})</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {rateSteps.map((r, rIdx) => (
+                      <tr key={rIdx}>
+                        <td className="p-1.5 text-left font-bold text-slate-800 bg-slate-50 whitespace-nowrap">{r.label}</td>
+                        {noiSteps.map((s, sIdx) => {
+                          const matrixDscr = getMatrixDscr(s.val, r.rate);
+                          const isPass = matrixDscr >= targetDscr;
+                          const isBreakeven = matrixDscr >= 1.0;
+                          return (
+                            <td
+                              key={sIdx}
+                              className={`p-1.5 font-bold ${
+                                isPass
+                                  ? 'bg-emerald-50 text-emerald-800'
+                                  : isBreakeven
+                                  ? 'bg-amber-50 text-amber-800'
+                                  : 'bg-rose-50 text-rose-800'
+                              }`}
+                            >
+                              {matrixDscr.toFixed(2)}x
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="flex flex-wrap items-center justify-between text-[10px] text-slate-500 pt-1">
+                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> ≥ {targetDscr}x ({isZh ? '达标' : 'Compliant'})</span>
+                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500 inline-block"></span> 1.00x–{targetDscr}x ({isZh ? '缓冲偏低' : 'Tight Cushion'})</span>
+                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-rose-500 inline-block"></span> &lt; 1.00x ({isZh ? '现金流赤字' : 'Deficit'})</span>
+              </div>
             </div>
 
             {/* Chained Parameter Flows (Item 8) */}

@@ -59,9 +59,15 @@ export default async function HomePage({ params }: PageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Headline, Value Proposition, Primary CTA */}
           <div className="lg:col-span-6 space-y-6 text-left">
-            <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-xs">
-              <TrendingUp className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>{t.home.heroTag}</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-xs">
+                <TrendingUp className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{t.home.heroTag}</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-full border border-slate-200">
+                <Calendar className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>{homeData.developer.reviewDate}</span>
+              </div>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">

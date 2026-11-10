@@ -241,7 +241,7 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       h1: 'Internal Rate of Return (IRR): Definition, Underwriting & Formula',
       shortDefinition: 'Internal Rate of Return (IRR) is the annualized rate of return earned on each dollar invested in a commercial real estate property over an entire multi-year holding period, accounting for the time value of money.',
       fullDefinition: `Internal Rate of Return (IRR) is the gold-standard metric used by private equity syndicators, real estate funds, and institutional investors to evaluate investment performance across an entire holding cycle (typically 3 to 10 years).\n\nUnlike static single-year metrics like Cap Rate or Cash-on-Cash Return, IRR accounts for the timing and magnitude of all cash inflows and outflows—including initial acquisition equity, ongoing annual operating distributions, capital calls, and the final net profit from property refinancing or ultimate disposition.`,
-      whyItMatters: 'IRR incorporates the time value of money: a dollar returned in Year 1 contributes far more to IRR than a dollar returned in Year 7. Note: crecalculators.com specializes in rapid acquisition screening (Cap Rate, CoC, DSCR, and BER); you can model multi-year cash flow distributions and stress testing using our Deal Analyzer. For a comprehensive comparison, see our complete Cash-on-Cash Return vs IRR guide.',
+      whyItMatters: 'IRR incorporates the time value of money: a dollar returned in Year 1 contributes far more to IRR than a dollar returned in Year 7. Note: crecalculators.com specializes in rapid single-year acquisition screening (Cap Rate, CoC, DSCR, and BER) rather than multi-year discounted cash flow engines. To understand when to prioritize single-year cash yield versus multi-year internal rate of return, read our comprehensive Cash-on-Cash Return vs IRR guide.',
       formula: '0 = NPV = Σ [ CFt / (1 + IRR)^t ] (Discount rate where Net Present Value of all cash flows equals zero)',
       variables: [
         { name: 'CF0', desc: 'Initial equity investment outflow (negative value at Year 0).' },
@@ -260,10 +260,10 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
         'Opportunistic & Ground-Up Development: 17.0% - 22.0%+ target IRR.',
       ],
       calculatorCta: {
-        title: 'Model Full Multi-Year Underwriting in Deal Analyzer',
-        desc: 'Combine Cap Rate, DSCR, Cash-on-Cash, and full deal stress testing in our comprehensive underwriting suite.',
-        url: 'tools/deal-analyzer',
-        anchorText: 'Launch Deal Analyzer Suite',
+        title: 'Compare Cash-on-Cash Return vs IRR',
+        desc: 'Explore the trade-offs between static first-year cash yields and multi-year compounded holding returns in our in-depth analysis.',
+        url: 'guides/cash-on-cash-vs-irr',
+        anchorText: 'Read Cash-on-Cash vs IRR Guide',
       },
       faqs: [
         { question: 'What is the main limitation of IRR in real estate?', answer: 'IRR mathematically assumes that interim cash flow distributions are immediately reinvested at the same high internal rate of return, which may be unrealistic in ordinary financial markets.' },
@@ -280,7 +280,7 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       h1: 'Gross Rent Multiplier (GRM): Definition, Formula & Quick Screening',
       shortDefinition: 'Gross Rent Multiplier (GRM) is a rapid screening ratio that compares property purchase price to its annual gross potential rental income, calculated as Price divided by Gross Annual Rent.',
       fullDefinition: `Gross Rent Multiplier (GRM) is one of the simplest and fastest screening metrics in real estate valuation. It tells an investor how many years it would take for a property to pay for itself in gross rent collections, assuming zero expenses, zero vacancies, and zero mortgage costs.\n\nWhile GRM is too basic for deep underwriting because it ignores property taxes, utilities, and insurance variations, it is widely utilized by brokers and multifamily investors as an initial preliminary screen to quickly filter out overpriced listings before committing time to detailed financial due diligence.`,
-      whyItMatters: 'GRM allows investors to rapidly scan commercial listings in seconds, but ignores operating expenses, debt service, and taxes. For detailed bottom-line underwriting, calculate defensible Net Operating Income in our NOI Calculator and run full deal metrics in Deal Analyzer.',
+      whyItMatters: 'GRM allows investors to rapidly scan commercial listings in seconds, but ignores operating expenses, debt service, and taxes. crecalculators.com focuses on net-operating metrics; to convert gross rent into net operating income and evaluate true property yields, use our NOI Calculator and Cap Rate Calculator.',
       formula: 'GRM = Purchase Price / Annual Gross Potential Rent',
       variables: [
         { name: 'Purchase Price', desc: 'Asking price or contract acquisition price of the property.' },
@@ -512,7 +512,7 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       h1: 'Internal Rate of Return (IRR)：定义、计算原理与生命周期分析',
       shortDefinition: '内部收益率（IRR）衡量在商业地产多年度持有全周期内，每一块钱投资资本所产生的复合年化收益率，深度结合了资金的时间价值。',
       fullDefinition: `内部收益率（Internal Rate of Return，简称 IRR）是商业地产私募股权基金（PE）、机构资管与辛迪加合伙人评估全周期投资回报的黄金指标（通常针对 3 至 10 年的投资期）。\n\n与 Cap Rate 或 Cash-on-Cash 仅反映第一年单一年份的静态切片指标不同，IRR 统筹计算了整个投资持有期间所有的资金流入与流出——包括最初投入的首付资本、每年的营运分红、中间的装修改造追缴资本，以及在第 N 年物业加杠杆再融资或最终出售交割时的巨大资本利得。`,
-      whyItMatters: 'IRR 遵循“时间价值原理”：第 1 年拿到的分红在 IRR 权重中远高于第 7 年才收到的相同金额分红。美国商业地产私募的超额业绩提成（Promote / Waterfall）均严格锚定 IRR 门槛值。',
+      whyItMatters: 'IRR 遵循“时间价值原理”：第 1 年拿到的分红在 IRR 权重中远高于第 7 年才收到的相同金额分红。说明：crecalculators.com 专注于买入前期的单年度快速筛选（Cap Rate、现金回报率、DSCR 与盈亏平衡率），暂不包含多年期折现现金流模型。关于单年现金收益率与多年期内部收益率的对比权衡，请参阅我们的《Cash-on-Cash vs IRR 深度指南》。',
       formula: '0 = 净现值 (NPV) = Σ [ 现金流 CFt / (1 + IRR)^t ] （使全周期净现金流折现后等于零的折现率）',
       variables: [
         { name: 'CF0', desc: '投资初期的实际股本本金净流出（负数值）。' },
@@ -531,10 +531,10 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
         '机会型与新建开发项目 (Opportunistic / Ground-Up): 目标 IRR 通常在 17.0% 至 22.0%+。',
       ],
       calculatorCta: {
-        title: '体验完整全流程商业地产测算',
-        desc: '在 Deal Analyzer 综合工具中集成 Cap Rate、NOI、DSCR、现金回报率与压力测试。',
-        url: 'tools/deal-analyzer',
-        anchorText: '进入 Deal Analyzer 综合尽调套件',
+        title: '深度对比 Cash-on-Cash 与 IRR',
+        desc: '在实操指南中全面解析单年度静态现金回报与多年期复合内部收益率的核心差异与应用场景。',
+        url: 'guides/cash-on-cash-vs-irr',
+        anchorText: '阅读 Cash-on-Cash vs IRR 指南',
       },
       faqs: [
         { question: 'IRR 在商业地产测算中有哪些局限性？', answer: 'IRR 在数学公式上假设中间各年份分得的现金流能立刻以同样高昂的 IRR 利率进行再投资，这在现实再投资市场中往往难以持续兑现。' },
@@ -551,7 +551,7 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       h1: 'Gross Rent Multiplier (GRM)：定义、速算公式与粗筛指南',
       shortDefinition: '总租金乘数（GRM）是商业地产投资中用于 60 秒快速筛选物业的初级比率，等于购买价格除以物业的全年潜在毛租金总额。',
       fullDefinition: `总租金乘数（Gross Rent Multiplier，简称 GRM）是商业地产与多户公寓投资中最简单直观的粗筛估值倍数。它告诉买家：在完全不考虑日常运营开支、不考虑空置损失、也不考虑贷款的情况下，单凭物业账面的毛租金总额，需要多少年才能收回房子的总购买成本。\n\n虽然 GRM 因为完全忽略了地税、老旧建筑维修成本与水电费差异而不能作为深度承销的最终依据，但它被全美经纪人与活跃投资者广泛用于在海量房源中进行初筛，几秒钟内就能识别出那些明显严重溢价的虚高挂牌。`,
-      whyItMatters: 'GRM 让投资人在几分钟内浏览几十套挂牌房源。如果当地同一个社区的类似多户公寓普遍以 9.0x 的 GRM 成交，而某处挂牌按要价折算出的 GRM 高达 15.0x，买家就能立刻判定其售价过高。',
+      whyItMatters: 'GRM 让投资人在几分钟内浏览几十套挂牌房源。但由于其忽略了运营开支、坏账与地税，不可替代深度承销。crecalculators.com 专注于净收益测算；如需从毛租金推导真实的净营业收入与资本化率，请结合我们的 NOI 计算器与 Cap Rate 计算器。',
       formula: 'GRM = 物业购买价格 / 全年潜在毛租金收入 (Gross Annual Rent)',
       variables: [
         { name: '物业购买价格', desc: '挂牌售价或合同成交总价。' },
@@ -783,7 +783,7 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       h1: 'Tasa Interna de Retorno (IRR): Definición, Fórmula y Evaluación',
       shortDefinition: 'La Tasa Interna de Retorno (IRR) es la tasa de rentabilidad anualizada generada por cada dólar invertido en una propiedad comercial a lo largo de todo el periodo de tenencia, teniendo en cuenta el valor temporal del dinero.',
       fullDefinition: `La Tasa Interna de Retorno (IRR, o TIR en español) es el estándar de oro utilizado por fondos de inversión inmobiliaria, firmas de capital privado y sindicadores para evaluar la rentabilidad global de una inversión durante su ciclo completo de tenencia (típicamente de 3 a 10 años).\n\nA diferencia de métricas estáticas de un solo año como el Cap Rate o el Cash-on-Cash, el IRR tiene en cuenta el momento exacto y la cuantía de todas las entradas y salidas de efectivo: la aportación inicial de capital, los dividendos operativos anuales, las posibles aportaciones adicionales y la ganancia neta en la venta o refinanciación final del inmueble.`,
-      whyItMatters: 'El IRR incorpora el valor temporal del dinero: un dólar recibido en el año 1 tiene un impacto mucho mayor en el IRR que un dólar recibido en el año 7. Las estructuras de comisiones de éxito (waterfall/promotes) de los fondos de inversión se rigen invariablemente por tramos de IRR.',
+      whyItMatters: 'El IRR incorpora el valor temporal del dinero: un dólar recibido en el año 1 tiene un impacto mucho mayor en el IRR que un dólar recibido en el año 7. Nota: crecalculators.com se especializa en la evaluación rápida del primer año de adquisición (Cap Rate, CoC, DSCR y BER) y no en modelos de flujos descontados multianuales. Para comparar la rentabilidad en efectivo del primer año con el rendimiento anualizado de largo plazo, consulte nuestra guía completa de Cash-on-Cash vs IRR.',
       formula: '0 = VPN = Σ [ CFt / (1 + IRR)^t ] (Tasa de descuento donde el Valor Presente Neto de todos los flujos es cero)',
       variables: [
         { name: 'CF0', desc: 'Desembolso inicial de capital propio aportado para la adquisición (valor negativo en el año 0).' },
@@ -802,10 +802,10 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
         'Desarrollo de obra nueva y oportunista: TIR/IRR objetivo del 17.0% al 22.0%+.',
       ],
       calculatorCta: {
-        title: 'Modele proyecciones completas multianuales en Deal Analyzer',
-        desc: 'Combine Cap Rate, DSCR, Cash-on-Cash y pruebas de estrés completas en nuestra suite integral.',
-        url: 'tools/deal-analyzer',
-        anchorText: 'Abrir Suite Deal Analyzer',
+        title: 'Comparar Cash-on-Cash vs IRR',
+        desc: 'Comprenda las ventajas y limitaciones entre el rendimiento en efectivo del primer año y el retorno compuesto multianual.',
+        url: 'guides/cash-on-cash-vs-irr',
+        anchorText: 'Leer Guía Cash-on-Cash vs IRR',
       },
       faqs: [
         { question: '¿Cuál es la principal limitación del IRR en bienes raíces?', answer: 'El IRR asume matemáticamente que los flujos de caja provisionales se reinvierten inmediatamente a la misma tasa de retorno elevada, lo cual puede no reflejar la realidad del mercado.' },
@@ -822,7 +822,7 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       h1: 'Gross Rent Multiplier (GRM): Definición, Fórmula y Filtrado Rápido',
       shortDefinition: 'El Multiplicador de Ingreso Bruto (GRM) es una métrica de filtrado rápido que compara el precio de compra del inmueble con sus ingresos brutos por alquiler, calculada como Precio dividido por Alquiler Bruto Anual.',
       fullDefinition: `El Multiplicador de Ingreso Bruto (GRM) es una de las herramientas de filtrado más ágiles en la valoración de bienes raíces. Indica cuántos años tardaría una propiedad en pagarse a sí misma mediante los alquileres brutos cobrados, suponiendo cero gastos, cero desocupación y sin costes hipotecarios.\n\nAunque el GRM resulta insuficiente para una evaluación financiera rigurosa porque ignora por completo los impuestos, los seguros y el estado de conservación del edificio, es empleado ampliamente por inversores y corredores para cribar decenas de opciones y descartar rápidamente aquellas con precios desproporcionados.`,
-      whyItMatters: 'Permite revisar decenas de anuncios en cuestión de minutos. Si los edificios similares de un vecindario cotizan habitualmente a 9.5x GRM, un inmueble anunciado a 15.0x GRM se detecta al instante como sobrevalorado.',
+      whyItMatters: 'Permite revisar decenas de anuncios en cuestión de minutos, pero omite por completo los gastos operativos, la vacancia y la deuda. crecalculators.com se centra en métricas de ingreso neto; para transformar el alquiler bruto en ingreso operativo neto y calcular la rentabilidad real, utilice nuestras calculadoras de NOI y Cap Rate.',
       formula: 'GRM = Precio de Compra / Alquiler Bruto Potencial Anual',
       variables: [
         { name: 'Precio de Compra', desc: 'Precio de venta solicitado o precio acordado en el contrato de compraventa.' },
@@ -1054,7 +1054,7 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       h1: 'Taxa Interna de Retorno (IRR): Definição, Fórmula e Análise',
       shortDefinition: 'A Taxa Interna de Retorno (IRR) é a taxa de rentabilidade anualizada gerada sobre cada unidade monetária investida em um imóvel comercial ao longo de todo o período de posse, considerando o valor do dinheiro no tempo.',
       fullDefinition: `A Taxa Interna de Retorno (IRR, conhecida como TIR no Brasil) é a métrica padrão utilizada por gestores de fundos imobiliários, private equity e investidores institucionais para avaliar o desempenho financeiro de um projeto durante todo o seu ciclo de investimento (normalmente de 3 a 10 anos).\n\nDiferente de índices pontuais de um único ano como o Cap Rate ou o Retorno Cash-on-Cash, a TIR computa o momento exato e o volume de todas as entradas e saídas de caixa: o investimento inicial de entrada, os dividendos operacionais anuais, aportes adicionais de capital e o ganho líquido na venda ou refinanciamento final do patrimônio.`,
-      whyItMatters: 'A TIR pondera o valor do dinheiro no tempo: um real recebido no Ano 1 tem peso muito maior na TIR do que um real recebido no Ano 7. Estruturas contratuais de taxa de performance (waterfall / carry) de fundos são universalmente balizadas por metas de TIR.',
+      whyItMatters: 'A TIR pondera o valor do dinheiro no tempo: um real recebido no Ano 1 tem peso muito maior na TIR do que um real recebido no Ano 7. Nota: o crecalculators.com é focado na triagem expressa do primeiro ano de aquisição (Cap Rate, CoC, DSCR e BER) e não possui motor de fluxo de caixa descontado plurianual. Para comparar a rentabilidade anual em caixa versus a taxa interna plurianual, consulte nosso guia comparativo Cash-on-Cash vs IRR.',
       formula: '0 = VPL = Σ [ CFt / (1 + IRR)^t ] (Taxa de desconto onde o Valor Presente Líquido de todos os fluxos é igual a zero)',
       variables: [
         { name: 'CF0', desc: 'Desembolso de capital próprio inicial aportado na compra (valor negativo no Ano 0).' },
@@ -1073,10 +1073,10 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
         'Desenvolvimento Imobiliário do Zero (Opportunistic): TIR/IRR alvo de 17,0% a 22,0%+.',
       ],
       calculatorCta: {
-        title: 'Projete análises completas plurianuais no Deal Analyzer',
-        desc: 'Integre Cap Rate, DSCR, Cash-on-Cash e testes de estresse em uma suíte institucional completa.',
-        url: 'tools/deal-analyzer',
-        anchorText: 'Acessar Suíte Deal Analyzer',
+        title: 'Comparar Cash-on-Cash vs TIR (IRR)',
+        desc: 'Entenda os trade-offs entre o retorno em dinheiro do primeiro ano e o retorno composto de longo prazo em nosso guia completo.',
+        url: 'guides/cash-on-cash-vs-irr',
+        anchorText: 'Ler Guia Cash-on-Cash vs IRR',
       },
       faqs: [
         { question: 'Qual a principal limitação da TIR/IRR no mercado imobiliário?', answer: 'A TIR assume matematicamente que todas as distribuições intermediárias de caixa são imediatamente reinvestidas à mesma taxa elevada de retorno, o que pode não condizer com as opções práticas de mercado.' },
@@ -1093,7 +1093,7 @@ export const glossaryContent: Record<string, Record<GlossarySlug, GlossaryTerm>>
       h1: 'Gross Rent Multiplier (GRM): Definição, Fórmula e Triagem Expressa',
       shortDefinition: 'O Multiplicador de Aluguel Bruto (GRM) é um indicador de triagem rápida que compara o preço de aquisição do imóvel com sua receita anual bruta de aluguel, calculado como Preço dividido pelo Aluguel Bruto Anual.',
       fullDefinition: `O Gross Rent Multiplier (GRM) é uma das ferramentas de triagem mais rápidas e intuitivas na análise de imóveis. Ele indica ao investidor quantos anos seriam necessários para que a propriedade se pagasse exclusivamente com as receitas brutas de locação, considerando zero despesas, zero vacância e sem custos de financiamento.\n\nEmbora o GRM seja simplificado demais para uma tomada de decisão final por desconsiderar custos como IPTU, seguros e reformas estruturais, ele é largamente utilizado por corretores e investidores experientes para filtrar centenas de oportunidades em minutos e descartar ofertas com preços inflacionados.`,
-      whyItMatters: 'Permite analisar dezenas de imóveis comerciais em poucos minutos. Se os condomínios residenciais semelhantes em um bairro negociam tipicamente a 9,5x de GRM, uma oferta anunciada a 15,0x de GRM é imediatamente identificada como superavaliada.',
+      whyItMatters: 'Permite analisar dezenas de imóveis comerciais em poucos minutos, mas ignora despesas operacionais, vacância e financiamento. O crecalculators.com prioriza indicadores de receita líquida; para converter aluguel bruto em lucro operacional líquido real, use nossas calculadoras de NOI e Cap Rate.',
       formula: 'GRM = Preço de Compra / Aluguel Bruto Anual Potencial',
       variables: [
         { name: 'Preço de Compra', desc: 'Preço anunciado de venda ou valor acordado no contrato de aquisição.' },

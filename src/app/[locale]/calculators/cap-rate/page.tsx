@@ -408,7 +408,7 @@ export default async function CapRatePage({ params }: PageProps) {
             </p>
           </div>
           <Link
-            href={`/${locale}/guides/cap-rate-benchmarks-by-city/`}
+            href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
           >
             <span>{bannersByLocale.guideBtn}</span>

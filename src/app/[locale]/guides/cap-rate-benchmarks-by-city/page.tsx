@@ -88,6 +88,90 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
         </div>
       </section>
 
+      {/* Universal National Cap Rate Benchmark Table (All 7 Asset Classes) */}
+      <section id="national-benchmarks" className="scroll-mt-24 bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
+            <Building2 className="w-3.5 h-3.5" />
+            <span>{isZh ? '全美基准参考表' : isEs ? 'Tabla Maestra de Referencia Nacional' : isPt ? 'Tabela Mestra de Referência Nacional' : 'National Benchmark Master Reference'}</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+            {isZh ? '全美 7 大主要商业物业 Cap Rate 基准全距 (2026)' : isEs ? 'Rangos Nacionales de Cap Rate por Tipo de Activo Comercial (2026)' : isPt ? 'Faixas Nacionais de Cap Rate por Classe de Imóvel Comercial (2026)' : 'National Commercial Real Estate Cap Rate Benchmark Ranges (2026)'}
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl">
+            {isZh
+              ? '跨物业类别与资产评级的全美 Cap Rate 参考总表。综合 Newmark 2026 年一季度全美调查（多户、工业、零售、办公、自存仓、酒店跨档位全距）与 The Boulder Group 2026 年三季度净租金市场报告（单租户 NNN 整体平均 6.92%）。'
+              : isEs
+              ? 'Tabla resumen nacional que cubre los 7 principales sectores comerciales. Informada por el sondeo nacional de Newmark Q1 2026 y el informe de The Boulder Group Q3 2026 (promedio nacional NNN 6.92%).'
+              : isPt
+              ? 'Quadro resumo de referência nacional para as 7 principais classes comerciais. Baseado na pesquisa Newmark T1 2026 e relatório da The Boulder Group T3 2026 (média NNN 6,92%).'
+              : 'Universal national benchmark reference table spanning all 7 major commercial property sectors. Derived from Newmark Q1 2026 National Investor Survey (comprehensive ranges across Class A to C tiers) and The Boulder Group Q3 2026 Net Lease Market Report (6.92% national NNN average).'}
+          </p>
+        </div>
+
+        <div className="overflow-x-auto rounded-xl border border-slate-200">
+          <table className="w-full text-left text-xs sm:text-sm">
+            <thead className="bg-slate-900 text-white font-bold border-b border-slate-800">
+              <tr>
+                <th className="py-3.5 px-4 min-w-[180px]">{isZh ? '物业类型 (Asset Class)' : 'Asset Class'}</th>
+                <th className="py-3.5 px-4 min-w-[150px]">{isZh ? '全美基准区间 (Range)' : 'National Benchmark Range'}</th>
+                <th className="py-3.5 px-4 min-w-[160px]">{isZh ? '主要数据来源 (Source)' : 'Primary Source & Methodology'}</th>
+                <th className="py-3.5 px-4">{isZh ? '测算要点与说明 (Underwriting Notes)' : 'Key Underwriting Notes'}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 text-slate-800">
+              <tr className="hover:bg-slate-50/80 transition-colors">
+                <td className="py-3 px-4 font-bold text-slate-900">Multifamily (多户住宅公寓)</td>
+                <td className="py-3 px-4 font-bold text-emerald-700 whitespace-nowrap bg-emerald-50/40">4.50% – 7.00%</td>
+                <td className="py-3 px-4 text-xs text-slate-600">Newmark Q1 2026 Survey</td>
+                <td className="py-3 px-4 text-slate-600 leading-relaxed text-xs">Span covers gateway Class A (4.50%–5.25%) to secondary/tertiary Class B/C (5.50%–7.00%). Tightest institutional liquidity spread.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/80 transition-colors">
+                <td className="py-3 px-4 font-bold text-slate-900">Industrial & Logistics (工业与物流仓储)</td>
+                <td className="py-3 px-4 font-bold text-emerald-700 whitespace-nowrap bg-emerald-50/40">5.00% – 7.50%</td>
+                <td className="py-3 px-4 text-xs text-slate-600">Newmark Q1 2026 Survey</td>
+                <td className="py-3 px-4 text-slate-600 leading-relaxed text-xs">Bulk modern distribution commands 5.00%–6.25%; shallow-bay and flex industrial trade wider at 6.50%–7.50%.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/80 transition-colors">
+                <td className="py-3 px-4 font-bold text-slate-900">Retail (商业零售中心)</td>
+                <td className="py-3 px-4 font-bold text-emerald-700 whitespace-nowrap bg-emerald-50/40">5.50% – 9.25%</td>
+                <td className="py-3 px-4 text-xs text-slate-600">Newmark Q1 2026 / JLL</td>
+                <td className="py-3 px-4 text-slate-600 leading-relaxed text-xs">Grocery-anchored neighborhood retail trades tightly (5.50%–6.50%); unanchored strip centers price with credit discount up to 9.25%.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/80 transition-colors">
+                <td className="py-3 px-4 font-bold text-slate-900">Office (办公楼宇)</td>
+                <td className="py-3 px-4 font-bold text-emerald-700 whitespace-nowrap bg-emerald-50/40">5.75% – 11.25%</td>
+                <td className="py-3 px-4 text-xs text-slate-600">Newmark Q1 2026 Survey</td>
+                <td className="py-3 px-4 text-slate-600 leading-relaxed text-xs">Bifurcated market: Trophy CBD buildings trade around 5.75%–7.50%; commodity suburban Class B/C trade with elevated risk premium up to 11.25%.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/80 transition-colors">
+                <td className="py-3 px-4 font-bold text-slate-900">Self-Storage (自存仓)</td>
+                <td className="py-3 px-4 font-bold text-emerald-700 whitespace-nowrap bg-emerald-50/40">5.00% – 9.00%</td>
+                <td className="py-3 px-4 text-xs text-slate-600">Newmark Q1 2026 / Cushman</td>
+                <td className="py-3 px-4 text-slate-600 leading-relaxed text-xs">Primary climate-controlled multi-story trades 5.00%–6.00%; tertiary drive-up facilities price 7.00%–9.00% reflecting month-to-month leases.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/80 transition-colors">
+                <td className="py-3 px-4 font-bold text-slate-900">Hotel & Hospitality (酒店)</td>
+                <td className="py-3 px-4 font-bold text-emerald-700 whitespace-nowrap bg-emerald-50/40">6.50% – 11.50%</td>
+                <td className="py-3 px-4 text-xs text-slate-600">Newmark Q1 2026 / CBRE Survey</td>
+                <td className="py-3 px-4 text-slate-600 leading-relaxed text-xs">Full-service gateway luxury prices 6.50%–7.50%; economy limited-service trades up to 11.50%. Note: CBRE hotel survey reflects narrower central tendency (7.0%–9.5% for select-service).</td>
+              </tr>
+              <tr className="hover:bg-slate-50/80 transition-colors">
+                <td className="py-3 px-4 font-bold text-slate-900">Single-Tenant Net Lease / NNN (单租户净租)</td>
+                <td className="py-3 px-4 font-bold text-emerald-700 whitespace-nowrap bg-emerald-50/40">6.70% – 8.00%</td>
+                <td className="py-3 px-4 text-xs text-slate-600">The Boulder Group Q3 2026</td>
+                <td className="py-3 px-4 text-slate-600 leading-relaxed text-xs">National overall net lease average is 6.92%. Investment-grade corporate credit (CVS, Walgreens, Dollar General) prices 6.00%–6.75%; franchisee guarantees trade 7.25%–8.00%+.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-slate-500 leading-relaxed italic">
+          {isZh
+            ? '注：上述宽泛区间反映全美不同区域（一线核心市场至三线市场）与资产评级（Class A 至 Class C）的全谱系分布。CBRE 酒店调查在中心趋向统计上与 Newmark 略有分歧（CBRE 精选服务型多集中于 7.0%–9.5%），已在表中特别注明。个别数字经 JLL 与 Marcus & Millichap 行业二级报告复核。'
+            : 'Note: Wide ranges reflect the full national continuum across market tiers (Gateway Tier 1 to Tertiary Tier 3) and property quality (Class A to Class C). CBRE hospitality surveys indicate narrower central tendencies for select-service hotels (7.0%–9.5%) as footnoted. Select figures cross-checked against JLL and Marcus & Millichap market reports.'}
+        </p>
+      </section>
+
       {/* Property Type Benchmark Table */}
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
         <div className="space-y-1">

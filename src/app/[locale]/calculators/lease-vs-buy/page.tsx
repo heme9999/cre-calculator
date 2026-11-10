@@ -107,6 +107,115 @@ export default async function LeaseVsBuyPage({ params }: PageProps) {
           <LeaseVsBuyScenarioComparison locale={locale} />
         </section>
 
+        {/* Strategic Decision Factors: Holding Period & Tax Shields */}
+        <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
+          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-emerald-600" />
+            {isZh
+              ? '深度决策模型：持有周期与税务折旧抵税测算'
+              : isEs
+              ? 'Factores Estratégicos de Decisión: Horizonte Temporal y Escudos Fiscales'
+              : isPt
+              ? 'Fatores Estratégicos de Decisão: Prazo de Posse e Benefícios Fiscais'
+              : 'Strategic Underwriting Factors: Holding Period Dynamics & Tax Shields'}
+          </h2>
+          <div className="space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
+            <p>
+              {isZh
+                ? '商业物业的买租决策绝非仅仅对比每月租金与月供。真正的核心分水岭在于业务的持有周期预期、资金机会成本以及沉淀资本的折旧抵税效应：'
+                : isEs
+                ? 'La decisión entre comprar o alquilar no es una simple comparación entre renta mensual y cuota hipotecaria. Los dos factores determinantes son el horizonte temporal y los escudos fiscales:'
+                : isPt
+                ? 'A decisão entre comprar ou alugar vai muito além de comparar o aluguel mensal com a parcela do financiamento. Os fatores críticos são o horizonte de permanência e os benefícios fiscais:'
+                : 'Deciding whether to lease or purchase commercial real estate is never a simple comparison of monthly rent versus monthly loan debt service. The true break-even inflection point is driven by two institutional factors: the planned holding horizon and the tax shield created by real estate depreciation:'}
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2">
+                <h3 className="font-bold text-slate-900 text-sm">
+                  {isZh ? '1. 持有周期效应 (3–5 年 vs 7–10 年)' : isEs ? '1. Horizonte Temporal (3–5 vs 7–10 Años)' : isPt ? '1. Horizonte de Posse (3–5 vs 7–10 Anos)' : '1. Holding Period Inflection (3–5 vs. 7–10+ Years)'}
+                </h3>
+                <p>
+                  {isZh
+                    ? '短期持有（3–5 年以内）通常偏向租赁。因为商业地产买卖的交易摩擦成本极高：购入时需支付 2%–4% 的尽调与交割费，出售时需支付 5%–6% 的经纪佣金与过户税。若持有年限不足以摊销这些沉没成本并累积本金偿付，租赁能保持企业营运资金的充沛流动性。反之，7 年以上周期买入优势显著，不仅锁定了固定居住成本，还能享受长期资产增值与贷款本金偿付形成的权益积累。'
+                    : isEs
+                    ? 'Plazos cortos (3 a 5 años) suelen favorecer el alquiler debido a los altos costos de transacción (2%–4% en la adquisición y 5%–6% de comisiones en la venta). Para periodos superiores a 7 años, comprar suele ser más ventajoso al amortizar deuda y capturar plusvalías a largo plazo.'
+                    : isPt
+                    ? 'Prazos curtos (3 a 5 anos) geralmente favorecem o aluguel devido aos custos transacionais elevados. Acima de 7 anos, a compra compensa pelo acúmulo de patrimônio na amortização da dívida e valorização imobiliária.'
+                    : 'Short holding horizons (under 5 years) almost invariably favor leasing due to heavy transaction friction: 2% to 4% in upfront financing and due diligence closing costs, plus 5% to 6% in broker disposition fees upon exit. If your business relocates or expands before these frictions are amortized, leasing preserves vital working capital. Conversely, holding horizons exceeding 7 to 10 years strongly favor ownership as debt principal paydown accelerates and property equity accumulates.'}
+                </p>
+              </div>
+
+              <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2">
+                <h3 className="font-bold text-slate-900 text-sm">
+                  {isZh ? '2. 折旧与成本分离抵税 (IRC §168)' : isEs ? '2. Depreciación y Segregación de Costos' : isPt ? '2. Depreciação e Benefício Fiscal' : '2. Depreciation Shields & Cost Segregation'}
+                </h3>
+                <p>
+                  {isZh
+                    ? '商业物业（非住宅）按 IRC §168(c) 实行 39 年直线折旧（住宅出租物业为 27.5 年）。虽然全额租金支出可作为营业费用 100% 抵税，但购置商业地产可通过“成本分离”（Cost Segregation）将 20%–35% 的建筑成本（如地毯、专用电气、景观铺装）拆分为 5 年、7 年或 15 年资产，在前几年产生巨额账面折旧亏损，抵减企业利润税。'
+                    : isEs
+                    ? 'Los inmuebles comerciales se amortizan en 39 años según la normativa estadounidense. Aunque el alquiler es 100% deducible como gasto operativo, la compra permite realizar estudios de segregación de costos para acelerar deducciones fiscales sustanciales en los primeros años.'
+                    : isPt
+                    ? 'Imóveis comerciais geram amortização fiscal dedutível. Enquanto o aluguel é integralmente dedutível como despesa, a propriedade permite estruturar estratégias de depreciação acelerada para reduzir tributos.'
+                    : 'Under IRC §168(c), non-residential commercial buildings are depreciated straight-line over 39 years (residential over 27.5 years). While lease payments are 100% deductible as ordinary operating expenses, property acquisition unlocks cost segregation studies, accelerating 20% to 35% of building components into 5-, 7-, and 15-year MACRS property to generate front-loaded tax shields.'}
+                </p>
+              </div>
+            </div>
+
+            <p className="pt-2">
+              {isZh ? (
+                <>
+                  若您正在评估自用或投资型商业物业的买入价格是否公允，请查阅我们的{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    全美主要商业物业 Cap Rate 基准参考表
+                  </Link>
+                  ，核对目标资产的无杠杆回报水平与市场均值。同时，建议深入阅读完整的{' '}
+                  <Link href={`/${locale}/guides/buy-vs-lease-decision-framework/`} className="text-emerald-600 hover:underline font-semibold">
+                    商业地产买 vs 租决策分析框架
+                  </Link>
+                  。
+                </>
+              ) : isEs ? (
+                <>
+                  Si evalúa si el precio de compra propuesto se ajusta a las condiciones del mercado, consulte nuestra{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    Tabla Maestra de Cap Rates Nacionales
+                  </Link>
+                  {' '}y lea el{' '}
+                  <Link href={`/${locale}/guides/buy-vs-lease-decision-framework/`} className="text-emerald-600 hover:underline font-semibold">
+                    Marco de Decisión Completo
+                  </Link>
+                  .
+                </>
+              ) : isPt ? (
+                <>
+                  Se você está avaliando se o preço de compra está condizente com o mercado, consulte a nossa{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    Tabela Mestra de Cap Rates Nacionais
+                  </Link>
+                  {' '}e leia o{' '}
+                  <Link href={`/${locale}/guides/buy-vs-lease-decision-framework/`} className="text-emerald-600 hover:underline font-semibold">
+                    Guia de Decisão Completo
+                  </Link>
+                  .
+                </>
+              ) : (
+                <>
+                  If you are evaluating whether an acquisition price aligns with institutional market norms, check prevailing sector cap rates in our{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    National Cap Rate Benchmarks Master Reference Table
+                  </Link>
+                  , or explore our in-depth{' '}
+                  <Link href={`/${locale}/guides/buy-vs-lease-decision-framework/`} className="text-emerald-600 hover:underline font-semibold">
+                    Commercial Buy vs. Lease Decision Framework Guide
+                  </Link>
+                  .
+                </>
+              )}
+            </p>
+          </div>
+        </section>
+
         {/* Guide Banner */}
         <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs">
           <div className="space-y-2 max-w-2xl">

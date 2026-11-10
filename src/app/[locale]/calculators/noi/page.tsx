@@ -62,52 +62,52 @@ export default async function NoiPage({ params }: PageProps) {
   const workedExampleByLocale = {
     en: {
       title: 'Worked Commercial Property Example',
-      intro: 'Consider a hypothetical 24-unit multifamily property purchased for $2,800,000. To calculate its NOI, we only look at property-level operations:',
-      p1: 'Gross potential income: $336,000',
-      p2: 'Vacancy loss: 5% ($16,800)',
-      p3: 'Effective gross income (EGI): $319,200',
-      p4: 'Operating expenses: $92,000',
-      calc: 'Calculation: NOI = $319,200 (EGI) - $92,000 (OpEx) = $227,200',
-      note: 'Note that we explicitly ignore the mortgage here. Once you have this $227,200 NOI, your typical next step is to use it to ',
+      intro: 'Consider a hypothetical 18-unit garden-style multifamily property acquired for $2,450,000. To calculate its Net Operating Income (NOI), we look exclusively at operational revenues and property-level expenses:',
+      p1: 'Gross potential rent (18 units × $1,250/mo × 12): $270,000 + Laundry & parking income: $14,400 (Total GPI: $284,400)',
+      p2: 'Economic vacancy & credit loss: 5.5% (-$15,642)',
+      p3: 'Effective Gross Income (EGI): $268,758',
+      p4: 'Operating expenses (taxes, insurance, management, maintenance, utilities): $98,400',
+      calc: 'Calculation: NOI = $268,758 (EGI) - $98,400 (OpEx) = $170,358 (6.95% unlevered property yield)',
+      note: 'Note that debt service is excluded from NOI. Once you establish this $170,358 stabilized NOI, your next underwriting step is to ',
       capLink: 'calculate the property\'s Cap Rate',
       orText: ' or ',
       dscrLink: 'measure your loan\'s DSCR',
     },
     zh: {
       title: '商业地产分析案例 (Illustrative Example)',
-      intro: '假设您正在评估一处 24 单元的多户住宅物业（24-unit multifamily），购买价为 $2,800,000。要计算其 NOI，我们只需要关注物业自身的运营表现：',
-      p1: '年潜在毛收入: $336,000',
-      p2: '空置率: 5% ($16,800)',
-      p3: '有效毛收入 (EGI): $319,200',
-      p4: '年度运营费用: $92,000',
-      calc: '计算 NOI = $319,200 (EGI) - $92,000 (OpEx) = $227,200',
-      note: '注意：我们在此不扣除房贷。得到 $227,200 的 NOI 后，您的下一步通常是利用这个数字来 ',
+      intro: '假设您正在评估一处 18 单元的花园式多户住宅物业（18-unit multifamily），购买价为 $2,450,000。要计算其净营业收入 (NOI)，我们只需聚焦于物业层面的实际运营收支：',
+      p1: '潜在租金总额 (18 单元 × $1,250/月 × 12): $270,000 + 洗衣与停车其他收入: $14,400 (潜在毛收入 GPI: $284,400)',
+      p2: '经济空置与坏账准备: 5.5% (-$15,642)',
+      p3: '有效毛收入 (EGI): $268,758',
+      p4: '年度运营开支 (房产税、保险、物业管理费、日常维护与水电): $98,400',
+      calc: '计算: NOI = $268,758 (EGI) - $98,400 (OpEx) = $170,358 (对应 6.95% 无杠杆资本化率)',
+      note: '注意：我们在此严格不扣除房贷。得到 $170,358 的 NOI 后，后续步骤通常是利用该数字来 ',
       capLink: '计算物业的 Cap Rate',
       orText: ' 或 ',
-      dscrLink: '测量贷款的 DSCR',
+      dscrLink: '测算贷款的 DSCR',
     },
     es: {
       title: 'Caso Práctico en Bienes Raíces Comerciales',
-      intro: 'Considere una propiedad multifamiliar hipotética de 24 unidades adquirida por $2,800,000. Para calcular su NOI, nos enfocamos exclusivamente en la operación directa del activo:',
-      p1: 'Ingreso potencial bruto: $336,000',
-      p2: 'Pérdida por vacancia: 5% ($16,800)',
-      p3: 'Ingreso bruto efectivo (EGI): $319,200',
-      p4: 'Gastos operativos anuales: $92,000',
-      calc: 'Cálculo: NOI = $319,200 (EGI) − $92,000 (OpEx) = $227,200',
-      note: 'Nota: En este punto se excluyen deliberadamente las cuotas hipotecarias. Tras obtener los $227,200 de NOI, el siguiente paso típico es utilizar esta cifra para ',
+      intro: 'Considere una propiedad multifamiliar de 18 unidades adquirida por $2,450,000. Para determinar su Ingreso Operativo Neto (NOI), evaluamos exclusivamente los flujos operativos a nivel de propiedad:',
+      p1: 'Renta potencial bruta: $270,000 + Ingresos de lavandería y estacionamiento: $14,400 (GPI total: $284,400)',
+      p2: 'Pérdida por vacancia económica y morosidad: 5.5% (-$15,642)',
+      p3: 'Ingreso bruto efectivo (EGI): $268,758',
+      p4: 'Gastos operativos anuales (impuestos, seguros, administración y mantenimiento): $98,400',
+      calc: 'Cálculo: NOI = $268,758 (EGI) − $98,400 (OpEx) = $170,358 (rendimiento desapalancado del 6.95%)',
+      note: 'Nota: Excluimos deliberadamente el servicio de deuda en este punto. Al obtener $170,358 de NOI, el paso siguiente es ',
       capLink: 'calcular el Cap Rate del inmueble',
       orText: ' o ',
       dscrLink: 'medir el DSCR de la hipoteca',
     },
     pt: {
       title: 'Exemplo Prático em Imóveis Comerciais',
-      intro: 'Considere um imóvel multifamiliar hipotético de 24 unidades adquirido por $2,800,000. Para calcular o NOI, focamos unicamente no desempenho operacional do ativo:',
-      p1: 'Receita potencial bruta: $336,000',
-      p2: 'Perda por vacância: 5% ($16,800)',
-      p3: 'Receita bruta efetiva (EGI): $319,200',
-      p4: 'Despesas operacionais anuais: $92,000',
-      calc: 'Cálculo: NOI = $319,200 (EGI) − $92,000 (OpEx) = $227,200',
-      note: 'Nota: Ignoramos expressamente as parcelas do empréstimo nesta etapa. Ao apurar o NOI de $227,200, a etapa seguinte usual é utilizá-lo para ',
+      intro: 'Considere um imóvel multifamiliar de 18 unidades adquirido por $2,450,000. Para apurar a Receita Operacional Líquida (NOI), focamos exclusivamente nas receitas operacionais e despesas do ativo:',
+      p1: 'Aluguel potencial bruto: $270,000 + Receitas adicionais: $14,400 (GPI total: $284,400)',
+      p2: 'Perda por vacância econômica e inadimplência: 5.5% (-$15,642)',
+      p3: 'Receita bruta efetiva (EGI): $268,758',
+      p4: 'Despesas operacionais anuais (impostos, seguro, gestão e manutenção): $98,400',
+      calc: 'Cálculo: NOI = $268,758 (EGI) − $98,400 (OpEx) = $170,358 (retorno desalavancado de 6.95%)',
+      note: 'Nota: O serviço da dívida é rigorosamente excluído do NOI. Ao estabelecer o NOI estabilizado de $170,358, o passo seguinte é ',
       capLink: 'calcular o Cap Rate do imóvel',
       orText: ' ou ',
       dscrLink: 'medir o DSCR do financiamento',
@@ -240,6 +240,98 @@ export default async function NoiPage({ params }: PageProps) {
           <div className="space-y-2 text-xs sm:text-sm text-amber-900 leading-relaxed">
             <p>{pit.item1}</p>
             <p>{pit.item2}</p>
+          </div>
+        </section>
+
+        {/* Institutional Underwriting: T-12 Normalization & Tax Reassessments */}
+        <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
+          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-emerald-600" />
+            {isZh
+              ? '机构级承销：T-12 财报规范化与交易后房产税重估'
+              : locale === 'es'
+              ? 'Suscripción Institucional: Normalización de T-12 y Reevaluación Fiscal'
+              : locale === 'pt'
+              ? 'Subscrição Institucional: Normalização de T-12 e Reavaliação Fiscal'
+              : 'Institutional Underwriting: T-12 Normalization & Tax Reassessments'}
+          </h2>
+          <div className="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+            <p>
+              {isZh
+                ? '在实际商业地产交易中，经纪人推介手册（Offering Memorandum）中的“预计”或“预测” NOI 往往经过美化（例如假设零坏账、低估维修费）。机构尽调人员必须依据过去 12 个月的实际流水账目（Trailing-12 或 T-12）进行严格规范化：'
+                : locale === 'es'
+                ? 'En transacciones comerciales reales, el NOI "proyectado" en los folletos de venta suele ser excesivamente optimista. Los evaluadores institucionales normalizan las cifras basándose en los estados financieros de los últimos 12 meses (T-12):'
+                : locale === 'pt'
+                ? 'Em negociações comerciais, o NOI "projetado" em memorandos de venda frequentemente mascara custos reais. Avaliadores institucionais normalizam os números com base nos balancetes dos últimos 12 meses (T-12):'
+                : 'In commercial acquisitions, broker-marketed "pro-forma" NOI frequently inflates true operating health by ignoring recurring tenant concessions and underestimating turnover costs. Institutional underwriters strictly audit Trailing-12 (T-12) financial statements to normalize operational cash flows:'}
+            </p>
+            <ul className="list-disc pl-5 space-y-1.5">
+              <li>
+                <strong>{isZh ? '剥离非经常性收支：' : locale === 'es' ? 'Depurar partidas no recurrentes: ' : locale === 'pt' ? 'Expurgar itens não recorrentes: ' : 'Eliminate Non-Recurring Adjustments: '}</strong>
+                {isZh
+                  ? '剔除前房东一次性的法律纠纷支出、个人车辆加油等非物业支出，补足合理的职业物业管理费（通常占 EGI 的 4%–8%，即使买家打算自行管理也需计入）。'
+                  : locale === 'es'
+                  ? 'Eliminar gastos personales del vendedor y contingencias legales únicas, reservando honorarios de gestión profesional de terceros (4% a 8% del EGI).'
+                  : locale === 'pt'
+                  ? 'Remover despesas pessoais do proprietário anterior e processos pontuais, garantindo taxa de administração profissional (4% a 8% da EGI).'
+                  : 'Remove seller-specific discretionary expenses, one-off insurance claims, and add market-rate third-party management fees (typically 4% to 8% of EGI), even if self-managed.'}
+              </li>
+              <li>
+                <strong>{isZh ? '交割后房产税重估风险：' : locale === 'es' ? 'Reevaluación de impuestos prediales tras la compra: ' : locale === 'pt' ? 'Reavaliação de IPTU pós-aquisição: ' : 'Post-Closing Property Tax Reassessment: '}</strong>
+                {isZh
+                  ? '这是承销中最常见的致命漏洞。许多地区的评估部门会在产权过户后，将计税估值直接重估至最新成交价（如德克萨斯州或加利福尼亚州）。若仍沿用前业主的历史低税额，实际 NOI 可能会直接缩水 15%–25%。'
+                  : locale === 'es'
+                  ? 'Un error crítico común: en muchas jurisdicciones, la compraventa dispara una retasación del valor catastral al nuevo precio de compra, lo que puede incrementar los impuestos y reducir el NOI real entre un 15% y un 25%.'
+                  : locale === 'pt'
+                  ? 'Um risco fatal comum: em muitos municípios, a transferência do imóvel dispara a reavaliação do valor venal ao preço de compra, elevando o imposto e reduzindo o NOI real em 15% a 25%.'
+                  : 'Never rely on the seller\'s historical tax bill. In reassessment jurisdictions (such as Texas or California upon change of ownership), local taxing authorities reassess assessed values toward the new purchase price, often increasing property taxes by 20% to 50% and erasing tens of thousands from net operating income.'}
+              </li>
+              <li>
+                <strong>{isZh ? '资本重置准备金：' : locale === 'es' ? 'Reservas para reposición de capital: ' : locale === 'pt' ? 'Reserva para substituição de capital: ' : 'Replacement Reserves: '}</strong>
+                {isZh
+                  ? '机构放贷机构（如 Fannie Mae 与 Freddie Mac）要求每套住宅每年提留 $250–$350 的重置准备金，用于未来的屋顶、暖通空调及大型设备更新。'
+                  : locale === 'es'
+                  ? 'Prestamistas institucionales (como Fannie Mae y Freddie Mac) exigen reservar entre $250 y $350 por unidad al año para futuros reemplazos de techos, sistemas HVAC y pavimentación.'
+                  : locale === 'pt'
+                  ? 'Credores institucionais exigem reservar de $250 a $350 por unidade ao ano para substituição periódica de telhados, sistemas de ar-condicionado e pavimentação.'
+                  : 'Fannie Mae, Freddie Mac, and life companies require deducting $250 to $350 per unit annually into escrow for ongoing capital replacements (roofs, HVACs, and parking lots) to arrive at underwritten net cash flow.'}
+              </li>
+            </ul>
+            <p className="pt-2">
+              {isZh ? (
+                <>
+                  核定出真实的标准化 NOI 后，下一步是将其放入市场整体环境中对比。请参考我们的{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    全美主要商业物业 Cap Rate 基准参考表
+                  </Link>
+                  ，查看多户住宅、工业物流、零售及医疗地产的最新平均收益率区间。
+                </>
+              ) : locale === 'es' ? (
+                <>
+                  Una vez normalizado el NOI, evalúe si el rendimiento del activo es competitivo consultando nuestra{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    Tabla Maestra de Cap Rates Nacionales por Tipo de Activo
+                  </Link>
+                  .
+                </>
+              ) : locale === 'pt' ? (
+                <>
+                  Após normalizar o NOI, compare o retorno com os parâmetros de mercado em nossa{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    Tabela Mestra de Cap Rates Nacionais por Categoria de Ativo
+                  </Link>
+                  .
+                </>
+              ) : (
+                <>
+                  Once you have calculated a defensible, normalized NOI, evaluate whether the implied yield matches prevailing market expectations using our{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    National Cap Rate Benchmarks Master Reference Table
+                  </Link>
+                  , which compiles target yields across multifamily, industrial, retail, office, self-storage, hotel, and single-tenant NNN properties.
+                </>
+              )}
+            </p>
           </div>
         </section>
 

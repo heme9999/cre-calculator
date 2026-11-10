@@ -227,6 +227,41 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
                 </>
               )}
             </p>
+            <p className="mt-3 text-xs sm:text-sm text-slate-600">
+              {isZh ? (
+                <>
+                  在评估物业的盈亏平衡点与抗风险垫层时，还应关注资产类别对应的风险收益定价。可查阅我们的{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    全美主要物业 Cap Rate 基准参考表
+                  </Link>
+                  ，核对目标资产的无杠杆回报水平与市场均值。
+                </>
+              ) : isEs ? (
+                <>
+                  Al analizar los márgenes de seguridad operativa y la ocupación de equilibrio, compare el rendimiento subyacente con nuestra{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    Tabla Maestra de Cap Rates Nacionales
+                  </Link>
+                  .
+                </>
+              ) : isPt ? (
+                <>
+                  Ao avaliar as margens de segurança operacional e o ponto de equilíbrio, compare o rendimento com a nossa{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    Tabela Mestra de Cap Rates Nacionais
+                  </Link>
+                  .
+                </>
+              ) : (
+                <>
+                  When assessing whether your break-even occupancy leaves adequate margin against local market distress, compare the asset&apos;s unlevered yield against peer sectors in our{' '}
+                  <Link href={`/${locale}/guides/cap-rate-benchmarks-by-city/#national-benchmarks`} className="text-emerald-600 hover:underline font-semibold">
+                    National Cap Rate Benchmarks Reference Table
+                  </Link>
+                  .
+                </>
+              )}
+            </p>
           </div>
         </section>
 

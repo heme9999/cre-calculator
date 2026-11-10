@@ -54,9 +54,9 @@ export function ArticleGuideView({ content, locale, guideSlug }: Props) {
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
           {content.h1}
         </h1>
-        <p className="text-base text-slate-600 max-w-3xl leading-relaxed">
-          {content.subtitle}
-        </p>
+        <div className="text-base text-slate-600 max-w-3xl leading-relaxed">
+          <MarkdownContent content={content.subtitle} />
+        </div>
       </header>
 
       {/* Structured Underwriting Workflow Infographic */}
