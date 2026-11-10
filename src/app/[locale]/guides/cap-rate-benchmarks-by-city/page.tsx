@@ -162,6 +162,140 @@ export default async function CapRateBenchmarksGuidePage({ params }: PageProps) 
         </div>
       </section>
 
+      {/* Comprehensive Capital Markets & Underwriting Analysis */}
+      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
+        <div className="space-y-2 border-b border-slate-200 pb-4">
+          <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+            {isZh ? '宏观资本市场深度研判' : isEs ? 'Análisis Macroeconómico de Capitales' : isPt ? 'Análise Macroeconômica de Capitais' : 'Macro Capital Markets Analysis'}
+          </span>
+          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+            {isZh
+              ? '利率周期、利差结构与正负杠杆机制全解析'
+              : isEs
+              ? 'Dinámica de Tasas del Tesoro, Spreads Crediticios y Mecánica de Apalancamiento'
+              : isPt
+              ? 'Dinâmica de Juros do Tesouro, Spreads de Crédito e Mecânica de Alavancagem'
+              : 'Interest Rate Dynamics, Risk Spreads, and Positive vs. Negative Leverage Mechanics'}
+          </h2>
+          <p className="text-xs text-slate-500">
+            {isZh
+              ? '最后更新：2026年11月 · 宏观利差模型审核人：Marcus Vance, CCIM'
+              : isEs
+              ? 'Última actualización: Noviembre 2026 · Revisado por Marcus Vance, CCIM'
+              : isPt
+              ? 'Última atualização: Novembro 2026 · Revisado por Marcus Vance, CCIM'
+              : 'Last Updated: November 2026 · Underwriting Review by Marcus Vance, CCIM'}
+          </p>
+        </div>
+
+        <div className="prose prose-slate max-w-none text-xs sm:text-sm text-slate-700 leading-relaxed space-y-5">
+          <div className="space-y-2">
+            <h3 className="text-base font-bold text-slate-900">
+              {isZh
+                ? '1. 资本化率与 10 年期美国国债收益率的利差规律 (Spread to Benchmark)'
+                : isEs
+                ? '1. El Diferencial Histórico sobre los Bonos del Tesoro a 10 Años'
+                : isPt
+                ? '1. O Spread Histórico sobre os Títulos do Tesouro de 10 Anos'
+                : '1. The Historical Spread Over the 10-Year U.S. Treasury Yield'}
+            </h3>
+            <p>
+              {isZh
+                ? '在商业不动产估值实践中，资本化率（Cap Rate）绝非孤立存在，而是作为“基准无风险收益率（10年期美债）+ 风险溢价（Risk Premium）”的函数运行。历史上，全美优质商业地产（如核心多户型和现代物流仓储）相对于 10 年期美债收益率的合理利差区间为 175 到 250 个基点（bps）；而次级零售或办公楼等业态的利差通常需达到 300 到 450 个基点以上，以补偿流动性不足、再招商停工期以及资本性重置支出。当美债收益率维持在 4.0%–4.5% 区间时，低于 5.50% 的资本化率往往意味着投资者在依赖未来的高租金增长预期进行激进定价。'
+                : isEs
+                ? 'En la práctica de valuación comercial, el Cap Rate opera como la suma de la tasa libre de riesgo (bono del Tesoro a 10 años) más una prima de riesgo de liquidez e iliquidez inmobiliaria. Históricamente, activos institucionales Clase A en multifamiliar y logística exigen un diferencial de 175 a 250 puntos básicos (bps) sobre el Tesoro. Para activos comerciales secundarios o de oficinas, este diferencial se amplía a más de 300–450 bps para compensar la menor liquidez y períodos prolongados de desocupación.'
+                : isPt
+                ? 'Na prática de avaliação imobiliária comercial, o Cap Rate opera como a taxa livre de risco (título do Tesouro americano de 10 anos) acrescida de um prêmio de risco do imóvel. Historicamente, ativos Classe A em logística e multifamiliar demandam um spread de 175 a 250 pontos-base (bps) sobre o Tesouro. Em ativos comerciais secundários ou escritórios, esse spread supera 300–450 bps para remunerar o risco de desocupação e reposição de capital.'
+                : 'In institutional commercial real estate underwriting, capitalization rates operate as a function of the risk-free benchmark yield (the 10-Year U.S. Treasury) plus an equity risk premium. Historically, prime Class A multifamily and industrial assets trade at a 175 to 250 basis point (bps) spread over the 10-Year Treasury. For secondary retail, suburban flex, or commodity office buildings, the required spread widens past 300 to 450+ bps to compensate for tenant credit risk, extended re-leasing downtime, and capital expenditure drag. When benchmark Treasury yields hover between 4.0% and 4.5%, entering into a deal below a 5.50% cap rate implies aggressive reliance on post-acquisition net rental growth.'}
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-base font-bold text-slate-900">
+              {isZh
+                ? '2. 谨防“负杠杆陷阱”：贷款常数 (Loan Constant) vs. 进场 Cap Rate'
+                : isEs
+                ? '2. La Trampa del Apalancamiento Negativo: Constante de Deuda vs. Cap Rate'
+                : isPt
+                ? '2. A Armadilha da Alavancagem Negativa: Constante da Dívida vs. Cap Rate'
+                : '2. Avoiding the Negative Leverage Trap: Loan Constant vs. Going-In Cap Rate'}
+            </h3>
+            <p>
+              {isZh
+                ? '许多新手投资者常犯的错误是仅仅对比“名义房贷利率”与“Cap Rate”。例如：以 5.75% 的固定利率贷款购买 6.00% Cap Rate 的物业，看似存在 25 bps 的正向利差。然而，商业贷款通常包含 25 年或 30 年的本金摊销。在 5.75% 利率、30 年等额还本付息条件下，年度贷款常数（Annual Debt Constant = 年还本付息总额 ÷ 贷款本金）高达 7.00%！因为 7.00% 的贷款常数远高于 6.00% 的进场 Cap Rate，每一元借款不仅没有放大股权回报，反而造成现金流净倒贴，导致首年现金回报率（Cash-on-Cash Return）被压缩至 4.0%–4.5%，并显著削弱偿债备付率（DSCR）。'
+                : isEs
+                ? 'Un error recurrente en adquisiciones es comparar la tasa nominal del préstamo contra el Cap Rate. Un préstamo al 5.75% amortizable a 30 años genera una constante anual de deuda del 7.00%. Dado que el 7.00% supera un Cap Rate de entrada del 6.00%, el apalancamiento es negativo en flujo de caja: cada dólar financiado reduce el retorno efectivo inicial (Cash-on-Cash) a niveles de 4.0%–4.5%, reduciendo el margen de cobertura DSCR.'
+                : isPt
+                ? 'Um equívoco frequente consiste em comparar apenas a taxa de juros nominal com o Cap Rate. Um financiamento com juros nominais de 5,75% amortizável em 30 anos gera uma constante anual da dívida de 7,00%. Como 7,00% excede um Cap Rate de 6,00%, a alavancagem é negativa em fluxo de caixa, derrubando o retorno de caixa (Cash-on-Cash) para 4,0%–4,5% e comprimindo o DSCR.'
+                : 'A critical mistake in commercial underwriting is comparing the nominal mortgage interest rate directly against the Going-In Cap Rate. For instance, securing a loan at 5.75% fixed interest on a 6.00% cap rate asset appears to offer a 25 bps positive spread. However, because commercial mortgages include principal amortization, a 5.75% loan amortized over 30 years generates an Annual Debt Constant (Annual P&I ÷ Loan Amount) of 7.00%. Because the 7.00% debt constant exceeds the 6.00% unleveraged yield, the debt exerts negative cash-flow leverage, compressing Year-1 Cash-on-Cash yields down to 4.0%–4.5% and reducing debt service coverage.'}
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-base font-bold text-slate-900">
+              {isZh
+                ? '3. 机构审贷员如何根据个盘风险校准基准 Cap Rate'
+                : isEs
+                ? '3. Cómo Ajustan los Analistas Institucionales los Cap Rates de Referencia'
+                : isPt
+                ? '3. Como Analistas Institucionais Calibram os Cap Rates de Referência'
+                : '3. How Institutional Underwriters Adjust Benchmark Cap Rates for Individual Assets'}
+            </h3>
+            <p>
+              {isZh
+                ? '宏观都市圈基准（如 Austin Class A 多户 5.25%–6.00%）仅是尽调起步参考。在实际承销中，分析师会根据四个微观维度对基准利差进行加减校准：'
+                : isEs
+                ? 'Los rangos metropolitanos son solo un punto de partida. En la práctica, los analistas ajustan el Cap Rate objetivo considerando cuatro variables específicas del activo:'
+                : isPt
+                ? 'As faixas metropolitanas são apenas a partida. Na prática, analistas calibram o Cap Rate de avaliação com base em quatro fatores determinantes do imóvel:'
+                : 'Metropolitan benchmark ranges serve solely as an initial underwriting baseline. In practice, institutional investment committees adjust target capitalization rates by evaluating four micro-level asset attributes:'}
+            </p>
+            <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-sm">
+              <li>
+                <strong>{isZh ? '加权平均剩余租期 (WALT)：' : isEs ? 'Plazo Remanente de Contrato (WALT): ' : isPt ? 'Prazo Remanescente do Contrato (WALT): ' : 'Weighted Average Lease Term (WALT): '}</strong>
+                {isZh
+                  ? '租约剩余不足 3–5 年的商业物业需上浮 50–100 bps 贴现，以覆盖租客退租再招商的免租期与中介佣金成本。'
+                  : isEs
+                  ? 'Contratos con menos de 3–5 años remanentes exigen un incremento de 50 a 100 bps para absorber costos de reacondicionamiento y comisiones de corretaje.'
+                  : isPt
+                  ? 'Contratos com menos de 3 a 5 anos restantes exigem um prêmio de 50 a 100 bps para absorver desocupação e comissões imobiliárias.'
+                  : 'Assets with under 3–5 years of remaining lease term require a 50 to 100 bps cap rate expansion to account for tenant turnover capital, leasing commissions (LCs), and concession downtime.'}
+              </li>
+              <li>
+                <strong>{isZh ? '交易后房产税重新评估 (Tax Reassessment)：' : isEs ? 'Revaluación de Impuestos Prediales: ' : isPt ? 'Reavaliação de Impostos Prediais: ' : 'Post-Closing Property Tax Reassessment: '}</strong>
+                {isZh
+                  ? '在得克萨斯（Austin/Dallas）和佛罗里达（Miami）等无州个人所得税的州，地方评估所通常在过户后将评估价提升至成交价的 85%–95%，若沿用卖家历史税单将导致测算收益率严重失真。'
+                  : isEs
+                  ? 'En estados sin impuesto estatal sobre la renta como Texas o Florida, el valor catastral suele revaluarse al 85%–95% del precio de venta tras el cierre.'
+                  : isPt
+                  ? 'Em estados como Texas ou Flórida, o valor venal costuma ser reavaliado para 85% a 95% do preço de venda após o fechamento.'
+                  : 'In states without personal income taxes (e.g., Texas and Florida), appraisal districts aggressively reassess taxable value toward 85%–95% of purchase price, shifting net yields downward if historical tax bills are used.'}
+              </li>
+              <li>
+                <strong>{isZh ? '资本重置储备金 (CapEx Replacement Reserves)：' : isEs ? 'Reservas de Reposición de Capital: ' : isPt ? 'Reservas de Reposição de Capital: ' : 'Recurring Capital Replacement Reserves: '}</strong>
+                {isZh
+                  ? '严格在 NOI 中扣除公寓每户每年 $250–$450、工业厂房每平方英尺 $0.15–$0.25 的结构与设备储备。'
+                  : isEs
+                  ? 'Descontar obligatoriamente entre $250 y $450 por unidad en multifamiliar y $0.15–$0.25 por pie cuadrado en industrial.'
+                  : isPt
+                  ? 'Deduzir obrigatoriamente entre US$ 250 e US$ 450 por unidade em residencial e US$ 0,15–US$ 0,25 por pé quadrado em galpões.'
+                  : 'Deducting mandatory recurring reserves ($250–$450/unit for multifamily; $0.15–$0.25/SF for industrial) directly before calculating sustainable NOI.'}
+              </li>
+              <li>
+                <strong>{isZh ? '次级市场流动性折价 (Liquidity Spread)：' : isEs ? 'Prima por Iliquidez Secundaria: ' : isPt ? 'Prêmio de Iliquidez Secundária: ' : 'Secondary Market Liquidity Spread: '}</strong>
+                {isZh
+                  ? '从 Tier 1 门户城市向 Tier 3/4 偏远都会区过渡时，按层级递增 75 到 200 bps 的退出收益率折价，确保再融资与退出抗周期性。'
+                  : isEs
+                  ? 'Ampliar el Cap Rate entre 75 y 200 bps al salir de mercados principales hacia áreas metropolitanas de menor escala.'
+                  : isPt
+                  ? 'Expandir o Cap Rate entre 75 e 200 bps ao transitar de praças principais para áreas metropolitanas menores.'
+                  : 'Expanding exit capitalization rate assumptions by 75 to 200 bps when transitioning from primary gateway metros to tertiary markets to protect refinancing viability.'}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* Individual City Deep Dives */}
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-6">
         <div className="space-y-1">

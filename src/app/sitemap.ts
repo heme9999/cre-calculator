@@ -4,9 +4,9 @@ import { SITE_URL } from '@/lib/constants';
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  // High-Value Indexable URLs (132 URLs total: 33 Core Routes × 4 Locales: en, zh, es, pt)
+  // High-Value Indexable URLs (152 URLs total: 38 Core Routes × 4 Locales: en, zh, es, pt)
   const approvedUrls = [
-    // English Pages (33)
+    // English Pages (38)
     `${SITE_URL}/en/`,
     `${SITE_URL}/en/calculators/cap-rate/`,
     `${SITE_URL}/en/calculators/noi/`,
@@ -24,6 +24,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/en/guides/how-to-estimate-noi/`,
     `${SITE_URL}/en/guides/1031-exchange-process/`,
     `${SITE_URL}/en/guides/how-to-underwrite-a-deal/`,
+    `${SITE_URL}/en/guides/dscr-complete-guide/`,
+    `${SITE_URL}/en/guides/loan-amortization-and-balloon-loans/`,
+    `${SITE_URL}/en/guides/cash-on-cash-vs-irr/`,
+    `${SITE_URL}/en/guides/buy-vs-lease-decision-framework/`,
+    `${SITE_URL}/en/guides/commercial-real-estate-underwriting-checklist/`,
     `${SITE_URL}/en/calculators/multifamily-cap-rate/`,
     `${SITE_URL}/en/calculators/industrial-cap-rate/`,
     `${SITE_URL}/en/calculators/self-storage-cap-rate/`,
@@ -41,7 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/en/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/`,
     `${SITE_URL}/en/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/`,
 
-    // Chinese Pages (33)
+    // Chinese Pages (38)
     `${SITE_URL}/zh/`,
     `${SITE_URL}/zh/calculators/cap-rate/`,
     `${SITE_URL}/zh/calculators/noi/`,
@@ -59,6 +64,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/zh/guides/how-to-estimate-noi/`,
     `${SITE_URL}/zh/guides/1031-exchange-process/`,
     `${SITE_URL}/zh/guides/how-to-underwrite-a-deal/`,
+    `${SITE_URL}/zh/guides/dscr-complete-guide/`,
+    `${SITE_URL}/zh/guides/loan-amortization-and-balloon-loans/`,
+    `${SITE_URL}/zh/guides/cash-on-cash-vs-irr/`,
+    `${SITE_URL}/zh/guides/buy-vs-lease-decision-framework/`,
+    `${SITE_URL}/zh/guides/commercial-real-estate-underwriting-checklist/`,
     `${SITE_URL}/zh/calculators/multifamily-cap-rate/`,
     `${SITE_URL}/zh/calculators/industrial-cap-rate/`,
     `${SITE_URL}/zh/calculators/self-storage-cap-rate/`,
@@ -76,7 +86,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/zh/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/`,
     `${SITE_URL}/zh/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/`,
 
-    // Spanish Pages (33)
+    // Spanish Pages (38)
     `${SITE_URL}/es/`,
     `${SITE_URL}/es/calculators/cap-rate/`,
     `${SITE_URL}/es/calculators/noi/`,
@@ -94,6 +104,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/es/guides/how-to-estimate-noi/`,
     `${SITE_URL}/es/guides/1031-exchange-process/`,
     `${SITE_URL}/es/guides/how-to-underwrite-a-deal/`,
+    `${SITE_URL}/es/guides/dscr-complete-guide/`,
+    `${SITE_URL}/es/guides/loan-amortization-and-balloon-loans/`,
+    `${SITE_URL}/es/guides/cash-on-cash-vs-irr/`,
+    `${SITE_URL}/es/guides/buy-vs-lease-decision-framework/`,
+    `${SITE_URL}/es/guides/commercial-real-estate-underwriting-checklist/`,
     `${SITE_URL}/es/calculators/multifamily-cap-rate/`,
     `${SITE_URL}/es/calculators/industrial-cap-rate/`,
     `${SITE_URL}/es/calculators/self-storage-cap-rate/`,
@@ -111,7 +126,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/es/guides/cap-rate-benchmarks-by-city/dallas-tx-cap-rates/`,
     `${SITE_URL}/es/guides/cap-rate-benchmarks-by-city/phoenix-az-cap-rates/`,
 
-    // Portuguese Pages (33)
+    // Portuguese Pages (38)
     `${SITE_URL}/pt/`,
     `${SITE_URL}/pt/calculators/cap-rate/`,
     `${SITE_URL}/pt/calculators/noi/`,
@@ -129,6 +144,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${SITE_URL}/pt/guides/how-to-estimate-noi/`,
     `${SITE_URL}/pt/guides/1031-exchange-process/`,
     `${SITE_URL}/pt/guides/how-to-underwrite-a-deal/`,
+    `${SITE_URL}/pt/guides/dscr-complete-guide/`,
+    `${SITE_URL}/pt/guides/loan-amortization-and-balloon-loans/`,
+    `${SITE_URL}/pt/guides/cash-on-cash-vs-irr/`,
+    `${SITE_URL}/pt/guides/buy-vs-lease-decision-framework/`,
+    `${SITE_URL}/pt/guides/commercial-real-estate-underwriting-checklist/`,
     `${SITE_URL}/pt/calculators/multifamily-cap-rate/`,
     `${SITE_URL}/pt/calculators/industrial-cap-rate/`,
     `${SITE_URL}/pt/calculators/self-storage-cap-rate/`,

@@ -555,19 +555,19 @@ try {
       const ptWhatIs = propertyCapRatesContent.pt['multifamily-cap-rate'].whatIsContent;
 
       // English
-      assert.ok(enWhatIs.includes('Cap Rate = Annual NOI ÷ Purchase Price; when sustainable NOI and an applicable market Cap Rate are known, NOI ÷ Cap Rate can be used as a valuation reference.'));
+      assert.ok(enWhatIs.includes('Multifamily valuation centers on short-duration 12-month lease cycles'));
       assert.ok(!enWhatIs.includes('are valued primarily on their Net Operating Income'));
 
       // Chinese
-      assert.ok(zhWhatIs.includes('Cap Rate = 年度 NOI ÷ 购买价格；在可持续 NOI 与适用 Cap Rate 已知时，可用 NOI ÷ Cap Rate 作估值参考。'));
+      assert.ok(zhWhatIs.includes('多户住宅的核心估值逻辑在于 12 个月的短租期与高频租客换手'));
       assert.ok(!zhWhatIs.includes('严格按照'));
 
       // Spanish
-      assert.ok(esWhatIs.includes('Cap Rate = NOI Anual ÷ Precio de Compra; cuando se conocen el NOI sostenible y el Cap Rate aplicable del mercado, puede utilizarse NOI ÷ Cap Rate como referencia de valuación.'));
+      assert.ok(esWhatIs.includes('La valuación de propiedades multifamiliares se rige por contratos de corta duración'));
       assert.ok(!esWhatIs.includes('se valoran principalmente dividiendo su Ingreso'));
 
       // Portuguese
-      assert.ok(ptWhatIs.includes('Cap Rate = NOI Anual ÷ Preço de Compra; quando o NOI sustentável e a taxa de capitalização aplicável de mercado são conhecidos, pode-se utilizar NOI ÷ Cap Rate como referência de avaliação.'));
+      assert.ok(ptWhatIs.includes('A avaliação de imóveis multifamiliares é pautada por ciclos contratuais curtos'));
       assert.ok(!ptWhatIs.includes('são avaliadas principalmente dividindo-se a Receita'));
     });
 

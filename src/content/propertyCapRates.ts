@@ -82,9 +82,9 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
       defaultPrice: MF_PRICE,
       defaultNoi: MF_NOI,
       benchmarkRange: '4.75% – 6.75% (Illustrative)',
-      whatIsTitle: 'How Multifamily Cap Rate Modeling Works',
+      whatIsTitle: 'Multifamily Cap Rate: What Moves the Number',
       whatIsContent:
-        'In commercial real estate (CRE), Cap Rate = Annual NOI ÷ Purchase Price; when sustainable NOI and an applicable market Cap Rate are known, NOI ÷ Cap Rate can be used as a valuation reference. Because residential leases typically reset every 12 months, apartment income streams adjust more quickly to local rent and occupancy shifts than long-term commercial leases.\n\nIn educational underwriting models, newer Class A apartments are commonly modeled with lower illustrative cap rates (e.g., 4.75% to 5.50%) to reflect lower near-term capital expenditure needs, whereas older Class B and Class C value-add properties are often modeled at higher illustrative yields (e.g., 5.50% to 6.75%+) to account for unit turnover, maintenance reserves, and renovation risk. These ranges are illustrative modeling assumptions—not live market quotes.',
+        'Multifamily valuation centers on short-duration 12-month lease cycles and frequent tenant turnover.\n\nWhat moves multifamily cap rates: The biggest driver is occupancy stability: a building with many units spreads vacancy risk across tenants, so lenders and buyers accept lower cap rates for well-occupied, well-located multifamily than for most other property types. Rent growth matters more here than anywhere else — a building with in-place rents below market has upside a buyer will pay for, while a building at peak rents has nowhere to go. Expense ratio is the quiet driver: older buildings with high maintenance and turnover costs produce less NOI per dollar of rent, and the cap rate reflects it.\n\nRisks specific to multifamily: Rent control and local tenant-protection rules can cap how fast rents rise, which lowers the income growth a buyer can underwrite. Turnover is a real cost: every vacant unit means lost rent plus make-ready spending. Watch the lease expiration schedule — a building where half the leases end in the same year is riskier than one with staggered expirations, even at the same occupancy today.\n\nHow to read the result: Compare the computed cap rate with the benchmarks in our US Cap Rate Benchmarks guide, and check it against the market tier of the property: the same building prices at a lower cap rate in a top-tier market than in a secondary one. For the definition and the formula, see the main cap rate calculator.',
       metricsExploration: {
         title: 'Key Multifamily Underwriting Drivers',
         points: [
@@ -161,9 +161,9 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
       defaultPrice: 8000000,
       defaultNoi: 472000,
       benchmarkRange: '5.25% – 7.00% (Illustrative)',
-      whatIsTitle: 'Understanding Industrial & Logistics Cap Rate Modeling',
+      whatIsTitle: 'Industrial Cap Rate: Logistics, Clear Height, and Tenant Credit',
       whatIsContent:
-        'Industrial real estate—spanning last-mile logistics warehouses, cold storage, light manufacturing, and flex space—frequently utilizes Triple Net (NNN) or Modified Gross leases where tenants reimburse property taxes, building insurance, and common area maintenance (CAM).\n\nIn illustrative underwriting models, modern high-clear-height distribution facilities are often modeled at lower cap rates (e.g., 5.25% to 6.00%), while older shallow-bay or specialized manufacturing buildings are modeled at wider illustrative yields (e.g., 6.25% to 7.25%+) to reflect functional obsolescence and re-leasing downtime. All ranges on this page are educational modeling assumptions rather than live market quotes.',
+        'What moves industrial cap rates: Location relative to logistics demand is first: proximity to highways, ports, and population centers, plus clear height, dock doors, and trailer parking. Lease structure matters more than in multifamily — a long-term net lease to a credit tenant prices very differently from a short-term gross lease to a small operator. E-commerce demand has pushed well-located warehouse space to some of the lowest cap rates in commercial real estate; functionally obsolete space (low ceilings, too few docks) prices far higher.\n\nRisks specific to industrial: Single-tenant risk: one tenant leaving can take 100% of the income with it. Obsolescence is faster than it looks — a warehouse built for one use may need expensive reconfiguration for the next. Watch the remaining lease term: a short remaining term on a single-tenant building means the buyer is really buying the next lease, not the current one.\n\nHow to read the result: A low industrial cap rate usually means a strong tenant, a long lease, and a good location — not a bargain. Cross-check against the benchmarks in our US Cap Rate Benchmarks guide. For the definition and the formula, see the main cap rate calculator.',
       metricsExploration: {
         title: 'Core Industrial Valuation Factors',
         points: [
@@ -231,9 +231,9 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
       defaultPrice: 4200000,
       defaultNoi: 273000,
       benchmarkRange: '5.50% – 7.25% (Illustrative)',
-      whatIsTitle: 'How Self-Storage Cap Rate Underwriting Works',
+      whatIsTitle: 'Self-Storage Cap Rate: Sticky Demand, High Density, Low CapEx',
       whatIsContent:
-        'Self-storage facilities operate on month-to-month rental agreements with no tenant improvement (TI) allowances or leasing commissions upon unit turnover. Because rental rates can be adjusted monthly, storage income responds rapidly to local supply and demand.\n\nIn educational underwriting models, institutional climate-controlled facilities are commonly modeled at illustrative cap rates of 5.50% to 6.25%, while secondary drive-up facilities are often modeled between 6.25% and 7.25%+. These figures are illustrative underwriting assumptions for analysis and education—not live market benchmarks.',
+        'What moves self-storage cap rates: Occupancy and street rate — the advertised rate for a new renter — drive everything: a facility at 90% occupancy with rising street rates earns far more than one at 75% with flat rates. Unit mix matters: climate-controlled units and larger units rent for more per square foot. Local supply is the swing factor: storage is easy to build, and a new facility down the road can cut occupancy and rates at once.\n\nRisks specific to self-storage: The income is month-to-month, so it can fall faster than a leased office or retail building when demand softens. New supply is the biggest threat — check what is under construction within a few miles before trusting today\'s occupancy. Management quality shows up directly in the numbers: a well-run facility keeps occupancy high and delinquency low.\n\nHow to read the result: Look at the cap rate together with occupancy and street rate: a low cap rate on a 95%-occupied facility with rising street rates is a different deal from the same cap rate on a 75%-occupied one. Cross-check against the benchmarks in our US Cap Rate Benchmarks guide. For the definition and the formula, see the main cap rate calculator.',
       metricsExploration: {
         title: 'Key Self-Storage Underwriting Metrics',
         points: [
@@ -301,9 +301,9 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
       defaultPrice: 2800000,
       defaultNoi: 182000,
       benchmarkRange: '5.50% – 7.25% (Illustrative)',
-      whatIsTitle: 'How Single-Tenant NNN Cap Rate Valuation Works',
+      whatIsTitle: 'NNN Lease Cap Rate: Credit, Term, and the Spread Over Treasuries',
       whatIsContent:
-        'In an Absolute Triple Net (NNN) lease, the corporate or franchisee tenant pays 100% of property taxes, property insurance, and maintenance directly, leaving the landlord’s Net Operating Income (NOI) virtually equal to the contractual annual base rent (less any owner-level accounting or reserve allowance).\n\nBecause operating expense volatility is transferred to the tenant during the base lease term, NNN valuation behaves similarly to a fixed-income corporate bond: illustrative cap rates vary primarily with the tenant’s creditworthiness, remaining primary lease term, and underlying land residual value. All ranges on this page are illustrative modeling scenarios rather than live dealer quotes.',
+        'What moves NNN cap rates: Tenant credit rating is the starting point: an investment-grade tenant (CVS, Walgreens, Dollar General) prices at a much lower cap rate than a franchisee or an unrated local business. Remaining lease term is the second: a 15-year lease is priced like a bond; a 3-year lease is priced like an imminent vacancy risk. Escalations matter: a lease with 2% annual bumps protects against inflation far better than a flat lease, and buyers pay a lower cap rate for it.\n\nRisks specific to NNN leases: The cap rate looks safe, but it is a bet on one tenant: if the tenant defaults or leaves at expiry, the income drops to zero until a new tenant is found, and re-letting a purpose-built space (a pharmacy, a fast-food pad) can be slow and expensive. Interest rates hit NNN cap rates harder than most property types, because the income stream behaves like a fixed-rate bond.\n\nHow to read the result: A NNN cap rate near the low end of the range usually means strong tenant credit and a long term; a high one usually means a weaker tenant or a short remaining term. The worked example on this page ($400,000 of rent on a $6,800,000 price, about 5.88%) is the arithmetic — the judgment is in the tenant and the lease. Cross-check against the benchmarks in our US Cap Rate Benchmarks guide. For the definition and the formula, see the main cap rate calculator.',
       metricsExploration: {
         title: 'Three Pillars of NNN Lease Pricing',
         points: [
@@ -373,9 +373,9 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
       defaultPrice: MF_PRICE,
       defaultNoi: MF_NOI,
       benchmarkRange: '4.75% – 6.75% (教学示例区间)',
-      whatIsTitle: '如何进行 Multifamily 多户住宅 Cap Rate 承销建模',
+      whatIsTitle: 'Multifamily 多户住宅独特的租期与收益特征',
       whatIsContent:
-        '在商业地产（CRE）中，Cap Rate = 年度 NOI ÷ 购买价格；在可持续 NOI 与适用 Cap Rate 已知时，可用 NOI ÷ Cap Rate 作估值参考。由于公寓租约通常每 12 个月重签一次，其租金与入住率对本地供需变化的反应快于长期商业租约。\n\n在教学承销模型中，楼龄较新的核心区 Class A 公寓通常设定较低的示例 Cap Rate（如 4.75%–5.50%），以反映较低的近期大修需求；而楼龄较老的 Class B/C 增值型公寓通常采用较高的示例收益率区间（如 5.50%–6.75%+），以覆盖租客换手翻新、维修储备及运营波动风险。本页所列区间均为教学建模假设，不代表实时市场成交报价。',
+        '多户住宅的核心估值逻辑在于 12 个月的短租期与高频租客换手。与锁定数年租金的商业长约不同，公寓物业的收入水平与本地就业薪酬、优惠免租力度以及当季新增交付直接挂钩。\n\n在机构承销模型中，核心区品质优良的 Class A 公寓通常对应较低的资本化率（如 4.75%–5.50%），体现其稳健的租客群体与较少的基础设施大修开支；而 Class B/C 增值型公寓则常按 5.50%–6.75%+ 测算，用于平衡单位换手修缮、日常折旧与运营风险。本页重点关注多户型专属的经济出租率与重置储备金核算。',
       metricsExploration: {
         title: '多户住宅承销的三大核心变量',
         points: [
@@ -660,9 +660,9 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
       defaultPrice: MF_PRICE,
       defaultNoi: MF_NOI,
       benchmarkRange: '4.75% – 6.75% (Ilustrativo)',
-      whatIsTitle: 'Cómo Funciona el Modelado de Cap Rate en Propiedades Multifamiliares',
+      whatIsTitle: 'Dinámica de Flujo y Valuación en Activos Multifamiliares',
       whatIsContent:
-        'En bienes raíces comerciales (CRE), Cap Rate = NOI Anual ÷ Precio de Compra; cuando se conocen el NOI sostenible y el Cap Rate aplicable del mercado, puede utilizarse NOI ÷ Cap Rate como referencia de valuación. Dado que los contratos residenciales suelen renovarse cada 12 meses, los ingresos se ajustan con mayor rapidez a los cambios de renta y ocupación que los arrendamientos comerciales de largo plazo.\n\nEn modelos educativos de evaluación financiera, los edificios Clase A suelen modelarse con tasas de capitalización ilustrativas más bajas (ej. 4.75% a 5.50%) por su menor requerimiento inmediato de capital, mientras que las propiedades Clase B y Clase C se modelan con rendimientos ilustrativos mayores (ej. 5.50% a 6.75%+) para reflejar rotación de inquilinos, reservas de mantenimiento y riesgo de renovación. Estos rangos son supuestos ilustrativos de modelado y no cotizaciones del mercado en tiempo real.',
+        'La valuación de propiedades multifamiliares se rige por contratos de corta duración (habitualmente 12 meses) y una rotación constante de inquilinos. A diferencia de contratos comerciales plurianuales con rentas fijas, los edificios de apartamentos ajustan sus ingresos en tiempo real frente a salarios locales y nuevas ofertas de vivienda.\n\nEn modelos de evaluación institucional, los activos Clase A operan con tasas más comprimidas (4.75% a 5.50%) por su alta retención y bajo CapEx diferido, mientras que las comunidades Clase B y C de valor agregado se evalúan entre 5.50% y 6.75%+ para compensar gastos de rotación, reservas periódicas y riesgos de remodelación.',
       metricsExploration: {
         title: 'Factores Clave en la Evaluación Multifamiliar',
         points: [
@@ -951,9 +951,9 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
       defaultPrice: MF_PRICE,
       defaultNoi: MF_NOI,
       benchmarkRange: '4.75% – 6.75% (Ilustrativo)',
-      whatIsTitle: 'Como Funciona a Modelagem de Cap Rate em Imóveis Multifamiliares',
+      whatIsTitle: 'Dinâmica de Receita e Avaliação em Imóveis Multifamiliares',
       whatIsContent:
-        'No setor imobiliário comercial (CRE), Cap Rate = NOI Anual ÷ Preço de Compra; quando o NOI sustentável e a taxa de capitalização aplicável de mercado são conhecidos, pode-se utilizar NOI ÷ Cap Rate como referência de avaliação. Como os contratos residenciais costumam ser renovados a cada 12 meses, a receita acompanha as mudanças de aluguel e ocupação mais rapidamente do que contratos comerciais de longo prazo.\n\nEm modelos educativos de análise financeira, edifícios Classe A costumam ser simulados com taxas de capitalização ilustrativas menores (ex.: 4.75% a 5.50%) devido à menor necessidade imediata de reformas, enquanto imóveis Classe B e Classe C são modelados com rendimentos ilustrativos mais elevados (ex.: 5.50% a 6.75%+) para refletir rotatividade de inquilinos, reservas de manutenção e risco de modernização. Estas faixas são premissas ilustrativas de modelagem e não cotações de mercado em tempo real.',
+        'A avaliação de imóveis multifamiliares é pautada por ciclos contratuais curtos de 12 meses e rotatividade frequente de locatários. Diferente de contratos corporativos de longo prazo, a receita residencial reprecifica de forma contínua com a renda média local, concessões temporárias e novas entregas de unidades.\n\nEm análises de crédito institucional, edifícios residenciais Classe A operam com taxas mais comprimidas (4,75% a 5,50%) graças à alta retenção e baixa necessidade de obras imediatas, enquanto comunidades Classe B e C são projetadas entre 5,50% e 6,75%+ para remunerar reformas de unidades, desocupação e manutenção.',
       metricsExploration: {
         title: 'Fatores Essenciais na Análise Multifamiliar',
         points: [

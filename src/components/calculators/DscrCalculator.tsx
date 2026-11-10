@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { formatCurrency, formatNumberWithCommas, parseNumberInput } from '@/lib/utils';
-import { Calculator, ShieldCheck, AlertTriangle, ShieldAlert, CheckCircle2, Info, ArrowRight, Scale, TrendingDown, Sparkles } from 'lucide-react';
+import { Calculator, ShieldCheck, AlertTriangle, ShieldAlert, CheckCircle2, Info, ArrowRight, Scale, TrendingDown, Sparkles, BookOpen } from 'lucide-react';
 import { DscrCoverageTierVisualizer } from './visuals/DscrCoverageTierVisualizer';
 import { getUiTranslations } from '@/lib/translations';
 import { CalculatorActionBar } from './common/CalculatorActionBar';
@@ -286,11 +286,11 @@ export function DscrCalculator({ locale }: Props) {
   }
 
   const serviceUnavailableNote = {
-    en: 'Service & Privacy Notice: Commercial lender quote matching is not yet open while partner integrations and data processing authorizations are not active. All DSCR calculations run 100% locally in your browser; no email addresses or deal parameters are collected or transmitted.',
-    zh: '服务与隐私说明：商业地产贷款询价与合作机构匹配服务当前暂未开放（合作方接入与数据处理授权尚未启用）。本站所有 DSCR 测算完全在浏览器本地运行，不收集、存储或向外发送任何邮箱或交易参数。',
-    es: 'Aviso de Servicio y Privacidad: El servicio de cotizaciones con prestamistas comerciales aún no está abierto mientras la integración de socios y las autorizaciones de datos no están activas. Todos los cálculos de DSCR se ejecutan 100% localmente en su navegador sin recopilar ni enviar datos.',
-    pt: 'Aviso de Serviço e Privacidade: O serviço de cotações com credores comerciais ainda não está aberto enquanto a integração de parceiros e as autorizações de dados não estão ativas. Todos os cálculos de DSCR rodam 100% localmente no seu navegador sem coletar nem transmitir dados.',
-  }[locale as 'en' | 'zh' | 'es' | 'pt'] || 'Service & Privacy Notice: Commercial lender quote matching is not yet open while partner integrations and data processing authorizations are not active. All DSCR calculations run 100% locally in your browser; no email addresses or deal parameters are collected or transmitted.';
+    en: 'crecalculators.com operates strictly as an independent analysis toolkit. All DSCR sizing and debt calculations run 100% locally in your browser. We never broker mortgages or share borrower data.',
+    zh: 'crecalculators.com 恪守独立第三方工具原则。所有 DSCR 试算与借贷能力测算均 100% 在您的本地浏览器运行，不从事贷款中介业务，亦不收集或向外分享您的交易参数。',
+    es: 'crecalculators.com opera estrictamente como una herramienta analítica independiente. Todos los cálculos se ejecutan 100% en su navegador. No intermediamos préstamos ni compartimos datos con terceros.',
+    pt: 'O crecalculators.com opera exclusivamente como um conjunto de ferramentas analíticas independentes. Todos os cálculos rodam 100% no seu navegador. Não intermediamos empréstimos nem compartilhamos dados.',
+  }[locale as 'en' | 'zh' | 'es' | 'pt'] || 'crecalculators.com operates strictly as an independent analysis toolkit. All DSCR sizing and debt calculations run 100% locally in your browser.';
 
   const dealAnalyzerCtaLabel = {
     en: 'Model Loan Terms Locally in Deal Analyzer',
@@ -751,14 +751,14 @@ export function DscrCalculator({ locale }: Props) {
         </div>
       </section>
 
-      {/* Deactivated Lender Quote Matching Service Notice */}
+      {/* Independent Underwriting & Educational Resource Notice */}
       <section
         data-testid="dscr-lender-service-disabled"
         className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-6 md:p-8 text-white border border-slate-700 shadow-md"
       >
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold mb-3 border border-amber-500/30">
-            <Info className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-3 border border-emerald-500/30">
+            <ShieldCheck className="w-3.5 h-3.5" />
             <span>{t.dscrCalc.leadBadge}</span>
           </div>
           <h3 className="text-xl md:text-2xl font-black text-white">
@@ -773,17 +773,17 @@ export function DscrCalculator({ locale }: Props) {
           </div>
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              disabled
-              aria-disabled="true"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-700/70 text-slate-400 font-bold text-xs border border-slate-600 cursor-not-allowed"
+            <Link
+              href={`/${locale}/guides/dscr-complete-guide/`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs transition-all shadow-sm"
             >
+              <BookOpen className="w-3.5 h-3.5" />
               <span>{t.dscrCalc.leadSubmitBtn}</span>
-            </button>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
             <Link
               href={`/${locale}/tools/deal-analyzer/`}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 active:scale-95 text-slate-200 hover:text-white font-bold text-xs transition-all shadow-sm"
             >
               <span>{dealAnalyzerCtaLabel}</span>
               <ArrowRight className="w-3.5 h-3.5" />

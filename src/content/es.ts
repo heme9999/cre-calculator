@@ -1,6 +1,8 @@
 import { LocaleContent } from './types';
+import { esNewGuides } from './newGuides';
 
 export const esContent: LocaleContent = {
+  ...esNewGuides,
   nav: {
     brandName: 'CRE Calculators',
     calculators: 'Todas las Calculadoras',
@@ -834,6 +836,41 @@ export const esContent: LocaleContent = {
         description: 'Un método riguroso para pasar del folleto de venta a una oferta justificada o rechazar la operación a tiempo.',
         badge: 'Debida Diligencia',
         readTime: '10 min de lectura',
+      },
+      {
+        slug: 'dscr-complete-guide',
+        title: 'La Guía Completa de DSCR (Ratio de Cobertura del Servicio de la Deuda)',
+        description: 'Al adquirir un inmueble comercial, un indicador determina la aprobación del crédito: el DSCR. Descubra qué es y cómo calcularlo.',
+        badge: 'Deuda y Crédito',
+        readTime: '11 min de lectura',
+      },
+      {
+        slug: 'loan-amortization-and-balloon-loans',
+        title: 'Amortización de Préstamos Comerciales y Créditos Balloon',
+        description: 'Comprenda la discrepancia entre el plazo del préstamo y el período de amortización, cómo interpretar la tabla y cuándo refinanciar.',
+        badge: 'Financiamiento',
+        readTime: '12 min de lectura',
+      },
+      {
+        slug: 'cash-on-cash-vs-irr',
+        title: 'Retorno Cash-on-Cash vs TIR (IRR): Qué Revela y Qué Oculta Cada Métrica',
+        description: 'Dos inmuebles pueden lucir idénticos bajo una métrica y completamente diferentes bajo la otra. Aprenda a interpretarlas.',
+        badge: 'Rendimiento',
+        readTime: '12 min de lectura',
+      },
+      {
+        slug: 'buy-vs-lease-decision-framework',
+        title: 'Comprar vs Alquilar: Marco de Decisión para Bienes Raíces Comerciales',
+        description: 'Evalúe los factores financieros determinantes: horizonte de permanencia, costos de entrada y salida, y acumulación de patrimonio.',
+        badge: 'Estrategia',
+        readTime: '11 min de lectura',
+      },
+      {
+        slug: 'commercial-real-estate-underwriting-checklist',
+        title: 'Checklist de Evaluación de Bienes Raíces Comerciales: 7 Puertas Antes de Comprar',
+        description: 'La evaluación rigurosa busca la razón para rechazar una mala compra antes de arriesgar capital. Verifique este checklist.',
+        badge: 'Debida Diligencia',
+        readTime: '11 min de lectura',
       },
     ],
   },

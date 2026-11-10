@@ -1,6 +1,8 @@
 import { LocaleContent } from './types';
+import { ptNewGuides } from './newGuides';
 
 export const ptContent: LocaleContent = {
+  ...ptNewGuides,
   nav: {
     brandName: 'CRE Calculators',
     calculators: 'Todas as Calculadoras',
@@ -834,6 +836,41 @@ export const ptContent: LocaleContent = {
         description: 'Um método prático para transformar uma proposta de venda em uma oferta fundamentada ou descartar o negócio.',
         badge: 'Due Diligence',
         readTime: '10 min de leitura',
+      },
+      {
+        slug: 'dscr-complete-guide',
+        title: 'O Guia Completo de DSCR (Índice de Cobertura do Serviço da Dívida)',
+        description: 'Ao adquirir um imóvel comercial, o DSCR define se a instituição financeira aprovará o crédito. Veja como calcular.',
+        badge: 'Dívida e Crédito',
+        readTime: '11 min de leitura',
+      },
+      {
+        slug: 'loan-amortization-and-balloon-loans',
+        title: 'Amortização de Empréstimos Comerciais e Financiamentos Balloon',
+        description: 'Entenda a diferença entre prazo contratual e período de amortização, como ler o cronograma e o momento de refinanciar.',
+        badge: 'Financiamento',
+        readTime: '12 min de leitura',
+      },
+      {
+        slug: 'cash-on-cash-vs-irr',
+        title: 'Retorno Cash-on-Cash vs TIR (IRR): O Que Cada Métrica Revela e Oculta',
+        description: 'Dois imóveis podem parecer idênticos sob um indicador e completamente distintos sob outro. Compreenda as respostas.',
+        badge: 'Retorno e Rendimento',
+        readTime: '12 min de leitura',
+      },
+      {
+        slug: 'buy-vs-lease-decision-framework',
+        title: 'Comprar vs Alugar: O Modelo de Decisão para Imóveis Comerciais',
+        description: 'Ao decidir a sede da sua empresa, descubra por que a comparação entre aluguel e prestação pode induzir a erro.',
+        badge: 'Estratégia Imobiliária',
+        readTime: '11 min de leitura',
+      },
+      {
+        slug: 'commercial-real-estate-underwriting-checklist',
+        title: 'Checklist de Avaliação Imobiliária Comercial: 7 Portões Antes de Comprar',
+        description: 'A análise criteriosa existe para encontrar motivos concretos para desistir de um mau negócio antes de travar capital.',
+        badge: 'Due Diligence',
+        readTime: '11 min de leitura',
       },
     ],
   },

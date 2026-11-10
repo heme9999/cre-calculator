@@ -28,6 +28,8 @@ const PRIVACY_COPY: Record<
     sec2Desc: string;
     sec3Title: string;
     sec3Desc: string;
+    sec4Title: string;
+    sec4Desc: string;
   }
 > = {
   en: {
@@ -36,7 +38,7 @@ const PRIVACY_COPY: Record<
       'Learn how CRE Calculators protects your privacy. All underwriting calculation inputs run 100% locally in your browser.',
     badge: 'Privacy Policy',
     h1: 'Privacy Policy',
-    effectiveDate: 'Effective Date: August 2026',
+    effectiveDate: 'Effective Date: November 2026',
     commitmentTitle: 'Core Commitment: 100% Client-Side Processing',
     commitmentDesc:
       'When you enter financial inputs into our calculators, all processing happens locally in your browser session. We do not upload or store your financial numbers on any server.',
@@ -46,9 +48,12 @@ const PRIVACY_COPY: Record<
     sec2Title: '2. Cookies & Local Storage',
     sec2Desc:
       'We use local storage strictly to remember your preferences (such as selected language and deal analyzer history). You can clear this data anytime from your browser.',
-    sec3Title: '3. Third-Party Services',
+    sec3Title: '3. Third-Party Infrastructure Services',
     sec3Desc:
       'Our website is hosted on Cloudflare network infrastructure. Cloudflare may process network-level request metrics for anti-DDoS protection and CDN acceleration.',
+    sec4Title: '4. Advertising & Google AdSense Cookies',
+    sec4Desc:
+      'We partner with Google AdSense to serve advertisements when you visit our website. Google, as a third-party vendor, uses cookies (including the DoubleClick cookie) to serve ads based on your prior visits to our website or other websites on the internet. You may opt out of personalized advertising by visiting Google Ads Settings (https://adssettings.google.com) or by visiting the Digital Advertising Alliance consumer choice portal at www.aboutads.info/choices.',
   },
   zh: {
     metaTitle: '隐私政策 | CRE Calculators',
@@ -56,7 +61,7 @@ const PRIVACY_COPY: Record<
       'CRE Calculators 尊重并保护所有用户的隐私。我们的计算器纯客户端运行，不收集或保存你的任何物业财务测算数据。',
     badge: '隐私声明',
     h1: '隐私政策',
-    effectiveDate: '生效日期：2026年8月',
+    effectiveDate: '生效日期：2026年11月',
     commitmentTitle: '核心隐私承诺：所有测算数据均保存在本地',
     commitmentDesc:
       '当你在 Cap Rate、NOI、DSCR 或 Deal Analyzer 工具中输入房屋价格、租金、贷款额等物业数据时，所有计算仅在你的浏览器中处理。我们不会将其发送、上传或存储至任何云端服务器。',
@@ -66,9 +71,12 @@ const PRIVACY_COPY: Record<
     sec2Title: '2. Cookie 与本地存储',
     sec2Desc:
       '我们使用 Cookie 或 LocalStorage 仅用于保存你的偏好设置（如当前选中的语言版本、测试历史记录）。你可以随时清除浏览器的缓存与 LocalStorage 记录。',
-    sec3Title: '3. 第三方服务',
+    sec3Title: '3. 第三方基础设施服务',
     sec3Desc:
       '本站托管于 Cloudflare 边缘节点网络。Cloudflare 可能会收集标准的网络层访问日志（如 IP 地址、浏览器请求头），以抵御 DDoS 攻击并提供 CDN 加速。',
+    sec4Title: '4. 广告服务与 Google AdSense Cookie 政策',
+    sec4Desc:
+      '我们与 Google AdSense 合作展示广告。Google 作为第三方供应商，使用 Cookie（包括 DoubleClick Cookie）根据您之前对本网站或互联网其他网站的访问记录向您投递广告。您可以随时访问 Google 广告设置中心（https://adssettings.google.com）或访问数字广告联盟退出页面 www.aboutads.info/choices 选择停用个性化广告。',
   },
   es: {
     metaTitle: 'Política de Privacidad | CRE Calculators',
@@ -76,7 +84,7 @@ const PRIVACY_COPY: Record<
       'Conozca cómo CRE Calculators protege su privacidad. Todos los datos financieros ingresados se procesan 100% localmente en su navegador.',
     badge: 'Política de Privacidad',
     h1: 'Política de Privacidad',
-    effectiveDate: 'Fecha de entrada en vigor: Agosto de 2026',
+    effectiveDate: 'Fecha de entrada en vigor: Noviembre de 2026',
     commitmentTitle: 'Compromiso Principal: Procesamiento 100% Local en su Navegador',
     commitmentDesc:
       'Cuando ingresa datos financieros (precio de compra, rentas, gastos o préstamos) en nuestras calculadoras o en el Deal Analyzer, todo el cálculo se ejecuta exclusivamente en su navegador. No transmitimos, subimos ni almacenamos sus cifras financieras en ningún servidor.',
@@ -89,6 +97,9 @@ const PRIVACY_COPY: Record<
     sec3Title: '3. Servicios de Infraestructura de Terceros',
     sec3Desc:
       'Nuestro sitio web está alojado en la infraestructura de red de Cloudflare. Cloudflare puede procesar registros técnicos de red estándar para protección contra ataques DDoS y aceleración mediante CDN.',
+    sec4Title: '4. Publicidad y Cookies de Google AdSense',
+    sec4Desc:
+      'Nos asociamos con Google AdSense para publicar anuncios cuando visita nuestro sitio web. Google, como proveedor externo, utiliza cookies (incluida la cookie de DoubleClick) para publicar anuncios basados en sus visitas previas a este u otros sitios web de Internet. Puede inhabilitar la publicidad personalizada accediendo a la Configuración de anuncios de Google (https://adssettings.google.com) o visitando el portal de la Digital Advertising Alliance en www.aboutads.info/choices.',
   },
   pt: {
     metaTitle: 'Política de Privacidade | CRE Calculators',
@@ -96,7 +107,7 @@ const PRIVACY_COPY: Record<
       'Saiba como o CRE Calculators protege sua privacidade. Todos os dados financeiros inseridos são processados 100% localmente no seu navegador.',
     badge: 'Política de Privacidade',
     h1: 'Política de Privacidade',
-    effectiveDate: 'Data de vigência: Agosto de 2026',
+    effectiveDate: 'Data de vigência: Novembro de 2026',
     commitmentTitle: 'Compromisso Principal: Processamento 100% Local no Navegador',
     commitmentDesc:
       'Quando você insere dados financeiros (preço de compra, aluguéis, despesas ou financiamentos) em nossas calculadoras ou no Deal Analyzer, todo o processamento ocorre exclusivamente na sessão do seu navegador. Não enviamos, carregamos nem armazenamos seus números financeiros em nenhum servidor.',
@@ -109,6 +120,9 @@ const PRIVACY_COPY: Record<
     sec3Title: '3. Serviços de Infraestrutura de Terceiros',
     sec3Desc:
       'Nosso site é hospedado na infraestrutura de rede da Cloudflare. A Cloudflare pode processar métricas técnicas de requisição em nível de rede para proteção contra ataques DDoS e aceleração via CDN.',
+    sec4Title: '4. Publicidade e Cookies do Google AdSense',
+    sec4Desc:
+      'Utilizamos o Google AdSense para exibir anúncios quando você visita nosso site. O Google, como fornecedor terceiro, utiliza cookies (incluindo o cookie DoubleClick) para veicular anúncios com base em visitas anteriores a este ou a outros sites na internet. Você pode optar por desativar a publicidade personalizada visitando as Configurações de Anúncios do Google (https://adssettings.google.com) ou através do portal da Digital Advertising Alliance em www.aboutads.info/choices.',
   },
 };
 
@@ -172,6 +186,11 @@ export default async function PrivacyPage({ params }: PageProps) {
         <section className="bg-white rounded-2xl p-6 border border-slate-200 space-y-3">
           <h2 className="text-base font-bold text-slate-900">{copy.sec3Title}</h2>
           <p className="text-slate-600">{copy.sec3Desc}</p>
+        </section>
+
+        <section className="bg-white rounded-2xl p-6 border border-slate-200 space-y-3">
+          <h2 className="text-base font-bold text-slate-900">{copy.sec4Title}</h2>
+          <p className="text-slate-600">{copy.sec4Desc}</p>
         </section>
       </div>
     </article>

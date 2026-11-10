@@ -1,6 +1,8 @@
 import { LocaleContent } from './types';
+import { zhNewGuides } from './newGuides';
 
 export const zhContent: LocaleContent = {
+  ...zhNewGuides,
   nav: {
     brandName: '商业地产投资计算器',
     calculators: '计算器总览',
@@ -973,6 +975,41 @@ export const zhContent: LocaleContent = {
         description: '不看你的 W-2 收入、不看美国信用分数，DSCR 贷款按物业本身的租金收入放贷——华人投资者进入美国商业地产市场的实用路径。',
         badge: '融资贷款',
         readTime: '8 分钟阅读',
+      },
+      {
+        slug: 'dscr-complete-guide',
+        title: 'DSCR (偿债备付率) 商业地产贷款完全指南',
+        description: '商业地产贷款核心指标 DSCR：如何计算、银行审贷标准、分业态门槛以及提升偿债覆盖率的实用策略。',
+        badge: '融资承销',
+        readTime: '11 分钟阅读',
+      },
+      {
+        slug: 'loan-amortization-and-balloon-loans',
+        title: '商业贷款摊销与气球贷：解读还款表、应对气球款与规划再融资时机',
+        description: '解读商业贷款摊销表细节，掌握贷款期限与摊销期差异、气球贷到期应对策略与再融资关键时间节点。',
+        badge: '商业信贷',
+        readTime: '12 分钟阅读',
+      },
+      {
+        slug: 'cash-on-cash-vs-irr',
+        title: 'Cash-on-Cash vs IRR：各自告诉你什么，又隐藏了什么',
+        description: '两处房产在某一个收益指标上可能完全相同，但在另一个指标上却天壤之别。认清两者的本质与常见误区。',
+        badge: '收益分析',
+        readTime: '12 分钟阅读',
+      },
+      {
+        slug: 'buy-vs-lease-decision-framework',
+        title: '商业地产买 vs 租：决定企业资产配置的决策框架',
+        description: '企业选址决策：买楼还是租楼？绝不能只比月供与月租金。通过完整算例逐步拆解持有期对买租决策的逆转效应。',
+        badge: '资本配置',
+        readTime: '11 分钟阅读',
+      },
+      {
+        slug: 'commercial-real-estate-underwriting-checklist',
+        title: '商业地产承销核对清单：签约前必须通过的 7 道硬性检验',
+        description: '承销的本质不是为了找理由买入，而是在资金被锁定前找出足以放弃交易的致命硬伤。7 道严谨检验关卡。',
+        badge: '交易尽调',
+        readTime: '11 分钟阅读',
       },
     ],
   },

@@ -1,6 +1,8 @@
 import { LocaleContent } from './types';
+import { enNewGuides } from './newGuides';
 
 export const enContent: LocaleContent = {
+  ...enNewGuides,
   nav: {
     brandName: 'CRE Calculators',
     calculators: 'All Calculators',
@@ -906,6 +908,41 @@ export const enContent: LocaleContent = {
         description: "A practical framework for going from 'here's a listing' to 'here's my offer' — or 'here's why I'm passing.'",
         badge: "Due Diligence",
         readTime: "10 min read",
+      },
+      {
+        slug: "dscr-complete-guide",
+        title: "The Complete Guide to DSCR (Debt Service Coverage Ratio)",
+        description: "What DSCR measures, how lenders calculate it, acceptable ranges by property type, and strategies to improve deal coverage.",
+        badge: "Debt & Underwriting",
+        readTime: "11 min read",
+      },
+      {
+        slug: "loan-amortization-and-balloon-loans",
+        title: "Loan Amortization & Balloon Loans: Schedules, Calculations & Refinance",
+        description: "How commercial loan amortization tables work, balloon payment mechanics at 5, 7, and 10 years, and timing your refinance window.",
+        badge: "Debt & Financing",
+        readTime: "12 min read",
+      },
+      {
+        slug: "cash-on-cash-vs-irr",
+        title: "Cash-on-Cash Return vs IRR: What Each Metric Tells You (and What It Hides)",
+        description: "Comparing year-one cash yield with multi-year internal rate of return, common metric traps, and when to use each in investment decisions.",
+        badge: "Return Analysis",
+        readTime: "12 min read",
+      },
+      {
+        slug: "buy-vs-lease-decision-framework",
+        title: "Buy vs Lease: A Decision Framework for Commercial Property",
+        description: "Evaluating 5-year and 10-year holding periods, down payments, equity build-up, tax deductions, and capital flexibility for businesses.",
+        badge: "Capital Strategy",
+        readTime: "11 min read",
+      },
+      {
+        slug: "commercial-real-estate-underwriting-checklist",
+        title: "Commercial Real Estate Underwriting Checklist: 7 Gates Before You Buy",
+        description: "A rigorous 7-gate verification framework covering income, expenses, cap rates, debt coverage, cash return, break-even occupancy, and stress tests.",
+        badge: "Due Diligence",
+        readTime: "11 min read",
       },
     ],
   },

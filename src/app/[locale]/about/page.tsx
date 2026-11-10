@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { LOCALES, resolveLocale } from '@/lib/constants';
 import { buildSeoMetadata } from '@/lib/seo';
-import { ShieldCheck, Building2, Award, FileSpreadsheet, ArrowRight } from 'lucide-react';
+import { ShieldCheck, Code2, CheckCircle2, AlertTriangle, ArrowRight, Mail } from 'lucide-react';
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
@@ -21,20 +21,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const isPt = locale === 'pt';
 
   const title = isZh
-    ? '关于我们与编辑使命 | CRE Calculators'
+    ? '关于我们 | CRE Calculators'
     : isEs
-    ? 'Sobre Nosotros y Misión Editorial | CRE Calculators'
+    ? 'Sobre Nosotros | CRE Calculators'
     : isPt
-    ? 'Sobre Nós e Missão Editorial | CRE Calculators'
-    : 'About Us & Mission | CRE Calculators';
+    ? 'Sobre Nós | CRE Calculators'
+    : 'About Us | CRE Calculators';
 
   const description = isZh
-    ? 'CRE Calculators 致力于为商业地产投资者、经纪人及承销人员提供透明、精准的财务计算工具与尽调数据模型。'
+    ? '了解 crecalculators.com 的背景、建站初衷、计算逻辑核验流程与使用原则。'
     : isEs
-    ? 'CRE Calculators proporciona herramientas de evaluación financiera y modelos de inversión transparentes e independientes para profesionales de bienes raíces comerciales.'
+    ? 'Conozca la historia, misión, metodología de verificación y principios de uso de crecalculators.com.'
     : isPt
-    ? 'O CRE Calculators oferece ferramentas de análise financeira e modelos de investimento transparentes e independentes para profissionais do mercado imobiliário comercial.'
-    : 'CRE Calculators provides transparent, institutional-grade commercial real estate underwriting tools and financial models for investors and brokers.';
+    ? 'Conheça a história, missão, metodologia de verificação e princípios de uso do crecalculators.com.'
+    : 'Learn about crecalculators.com, why it was built, how calculation logic is verified, and our core principles.';
 
   return buildSeoMetadata({
     path: 'about',
@@ -56,7 +56,7 @@ export default async function AboutPage({ params }: PageProps) {
   const aboutLabel = isZh ? '关于我们' : isEs ? 'Sobre Nosotros' : isPt ? 'Sobre Nós' : 'About Us';
 
   return (
-    <article className="max-w-4xl mx-auto space-y-10 py-4">
+    <article className="max-w-3xl mx-auto space-y-10 py-6">
       {/* Breadcrumb Navigation */}
       <nav className="text-xs font-medium text-slate-500 flex items-center gap-1.5 mb-2">
         <Link href={`/${locale}/`} className="hover:text-emerald-600 transition-colors">{homeLabel}</Link>
@@ -64,122 +64,189 @@ export default async function AboutPage({ params }: PageProps) {
         <span className="text-slate-900 font-semibold">{aboutLabel}</span>
       </nav>
 
-      <header className="space-y-3 border-b border-slate-200 pb-6">
+      {/* Header */}
+      <header className="space-y-4 border-b border-slate-200 pb-8">
         <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full">
-          <Building2 className="w-4 h-4 text-emerald-600" />
-          <span>{isZh ? '关于我们' : isEs ? 'Acerca de CRE Calculators' : isPt ? 'Sobre o CRE Calculators' : 'About CRE Calculators'}</span>
+          <Code2 className="w-3.5 h-3.5 text-emerald-600" />
+          <span>{isZh ? '关于网站与开发者' : isEs ? 'Sobre el Proyecto' : isPt ? 'Sobre o Projeto' : 'About the Project'}</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
           {isZh
-            ? '打造专业的商业地产投资决策工具'
+            ? '关于 crecalculators.com'
             : isEs
-            ? 'Análisis Financiero Transparente y Potente para Bienes Raíces Comerciales'
+            ? 'Sobre crecalculators.com'
             : isPt
-            ? 'Análise Financeira Transparente e Poderosa para Imóveis Comerciais'
-            : 'Transparent & Powerful Commercial Real Estate Financial Analytics'}
+            ? 'Sobre crecalculators.com'
+            : 'About crecalculators.com'}
         </h1>
-        <p className="text-base text-slate-600 leading-relaxed">
-          {isZh
-            ? '我们为商业地产 (CRE) 投资者、小组成员、贷款承销员及跨国投资者提供透明、易用、不要求注册即可直接使用的决策分析工具。'
-            : isEs
-            ? 'Desarrollamos calculadoras y modelos de evaluación rápidos, gratuitos y 100% transparentes, diseñados específicamente para inversores, corredores y analistas de bienes raíces comerciales.'
-            : isPt
-            ? 'Criamos calculadoras e modelos de análise ágeis, gratuitos e 100% transparentes, projetados especificamente para investidores, corretores e analistas do mercado imobiliário comercial.'
-            : 'We build fast, free, transparent underwriting and valuation calculators engineered specifically for commercial real estate professionals.'}
+        <p className="text-lg text-slate-700 leading-relaxed font-medium">
+          {isZh ? (
+            <>
+              <strong>crecalculators.com</strong> 是一套免费的商业地产投资计算工具集，由独立开发者 Peter 独立构建并维护。
+            </>
+          ) : isEs ? (
+            <>
+              <strong>crecalculators.com</strong> es un conjunto gratuito de calculadoras de bienes raíces comerciales, desarrollado y mantenido por Peter, un desarrollador independiente.
+            </>
+          ) : isPt ? (
+            <>
+              O <strong>crecalculators.com</strong> é um conjunto gratuito de calculadoras para o setor imobiliário comercial, desenvolvido e mantido por Peter, um desenvolvedor independente.
+            </>
+          ) : (
+            <>
+              <strong>crecalculators.com</strong> is a free set of commercial real estate calculators, built and maintained by Peter, an independent developer.
+            </>
+          )}
         </p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-            <FileSpreadsheet className="w-5 h-5" />
-          </div>
-          <h3 className="text-base font-bold text-slate-900">
-            {isZh ? '公式完全透明' : isEs ? 'Fórmulas 100% Transparentes' : isPt ? 'Fórmulas 100% Transparentes' : 'Transparent Formulas'}
-          </h3>
-          <p className="text-xs text-slate-600 leading-relaxed">
+      {/* Main Content Body */}
+      <div className="space-y-8 text-sm sm:text-base text-slate-700 leading-relaxed">
+        {/* Section 1: Why I Built This Site */}
+        <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
+          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-emerald-600" />
+            {isZh ? '我为什么做这个网站' : isEs ? 'Por Qué Creé Este Sitio' : isPt ? 'Por Que Criei Este Site' : 'Why I Built This Site'}
+          </h2>
+          <p>
             {isZh
-              ? '不搞“黑盒算法”。每一个指标（Cap Rate、NOI、DSCR、Cash-on-Cash 等）都公开数学逻辑与推导假设。'
+              ? '我创建这个网站的初衷很简单：评估一笔商业地产交易，不应该非得依赖复杂的 Excel 表格或昂贵的付费工具。'
               : isEs
-              ? 'Cero algoritmos de "caja negra". Cada métrica (Cap Rate, NOI, DSCR, CoC, etc.) expone su lógica matemática, variables y supuestos paso a paso.'
+              ? 'Construí este sitio porque evaluar una inversión inmobiliaria no debería requerir una hoja de cálculo compleja o herramientas de pago costosas.'
               : isPt
-              ? 'Zero algoritmos de "caixa-preta". Cada indicador (Cap Rate, NOI, DSCR, CoC, etc.) apresenta sua lógica matemática, variáveis e premissas passo a passo.'
-              : 'Zero black-box calculations. Every metric provides plain-math formulas, variable definitions, and step-by-step examples.'}
+              ? 'Criei este site porque analisar uma transação imobiliária não deveria exigir planilhas complexas nem ferramentas pagas.'
+              : "I built this site because checking a deal shouldn't require a spreadsheet or a paid tool."}
           </p>
-        </div>
+          <p>
+            {isZh ? (
+              <>
+                网站上的每一个计算器都完全在您的<strong>浏览器本地运行</strong>——无需创建账户、无需登录，绝不向任何服务器发送您的财务数据。每页都直观公开了计算公式，所有算例均采用真实商业地产数字，整体分析方法记录在{' '}
+                <Link href={`/${locale}/editorial/`} className="text-emerald-600 font-semibold hover:underline">
+                  方法论页面 (Methodology)
+                </Link>
+                。
+              </>
+            ) : isEs ? (
+              <>
+                Cada calculadora funciona enteramente en su navegador: sin cuentas, sin registro y sin enviar datos a ningún servidor. Las fórmulas se muestran directamente en la página, los ejemplos prácticos utilizan cifras reales y la metodología está documentada en la página de{' '}
+                <Link href={`/${locale}/editorial/`} className="text-emerald-600 font-semibold hover:underline">
+                  Metodología
+                </Link>
+                .
+              </>
+            ) : isPt ? (
+              <>
+                Cada calculadora roda 100% no seu navegador — sem necessidade de conta, sem cadastro e sem envio de dados para servidores. As fórmulas são exibidas na página, os exemplos utilizam números reais e a metodologia está documentada na página de{' '}
+                <Link href={`/${locale}/editorial/`} className="text-emerald-600 font-semibold hover:underline">
+                  Metodologia
+                </Link>
+                .
+              </>
+            ) : (
+              <>
+                Every calculator runs entirely in your browser — no account, no sign-up, and no data sent to a server. Formulas are shown on the page, worked examples use real numbers, and the methodology is documented on the{' '}
+                <Link href={`/${locale}/editorial/`} className="text-emerald-600 font-semibold hover:underline">
+                  Methodology page
+                </Link>
+                .
+              </>
+            )}
+          </p>
+        </section>
 
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-          <h3 className="text-base font-bold text-slate-900">
-            {isZh ? '零门槛，不留隐私' : isEs ? 'Privacidad Primero, Sin Registro' : isPt ? 'Privacidade em Primeiro Lugar' : 'Privacy-First & No Signup'}
-          </h3>
-          <p className="text-xs text-slate-600 leading-relaxed">
+        {/* Section 2: How the Content Is Checked */}
+        <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
+          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+            {isZh ? '内容是如何审核与核验的' : isEs ? 'Cómo se Verifica el Contenido' : isPt ? 'Como o Conteúdo é Verificado' : 'How the Content Is Checked'}
+          </h2>
+          <ul className="space-y-3 list-disc pl-5 text-slate-600">
+            <li>
+              <strong>{isZh ? '算例逻辑验证：' : isEs ? 'Verificación de cálculos: ' : isPt ? 'Verificação de cálculos: ' : 'Calculation logic: '}</strong>
+              {isZh
+                ? '所有计算逻辑在发布前均对照分步手算案例逐项核验；'
+                : isEs
+                ? 'La lógica de cálculo se comprueba contra ejemplos paso a paso antes de su publicación;'
+                : isPt
+                ? 'A lógica dos cálculos é auditada com exemplos práticos antes da publicação;'
+                : 'Calculation logic is verified against worked examples before publication;'}
+            </li>
+            <li>
+              <strong>{isZh ? '参考区间分类：' : isEs ? 'Rangos de referencia: ' : isPt ? 'Faixas de referência: ' : 'Threshold ranges: '}</strong>
+              {isZh
+                ? '门槛区间（例如典型的商业银行审贷 DSCR 最低要求）均明确标注为市场典型参考值，绝非商业贷款承诺或担保；'
+                : isEs
+                ? 'Los rangos de referencia (por ejemplo, los requisitos mínimos típicos de DSCR de los bancos) se clasifican como típicos y no como garantías;'
+                : isPt
+                ? 'As faixas de referência (como as exigências mínimas típicas de DSCR dos bancos) são identificadas como típicas, e não como garantias;'
+                : 'Threshold ranges (for example, typical lender DSCR minimums) are labeled as typical, not guarantees;'}
+            </li>
+            <li>
+              <strong>{isZh ? '权威来源链接：' : isEs ? 'Fuentes institucionales: ' : isPt ? 'Fontes institucionais: ' : 'Sources linked: '}</strong>
+              {isZh
+                ? '指南文章中均附带官方机构与学术出版物数据来源链接；'
+                : isEs
+                ? 'Las fuentes de datos están citadas y enlazadas directamente en las guías;'
+                : isPt
+                ? 'As fontes de dados são citadas e linkadas diretamente nos guias;'
+                : 'Sources are linked in the guides;'}
+            </li>
+            <li>
+              <strong>{isZh ? '最后审核时间：' : isEs ? 'Fechas de revisión: ' : isPt ? 'Datas de revisão: ' : 'Review dates: '}</strong>
+              {isZh
+                ? '各页面均明确标注最后审查与校准日期。'
+                : isEs
+                ? 'Las páginas incluyen una fecha visible de última revisión.'
+                : isPt
+                ? 'As páginas exibem a data da última revisão.'
+                : 'Pages carry a last-reviewed date.'}
+            </li>
+          </ul>
+        </section>
+
+        {/* Section 3: Legal & Professional Disclaimer */}
+        <section className="bg-amber-50/80 border border-amber-200 rounded-2xl p-6 md:p-8 space-y-3">
+          <h2 className="text-lg font-bold text-amber-950 flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-amber-600" />
+            {isZh ? '工具性质与免责声明' : isEs ? 'Aviso Legal y de Servicio' : isPt ? 'Aviso Legal e de Serviço' : 'Calculation Tool Disclaimer'}
+          </h2>
+          <p className="text-amber-900 text-xs sm:text-sm leading-relaxed">
             {isZh
-              ? '所有计算逻辑 100% 在你的浏览器客户端执行，不强制要求注册账号，更不会将你的交易数据存入云端数据库。'
+              ? '本站纯属计算与分析工具，不是房地产经纪公司、放贷机构或投资顾问。本站不买卖、不促成交易、也不为任何物业提供融资。页面上的任何文字、数字或测算结果均不构成税务、法律或投资建议。'
               : isEs
-              ? 'Todos los cálculos se ejecutan 100% en su navegador local. Jamás recopilamos, transferimos ni almacenamos sus cifras financieras privadas.'
+              ? 'Este sitio es una herramienta de cálculo, no una agencia inmobiliaria, entidad crediticia ni servicio de asesoría. No compra, vende ni financia propiedades, y ningún contenido aquí constituye asesoramiento fiscal, legal o de inversión.'
               : isPt
-              ? 'Todos os cálculos rodam 100% no navegador do usuário. Nunca coletamos, transferimos ou armazenamos seus dados financeiros privados em nuvem.'
-              : 'All underwriting runs 100% client-side in your browser. We never collect or store your private property financial numbers.'}
+              ? 'Este site é uma ferramenta de cálculo, não uma corretora, instituição financeira ou consultoria de investimentos. Não compramos, vendemos ou financiamos imóveis, e nenhum conteúdo aqui constitui aconselhamento tributário, jurídico ou financeiro.'
+              : "This site is a calculation tool, not a brokerage, lender, or advisory service. It doesn't buy, sell, or finance properties, and nothing here is tax, legal, or investment advice."}
           </p>
-        </div>
+        </section>
 
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-            <Award className="w-5 h-5" />
+        {/* Section 4: Contact & Feedback */}
+        <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h3 className="text-base font-bold text-slate-900">
+              {isZh ? '欢迎指正与建议' : isEs ? 'Correcciones y Sugerencias' : isPt ? 'Correções e Sugestões' : 'Corrections & Suggestions'}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600">
+              {isZh
+                ? '如果您发现任何数字、公式或表达有误，欢迎向我们提出反馈。'
+                : isEs
+                ? 'Si encuentra algún error o desea sugerir una mejora, sus comentarios son bienvenidos.'
+                : isPt
+                ? 'Se encontrar qualquer inconsistência ou desejar sugerir melhorias, seu feedback é bem-vindo.'
+                : 'Corrections and suggestions are welcome — see the Contact page.'}
+            </p>
           </div>
-          <h3 className="text-base font-bold text-slate-900">
-            {isZh ? '行业基准参考' : isEs ? 'Estándares del Mercado' : isPt ? 'Padrões de Mercado' : 'Market Benchmarks'}
-          </h3>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            {isZh
-              ? '定期根据全美主要都市圈（Tier 1-4）与银行机构测算标准更新参考范围，确保测算符合市场实操。'
-              : isEs
-              ? 'Actualizado periódicamente con rangos de referencia de Cap Rate de las principales áreas metropolitanas (Tier 1-4) y criterios bancarios.'
-              : isPt
-              ? 'Atualizado periodicamente com parâmetros de Cap Rate das principais regiões metropolitanas dos EUA (Tier 1-4) e critérios bancários.'
-              : 'Regularly updated with Tier 1-4 US metropolitan cap rate benchmarks and DSCR lender underwriting parameters.'}
-          </p>
-        </div>
-      </div>
-
-      <section className="bg-slate-900 text-white rounded-2xl p-8 space-y-4">
-        <h2 className="text-xl font-bold">
-          {isZh
-            ? '查看更多说明与指南'
-            : isEs
-            ? 'Metodología Editorial y Fórmulas'
-            : isPt
-            ? 'Metodologia Editorial e Fórmulas'
-            : 'Editorial Policy & Calculation Methodology'}
-        </h2>
-        <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
-          {isZh
-            ? '你可以阅读我们的编辑方法论、公式假设定义，或通过联系页面向我们提出意见与功能需求。'
-            : isEs
-            ? 'Revise nuestras pautas metodológicas completas o póngase en contacto con nuestro equipo para enviarnos sugerencias y consultas.'
-            : isPt
-            ? 'Confira nossas diretrizes metodológicas completas ou entre em contato com nossa equipe para enviar sugestões e dúvidas.'
-            : 'Review our complete methodology guidelines or get in touch with our product team for feedback.'}
-        </p>
-        <div className="flex flex-wrap gap-4 pt-2">
-          <Link
-            href={`/${locale}/editorial/`}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors"
-          >
-            <span>{isZh ? '公式与方法论说明' : isEs ? 'Metodología de Cálculo' : isPt ? 'Metodologia de Cálculo' : 'Calculation Methodology'}</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
           <Link
             href={`/${locale}/contact/`}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-colors border border-slate-700"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shrink-0 transition-colors shadow-xs"
           >
-            <span>{isZh ? '联系我们' : isEs ? 'Contáctenos' : isPt ? 'Fale Conosco' : 'Contact Us'}</span>
+            <Mail className="w-4 h-4" />
+            <span>{isZh ? '联系我们' : isEs ? 'Página de Contacto' : isPt ? 'Página de Contato' : 'Contact Page'}</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
-        </div>
-      </section>
+        </section>
+      </div>
     </article>
   );
 }

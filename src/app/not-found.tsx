@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import './globals.css';
 import { Building2, Home, Calculator, BookOpen, Compass } from 'lucide-react';
+import { Footer } from '@/components/layout/Footer';
 
 export default function NotFound() {
   return (
@@ -99,9 +100,7 @@ export default function NotFound() {
           </div>
         </main>
 
-        <footer className="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} CRE Calculators. The Independent Underwriting Suite.</p>
-        </footer>
+        <Footer locale="en" />
       </body>
     </html>
   );

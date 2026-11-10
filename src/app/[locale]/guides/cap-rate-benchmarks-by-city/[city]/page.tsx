@@ -99,6 +99,9 @@ export default async function CityCapRatePage({ params }: PageProps) {
           <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
             {item.marketTier}
           </span>
+          <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+            {isZh ? '更新于：2026年11月 · Q4基准校准' : isEs ? 'Actualizado: Noviembre 2026 · Q4' : isPt ? 'Atualizado: Novembro 2026 · Q4' : 'Updated: November 2026 · Q4 Calibration'}
+          </span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
@@ -300,6 +303,57 @@ export default async function CityCapRatePage({ params }: PageProps) {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Verified Local Data Sources & Tax Authorities */}
+      <section className="bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8 space-y-4">
+        <div className="space-y-1">
+          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            {isZh ? `${item.cityName} 核心数据源与官方税政评估依据` : isEs ? `Fuentes de Datos y Autoridades Catastrales de ${item.cityName}` : isPt ? `Fontes de Dados e Autoridades Fiscais de ${item.cityName}` : `${item.cityName} Market Data Sources & Assessment Authorities`}
+          </h2>
+          <p className="text-xs text-slate-500">
+            {isZh
+              ? '本指南收益率区间参照以下机构市场研报与市政税务评估标准进行季度校验：'
+              : isEs
+              ? 'Los rangos de rendimiento se calibran trimestralmente frente a las siguientes publicaciones de corretaje y autoridades catastrales:'
+              : isPt
+              ? 'As faixas de rendimento são calibradas trimestralmente com base nas seguintes publicações de mercado e órgãos fiscais:'
+              : 'Benchmark yields are calibrated quarterly against institutional brokerage publications and official municipal assessment schedules:'}
+          </p>
+        </div>
+
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600">
+          <li className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
+            <span className="font-bold text-slate-800 block">
+              {item.slug === 'austin-tx-cap-rates'
+                ? 'Travis Central Appraisal District (TCAD)'
+                : item.slug === 'miami-fl-cap-rates'
+                ? 'Miami-Dade County Property Appraiser'
+                : item.slug === 'dallas-tx-cap-rates'
+                ? 'Dallas Central Appraisal District (DCAD) & TAD'
+                : 'Maricopa County Assessor (Commercial Assessment)'}
+            </span>
+            <p className="text-[11px] text-slate-500">
+              {item.slug === 'austin-tx-cap-rates'
+                ? (isZh ? '官方商业地产过户评估与税率核定规程' : 'Official municipal commercial reappraisal & tax rate schedules')
+                : item.slug === 'miami-fl-cap-rates'
+                ? (isZh ? '佛罗里达州商业不动产 TRIM 评估通知与税率核查' : 'TRIM assessment notices & commercial tax millage rates')
+                : item.slug === 'dallas-tx-cap-rates'
+                ? (isZh ? '北得州商业物业年审估值标准与申诉公报' : 'North Texas commercial appraisal standards & protest data')
+                : (isZh ? '亚利桑那州 Class 1 商业不动产法定评估比率' : 'Arizona Class 1 commercial assessment ratio guidelines')}
+            </p>
+          </li>
+
+          <li className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
+            <span className="font-bold text-slate-800 block">
+              {isZh ? '全美机构市场调查与资本市场研报' : 'Institutional Market Surveys & Capital Market Reports'}
+            </span>
+            <p className="text-[11px] text-slate-500">
+              Newmark 2026 Valuation & Advisory Survey · CBRE North America Cap Rate Survey (Q3/Q4 2026) · Marcus & Millichap Research
+            </p>
+          </li>
+        </ul>
       </section>
 
       {/* Other City Benchmark Guides */}

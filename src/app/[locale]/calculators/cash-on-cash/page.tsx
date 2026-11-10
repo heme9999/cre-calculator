@@ -409,6 +409,57 @@ export default async function CashOnCashPage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* In-Depth Guide Feature Banner */}
+        <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs">
+          <div className="space-y-2 max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300">
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>
+                {isZh
+                  ? '深度回报指南'
+                  : isEs
+                  ? 'Guía Integral de Retornos'
+                  : isPt
+                  ? 'Guia Completo de Retornos'
+                  : 'In-Depth Returns Guide'}
+              </span>
+            </span>
+            <h3 className="text-xl font-bold text-slate-900">
+              {isZh
+                ? 'Cash-on-Cash vs IRR：两个核心回报指标的本质区别与实战运用'
+                : isEs
+                ? 'Retorno sobre Efectivo (CoC) vs TIR (IRR): ¿Cuál Usar y Cuándo?'
+                : isPt
+                ? 'Retorno sobre Caixa (CoC) vs TIR (IRR): Qual Métrica Usar?'
+                : 'Cash-on-Cash Return vs IRR: Which Metric Matters When?'}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              {isZh
+                ? '详解首年现金流分红与 5 年全周期内部收益率的区别，揭示本金偿还如何推升最终股权倍数，以及专业投资人评估杠杆风险的决策底线。'
+                : isEs
+                ? 'Comprenda por qué un alto rendimiento en efectivo en el año 1 puede enmascarar una salida débil, cómo la amortización impulsa la TIR y qué métrica priorizan los inversores institucionales.'
+                : isPt
+                ? 'Entenda por que um alto dividendo no primeiro ano pode mascarar uma saída fraca, como a amortização impulsiona a TIR e o que os investidores institucionais realmente exigem.'
+                : 'Understand why a high Cash-on-Cash yield can mask a weak exit, how debt paydown shapes IRR over a 5-year hold, and which metric institutional equity investors actually rely upon.'}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/guides/cash-on-cash-vs-irr/`}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shrink-0 transition-all shadow-xs"
+          >
+            <span>
+              {isZh
+                ? '阅读完整指南'
+                : isEs
+                ? 'Leer la Guía Completa'
+                : isPt
+                ? 'Ler o Guia Completo'
+                : 'Read Complete Guide'}
+            </span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </section>
+
         {/* Deal Analyzer Banner */}
         <section className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4 border border-slate-700 shadow-md">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

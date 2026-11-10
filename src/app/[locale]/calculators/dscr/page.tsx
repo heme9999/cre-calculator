@@ -167,6 +167,38 @@ export default async function DscrPage({ params }: PageProps) {
     item2: '2. Tenant Concentration & Lease Expiry: Single-tenant properties face catastrophic DSCR drop if the tenant defaults. Always stress-test against localized vacancy spikes.',
   };
 
+  const guideBanner = {
+    en: {
+      badge: 'In-Depth Underwriting Guide',
+      title: 'The Complete Guide to DSCR (Debt Service Coverage Ratio)',
+      desc: 'Learn what lenders actually look for, worked 20-unit calculation steps, how debt constants affect sizing, and how to improve your ratio before submitting a loan application.',
+      btn: 'Read Complete Guide',
+    },
+    zh: {
+      badge: '深度承销指南',
+      title: 'DSCR (偿债备付率) 完全指南：从公式到银行审贷实操',
+      desc: '系统解析银行风控标准、20单元实操测算案例、常数表计算法，以及如何优化比率以获取最高贷款额度。',
+      btn: '阅读完全指南',
+    },
+    es: {
+      badge: 'Guía Integral de Suscripción',
+      title: 'Guía Completa de DSCR (Ratio de Cobertura del Servicio de la Deuda)',
+      desc: 'Aprenda qué evalúan realmente los bancos, cálculo paso a paso para 20 unidades, constantes de deuda y cómo optimizar su ratio antes de solicitar un préstamo.',
+      btn: 'Leer Guía Completa',
+    },
+    pt: {
+      badge: 'Guia Completo de Subscrição',
+      title: 'Guia Completo de DSCR (Índice de Cobertura do Serviço da Dívida)',
+      desc: 'Entenda os critérios dos credores, cálculos passo a passo para 20 unidades, constantes da dívida e como otimizar o índice antes da solicitação.',
+      btn: 'Ler Guia Completo',
+    },
+  }[locale as 'en' | 'zh' | 'es' | 'pt'] || {
+    badge: 'In-Depth Underwriting Guide',
+    title: 'The Complete Guide to DSCR (Debt Service Coverage Ratio)',
+    desc: 'Learn what lenders actually look for, worked 20-unit calculation steps, how debt constants affect sizing, and how to improve your ratio before submitting a loan application.',
+    btn: 'Read Complete Guide',
+  };
+
   const bannersByLocale = {
     zh: {
       daBadge: '综合分析工具',
@@ -345,6 +377,29 @@ export default async function DscrPage({ params }: PageProps) {
             </Link>
           </section>
         )}
+
+        {/* In-Depth Guide Feature Banner */}
+        <section className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs">
+          <div className="space-y-2 max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300">
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>{guideBanner.badge}</span>
+            </span>
+            <h3 className="text-xl font-bold text-slate-900">
+              {guideBanner.title}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              {guideBanner.desc}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/guides/dscr-complete-guide/`}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs shrink-0 transition-all shadow-xs"
+          >
+            <span>{guideBanner.btn}</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </section>
 
         {/* Deal Analyzer Banner */}
         <section className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-6 md:p-8 space-y-4 border border-slate-700 shadow-md">

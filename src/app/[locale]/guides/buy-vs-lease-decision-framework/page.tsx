@@ -1,0 +1,41 @@
+import React from 'react';
+import { Metadata } from 'next';
+import { getContent } from '@/content';
+import { LOCALES, resolveLocale } from '@/lib/constants';
+import { ArticleGuideView } from '@/components/guides/ArticleGuideView';
+import { buildSeoMetadata } from '@/lib/seo';
+
+export function generateStaticParams() {
+  return LOCALES.map((locale) => ({ locale }));
+}
+
+interface PageProps {
+  params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const locale = resolveLocale(resolvedParams.locale);
+  const content = getContent(locale).buyVsLeaseGuide;
+
+  return buildSeoMetadata({
+    path: 'guides/buy-vs-lease-decision-framework',
+    locale,
+    title: content.metaTitle,
+    description: content.metaDescription,
+  });
+}
+
+export default async function BuyVsLeaseGuidePage({ params }: PageProps) {
+  const resolvedParams = await params;
+  const locale = resolveLocale(resolvedParams.locale);
+  const content = getContent(locale).buyVsLeaseGuide;
+
+  return (
+    <ArticleGuideView
+      content={content}
+      locale={locale}
+      guideSlug="buy-vs-lease-decision-framework"
+    />
+  );
+}

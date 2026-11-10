@@ -192,5 +192,10 @@ export interface LocaleContent {
   exchange1031ProcessGuide: ArticleGuideContent;
   howToUnderwriteDealGuide: ArticleGuideContent;
   dscrLoanGuideChineseInvestorsGuide?: ArticleGuideContent;
+  dscrCompleteGuide: ArticleGuideContent;
+  loanAmortizationGuide: ArticleGuideContent;
+  cashOnCashVsIrrGuide: ArticleGuideContent;
+  buyVsLeaseGuide: ArticleGuideContent;
+  creUnderwritingChecklistGuide: ArticleGuideContent;
   guidesHub: GuidesHubPageContent;
 }
