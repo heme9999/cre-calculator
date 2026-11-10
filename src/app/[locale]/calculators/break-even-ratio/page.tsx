@@ -275,11 +275,11 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* In-depth Conceptual Difference: BER vs. BEO */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3 mt-4">
+            {/* In-depth Conceptual Difference: BER vs. BEO & 5 Balance-Sheet Levers */}
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 md:p-6 space-y-4 mt-4">
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-emerald-600" />
-                <span>{isZh ? '承销机制与实战：BER 与 BEO 的本质差异 (Underwriting Mechanics: BER vs. BEO & 5 Balance-Sheet Levers)' : 'Underwriting Mechanics: BER vs. BEO & 5 Balance-Sheet Levers'}</span>
+                <span>{isZh ? '承销机制与实战：BER 与 BEO 的本质差异及 5 大资产负债表杠杆 (Underwriting Mechanics: BER vs. BEO & 5 Balance-Sheet Levers)' : 'Underwriting Mechanics: BER vs. BEO & 5 Balance-Sheet Levers'}</span>
               </h3>
               <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                 {isZh
@@ -308,46 +308,46 @@ export default async function BreakEvenRatioPage({ params }: PageProps) {
                   </p>
                 </div>
               </div>
-            </div>
 
-            {/* 5 Practical Levers to Lower Break-Even Hurdles */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3 mt-4">
-              <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span>{isZh ? '实战指南：借款人压降盈亏平衡比率 (BER) 的 5 大有效杠杆' : 'Actionable Strategies: 5 Proven Levers to Lower Break-Even Hurdles'}</span>
-              </h3>
-              <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-sm text-slate-700">
-                <li>
-                  <strong>{isZh ? '延长贷款本息摊销期 (Amortization Extension)' : 'Extend Amortization Period'}:</strong>{' '}
-                  {isZh
-                    ? '将商业贷款摊销期限由 25 年拉长至 30 年，可直接削减约 6%–8%（例如 6.5% 利率下约 6.4%）的年度债务本息支出，降低 BER 约 300–500 个基点（3–5 个百分点）。'
-                    : 'Negotiating a 30-year amortization schedule instead of 25 years reduces annual debt service by approximately 6%–8% (e.g. 6.4% on a 6.50% commercial loan), lowering your BER by 300 to 500 basis points.'}
-                </li>
-                <li>
-                  <strong>{isZh ? '争取前期只还息期 (Interest-Only Period)' : 'Secure Initial Interest-Only (IO) Terms'}:</strong>{' '}
-                  {isZh
-                    ? '在并购后的前 2–3 年争取只还息待遇。免除本金摊销可使年偿债支出下降 20% 以上，为物业装修改造与租金重定价提供极佳的缓冲安全区。'
-                    : 'Securing 2 to 3 years of initial IO eliminates principal amortization during the capital improvement or repositioning phase, creating substantial temporary cash flow cushions.'}
-                </li>
-                <li>
-                  <strong>{isZh ? '发起地方房产税复议申诉 (Property Tax Appeal)' : 'Proactively Appeal Property Tax Assessments'}:</strong>{' '}
-                  {isZh
-                    ? '房产税通常占多户型与零售商业 OpEx 的 30%–45%。聘请专业税务顾问对过高评估发起申诉，一旦成功减免可永久降低固定运营开支。'
-                    : 'Property taxes typically comprise 30% to 45% of total operating expenses. Challenging an inflated post-sale reassessment permanently lowers your operating cost baseline.'}
-                </li>
-                <li>
-                  <strong>{isZh ? '推行公用事业分摊制度 (RUBS / Submetering)' : 'Implement Utility Submetering (RUBS)'}:</strong>{' '}
-                  {isZh
-                    ? '通过水电独立分表或比例分摊制度 (Ratio Utility Billing System)，将水暖电等能源杂费转移由实际租户负担，大幅压缩房东净营运支出。'
-                    : 'Passing water, sewer, and trash expenses through to tenants via a Ratio Utility Billing System shifts variable utility inflation off the landlord balance sheet.'}
-                </li>
-                <li>
-                  <strong>{isZh ? '提高首付追加自持权益 (Strategic De-Leveraging)' : 'Increase Equity Down Payment'}:</strong>{' '}
-                  {isZh
-                    ? '若资产初始 BER 超过 85%，追加 5%–10% 的股权首付以压缩贷款本金，能显著缩减借款规模，直接解除银行拒贷警报。'
-                    : 'If an acquisition models above 85% BER, injecting an additional 5% equity down payment reduces debt principal and brings debt service back into conventional bank compliance.'}
-                </li>
-              </ul>
+              {/* 5 Practical Levers to Lower Break-Even Hurdles */}
+              <div className="pt-3 border-t border-slate-200/80 space-y-2.5">
+                <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{isZh ? '借款人压降盈亏平衡门槛的 5 大有效杠杆 (5 Balance-Sheet Levers)' : '5 Balance-Sheet Levers to Lower Break-Even Hurdles'}</span>
+                </h4>
+                <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-sm text-slate-700">
+                  <li>
+                    <strong>{isZh ? '延长贷款本息摊销期 (Amortization Extension)' : 'Extend Amortization Period'}:</strong>{' '}
+                    {isZh
+                      ? '将商业贷款摊销期限由 25 年拉长至 30 年，可直接削减约 6%–8%（例如 6.5% 利率下约 6.4%）的年度债务本息支出，降低 BER 约 300–500 个基点（3–5 个百分点）。'
+                      : 'Negotiating a 30-year amortization schedule instead of 25 years reduces annual debt service by approximately 6%–8% (e.g. 6.4% on a 6.50% commercial loan), lowering your BER by 300 to 500 basis points.'}
+                  </li>
+                  <li>
+                    <strong>{isZh ? '争取前期只还息期 (Interest-Only Period)' : 'Secure Initial Interest-Only (IO) Terms'}:</strong>{' '}
+                    {isZh
+                      ? '在并购后的前 2–3 年争取只还息待遇。免除本金摊销可使年偿债支出下降 20% 以上，为物业装修改造与租金重定价提供极佳的缓冲安全区。'
+                      : 'Securing 2 to 3 years of initial IO eliminates principal amortization during the capital improvement or repositioning phase, creating substantial temporary cash flow cushions.'}
+                  </li>
+                  <li>
+                    <strong>{isZh ? '发起地方房产税复议申诉 (Property Tax Appeal)' : 'Proactively Appeal Property Tax Assessments'}:</strong>{' '}
+                    {isZh
+                      ? '房产税通常占多户型与零售商业 OpEx 的 30%–45%。聘请专业税务顾问对过高评估发起申诉，一旦成功减免可永久降低固定运营开支。'
+                      : 'Property taxes typically comprise 30% to 45% of total operating expenses. Challenging an inflated post-sale reassessment permanently lowers your operating cost baseline.'}
+                  </li>
+                  <li>
+                    <strong>{isZh ? '推行公用事业分摊制度 (RUBS / Submetering)' : 'Implement Utility Submetering (RUBS)'}:</strong>{' '}
+                    {isZh
+                      ? '通过水电独立分表或比例分摊制度 (Ratio Utility Billing System)，将水暖电等能源杂费转移由实际租户负担，大幅压缩房东净营运支出。'
+                      : 'Passing water, sewer, and trash expenses through to tenants via a Ratio Utility Billing System shifts variable utility inflation off the landlord balance sheet.'}
+                  </li>
+                  <li>
+                    <strong>{isZh ? '提高首付追加自持权益 (Strategic De-Leveraging)' : 'Increase Equity Down Payment'}:</strong>{' '}
+                    {isZh
+                      ? '若资产初始 BER 超过 85%，追加 5%–10% 的股权首付以压缩贷款本金，能显著缩减借款规模，直接解除银行拒贷警报。'
+                      : 'If an acquisition models above 85% BER, injecting an additional 5% equity down payment reduces debt principal and brings debt service back into conventional bank compliance.'}
+                  </li>
+                </ul>
+              </div>
             </div>
 
             <p className="pt-2">
