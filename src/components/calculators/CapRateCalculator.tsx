@@ -22,8 +22,8 @@ export function CapRateCalculator({ locale, defaultPrice, defaultNoi }: Props) {
   const isPt = locale === 'pt';
   const [mode, setMode] = useState<'forward' | 'reverse'>('forward');
 
-  const initialPrice = defaultPrice ?? 1500000;
-  const initialNoi = defaultNoi ?? 112500;
+  const initialPrice = defaultPrice ?? 3850000;
+  const initialNoi = defaultNoi ?? 269500;
 
   // Forward Mode state: Purchase Price + NOI -> Cap Rate
   const [purchasePrice, setPurchasePrice] = useState<number>(initialPrice);

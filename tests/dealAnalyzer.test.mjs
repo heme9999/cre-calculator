@@ -622,11 +622,11 @@ try {
       assert.ok(cocCalcContent.includes('data-testid="coc-result-cash-flow"'), 'Calculator must include coc-result-cash-flow data-testid');
       assert.ok(cocCalcContent.includes('data-testid="coc-result-cap-rate"'), 'Calculator must include coc-result-cap-rate data-testid');
 
-      // 3. Worked example text in page.tsx must reconcile the $2.8M case study and formulas
-      assert.ok(cocPageContent.includes('$57,048'), 'page.tsx must have annual cash flow $57,048');
-      assert.ok(cocPageContent.includes('$756,000'), 'page.tsx must have total cash invested $756,000');
-      assert.ok(cocPageContent.includes('7.55%'), 'page.tsx must have CoC return 7.55%');
-      assert.ok(cocPageContent.includes('8.11%'), 'page.tsx must have Cap Rate 8.11%');
+      // 3. Worked example text in page.tsx must reconcile the case study and formulas
+      assert.ok(cocPageContent.includes('$40,540'), 'page.tsx must have annual cash flow $40,540');
+      assert.ok(cocPageContent.includes('$864,000'), 'page.tsx must have total cash invested $864,000');
+      assert.ok(cocPageContent.includes('4.69%'), 'page.tsx must have CoC return 4.69%');
+      assert.ok(cocPageContent.includes('7.34%'), 'page.tsx must have Cap Rate 7.34%');
       assert.ok(cocPageContent.includes('CoC = (NOI - 年度还贷总额) / (首付 + 过户费用 + 即时 CapEx)'), 'page.tsx must state exact CoC formula in ZH');
       assert.ok(cocPageContent.includes('CoC = (NOI - Annual Debt Service) / (Down Payment + Closing Costs + Upfront Capex)'), 'page.tsx must state exact CoC formula in EN');
       assert.ok(!cocPageContent.includes('this represents Positive Leverage'), 'page.tsx should NOT call 7.55% vs 8.11% positive leverage');
@@ -756,10 +756,10 @@ try {
       assert.ok(!esFile.includes('Cash-on-Cash Return') && !ptFile.includes('Cash-on-Cash Return'), 'es.ts and pt.ts must localize Cash-on-Cash Return');
       assert.ok(!esFile.includes('Agency') && !ptFile.includes('Agency'), 'es.ts and pt.ts must localize Agency');
 
-      // 2. Component must use canonical 24-unit baseline & localize ES/PT results panel
-      assert.ok(freeRentalComp.includes('2800000'), 'FreeRentalPropertyCalculator must default price to 2800000');
-      assert.ok(freeRentalComp.includes('336000'), 'FreeRentalPropertyCalculator must default rent to 336000');
-      assert.ok(freeRentalComp.includes('92000'), 'FreeRentalPropertyCalculator must default OpEx to 92000');
+      // 2. Component must use canonical 4-unit fourplex baseline & localize ES/PT results panel
+      assert.ok(freeRentalComp.includes('700000'), 'FreeRentalPropertyCalculator must default price to 700000');
+      assert.ok(freeRentalComp.includes('72000'), 'FreeRentalPropertyCalculator must default rent to 72000');
+      assert.ok(freeRentalComp.includes('22900'), 'FreeRentalPropertyCalculator must default OpEx to 22900');
       assert.ok(freeRentalComp.includes('Pérdida por Vacancia:') && freeRentalComp.includes('Perda por Vacância:'), 'FreeRentalPropertyCalculator must localize Vacancy Loss in ES/PT');
       assert.ok(freeRentalComp.includes('Retorno sobre Efectivo (Capital Total):') && freeRentalComp.includes('Retorno sobre Caixa (Capital Total):'), 'FreeRentalPropertyCalculator must localize Cash-on-Cash in ES/PT');
 

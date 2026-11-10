@@ -181,7 +181,7 @@ export const uiTranslations: Record<Locale, UiTranslations> = {
     preview: {
       title: 'Deal Analyzer Preview',
       sampleBadge: 'Sample',
-      sampleSubtitle: 'Sample: 24-Unit Multifamily',
+      sampleSubtitle: 'Benchmark Model: Multifamily Property ($2.8M Portfolio)',
       scenarioAria: 'Scenario switcher',
       baseCaseBtn: 'Base Case',
       stressCaseBtn: 'Stress Case',
@@ -333,7 +333,7 @@ export const uiTranslations: Record<Locale, UiTranslations> = {
     preview: {
       title: 'Deal Analyzer 预览',
       sampleBadge: 'Sample',
-      sampleSubtitle: '示例资产：24 单元多户公寓',
+      sampleSubtitle: '基准测算模型：多户型公寓资产 (280万美元投资组合)',
       scenarioAria: '情景切换',
       baseCaseBtn: '基准情景',
       stressCaseBtn: '压力情景',
@@ -485,7 +485,7 @@ export const uiTranslations: Record<Locale, UiTranslations> = {
     preview: {
       title: 'Vista Previa de Deal Analyzer',
       sampleBadge: 'Ejemplo',
-      sampleSubtitle: 'Propiedad de ejemplo: Multifamiliar de 24 Unidades',
+      sampleSubtitle: 'Modelo de Referencia: Inmueble Multifamiliar ($2.8M)',
       scenarioAria: 'Cambiar escenario',
       baseCaseBtn: 'Caso Base',
       stressCaseBtn: 'Escenario de Estrés',
@@ -637,7 +637,7 @@ export const uiTranslations: Record<Locale, UiTranslations> = {
     preview: {
       title: 'Prévia do Deal Analyzer',
       sampleBadge: 'Exemplo',
-      sampleSubtitle: 'Imóvel demonstrativo: Multifamiliar de 24 Unidades',
+      sampleSubtitle: 'Modelo de Referência: Imóvel Multifamiliar ($2,8M)',
       scenarioAria: 'Alternar cenário',
       baseCaseBtn: 'Cenário Base',
       stressCaseBtn: 'Cenário de Estresse',

@@ -135,49 +135,49 @@ export default async function CashOnCashPage({ params }: PageProps) {
           <div className="bg-slate-50 border-l-4 border-emerald-500 p-4 sm:p-6 rounded-r-xl text-sm text-slate-700 leading-relaxed space-y-4">
             <p>
               {isZh
-                ? '假设您正在评估一处 24 单元的多户住宅物业（24-unit multifamily），购买价为 $2,800,000。'
+                ? '假设您正在评估一处挂牌买入价为 $3,200,000 的多商户商业混合物业（Suburban Commercial Property）：'
                 : isEs
-                ? 'Considere una propiedad multifamiliar hipotética de 24 unidades adquirida por $2,800,000.'
+                ? 'Considere la adquisición de una propiedad comercial mixta valorada en $3,200,000:'
                 : isPt
-                ? 'Considere um imóvel multifamiliar hipotético de 24 unidades adquirido por $2,800,000.'
-                : 'Consider a hypothetical 24-unit multifamily property purchased for $2,800,000.'}
+                ? 'Considere a aquisição de um imóvel comercial misto avaliado em $3,200,000:'
+                : 'Consider a suburban commercial multi-tenant property acquired for $3,200,000:'}
             </p>
             <ul className="list-disc pl-5 space-y-1">
               <li>
                 {isZh
-                  ? '实际投入总现金: $756,000（25% 首付 $700k，加 2% 过户费 $56k）'
+                  ? '实际投入总现金: $864,000（25% 首付 $800,000，加 2% 交易过户税费 $64,000）'
                   : isEs
-                  ? 'Capital total invertido: $756,000 (25% de anticipo de $700k, más 2% de costos de cierre de $56k)'
+                  ? 'Capital total invertido: $864,000 (25% de anticipo de $800,000, más 2% de costos de cierre de $64,000)'
                   : isPt
-                  ? 'Capital total investido: $756,000 (25% de entrada de $700k, mais 2% de custos de fechamento de $56k)'
-                  : 'Total cash invested: $756,000 (25% down payment of $700k, plus 2% closing costs of $56k)'}
+                  ? 'Capital total investido: $864,000 (25% de entrada de $800,000, mais 2% de custos de fechamento de $64,000)'
+                  : 'Total cash invested: $864,000 (25% down payment of $800,000, plus 2% closing costs of $64,000)'}
               </li>
               <li>
                 {isZh
-                  ? '年有效毛收入 (EGI): $319,200（潜在毛收入 $336k，减去 5% 空置率损失）'
+                  ? '年有效毛收入 (EGI): $360,000（潜在总租金扣除常规空置与减免损失后）'
                   : isEs
-                  ? 'Ingreso bruto efectivo (EGI): $319,200 ($336k brutos menos 5% de desocupación)'
+                  ? 'Ingreso bruto efectivo (EGI): $360,000 (ingreso potencial tras vacancia normalizada)'
                   : isPt
-                  ? 'Receita bruta efetiva (EGI): $319,200 ($336k brutos menos 5% de vacância)'
-                  : 'Effective gross income (EGI): $319,200 ($336k gross, minus 5% vacancy)'}
+                  ? 'Receita bruta efetiva (EGI): $360,000 (receita potencial após vacância normalizada)'
+                  : 'Effective gross income (EGI): $360,000 (after normalized market vacancy allowance)'}
               </li>
               <li>
                 {isZh
-                  ? '运营费用 (OpEx): $92,000'
+                  ? '年度运营费用 (OpEx): $125,000 (房产税、保险、物管与日常修缮)'
                   : isEs
-                  ? 'Gastos operativos (OpEx): $92,000'
+                  ? 'Gastos operativos anuales (OpEx): $125,000 (impuestos, seguros y gestión)'
                   : isPt
-                  ? 'Despesas operacionais (OpEx): $92,000'
-                  : 'Operating expenses: $92,000'}
+                  ? 'Despesas operacionais anuais (OpEx): $125,000 (impostos, seguro e gestão)'
+                  : 'Operating expenses (OpEx): $125,000 (property taxes, insurance, management, maintenance)'}
               </li>
               <li>
                 {isZh
-                  ? '贷款条件: $2,100,000，6.5% 利率，25年摊销'
+                  ? '商业贷款条件: 75% LTV 贷款 $2,400,000，6.50% 利率，25年摊销期'
                   : isEs
-                  ? 'Condiciones del préstamo: $2,100,000 al 6.5% de interés, amortización a 25 años'
+                  ? 'Condiciones del préstamo: $2,400,000 al 6.50% de interés, amortización a 25 años'
                   : isPt
-                  ? 'Condições do financiamento: $2,100,000 a 6,5% de juros, amortização em 25 anos'
-                  : 'Loan terms: $2,100,000 at 6.5% interest, 25-year amortization'}
+                  ? 'Condições do financiamento: $2,400,000 a 6,50% de juros, amortização em 25 anos'
+                  : 'Loan terms: $2,400,000 at 6.50% interest, 25-year amortization'}
               </li>
             </ul>
             
@@ -190,33 +190,33 @@ export default async function CashOnCashPage({ params }: PageProps) {
                   <>
                     首先扣除运营费用，我们可以{' '}
                     <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-semibold">计算该物业的 NOI</Link>
-                    {' '}为 $227,200（这也是{' '}
+                    {' '}为 $235,000（相当于 7.34% 的{' '}
                     <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">无杠杆 Cap Rate</Link>
-                    {' '}的基础）。接着，计算出每年 $170,152 的还贷本息 (Debt Service)。扣除房贷后，您的年税前现金流 (Annual Pre-Tax Cash Flow) 为 $57,048。
+                    ）。接着，基于贷款条件计算出每年 $194,460 的还本付息额 (Annual Debt Service)。扣除房贷后，您的年税前净现金流 (Annual Pre-Tax Cash Flow) 为 $40,540。
                   </>
                 ) : isEs ? (
                   <>
                     Al deducir los gastos operativos,{' '}
                     <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-semibold">calculamos el NOI de la propiedad</Link>
-                    {' '}en $227,200 (que sirve de base para el{' '}
+                    {' '}en $235,000 (un{' '}
                     <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">Cap Rate sin apalancamiento</Link>
-                    ). A continuación, calculamos el servicio anual de la deuda en $170,152. Al restar el servicio de la deuda, se obtiene un Flujo de Caja Anual Antes de Impuestos de $57,048.
+                    {' '}del 7.34%). A continuación, calculamos el servicio anual de la deuda en $194,460. Restando la hipoteca, se obtiene un Flujo de Caja Antes de Impuestos de $40,540.
                   </>
                 ) : isPt ? (
                   <>
                     Ao deduzir as despesas operacionais,{' '}
                     <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-semibold">calculamos o NOI do imóvel</Link>
-                    {' '}em $227,200 (que serve de base para o{' '}
+                    {' '}em $235,000 (um{' '}
                     <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">Cap Rate sem alavancagem</Link>
-                    ). Em seguida, calculamos o serviço anual da dívida em $170,152. Ao subtrair o serviço da dívida, obtém-se um Fluxo de Caixa Anual Antes dos Impostos de $57,048.
+                    {' '}de 7.34%). Em seguida, calculamos o serviço anual da dívida em $194,460. Subtraindo a dívida, obtém-se um Fluxo de Caixa Antes dos Impostos de $40,540.
                   </>
                 ) : (
                   <>
                     By deducting operating expenses, we{' '}
                     <Link href={`/${locale}/calculators/noi/`} className="text-emerald-600 hover:underline font-semibold">calculate the property&apos;s NOI</Link>
-                    {' '}at $227,200 (which is used to determine the{' '}
+                    {' '}at $235,000 (a 7.34%{' '}
                     <Link href={`/${locale}/calculators/cap-rate/`} className="text-emerald-600 hover:underline font-semibold">unleveraged Cap Rate</Link>
-                    ). Next, we calculate the annual debt service at $170,152. Subtracting the debt service gives you an Annual Pre-Tax Cash Flow of $57,048.
+                    ). Next, we calculate the annual debt service at $194,460. Subtracting debt service yields an Annual Pre-Tax Cash Flow of $40,540.
                   </>
                 )}
               </p>
@@ -228,12 +228,12 @@ export default async function CashOnCashPage({ params }: PageProps) {
               </strong>
               <p className="mt-1">
                 {isZh
-                  ? '将您的 $57,048 年税前现金流除以 $756,000 的初始现金投入，首年杠杆现金回报率为 7.55%（计算公式：CoC = (NOI - 年度还贷总额) / (首付 + 过户费用 + 即时 CapEx)）。请注意：尽管贷款名义利率为 6.5%（低于 8.11% 的 Cap Rate，即 NOI / 购买价格），但首年现金回报率却低于 8.11%。这是因为不可仅凭名义利率判断现金收益：每年 $170,152 的还贷总额中包含了本金摊销，减少了首年现金流分子；同时 $56,000 的前期过户费用增加了现金投入分母。虽然本金偿还形成的权益积累将在持有期或退出时体现，但它与首年到手现金收益不是同一指标。在第一年真实现金到账口径下，回报率为 7.55%。'
+                  ? '将您的 $40,540 年税前现金流除以 $864,000 的实际现金总投入，首年现金回报率为 4.69%（公式：CoC = 净现金流 ÷ 总现金投入）。尽管名义贷款利率 6.50% 低于 7.34% 的 Cap Rate，但由于 25 年等额本息还贷包含本金还款（首年本金摊销达 $39,944），压缩了当期到手现金。如果将首年本金偿还视为股东权益积累，综合真实股权回报率实际上达到了 9.32% (($40,540 + $39,944) ÷ $864,000)。'
                   : isEs
-                  ? 'Al dividir el flujo de caja anual antes de impuestos de $57,048 entre los $756,000 de capital total invertido, se obtiene un Rendimiento Cash-on-Cash del 7.55% (fórmula: CoC = (NOI - Servicio Anual de Deuda) / (Pago Inicial + Costos de Cierre + Mejoras Iniciales)). Observe que este rendimiento en efectivo resulta inferior al Cap Rate no apalancado del 8.11% (NOI / Precio de Compra), a pesar de que la tasa de interés nominal es del 6.5%. No se puede juzgar si el CoC supera al Cap Rate basándose únicamente en la tasa nominal: el servicio anual de deuda de $170,152 incluye amortización de principal, lo que reduce el numerador de flujo de caja, mientras que los $56,000 en costos iniciales de cierre aumentan el denominador de capital invertido. Aunque la amortización incrementa el patrimonio neto con el tiempo, la acumulación de capital y el dinero en efectivo recibido en el año 1 no son el mismo indicador.'
+                  ? 'Al dividir el flujo de caja anual antes de impuestos de $40,540 entre los $864,000 de capital total invertido, se obtiene un Rendimiento Cash-on-Cash del 4.69%. Aunque la tasa hipotecaria del 6.50% es inferior al Cap Rate del 7.34%, la amortización de principal del primer año ($39,944) absorbe liquidez corriente. Al sumar la reducción de deuda como acumulación patrimonial, el retorno global sobre capital propio alcanza el 9.32% (($40,540 + $39,944) ÷ $864,000).'
                   : isPt
-                  ? 'Ao dividir o fluxo de caixa anual antes dos impostos de $57,048 pelo capital total investido de $756,000, obtém-se um Retorno Cash-on-Cash no primeiro ano de 7,55% (fórmula: CoC = (NOI - Serviço Anual da Dívida) / (Entrada + Custos de Fechamento + Reformas Iniciais)). Observe que esse retorno em dinheiro fica abaixo do Cap Rate sem dívida de 8,11% (NOI / Preço de Compra), mesmo com taxa de juros nominal em 6,5%. Não se pode avaliar se o CoC supera o Cap Rate apenas pela taxa nominal: o serviço anual da dívida de $170,152 inclui amortização de principal, reduzindo o numerador do fluxo de caixa, enquanto $56,000 em custos iniciais aumentam o denominador do capital investido. Embora a amortização acumule patrimônio ao longo do tempo, o acúmulo de patrimônio e o dinheiro em mãos no primeiro ano não constituem o mesmo indicador.'
-                  : 'Dividing your $57,048 annual pre-tax cash flow by your $756,000 total cash invested yields a first-year Cash-on-Cash Return of 7.55% (formula: CoC = (NOI - Annual Debt Service) / (Down Payment + Closing Costs + Upfront Capex)). Notice this is lower than the unleveraged 8.11% Cap Rate (NOI / Purchase Price), even though the loan\'s nominal interest rate is 6.5%. One cannot judge whether CoC exceeds Cap Rate based solely on nominal interest rate: the $170,152 debt service includes principal amortization, reducing the cash flow numerator, while $56,000 in upfront closing costs increases the cash invested denominator. While debt amortization builds principal equity over time, equity accumulation and year-one cash-in-pocket are not the same metric; on a pure year-one cash received basis, the yield is 7.55%.'}
+                  ? 'Ao dividir o fluxo de caixa anual de $40,540 pelo capital total investido de $864,000, apura-se um Retorno Cash-on-Cash de 4,69%. Embora a taxa de 6,50% seja inferior ao Cap Rate de 7,34%, a amortização de principal no primeiro ano ($39,944) reduz a liquidez imediata. Somando o abatimento de dívida como acúmulo de patrimônio, o retorno total sobre o capital atinge 9,32% (($40,540 + $39,944) ÷ $864,000).'
+                  : 'Dividing your $40,540 annual pre-tax cash flow by your $864,000 total cash invested yields a first-year Cash-on-Cash Return of 4.69% (formula: CoC = Pre-Tax Cash Flow / Total Cash Invested). Although the 6.50% loan interest rate is lower than the 7.34% Cap Rate, standard 25-year mortgage payments include significant principal amortization ($39,944 in Year 1), which consumes in-pocket cash flow. When factoring in this first-year debt paydown as equity buildup, the combined total return on invested equity is 9.32% (($40,540 + $39,944) ÷ $864,000).'}
               </p>
             </div>
 

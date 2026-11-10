@@ -5,7 +5,7 @@ import { getContent } from '@/content';
 import { LOCALES, SITE_URL, resolveLocale } from '@/lib/constants';
 import { CapRateCalculator } from '@/components/calculators/CapRateCalculator';
 import { JsonLd, getCalculatorJsonLd, getBreadcrumbJsonLd, getFaqPageJsonLd } from '@/components/seo/JsonLd';
-import { ArrowRight, HelpCircle, BookOpen, AlertTriangle } from 'lucide-react';
+import { ArrowRight, HelpCircle, BookOpen, AlertTriangle, TrendingUp } from 'lucide-react';
 import { ComplianceDisclaimer } from '@/components/common/ComplianceDisclaimer';
 import { buildSeoMetadata } from '@/lib/seo';
 
@@ -68,11 +68,11 @@ export default async function CapRatePage({ params }: PageProps) {
       noiLink: 'NOI 计算方法与 T-12 规范化',
       noiSuffix: '）',
       calc: '计算 Cap Rate = $269,500 (NOI) ÷ $3,850,000 (价格) = 7.00%',
-      desc1: '7.00% 代表全款买下该物业时的无杠杆年度现金回报率。若采用 65% LTV、利率为 6.25% 的商业贷款，进场资本化率高于借贷成本（7.00% > 6.25%），形成正杠杆（Positive Leverage），可通过 ',
+      desc1: '7.00% 代表全款买入该物业时的无杠杆年度现金回报率。若采用 65% LTV 商业银行贷款（贷款本金 $2,502,500，买方股权权益 $1,347,500），年利率 6.25%：在前期 3 年只还息 (IO) 阶段，年偿债支出为 $156,406，税前现金流为 $113,094，对应的初始现金回报率 (Cash-on-Cash) 达到 8.39% (~8.4%)；若进入标准 25 年本息等额摊销期，年偿债额增至 $198,268，首年净现金流为 $71,232 (5.29% CoC)，结合首年偿还的 $41,862 本金积累，实际股东权益年化综合回报率同样达到 8.39%。您可通过 ',
       cocLink: 'Cash-on-Cash 现金回报率计算器',
       desc2: ' 或 ',
       daLink: 'Deal Analyzer 综合尽调工具',
-      desc3: ' 测算加杠杆后 8.4% 以上的真实股东权益回报。',
+      desc3: ' 测算这两种还款阶段在不同空置率下的抗压表现。',
     },
     es: {
       title: 'Caso Práctico 1: Edificio Residencial de 32 Unidades',
@@ -82,11 +82,11 @@ export default async function CapRatePage({ params }: PageProps) {
       noiLink: 'cómo calcular el NOI',
       noiSuffix: ')',
       calc: 'Cálculo: Cap Rate = $269,500 (NOI) ÷ $3,850,000 (Precio) = 7.00%',
-      desc1: 'El 7.00% representa el rendimiento anual desapalancado. Con una hipoteca al 65% LTV y tasa del 6.25%, el Cap Rate supera el coste financiero generando apalancamiento positivo. Verifíquelo en la ',
+      desc1: 'El 7.00% representa el rendimiento anual desapalancado. Con una hipoteca al 65% LTV ($2,502,500 de deuda, $1,347,500 de capital) y tasa fija del 6.25%: durante una fase inicial de 3 años de sólo intereses ($156,406 de servicio de deuda anual), el flujo de caja antes de impuestos es de $113,094, rindiendo un 8.39% (~8.4%) de Cash-on-Cash. Bajo amortización estándar a 25 años ($198,268 anuales), el flujo de caja es de $71,232 (5.29% CoC), sumado a $41,862 de reducción de capital en el primer año para un retorno total del 8.39%. Modélelo en la ',
       cocLink: 'Calculadora de Cash-on-Cash',
       desc2: ' o en ',
       daLink: 'Deal Analyzer',
-      desc3: ' para proyectar retornos sobre capital superiores al 8.4%.',
+      desc3: ' para evaluar ambas fases ante variaciones de vacancia.',
     },
     pt: {
       title: 'Exemplo Prático 1: Condomínio Residencial de 32 Unidades',
@@ -96,11 +96,11 @@ export default async function CapRatePage({ params }: PageProps) {
       noiLink: 'como calcular o NOI',
       noiSuffix: ')',
       calc: 'Cálculo: Cap Rate = $269,500 (NOI) ÷ $3,850,000 (Preço) = 7.00%',
-      desc1: 'A taxa de 7.00% expressa o retorno não alavancado do ativo. Financiando a 65% LTV com juros de 6.25%, obtém-se alavancagem positiva. Projete no ',
+      desc1: 'A taxa de 7.00% expressa o retorno não alavancado do ativo. Com um financiamento de 65% LTV ($2,502,500 de dívida, $1,347,500 de capital próprio) e taxa de 6.25%: durante um período de 3 anos somente de juros ($156,406 anuais), o fluxo de caixa líquido é de $113,094, rendendo 8.39% (~8.4%) de Cash-on-Cash. Em amortização plena de 25 anos ($198,268 de serviço anual), o fluxo de caixa é de $71,232 (5.29% CoC), acumulando $41,862 de abatimento de principal no 1º ano para um retorno patrimonial global de 8.39%. Projete no ',
       cocLink: 'Calculadora de Retorno Cash-on-Cash',
       desc2: ' ou no ',
       daLink: 'Deal Analyzer',
-      desc3: ' para verificar retornos sobre patrimônio acima de 8.4%.',
+      desc3: ' para testar a sensibilidade da operação.',
     },
     en: {
       title: 'Worked Example 1: 32-Unit Suburban Garden Apartment Property',
@@ -110,11 +110,11 @@ export default async function CapRatePage({ params }: PageProps) {
       noiLink: "NOI calculation methodology and T-12 normalization",
       noiSuffix: ')',
       calc: 'Calculation: Cap Rate = $269,500 (NOI) ÷ $3,850,000 (Purchase Price) = 7.00%',
-      desc1: 'The 7.00% represents your unleveraged cash yield if acquired for 100% cash. Sizing a 65% LTV commercial bank loan at 6.25% fixed interest creates positive financial leverage (7.00% Cap Rate > 6.25% debt rate). Combine this NOI with debt terms in our ',
+      desc1: 'The 7.00% represents your unleveraged cash yield if acquired for 100% cash. Sizing a 65% LTV commercial bank loan ($2,502,500 senior debt, $1,347,500 equity check) at 6.25% fixed interest generates positive financial leverage (7.00% Cap Rate > 6.25% debt rate). During an initial 3-year interest-only (IO) period ($156,406 annual debt service), pre-tax cash flow is $113,094, producing an 8.39% (~8.4%) Cash-on-Cash return. Upon transitioning to standard 25-year amortization ($198,268 annual debt service), annual cash flow is $71,232 (5.29% Cash-on-Cash), which combines with $41,862 in first-year principal paydown to deliver an 8.39% total return on equity before taxes. Model both phases in our ',
       cocLink: 'Cash-on-Cash Return Calculator',
       desc2: ' or full ',
       daLink: 'Deal Analyzer Tool',
-      desc3: ' to project leveraged equity yields exceeding 8.4%.',
+      desc3: ' to stress-test your leveraged debt coverage under higher vacancy.',
     },
   }[locale as 'en' | 'zh' | 'es' | 'pt'] || {
     title: 'Worked Example 1: 32-Unit Suburban Garden Apartment Property',
@@ -124,11 +124,11 @@ export default async function CapRatePage({ params }: PageProps) {
     noiLink: "NOI calculation methodology and T-12 normalization",
     noiSuffix: ')',
     calc: 'Calculation: Cap Rate = $269,500 (NOI) ÷ $3,850,000 (Purchase Price) = 7.00%',
-    desc1: 'The 7.00% represents your unleveraged cash yield if acquired for 100% cash. Sizing a 65% LTV commercial bank loan at 6.25% fixed interest creates positive financial leverage (7.00% Cap Rate > 6.25% debt rate). Combine this NOI with debt terms in our ',
+    desc1: 'The 7.00% represents your unleveraged cash yield if acquired for 100% cash. Sizing a 65% LTV commercial bank loan ($2,502,500 senior debt, $1,347,500 equity check) at 6.25% fixed interest generates positive financial leverage (7.00% Cap Rate > 6.25% debt rate). During an initial 3-year interest-only (IO) period ($156,406 annual debt service), pre-tax cash flow is $113,094, producing an 8.39% (~8.4%) Cash-on-Cash return. Upon transitioning to standard 25-year amortization ($198,268 annual debt service), annual cash flow is $71,232 (5.29% Cash-on-Cash), which combines with $41,862 in first-year principal paydown to deliver an 8.39% total return on equity before taxes. Model both phases in our ',
     cocLink: 'Cash-on-Cash Return Calculator',
     desc2: ' or full ',
     daLink: 'Deal Analyzer Tool',
-    desc3: ' to project leveraged equity yields exceeding 8.4%.',
+    desc3: ' to stress-test your leveraged debt coverage under higher vacancy.',
   };
 
   const pitfallsByLocale = {
@@ -266,7 +266,7 @@ export default async function CapRatePage({ params }: PageProps) {
 
       {/* Interactive Calculator Tool */}
       <section id="tool">
-        <CapRateCalculator locale={locale} defaultPrice={2800000} defaultNoi={227200} />
+        <CapRateCalculator locale={locale} defaultPrice={3850000} defaultNoi={269500} />
       </section>
 
       {/* Content Body Section */}
@@ -494,6 +494,49 @@ export default async function CapRatePage({ params }: PageProps) {
                   .
                 </>
               )}
+            </p>
+          </div>
+        </section>
+
+        {/* Cap Rate Dynamics: Growth Expectation & Terminal Exit Valuation */}
+        <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-xs space-y-4">
+          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-emerald-600" />
+            {isZh
+              ? '资产估值底层逻辑：租金成长预期 (r - g) 与退出资本化率扩张'
+              : locale === 'es'
+              ? 'Teoría de Valoración: Crecimiento de Rentas (r - g) y Expansión de Salida'
+              : locale === 'pt'
+              ? 'Teoria de Avaliação: Crescimento de Renda (r - g) e Taxa de Desinvestimento'
+              : 'Valuation Mechanics: Expected Growth (r − g) & Terminal Exit Expansion'}
+          </h2>
+          <div className="space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
+            <p>
+              {isZh
+                ? '在现代商业地产估值理论中，资本化率（Cap Rate）绝非一个孤立的除法结果，其实质是贴现现金流（DCF）模型在永续状态下的直接简化，可以用经典的戈登增长模型表达为：Cap Rate = r − g。其中，r 代表投资人要求的无杠杆总投资回报率（贴现率），g 代表该物业未来长期的净营业收入复合增长率。'
+                : locale === 'es'
+                ? 'En la teoría financiera inmobiliaria moderna, el Cap Rate no es un mero cociente estático; representa la simplificación a perpetuidad del modelo de Flujos de Fondos Descontados (DCF), formulado como Cap Rate = r − g. Donde r representa la tasa de descuento requerida sin deuda (TIR no apalancada) y g es la tasa de crecimiento anual compuesto esperada del NOI.'
+                : locale === 'pt'
+                ? 'Na teoria moderna de finanças imobiliárias, o Cap Rate não é uma simples divisão contábil; expressa a simplificação perpétua do Fluxo de Caixa Descontado (FCD), modelado como Cap Rate = r − g. Onde r representa a taxa de retorno desfalavancada exigida (taxa de desconto) e g representa a taxa de crescimento anual composto projetada do NOI.'
+                : 'In modern institutional real estate finance, the capitalization rate is far more than a static division of in-place cash flows; it represents the perpetual mathematical simplification of a discounted cash flow (DCF) model, expressed through the fundamental relationship: Cap Rate = r − g. Here, r represents the investor’s required unleveraged total rate of return (discount rate or hurdle IRR), while g represents the expected compound annual growth rate of the property’s Net Operating Income.'}
+            </p>
+            <p>
+              {isZh
+                ? '这个公式揭示了为什么不同市场的资本化率存在巨大级差：在一线高科技或人口净流入城市（如奥斯汀、凤凰城或迈阿密核心区），多户住宅可能以 4.5%–5.0% 的低 Cap Rate 成交，因为买家预期未来每年有 g = 3.5% 的租金涨幅，两者相加同样能达到 8.0%–8.5% 的长期真实回报；相反，在人口停滞的传统工业或偏远三线零售市场，租金增长预期 g 接近 0% 甚至为负，买方必须要求 7.5%–8.5% 以上的进场 Cap Rate 才能弥补流动性缺失并达到相同的投资底线。'
+                : locale === 'es'
+                ? 'Esta fórmula explica las marcadas discrepancias entre mercados: en centros urbanos con alto crecimiento demográfico (Austin, Phoenix o Miami), un activo multifamiliar puede transarse a un Cap Rate bajo del 4.5%–5.0% porque los inversores descuentan un crecimiento de rentas del 3.5%, alcanzando un retorno total del 8.0%–8.5%. Por el contrario, en mercados secundarios estancados donde g es inferior al 1%, los compradores deben exigir un Cap Rate del 7.5%–8.5% para compensar el nulo crecimiento.'
+                : locale === 'pt'
+                ? 'Essa fórmula elucida as discrepâncias de precificação: em polos urbanos com forte atração de capital (Austin, Phoenix ou Miami), imóveis residenciais negociam a Cap Rates comprimidos de 4.5%–5.0% porque os investidores projetam crescimento anual de aluguel de 3.5%, alcançando retornos globais de 8.0%–8.5%. Por outro lado, em mercados terciários estagnados onde g é próximo de zero, compradores exigem Cap Rates de 7.5%–8.5% para viabilizar o retorno sobre o capital.'
+                : 'This fundamental relationship explains why pricing yields diverge dramatically across asset classes and geographic tiers. In high-growth metropolitan markets experiencing strong corporate in-migration and population growth (such as Austin, Phoenix, or prime Miami submarkets), Class A multifamily properties frequently trade at compressed cap rates of 4.50% to 5.25%. Buyers willingly accept lower in-place cash yields because they underwrite an annual rent growth rate of g = 3.5%, which compounds to deliver an 8.0% to 8.75% unleveraged total return. Conversely, in mature rustbelt or tertiary retail markets where rent growth is constrained (g ≈ 0.5%), institutional buyers demand an in-place cap rate of 7.50% to 8.50% to clear their capital return hurdles.'}
+            </p>
+            <p>
+              {isZh
+                ? '【承销实务准则：退出资本化率扩张 (Terminal Cap Rate Expansion)】：在构建 5 至 10 年期的商业地产投资测算时，最常见的致命错误是假设未来出售时的 Cap Rate 与买入时持平甚至更低。专业承销团队普遍遵循“退出 Cap Rate 每年递增 5–10 个基点 (bps)”的严谨惯例（例如买入为 7.00%，在持有 5 年后按 7.25%–7.50% 测算退出价值）。这一安全垫层能有效防御建筑物随楼龄老化产生的折旧与大修支出、市场加息周期及宏观流动性紧缩对终值造成的估值踩踏。'
+                : locale === 'es'
+                ? 'Práctica de Suscripción Profesional: Expansión del Cap Rate de Salida. Al modelar horizontes de tenencia de 5 a 10 años, un error crítico consiste en asumir que el inmueble se venderá al mismo Cap Rate de adquisición. Los analistas institucionales siempre incorporan una expansión de salida de 5 a 10 puntos básicos por año de tenencia (p. ej., comprar al 7.00% y proyectar la venta al 7.50% en el año 5). Este margen protege contra el envejecimiento del activo y posibles ciclos alcistas de tipos de interés.'
+                : locale === 'pt'
+                ? 'Regra Prática de Subscrição: Expansão do Cap Rate Terminal. Em horizontes de investimento de 5 a 10 anos, assumir a manutenção ou compressão da taxa de capitalização na saída constitui uma falha grave. Profissionais experientes adicionam sistematicamente entre 5 e 10 bps por ano de retenção (por exemplo, aquisição a 7.00% e desinvestimento projetado a 7.50% no ano 5). Essa premissa conservadora absorve a obsolescência física natural da propriedade e a volatilidade macroeconômica.'
+                : 'Professional Underwriting Best Practice: Terminal Exit Cap Rate Expansion. When modeling a 5-to-10-year investment holding period, the most perilous pro-forma assumption is modeling exit valuation at the same (or lower) cap rate as acquisition. Institutional underwriters universally apply a conservative terminal cap rate expansion of +5 to +10 basis points per holding year (for example, acquiring an asset at a 7.00% entry cap rate and underwriting disposition at 7.25% to 7.50% at Year 5). This disciplined cushion insulates the deal against structural physical depreciation, rising tenant improvement costs as the asset ages, and unpredictable macroeconomic interest rate fluctuations upon exit.'}
             </p>
           </div>
         </section>

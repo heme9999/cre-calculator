@@ -24,6 +24,7 @@ export function Exchange1031Calculator({ locale }: Props) {
   const [depreciationTaken, setDepreciationTaken] = useState<number>(132000);
   const [sellingExpenses, setSellingExpenses] = useState<number>(52500);
   const [filingStatus, setFilingStatus] = useState<FilingStatus>('single');
+  const [sellerMagi, setSellerMagi] = useState<number>(650000);
   const [capitalGainsRate, setCapitalGainsRate] = useState<number>(15);
   const [stateTaxRate, setStateTaxRate] = useState<number>(5);
 
@@ -54,6 +55,7 @@ export function Exchange1031Calculator({ locale }: Props) {
           if (parsed.depreciationTaken !== undefined && !isNaN(Number(parsed.depreciationTaken))) setDepreciationTaken(Number(parsed.depreciationTaken));
           if (parsed.sellingExpenses !== undefined && !isNaN(Number(parsed.sellingExpenses))) setSellingExpenses(Number(parsed.sellingExpenses));
           if (parsed.filingStatus) setFilingStatus(parsed.filingStatus as FilingStatus);
+          if (parsed.sellerMagi !== undefined && !isNaN(Number(parsed.sellerMagi))) setSellerMagi(Number(parsed.sellerMagi));
           if (parsed.capitalGainsRate !== undefined && !isNaN(Number(parsed.capitalGainsRate))) setCapitalGainsRate(Number(parsed.capitalGainsRate));
           if (parsed.stateTaxRate !== undefined && !isNaN(Number(parsed.stateTaxRate))) setStateTaxRate(Number(parsed.stateTaxRate));
           if (parsed.closingDate) setClosingDate(parsed.closingDate);
@@ -77,6 +79,7 @@ export function Exchange1031Calculator({ locale }: Props) {
         depreciationTaken,
         sellingExpenses,
         filingStatus,
+        sellerMagi,
         capitalGainsRate,
         stateTaxRate,
         closingDate,
@@ -84,7 +87,7 @@ export function Exchange1031Calculator({ locale }: Props) {
     } catch {
       // ignore
     }
-  }, [salePrice, originalCostBasis, depreciationTaken, sellingExpenses, filingStatus, capitalGainsRate, stateTaxRate, closingDate]);
+  }, [salePrice, originalCostBasis, depreciationTaken, sellingExpenses, filingStatus, sellerMagi, capitalGainsRate, stateTaxRate, closingDate]);
 
   const niitThresholdMap: Record<FilingStatus, number> = {
     single: 200000,
@@ -113,7 +116,10 @@ export function Exchange1031Calculator({ locale }: Props) {
   // 6. Tax Breakdown Items
   const depreciationRecaptureTax = depreciationRecaptureGain * 0.25; // Flat 25% federal §1250 recapture
   const federalCapitalGainsTax = remainingCapitalGain * (capitalGainsRate / 100); // 0%, 15%, or 20%
-  const niitTax = realizedGain * 0.038; // Net Investment Income Tax 3.8% under IRC §1411
+  // IRC §1411 imposes 3.8% NIIT on lesser of realized gain or excess of MAGI over filing threshold
+  const magiExcessOverThreshold = Math.max(0, sellerMagi - currentNiitThreshold);
+  const niitSubjectGain = Math.min(realizedGain, magiExcessOverThreshold);
+  const niitTax = niitSubjectGain * 0.038; // Net Investment Income Tax 3.8% under IRC §1411
   const stateTax = realizedGain * (stateTaxRate / 100); // Illustrative State income tax rate
 
   // 7. Total Tax Liability & Effective Combined Rate
@@ -152,6 +158,8 @@ export function Exchange1031Calculator({ locale }: Props) {
     params.set('exp', sellingExpenses.toString());
     params.set('cgr', capitalGainsRate.toString());
     params.set('st', stateTaxRate.toString());
+    params.set('fs', filingStatus);
+    params.set('magi', sellerMagi.toString());
     const shareUrl = `${window.location.origin}${window.location.pathname}#${params.toString()}`;
     try {
       await navigator.clipboard.writeText(shareUrl);
@@ -370,6 +378,30 @@ export function Exchange1031Calculator({ locale }: Props) {
               </div>
 
               <div>
+                <label htmlFor="seller-magi-input" className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+                  <span>{isZh ? '预估年总调整收入 MAGI (含本次利得)' : isEs ? 'MAGI Total Estimado (con ganancia)' : isPt ? 'MAGI Total Estimado (com ganho)' : 'Estimated Total MAGI (incl. gain)'}</span>
+                  <span className="text-[10px] text-slate-500 font-normal">IRC §1411</span>
+                </label>
+                <div className="relative rounded-xl border border-slate-300 focus-ring overflow-hidden">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-xs">$</span>
+                  <input
+                    id="seller-magi-input"
+                    type="text"
+                    inputMode="decimal"
+                    value={formatNumberWithCommas(sellerMagi)}
+                    onChange={(e) => setSellerMagi(parseNumberInput(e.target.value))}
+                    className="w-full pl-7 pr-3 py-2.5 text-slate-900 font-semibold text-xs sm:text-sm focus:outline-none"
+                    placeholder="650,000"
+                  />
+                </div>
+                <p className="text-[10px] text-slate-500 mt-1">
+                  {isZh
+                    ? `NIIT 计税基数: min(利得, MAGI - 门槛) = $${formatNumberWithCommas(Math.round(niitSubjectGain))}`
+                    : `NIIT taxable base: min(gain, MAGI − $${(currentNiitThreshold / 1000).toFixed(0)}k threshold) = $${formatNumberWithCommas(Math.round(niitSubjectGain))}`}
+                </p>
+              </div>
+
+              <div>
                 <label htmlFor="capital-gains-rate-select" className="block text-xs font-bold text-slate-700 mb-1.5">
                   {isZh ? '联邦长期资本利得税率' : isEs ? 'Tasa Federal Ganancias Capital' : isPt ? 'Alíquota Federal de Capital' : 'Federal Capital Gains Rate'}
                 </label>
@@ -514,8 +546,8 @@ export function Exchange1031Calculator({ locale }: Props) {
                 <div className="flex justify-between py-1 border-b border-slate-100 pl-2">
                   <span>
                     {isZh
-                      ? `6. 净投资所得税 NIIT (3.8% · 申报门槛 $${(currentNiitThreshold / 1000).toFixed(0)}k):`
-                      : `6. Net Investment Income Tax (3.8% NIIT · $${(currentNiitThreshold / 1000).toFixed(0)}k threshold):`}
+                      ? `6. 净投资所得税 NIIT (3.8% · 计税基数 $${formatNumberWithCommas(Math.round(niitSubjectGain))}):`
+                      : `6. Net Investment Income Tax (3.8% NIIT · on $${formatNumberWithCommas(Math.round(niitSubjectGain))} base):`}
                   </span>
                   <span className="font-bold text-slate-900">{formatCurrency(Math.round(niitTax))}</span>
                 </div>

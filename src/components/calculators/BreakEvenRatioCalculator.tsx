@@ -16,11 +16,11 @@ export function BreakEvenRatioCalculator({ locale }: Props) {
   const isEs = locale === 'es';
   const isPt = locale === 'pt';
 
-  // Inputs
-  const [operatingExpenses, setOperatingExpenses] = useState<number>(DEFAULT_DEAL_INPUT.operatingExpenses);
-  const [annualDebtService, setAnnualDebtService] = useState<number>(170152); // Approximate ADS for default loan
-  const [grossPotentialIncome, setGrossPotentialIncome] = useState<number>(DEFAULT_DEAL_INPUT.grossPotentialIncome);
-  const [vacancyRate, setVacancyRate] = useState<number>(DEFAULT_DEAL_INPUT.vacancyRate);
+  // Inputs (Defaulted to canonical 48-unit $4.6M worked example)
+  const [operatingExpenses, setOperatingExpenses] = useState<number>(168000);
+  const [annualDebtService, setAnnualDebtService] = useState<number>(279536); // $3.45M debt at 6.50%, 25-yr amort
+  const [grossPotentialIncome, setGrossPotentialIncome] = useState<number>(576000);
+  const [vacancyRate, setVacancyRate] = useState<number>(5.0);
 
   const isInitializedRef = useRef(false);
 

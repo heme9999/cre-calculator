@@ -24,22 +24,22 @@ export function FreeRentalPropertyCalculator({ locale }: Props) {
   const isEs = locale === 'es';
   const isPt = locale === 'pt';
 
-  // 1. Property Acquisition Inputs (Defaulted to canonical 24-unit $2.8M baseline)
-  const [purchasePrice, setPurchasePrice] = useState<number>(2800000);
+  // 1. Property Acquisition Inputs (Defaulted to canonical 4-unit fourplex $700k baseline)
+  const [purchasePrice, setPurchasePrice] = useState<number>(700000);
   const [closingCostsPercent, setClosingCostsPercent] = useState<number>(2.0);
 
   // 2. Rental Revenue Inputs
-  const [annualGrossRent, setAnnualGrossRent] = useState<number>(336000);
+  const [annualGrossRent, setAnnualGrossRent] = useState<number>(72000);
   const [annualOtherIncome, setAnnualOtherIncome] = useState<number>(0);
   const [vacancyRate, setVacancyRate] = useState<number>(5.0);
 
   // 3. Operating Expenses
-  const [annualOperatingExpenses, setAnnualOperatingExpenses] = useState<number>(92000);
+  const [annualOperatingExpenses, setAnnualOperatingExpenses] = useState<number>(22900);
 
   // 4. Financing Structure
-  const [downPaymentPercent, setDownPaymentPercent] = useState<number>(25.0);
+  const [downPaymentPercent, setDownPaymentPercent] = useState<number>(30.0);
   const [interestRate, setInterestRate] = useState<number>(6.5);
-  const [amortizationYears, setAmortizationYears] = useState<number>(25);
+  const [amortizationYears, setAmortizationYears] = useState<number>(30);
 
   const isInitializedRef = useRef(false);
   const storageKey = `cre_free_rental_${locale}`;
