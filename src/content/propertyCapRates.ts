@@ -300,7 +300,7 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
         'Value single-tenant net lease retail, medical, and industrial properties using the universal Cap Rate formula and illustrative credit-spread scenarios.',
       defaultPrice: 2800000,
       defaultNoi: 182000,
-      benchmarkRange: '5.50% – 7.25% (Illustrative)',
+      benchmarkRange: '6.00% – 8.00% (Illustrative)',
       whatIsTitle: 'NNN Lease Cap Rate: Credit, Term, and the Spread Over Treasuries',
       whatIsContent:
         'What moves NNN cap rates: Tenant credit rating is the starting point: an investment-grade tenant (CVS, Walgreens, Dollar General) prices at a much lower cap rate than a franchisee or an unrated local business. Remaining lease term is the second: a 15-year lease is priced like a bond; a 3-year lease is priced like an imminent vacancy risk. Escalations matter: a lease with 2% annual bumps protects against inflation far better than a flat lease, and buyers pay a lower cap rate for it.\n\nRisks specific to NNN leases: The cap rate looks safe, but it is a bet on one tenant: if the tenant defaults or leaves at expiry, the income drops to zero until a new tenant is found, and re-letting a purpose-built space (a pharmacy, a fast-food pad) can be slow and expensive. Interest rates hit NNN cap rates harder than most property types, because the income stream behaves like a fixed-rate bond.\n\nHow to read the result: A NNN cap rate near the low end of the range usually means strong tenant credit and a long term; a high one usually means a weaker tenant or a short remaining term. The worked example on this page ($182,000 of net rent on a $2,800,000 price, 6.50%) is the arithmetic — the judgment is in the tenant and the lease. Cross-check against the benchmarks in our US Cap Rate Benchmarks guide. For the definition and the formula, see the main cap rate calculator.',
@@ -350,7 +350,7 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
         {
           question: 'What is an illustrative cap rate range for NNN properties?',
           answer:
-            'In educational underwriting models, single-tenant NNN properties are commonly modeled between 5.50% and 7.25% depending on corporate credit rating, remaining lease term, rent escalations, and real estate fundamentals.',
+            'In educational underwriting models, single-tenant NNN properties are commonly modeled between 6.00% and 8.00% depending on corporate credit rating, remaining lease term, rent escalations, and real estate fundamentals (with prime investment-grade corporate credit trading down to 6.00%–6.75% and franchisee guarantees trading 7.00%–8.00%).',
         },
         {
           question: 'Why does remaining lease term impact NNN Cap Rates so strongly?',
@@ -588,7 +588,7 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
         '基于通用 Cap Rate 公式（NOI ÷ 购买价格）与租户信用利差教学案例，评估单租户快餐店（QSR）、药店、医疗及零售 NNN 资产。',
       defaultPrice: 2800000,
       defaultNoi: 182000,
-      benchmarkRange: '5.50% – 7.25% (教学示例区间)',
+      benchmarkRange: '6.00% – 8.00% (教学示例区间)',
       whatIsTitle: '如何进行单租户 NNN 租赁 Cap Rate 估值建模',
       whatIsContent:
         '在绝对三净租赁（Absolute Triple Net / NNN）合同下，企业租户或加盟商直接承担 100% 的房产税、商业保险及日常维修，使得业主的净营业收入（NOI）基本等于合同约定的年度基础净租金（扣除极少量业主层面管理或储备预留）。\n\n由于基础租期内的运营费用波动已转移给租户，单租户 NNN 物业的定价逻辑类似于企业固定收益债券：教学模型中的 Cap Rate 主要取决于担保方信用等级、剩余主租期年限（Remaining Lease Term）以及底层土地重租价值。本页所有区间均为教学建模假设，而非实时交易商报价。',
@@ -637,7 +637,7 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
         {
           question: '单租户 NNN 物业的教学示例 Cap Rate 区间是多少？',
           answer:
-            '在商业地产教学承销模型中，单租户 NNN 物业通常在 5.50% 至 7.25% 之间设置建模假设，具体取决于租户信用评级、剩余主租期年限、租金递增条款及地段重租潜力。',
+            '在商业地产教学承销模型中，单租户 NNN 物业通常在 6.00% 至 8.00% 之间设置建模假设，具体取决于租户信用评级、剩余主租期年限、租金递增条款及地段重租潜力（其中优质投资级母公司担保集中在 6.00%–6.75%，加盟商担保集中在 7.00%–8.00%）。',
         },
         {
           question: '为什么剩余租期对 NNN 物业的 Cap Rate 影响极大？',
@@ -878,7 +878,7 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
         'Valore propiedades comerciales, médicas e industriales de inquilino único bajo contratos Triple Neto (NNN) utilizando la fórmula universal de Cap Rate.',
       defaultPrice: 2800000,
       defaultNoi: 182000,
-      benchmarkRange: '5.50% – 7.25% (Ilustrativo)',
+      benchmarkRange: '6.00% – 8.00% (Ilustrativo)',
       whatIsTitle: 'Cómo Funciona la Valoración de Cap Rate en Contratos NNN',
       whatIsContent:
         'En un contrato Triple Neto Absoluto (Absolute NNN), el inquilino corporativo o franquiciado paga directamente el 100% de los impuestos sobre la propiedad, seguros y mantenimiento, de modo que el Ingreso Operativo Neto (NOI) del propietario equivale prácticamente a la renta base anual contractual.\n\nDado que la volatilidad de los gastos operativos se transfiere al inquilino durante la vigencia del contrato base, la valoración NNN se comporta de forma similar a un bono corporativo: los rangos ilustrativos de Cap Rate dependen de la solvencia crediticia del garante, el plazo remanente del contrato y el valor residual del terreno. Todos los rangos en esta página son escenarios ilustrativos de modelado y no cotizaciones en vivo.',
@@ -928,7 +928,7 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
         {
           question: '¿Cuál es un rango ilustrativo de Cap Rate para propiedades NNN?',
           answer:
-            'En modelos educativos de evaluación financiera, las propiedades NNN de inquilino único suelen simularse entre 5.50% y 7.25% según la calificación crediticia del inquilino, los años restantes de contrato y los incrementos pactados.',
+            'En modelos educativos de evaluación financiera, las propiedades NNN de inquilino único suelen simularse entre 6.00% y 8.00% según la calificación crediticia del inquilino, los años restantes de contrato y los incrementos pactados (grado de inversión en 6.00%–6.75% y franquicias en 7.00%–8.00%).',
         },
         {
           question: '¿Por qué el plazo restante del contrato influye tanto en el Cap Rate NNN?',
@@ -1169,7 +1169,7 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
         'Avalie imóveis comerciais, médicos e industriais de inquilino único sob contratos Triple Net (NNN) utilizando a fórmula universal de Cap Rate.',
       defaultPrice: 2800000,
       defaultNoi: 182000,
-      benchmarkRange: '5.50% – 7.25% (Ilustrativo)',
+      benchmarkRange: '6.00% – 8.00% (Ilustrativo)',
       whatIsTitle: 'Como Funciona a Avaliação de Cap Rate em Contratos NNN',
       whatIsContent:
         'Em um contrato Triple Net Absoluto (Absolute NNN), o inquilino corporativo ou franqueado paga diretamente 100% dos impostos prediais, seguros e manutenção, fazendo com que a Receita Operacional Líquida (NOI) do proprietário seja praticamente igual ao aluguel base anual contratual.\n\nComo a volatilidade das despesas operacionais é transferida ao locatário durante a vigência do contrato principal, a avaliação NNN comporta-se de maneira semelhante a um título de renda fixa corporativo: as faixas ilustrativas de Cap Rate variam conforme a qualidade de crédito do garantidor, o prazo remanescente do contrato e o valor residual do terreno. Todas as faixas nesta página são cenários ilustrativos de modelagem e não cotações em tempo real.',
@@ -1219,7 +1219,7 @@ export const propertyCapRatesContent: Record<string, Record<PropertyCapRateSlug,
         {
           question: 'Qual é uma faixa ilustrativa de Cap Rate para imóveis NNN?',
           answer:
-            'Em modelos educativos de análise financeira, imóveis NNN de inquilino único costumam ser simulados entre 5.50% e 7.25% conforme a classificação de crédito do locatário, prazo restante de contrato e reajustes programados.',
+            'Em modelos educativos de análise financeira, imóveis NNN de inquilino único costumam ser simulados entre 6.00% e 8.00% conforme a classificação de crédito do locatário, prazo restante de contrato e reajustes programados (grau de investimento em 6.00%–6.75% e franquias em 7.00%–8.00%).',
         },
         {
           question: 'Por que o prazo restante de locação impacta tanto o Cap Rate NNN?',

@@ -106,7 +106,7 @@ export function LeaseVsBuyScenarioComparison({ locale }: Props) {
               <span className="font-semibold text-slate-900">{formatCurrency(Math.round(downPayment))}</span>
             </div>
             <div className="flex justify-between text-slate-600">
-              <span>{isZh ? '10年累计还贷本息:' : isEs ? 'Servicio de deuda total pagado (10 años):' : isPt ? 'Serviço total da dívida pago (10 anos):' : '10-Yr Total Mortgage Paid:'}</span>
+              <span>{isZh ? '10年累计还贷本息 (25年摊销):' : isEs ? 'Servicio deuda 10a (amort. 25a):' : isPt ? 'Serviço dívida 10a (amort. 25a):' : '10-Yr Mortgage (25-Yr Amort):'}</span>
               <span className="font-semibold text-slate-900">{formatCurrency(Math.round(cumulativeDebtService))}</span>
             </div>
             <div className="flex justify-between text-slate-600">
@@ -123,6 +123,28 @@ export function LeaseVsBuyScenarioComparison({ locale }: Props) {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Explicit 25-Year Amortization Schedule Mechanics Callout */}
+      <div className="text-[11px] text-slate-600 bg-white p-3.5 rounded-xl border border-slate-200 space-y-1 leading-relaxed">
+        <p className="font-bold text-slate-800">
+          {isZh
+            ? '商业贷款还款计划测算说明 (25 年等额本息摊销)：'
+            : isEs
+            ? 'Detalle del Plan de Amortización Hipotecaria (Amortización a 25 Años):'
+            : isPt
+            ? 'Detalhamento do Cronograma de Amortização (Amortização em 25 Anos):'
+            : 'Loan Amortization Schedule Mechanics (25-Year Amortization Schedule):'}
+        </p>
+        <p>
+          {isZh
+            ? '方案 B 中 10 年累计还贷本息 $1,093,836 基于 $1,350,000 贷款额度、6.50% 年利率以及标准的 25 年等额本息还款计划（每月月供 $9,115.30 × 120 个月）。第 10 年末出售物业时，已偿还本金 $303,597，剩余待清偿贷款气球余额为 $1,046,403。'
+            : isEs
+            ? 'El servicio de deuda acumulado de $1,093,836 a 10 años en la Opción B se basa en un préstamo de $1,350,000 al 6.50% de interés bajo un esquema de amortización estándar a 25 años ($9,115.30 mensuales × 120 meses). Al liquidar la propiedad al final del año 10, se han amortizado $303,597 de capital y el saldo deudor remanente es de $1,046,403.'
+            : isPt
+            ? 'O serviço acumulado da dívida de $1,093,836 em 10 anos na Opção B baseia-se em empréstimo de $1,350,000 a 6,50% ao ano com cronograma de amortização padrão de 25 anos ($9,115.30 mensais × 120 meses). No 10º ano, foram amortizados $303,597 de principal, restando saldo devedor de $1,046,403.'
+            : 'The $1,093,836 10-year debt service in Option B is modeled on a $1,350,000 senior commercial loan at 6.50% interest with a standard 25-year amortization schedule (monthly payment of $9,115.30 × 120 months). At the end of Year 10, $303,597 of principal has been amortized, leaving a remaining balloon loan balance of $1,046,403 paid from exit sale proceeds.'}
+        </p>
       </div>
 
       <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 text-xs text-emerald-950 font-medium flex flex-col sm:flex-row sm:items-center justify-between gap-2">

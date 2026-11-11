@@ -311,7 +311,7 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
               >
                 <div className="text-xs font-semibold text-slate-500">{isEs ? 'Gobierno' : isPt ? 'Governo' : 'Government'}</div>
                 <div className="text-sm">HUD / FHA 223(f)</div>
-                <div className="text-[11px] text-slate-500 mt-1">85% LTV • 35{isEs ? 'a' : isPt ? 'a' : 'y'} Amort</div>
+                <div className="text-[11px] text-slate-500 mt-1">87% LTV • 35{isEs ? 'a' : isPt ? 'a' : 'y'} Amort</div>
               </button>
 
               <button
@@ -456,12 +456,15 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                   {isZh ? '最高 LTV 限制 (%)' : isEs ? 'LTV Máximo Permitido (%)' : isPt ? 'LTV Máximo Permitido (%)' : 'Max LTV Benchmark (%)'}
                 </label>
                 <input
-                  type="number"
-                  step="0.5"
-                  value={maxLtv || ''}
+                  type="text"
+                  inputMode="decimal"
+                  aria-label={isZh ? '最高 LTV 限制' : isEs ? 'LTV Máximo Permitido' : isPt ? 'LTV Máximo Permitido' : 'Max LTV Benchmark'}
+                  value={maxLtv ? maxLtv.toString() : ''}
                   onChange={(e) => {
                     setSelectedPreset('custom');
-                    setMaxLtv(Math.max(1, Math.min(95, Number(e.target.value))));
+                    const clean = e.target.value.replace(/[^0-9.]/g, '');
+                    const val = parseFloat(clean);
+                    setMaxLtv(isNaN(val) ? 0 : Math.max(1, Math.min(95, Math.round(val * 100) / 100)));
                   }}
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
                 />
@@ -472,12 +475,15 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                   {isZh ? '最低 DSCR 覆盖要求 (x)' : isEs ? 'DSCR Mínimo Requerido (x)' : isPt ? 'DSCR Mínimo Exigido (x)' : 'Min DSCR Benchmark (x)'}
                 </label>
                 <input
-                  type="number"
-                  step="0.01"
-                  value={minDscr || ''}
+                  type="text"
+                  inputMode="decimal"
+                  aria-label={isZh ? '最低 DSCR 覆盖要求' : isEs ? 'DSCR Mínimo Requerido' : isPt ? 'DSCR Mínimo Exigido' : 'Min DSCR Benchmark'}
+                  value={minDscr ? minDscr.toFixed(2) : ''}
                   onChange={(e) => {
                     setSelectedPreset('custom');
-                    setMinDscr(Math.max(1.0, Number(e.target.value)));
+                    const clean = e.target.value.replace(/[^0-9.]/g, '');
+                    const val = parseFloat(clean);
+                    setMinDscr(isNaN(val) ? 0 : Math.max(1.0, Math.round(val * 100) / 100));
                   }}
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
                 />
@@ -488,12 +494,15 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                   {isZh ? '贷款年利率 (%)' : isEs ? 'Tasa de Interés Anual (%)' : isPt ? 'Taxa de Juros Anual (%)' : 'Annual Interest Rate (%)'}
                 </label>
                 <input
-                  type="number"
-                  step="0.05"
-                  value={interestRate || ''}
+                  type="text"
+                  inputMode="decimal"
+                  aria-label={isZh ? '贷款年利率' : isEs ? 'Tasa de Interés Anual' : isPt ? 'Taxa de Juros Anual' : 'Annual Interest Rate'}
+                  value={interestRate ? interestRate.toFixed(2) : ''}
                   onChange={(e) => {
                     setSelectedPreset('custom');
-                    setInterestRate(Math.max(0.1, Number(e.target.value)));
+                    const clean = e.target.value.replace(/[^0-9.]/g, '');
+                    const val = parseFloat(clean);
+                    setInterestRate(isNaN(val) ? 0 : Math.max(0.1, Math.round(val * 100) / 100));
                   }}
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-semibold text-slate-900"
                 />
@@ -660,7 +669,7 @@ export function ApartmentBuildingMortgageCalculator({ locale }: Props) {
                     <td className="py-2.5 pl-2 text-right font-mono text-emerald-700">{bankResult.cashOnCash.toFixed(2)}%</td>
                   </tr>
                   <tr className={selectedPreset === 'hud' ? 'bg-emerald-50/50 font-semibold' : ''}>
-                    <td className="py-2.5 pr-2">{isEs ? 'HUD 223(f) (85% / 35a)' : isPt ? 'HUD 223(f) (85% / 35a)' : 'HUD 223(f) (85% / 35y)'}</td>
+                    <td className="py-2.5 pr-2">{isEs ? 'HUD 223(f) (87% / 35a)' : isPt ? 'HUD 223(f) (87% / 35a)' : 'HUD 223(f) (87% / 35y)'}</td>
                     <td className="py-2.5 px-2 font-mono">{formatCurrency(hudResult.sizedLoan)}</td>
                     <td className="py-2.5 px-2 font-mono">{formatCurrency(hudResult.monthlyPayment)}</td>
                     <td className="py-2.5 pl-2 text-right font-mono text-emerald-700">{hudResult.cashOnCash.toFixed(2)}%</td>
