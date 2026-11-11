@@ -273,9 +273,9 @@ export default async function CashOnCashPage({ params }: PageProps) {
                   <>
                     What if loan rates rise to 7.5% and vacancy worsens to 10%?
                     <br />
-                    Annual debt service jumps to $186,226, while NOI shrinks to $210,400. Pre-tax cash flow plummets to $24,174. Under this stress scenario, your Cash-on-Cash Return collapses to just 3.20%. Additionally, your{' '}
+                    Annual debt service jumps to $212,829, while NOI shrinks to $210,400. Pre-tax cash flow falls to -$2,429. Under this stress scenario, your Cash-on-Cash Return falls to -0.28%. Additionally, your{' '}
                     <Link href={`/${locale}/calculators/dscr/`} className="text-emerald-600 hover:underline font-semibold">DSCR (Debt Service Coverage Ratio)</Link>
-                    {' '}drops to 1.13x (approaching common lender covenant thresholds depending on the loan agreement). To model these risks simultaneously, use the full{' '}
+                    {' '}drops to 0.99x (approaching common lender covenant thresholds depending on the loan agreement). To model these risks simultaneously, use the full{' '}
                     <Link href={`/${locale}/tools/deal-analyzer/`} className="text-emerald-600 hover:underline font-semibold">Deal Analyzer underwriting tool</Link>.
                   </>
                 )}
